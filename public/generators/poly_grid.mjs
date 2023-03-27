@@ -10,7 +10,8 @@ addPathMethods(rs);
 let wd = 200;
 let nr = 5;
 rs.setName('poly_grid');
-let topParams = {width:wd,height:wd,numRows:nr,numCols:nr,framePadding:.0*wd,frameStroke:'rgb(2,2,2)',frameStrokeWidth:1,saveAnimation:0,numSteps:50}
+let topParams = {width:wd,height:wd,numRows:nr,numCols:nr,framePadding:.0*wd,frameStroke:'rgb(2,2,2)',frameStrokeWidth:1,saveAnimation:1,numSteps:240}
+//let topParams = {width:wd,height:wd,numRows:nr,numCols:nr,framePadding:.0*wd,frameStroke:'rgb(2,2,2)',frameStrokeWidth:1,saveAnimation:1,numSteps:48}
 Object.assign(rs,topParams);
 /*
 rs.addPath = function (nm,speed) {
@@ -125,21 +126,25 @@ rs.buildColorArrays = function () {
     let idx = this.polyIndex(i,j);
     ca[idx] = v;
   };
-  let {caa} = this;
-  let ca0 = caa[0];
-  let ca1 = caa[1];
+  let ca0 = [];
+  let ca1 = [];
+  let ca2 = [];
+
   setCa(ca0,0,0,0);
   setCa(ca0,0,1,0);
   setCa(ca0,0,2,0);
   setCa(ca0,0,3,0);
+  
   setCa(ca0,1,0,0);
   setCa(ca0,1,1,1);
   setCa(ca0,1,2,1);
   setCa(ca0,1,3,0);
+  
   setCa(ca0,2,0,0);
   setCa(ca0,2,1,1);
   setCa(ca0,2,2,1);
-  setCa(ca0,1,3,0);
+  setCa(ca0,2,3,0);
+  
   setCa(ca0,3,0,0);
   setCa(ca0,3,1,0);
   setCa(ca0,3,2,0);
@@ -161,13 +166,37 @@ rs.buildColorArrays = function () {
   setCa(ca1,3,1,1);
   setCa(ca1,3,2,0);
   setCa(ca1,3,3,0);
+  
+  
+  setCa(ca2,0,0,0);
+  setCa(ca2,0,1,2);
+  setCa(ca2,0,2,0);
+  setCa(ca2,0,3,2);
+  
+  setCa(ca2,1,0,2);
+  setCa(ca2,1,1,0);
+  setCa(ca2,1,2,2);
+  setCa(ca2,1,3,0);
+  
+  setCa(ca2,2,0,0);
+  setCa(ca2,2,1,2);
+  setCa(ca2,2,2,0);
+  setCa(ca2,2,3,2);
+  
+  setCa(ca2,3,0,2);
+  setCa(ca2,3,1,0);
+  setCa(ca2,3,2,2);
+  setCa(ca2,3,3,0);
+  
+  let caa = [ca0,ca1,ca2]
   this.colors=[[255,0,0],[0,0,255]];
-  this.colors=[this.randomColorArray(),this.randomColorArray()];
+  this.colors=[this.randomColorArray(),this.randomColorArray(),this.randomColorArray()];
   let colorArrays = this.colorArrays = [];
   let lna = caa.length;
   for (let i = 0;i<lna;i++) {
     colorArrays[i] = this.cchoicea2ca(caa[i]);
   }
+  this.states = [0,2,1,2,0]
     
   
 }
@@ -251,12 +280,24 @@ rs.interpolateArrayOfArrays = function (frma,toa,fr) {
     
     
 rs.updateState = function () {
-  let {polys,stepsSoFar:ssf,numSteps,colorArrays} =this;
-  debugger;
-  let fr = ssf/numSteps;
-  let ca0 = colorArrays[0];
-  let ca1 = colorArrays[1];
-  let ca = this.interpolateArrayOfArrays(ca0,ca1,fr);
+  let {polys,stepsSoFar:ssf,numSteps,colorArrays,states} =this;
+  let lns = states.length;
+  //let fr = ssf/numSteps;
+  
+  let stl = Math.floor(numSteps/lns);
+  let ws = Math.min(Math.floor(ssf/stl),lns-1);
+  let sst = ws*stl; // step start
+  let sfr = (ssf-sst)/stl; //fraction within step
+  let st0 = states[ws];
+  let ca0 = colorArrays[st0];
+  let ns = (ws+1)%lns;
+  let st1 = states[ns];
+  console.log('ws',ws,'sfr',sfr);
+  let ca1 = colorArrays[st1];
+  if ((!ca0)||(!ca1)) {
+    debugger;
+  }
+  let ca = this.interpolateArrayOfArrays(ca0,ca1,sfr);
   this.setColors(ca);
 }
 
