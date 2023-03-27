@@ -12,7 +12,17 @@ rs['stroke-width'] = 1;
 rs.role = 'spot';
 rs.corners = [];
 
+
+rs.setDomAtts = function () {
+  this.setDomAttribute('visibility',this.visibility);
+  this.setDomAttribute('fill',this.fill);
+  this.setDomAttribute('stroke-width',this['stroke-width']);
+  this.setDomAttribute('stroke',this.stroke);
+
+}
+
 rs.update = function () {
+  this.setDomAtts(this.__element);
 	let {corners} = this;
 	let ln = corners.length;
 	if (!ln) {

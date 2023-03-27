@@ -131,7 +131,7 @@ const endsIn = function (string,p) {
     console.log('read',ffl);
      var scripts = '';
      let spath = (dir==='')?ffl:dir+'/'+ffl;
-    let ipath = '../../prototypejungle_ui2/'+spath;
+    let ipath = '../../prototypejungle_ui3/'+spath;
     var vl = fs.readFileSync(ipath).toString();
     console.log('read',ipath);
     let  ovl = endsIn(ffl,'.html')?insertBoilerplate(vl,scripts,''):vl;
@@ -154,8 +154,10 @@ var fs = require('fs');
 
   
   var xferDir = function (dir) {
-     let ipath = '../../prototypejungle_ui2/'+dir;
-		 console.log('Transfering dir with ipath',ipath);
+     let ipath = '../../prototypejungle_ui3/'+dir;
+		 if (dir === 'admin') {
+        console.log('Transfering dir with ipath',ipath);
+     }
      let files = fs.readdirSync(ipath);
      files.forEach( function (fln) {
        let ext = afterLastChar(fln,'.');
@@ -167,7 +169,9 @@ var fs = require('fs');
       }
       let fpath = ipath + '/' + fln;
       var scripts = '';
-      console.log('transfering file ',fpath);
+      if (dir === 'admin') {
+        console.log('transfering file ',fpath);
+      }
       var vl = fs.readFileSync(fpath).toString();
        // console.log('vl',vl);
         let  ovl = endsIn(fln,'.html')?insertBoilerplate(vl,scripts,''):vl;
@@ -195,10 +199,10 @@ xferFiles('admin',['genGrids.js','gridSections.js','imageOrder.js']);
 xferDirs(['public/generators','public/instances','public/shape','public/mlib','public/json','public/doc','public/server','public/admin']);
 //xferDirs(['js/core','js/dom','js/geom','js/draw']);
 xferDirs(['public/js/core','public/js/dom','public/js/geom','public/js/draw']);
-xferDirs(['public/fxhash/part2_0_2','public/fxhash/part2_0_2/generators','public/fxhash/part2_0_2/mlib','public/fxhash/part2_0_2/shape']);
+/*xferDirs(['public/fxhash/part2_0_2','public/fxhash/part2_0_2/generators','public/fxhash/part2_0_2/mlib','public/fxhash/part2_0_2/shape']);
 xferDirs(['public/fxhash/drop_circles_14','public/fxhash/drop_circles_14/generators','public/fxhash/drop_circles_14/mlib','public/fxhash/drop_circles_14/shape']);
 xferDirs(['public/fxhash/test','public/fxhash/test/generators','public/fxhash/test/mlib','public/fxhash/test/shape']);
-xferDirs(['public/fxhash/part2_0_30','public/fxhash/part2_0_30/generators','public/fxhash/part2_0_30/mlib','public/fxhash/part2_0_30/shape']);
+xferDirs(['public/fxhash/part2_0_30','public/fxhash/part2_0_30/generators','public/fxhash/part2_0_30/mlib','public/fxhash/part2_0_30/shape']);*/
 return;
 //xferDir(0,'public','');
  //xferDir('top','','server');

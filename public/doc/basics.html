@@ -1,4 +1,29 @@
-{{boilerplate1}}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="description" content="Image Generation via Prototype Trees">
+<title>PrototypeJungle</title>
+<link rel="stylesheet" type="text/css"  href="style.css"/>
+<link rel="stylesheet" type="text/css"  href="spectrum.css"/>
+<link rel="icon" href="/favicon.ico" />
+
+</head>
+<body style="background-color:white;font-size:14pt"> 
+<script src = "docSupport.js"></script>
+
+<div class="topGrid">
+<div></div>
+<div ><span id ="prevSpan" class="button"> &lt;</span></div>
+<div><span class="textVar"><a style="color:black" href="../index.html">PrototypeJungle</a></span></div>
+<div></div>
+<div><span style="padding-top:0px"> <img  src="logo.svg" width="30" height="30" /></span></div>
+<div><span id="nextSpan" class="button"> &gt; </span></div>
+</div>
+<hr/>
+<div class="theGrid">
+<div></div>
+<div>
 
 <p class = 'title'>basics</p>
 
@@ -27,7 +52,7 @@ is also available. Any parameters that are missing from the argument are taken f
 <p>
 Here are the relevant lines of code from the <a href="grid.html">grid example</a></p>
 
-<precode>
+<pre style="padding-left:20px;font-size:10pt;font-weight:bold" class="code">
 
 import {rs as basicsP} from '/generators/basics.mjs'; // /generators/basics.mjs imports in turn from /mlib/basics.mjs
 
@@ -49,9 +74,9 @@ rs.initialize = function () {
 
 </pre>
 <p> The method </p>
-<precode>
+<pre style="padding-left:20px;font-size:10pt;font-weight:bold" class="code">
 setBackgroundColor(clr:color)
-</precode>
+</pre>
 <p> where <span class='textVar'>clr</span> is a string like 'pink' or 'rgb(100,50,200)' sets the  overall background color of the image, however it is zoomed in or out. The default background color is 'black'.</p>
 
 </div>

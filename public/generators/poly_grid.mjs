@@ -10,7 +10,7 @@ addPathMethods(rs);
 let wd = 200;
 let nr = 5;
 rs.setName('poly_grid');
-let topParams = {width:wd,height:wd,numRows:nr,numCols:nr,framePadding:.0*wd,frameStroke:'rgb(2,2,2)',frameStrokeWidth:1,saveAnimation:0,numSteps:1000}
+let topParams = {width:wd,height:wd,numRows:nr,numCols:nr,framePadding:.0*wd,frameStroke:'rgb(2,2,2)',frameStrokeWidth:1,saveAnimation:0,numSteps:100}
 Object.assign(rs,topParams);
 /*
 rs.addPath = function (nm,speed) {
@@ -104,6 +104,15 @@ rs.polyIndex = function (i,j) {
   return idx;
 }
 
+rs.cchoicea2ca = function (cc) {
+ let {colors} = this;
+ let ln = cc.length;
+ let rs = [];
+ for (let i=0;i<ln;i++) {
+   rs.push(colors[cc[i]]);
+  }
+  return rs;
+}
 
 rs.buildColorArrays = function () {
   const setCa = (ca,i,j,v) => {
@@ -146,9 +155,24 @@ rs.buildColorArrays = function () {
   setCa(ca1,3,1,1);
   setCa(ca1,3,2,0);
   setCa(ca1,3,3,0);
-  this.colors=['blue','red'];
+  this.colors=[[255,0,0],[0,0,255]];
+  let colorArrays = this.colorArrays = [];
+  let lna = caa.length;
+  for (let i = 0;i<lna;i++) {
+    colorArrays[i] = this.cchoicea2ca(caa[i]);
+  }
+    
+  
 }
 
+rs.ca2fill = function (ca) {
+  let r = ca[0];
+  let g = ca[1];
+  let b = ca[2];
+  return `rgb(${r},${g},${b})`;
+}
+  
+  
 rs.setColors = function (ca) {
   let {polys,colors} = this;
   let ln = polys.length;
@@ -156,10 +180,23 @@ rs.setColors = function (ca) {
     let clri = ca[i];
     let poly = polys[i];
     let clr = colors[clri];
-    poly.fill = clr;
+    poly.fill = this.ca2fill(clr);
     poly.update();
   }
 }
+
+rs.setColors = function (ca) {
+  let {polys,colors} = this;
+  let ln = polys.length;
+  for (let i=0;i<ln;i++) {
+    let clr = ca[i];
+    let poly = polys[i];
+    poly.fill = this.ca2fill(clr);
+    poly.update();
+  }
+}
+  
+  
   
   
 rs.initProtos = function () {
@@ -173,23 +210,47 @@ rs.initialize =  function () {
   this.buildGrid();
   this.buildColorArrays();
   this.addPolys();
-  this.setColors(this.caa[1]);
+ // this.setColors(this.caa[1]);
 }
 
-rs.updateState = function () {
-  let {grid,stepsSoFar:ssf,numSteps,deltaX} =this;
-  let ln = grid.length;
-  for (let i=0;i<ln;i++) {
-    let g = grid[i];
-    let {speed} = g;
-    let fr = ssf/numSteps;
-    let a = fr*speed;
-    let fc = .2;
-    let vec = Point.mk(Math.cos(a),Math.sin(a)).times(fc*deltaX);
-    g.offset = vec;
+rs.interpolate = function (frmv,tov,fr) {
+  return frmv +fr*(tov-frmv);
+}
+
+rs.interpolateArrays = function (frma,toa,fr) {
+  let ln = frma.length;
+  let rsa = [];
+  for (let i=0;i<ln;i++) { 
+    let frmv =frma[i];
+    let tov = toa[i];
+    rsa.push(this.interpolate(frmv,tov,fr));
   }
-  this.adjustLines();
-}  
+  return rsa;
+}
+
+rs.interpolateArrayOfArrays = function (frma,toa,fr) {
+  let ln = frma.length;
+  let rsa = [];
+  for (let i=0;i<ln;i++) { 
+    let frmv =frma[i];
+    let tov = toa[i];
+    rsa.push(this.interpolateArrays(frmv,tov,fr));
+  }
+  return rsa;
+}
+
+  
+    
+    
+rs.updateState = function () {
+  let {polys,stepsSoFar:ssf,numSteps,colorArrays} =this;
+  debugger;
+  let fr = ssf/numSteps;
+  let ca0 = colorArrays[0];
+  let ca1 = colorArrays[1];
+  let ca = this.interpolateArrayOfArrays(ca0,ca1,fr);
+  this.setColors(ca);
+}
 
 
     

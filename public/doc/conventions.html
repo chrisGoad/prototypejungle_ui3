@@ -1,5 +1,30 @@
 
-{{boilerplate1}}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="description" content="Image Generation via Prototype Trees">
+<title>PrototypeJungle</title>
+<link rel="stylesheet" type="text/css"  href="style.css"/>
+<link rel="stylesheet" type="text/css"  href="spectrum.css"/>
+<link rel="icon" href="/favicon.ico" />
+
+</head>
+<body style="background-color:white;font-size:14pt"> 
+<script src = "docSupport.js"></script>
+
+<div class="topGrid">
+<div></div>
+<div ><span id ="prevSpan" class="button"> &lt;</span></div>
+<div><span class="textVar"><a style="color:black" href="../index.html">PrototypeJungle</a></span></div>
+<div></div>
+<div><span style="padding-top:0px"> <img  src="logo.svg" width="30" height="30" /></span></div>
+<div><span id="nextSpan" class="button"> &gt; </span></div>
+</div>
+<hr/>
+<div class="theGrid">
+<div></div>
+<div>
 <p class="title">Conventions</p>
 <p class="section">Types</p>
 <p> In these documents, I will use the notation exemplified below to indicate the types of functions or methods:</p>
@@ -17,9 +42,9 @@ nd.set('a',shp);
 
 <p>in code, but never the types.</p>
 <p>Some methods take as input an object whose properties contain the parameters to the function. The form of the expected parameter object is indicated in the following way:</p>
-<precode>
+<pre style="padding-left:20px;font-size:10pt;font-weight:bold" class="code">
 addRectangle({width:number,height:number,stroke_width:number,position:Point=Point(0,0),stroke:color='white',fill:color='Transparent'})
-</precode>
+</pre>
 <p> If an "=" appears, this indicates that the parameter is optional, and gives its default value.</p> 
 <p class="section">User-Defined Methods</p>
 

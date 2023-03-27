@@ -1,4 +1,29 @@
-{{boilerplate1}}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="description" content="Image Generation via Prototype Trees">
+<title>PrototypeJungle</title>
+<link rel="stylesheet" type="text/css"  href="style.css"/>
+<link rel="stylesheet" type="text/css"  href="spectrum.css"/>
+<link rel="icon" href="/favicon.ico" />
+
+</head>
+<body style="background-color:white;font-size:14pt"> 
+<script src = "docSupport.js"></script>
+
+<div class="topGrid">
+<div></div>
+<div ><span id ="prevSpan" class="button"> &lt;</span></div>
+<div><span class="textVar"><a style="color:black" href="../index.html">PrototypeJungle</a></span></div>
+<div></div>
+<div><span style="padding-top:0px"> <img  src="logo.svg" width="30" height="30" /></span></div>
+<div><span id="nextSpan" class="button"> &gt; </span></div>
+</div>
+<hr/>
+<div class="theGrid">
+<div></div>
+<div>
 
 <p class="title">Prototype Trees</p>
 
@@ -24,5 +49,10 @@ let x =Object.create(y);
 <p>In both cases <span class="textVar">x</span> is a new object that inherits, prototype-style, from <span class="textVar">y</span>.  The difference is that while <span class="textVar">Object.create</span> operates at only one level, <span class="textVar">y.instantiate()</span> does a deep copy of <span class="textVar">y</span> as a tree, and returns a structure in which all of the copied nodes inherit prototype-wise from the nodes from which they were copied, and in which the prototype chains of <span class="textVar">y</span> have also been copied into <span class="textVar">x</span>. Full detail can be found <a href="instantiation.html">here.</a></p>
 
 
-{{endplate}}
+
+</div>
+</div>
+</body>
+</html>
+
 

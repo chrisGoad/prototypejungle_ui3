@@ -1,11 +1,36 @@
-{{boilerplate1}}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="description" content="Image Generation via Prototype Trees">
+<title>PrototypeJungle</title>
+<link rel="stylesheet" type="text/css"  href="style.css"/>
+<link rel="stylesheet" type="text/css"  href="spectrum.css"/>
+<link rel="icon" href="/favicon.ico" />
+
+</head>
+<body style="background-color:white;font-size:14pt"> 
+<script src = "docSupport.js"></script>
+
+<div class="topGrid">
+<div></div>
+<div ><span id ="prevSpan" class="button"> &lt;</span></div>
+<div><span class="textVar"><a style="color:black" href="../index.html">PrototypeJungle</a></span></div>
+<div></div>
+<div><span style="padding-top:0px"> <img  src="logo.svg" width="30" height="30" /></span></div>
+<div><span id="nextSpan" class="button"> &gt; </span></div>
+</div>
+<hr/>
+<div class="theGrid">
+<div></div>
+<div>
 <p class="title">Web</p>
 <p> This <a href="../mlib/web.mjs">module</a> builds webs, where a web is defined as a set of lines drawn between given points, in such a way that intersections do not occur. </p>
 
 <p> As customary, webs will be introduced via annotated code, which generates this image:</p>
  <p><img  src="https://kingdomofpattern.com/thumbs/web_wheel.jpg?alt=media" style="cursor:pointer"  width="300" height="300" /></p>
  <p>Here's the code:</p>
-<precode>
+<pre style="padding-left:20px;font-size:10pt;font-weight:bold" class="code">
 import {rs as linePP} from '/shape/line.mjs';
 import {rs as basicP} from '/generators/basics.mjs';
 import {rs as addPointMethods} from '/mlib/pointGen.mjs';	
@@ -39,9 +64,9 @@ rs.initialize = function () {
 export {rs};
 </pre>
 <p> A web is a set of lines ("connectors") obeying the length constraints which connect given points without intersecting. <span class="textVar">generateWeb</span>  successively adds new connectors until it impossible to add a connector without intersection.   <span class="textVar">generateWeb</span>  has this type:
-<precode>
+<pre style="padding-left:20px;font-size:10pt;font-weight:bold" class="code">
 generateWeb({points:arrayOf(Point),minConnectorLength:number,maxConnectorLength,lineP:line});
-</precode>
+</pre>
 
 <p><span class="textVar">generateWeb</span> will take its parameters from <span class="textVar">this</span>  if they are not found in the parameter  object. 
 

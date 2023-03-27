@@ -1,4 +1,23 @@
-{{boilerplate_kop}}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="description" content="Kingdom of Pattern">
+<title>Kingdom of Pattern</title>
+<link rel="stylesheet" type="text/css"  href="style.css"/>
+<link rel="stylesheet" type="text/css"  href="spectrum.css"/>
+<link rel="icon" href="/favicon.ico" />
+
+</head>
+<body style="background-color:black;color:white;font-size:14pt"> 
+
+<div class="theGrid">
+<div></div>
+<div><p class="title"><a style="color:white" href="../index.html">Kingdom of Pattern</a></p></div>
+<div></div>
+</div>
+<div class="theGrid">
+<div></div>
 <div>
 <p class="title">General Considerations</p>
 <p> The software which generated these images consists of a series of JavaScript modules, one for each type of image: <span class="textVar">drop, partition tree, grid, web,</span> and <span class="textVar">lines</span>. Each module exports a function that adds the relevant set of methods to a  JavaScript object. For each individual image, a "generator" loads the needed modules and applies their method-defining functions to an object which it creates, sets the parameters for that image, and finally, applies the top level image generation methods one or more times. </p>

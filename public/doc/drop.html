@@ -1,4 +1,29 @@
-{{boilerplate1}}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="description" content="Image Generation via Prototype Trees">
+<title>PrototypeJungle</title>
+<link rel="stylesheet" type="text/css"  href="style.css"/>
+<link rel="stylesheet" type="text/css"  href="spectrum.css"/>
+<link rel="icon" href="/favicon.ico" />
+
+</head>
+<body style="background-color:white;font-size:14pt"> 
+<script src = "docSupport.js"></script>
+
+<div class="topGrid">
+<div></div>
+<div ><span id ="prevSpan" class="button"> &lt;</span></div>
+<div><span class="textVar"><a style="color:black" href="../index.html">PrototypeJungle</a></span></div>
+<div></div>
+<div><span style="padding-top:0px"> <img  src="logo.svg" width="30" height="30" /></span></div>
+<div><span id="nextSpan" class="button"> &gt; </span></div>
+</div>
+<hr/>
+<div class="theGrid">
+<div></div>
+<div>
 <p class="title">drop</p>
 
 <p> This <a href="../mlib/drop.mjs">module</a> will be introduced via annotated code, which generates the image</p>
@@ -64,7 +89,7 @@ rs.initialize = function () {
 export {rs};
 
 
-</precode>
+</pre>
  
 <span class="userDefinedText">  rs.generateDrop(p:Point)</span> should return a structure  of the form 
 <span class="textVar">{geometries:arrayOf(geometricObject), shapes:arrayOf(shape)}</span> The shapes constitute the visible form of the geometric objects. The algorithm <span class="textVar">generateDrops</span> calls <span class="userDefinedText">generateDrop</span> repeatedly on randomly selected points  on the canvas. It checks whether any of the geometries in the current drop collide with any of the geometries already dropped. If so the drop is rejected. If not the geometries are added to the array of all geometries dropped so far, and the shapes are added to the visible world. Both the shapes and geometries should be returned in their zero position; <span class="textVar">generateDrops</span> moves them into position. The reason that geometries and shapes are generated separately is that it allows the coder full control of how the geometries are made visible. The argument <span class="textVar">dropParams</span> to <span class="textVar">generateDrops</span> has the form <span class="textVar">{dropTries:number,maxDrops=Infinity:number}</span>. If <span class="textVar">generateDrops</span> encounters  <span class="textVar">dropTries</span> sequential failures to drop due to collision, the algorithm terminates. It also terminates once there have been <span class="textVar">maxDrops</span> successful drops.</p>
