@@ -1,0 +1,55 @@
+{{boilerplate1}}
+<p class="title">Web</p>
+<p> This <a href="../mlib/web.mjs">module</a> builds webs, where a web is defined as a set of lines drawn between given points, in such a way that intersections do not occur. </p>
+
+<p> As customary, webs will be introduced via annotated code, which generates this image:</p>
+ <p><img  src="https://kingdomofpattern.com/thumbs/web_wheel.jpg?alt=media" style="cursor:pointer"  width="300" height="300" /></p>
+ <p>Here's the code:</p>
+<precode>
+import {rs as linePP} from '/shape/line.mjs';
+import {rs as basicP} from '/generators/basics.mjs';
+import {rs as addPointMethods} from '/mlib/pointGen.mjs';	
+import {rs as addWebMethods} from '/mlib/web.mjs';	
+
+let rs = basicP.instantiate();
+addPointMethods(rs);
+addWebMethods(rs);
+rs.setName('web_wheel');
+let rd= 3000;
+
+let  topParams = {width:rd,height:rd,framePadding:1.2*rd};
+let  webParams = {webTries:1000,minConnectorLength:0,maxConnectorLength:2000};
+let ringParams = {numRings:20,radius:rd,numPointsPerRing:20};
+Object.assign(rs,topParams);
+
+rs.initProtos = function () {	
+  let lineP = this.lineP = linePP.instantiate();
+  this.lineP.stroke = 'white';
+  this.lineP['stroke-width'] = .1;
+  this.lineP['stroke-width'] = 5;
+}  
+
+rs.initialize = function () {
+  this.initProtos();
+  let points = this.ringPoints(ringParams);
+  this.generateWeb(Object.assign(webParams,{points}));
+  this.addFrame();
+}
+
+export {rs};
+</pre>
+<p> A web is a set of lines ("connectors") obeying the length constraints which connect given points without intersecting. <span class="textVar">generateWeb</span>  successively adds new connectors until it impossible to add a connector without intersection.   <span class="textVar">generateWeb</span>  has this type:
+<precode>
+generateWeb({points:arrayOf(Point),minConnectorLength:number,maxConnectorLength,lineP:line});
+</precode>
+
+<p><span class="textVar">generateWeb</span> will take its parameters from <span class="textVar">this</span>  if they are not found in the parameter  object. 
+
+
+</div>
+</div>
+</body>
+</html>
+
+
+

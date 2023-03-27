@@ -1,0 +1,81 @@
+{{boilerplate1}}
+<p class="title">drop</p>
+
+<p> This <a href="../mlib/drop.mjs">module</a> will be introduced via annotated code, which generates the image</p>
+ <p><img  src="https://kingdomofpattern.com/thumbs/drop_ice.jpg?alt=media" style="cursor:pointer"  width="400" height="400"/></p>
+ <p>Here's the code:</p>
+<pre style="padding-left:20px;font-size:10pt;font-weight:bold" class="code">
+
+import {rs as linePP} from '/shape/line.mjs';
+import {rs as basicsP} from '/generators/basics.mjs';
+import {rs as addDropMethods} from '/mlib/newDrop.mjs';
+import {rs as addSegsetMethods} from '/mlib/segsets.mjs';
+let rs = basicsP.instantiate();
+
+addDropMethods(rs);
+addSegsetMethods(rs);
+rs.setName('drop_ice');
+let wd = 100;
+
+let topParams = {width:wd,height:wd,minSeparation:10,framePadding:20}
+let dropParams = {dropTries:100,maxDrops:4000}
+
+Object.assign(rs,topParams);
+
+rs.initProtos = function () {
+  this.lineP = linePP.instantiate();
+  this.lineP.stroke = 'yellow';
+  this.lineP['stroke-width'] = .15;
+}  
+
+rs.initialDrop = function () {
+  let {width,height,lineP} = this;
+  let segs = this.rectangleSegments(width,height); // rectangleSegments is defined in segsets.mjs
+  let lines = segs.map((sg) => this.genLine(sg,lineP));  
+  return {geometries:segs,shapes:lines};
+}
+
+rs.segParams = function () {
+  let r = Math.random();
+  let np = 4;
+  let angle = Math.floor(r*np)* (Math.PI/np)
+  let length = 2 + Math.floor(r*np)*4;
+  return {angle,length};
+} 	
+
+rs.generateDrop = function (p) {
+  let p0 = Point.mk(0,0);
+  let {minSeparation,lineP} = this;
+  let {length,angle} = this.segParams();
+  let seg = LineSegment.mkAngled(p0,angle,length);
+  let line = this.genLine(seg,lineP);
+  // lseg is minSeparation longer than the seg and line, meaning that lines extended by this much
+  // which intersect existing dropStructs are rejected as drop candidates
+  let lseg = LineSegment.mkAngled(p0,angle,length+minSeparation);
+  return {geometries:[lseg],shapes:[line]};
+}
+ 
+rs.initialize = function () {
+  this.initProtos();
+  this.generateDrops(dropParams);
+  this.addFrame();
+}
+
+export {rs};
+
+
+</precode>
+ 
+<span class="userDefinedText">  rs.generateDrop(p:Point)</span> should return a structure  of the form 
+<span class="textVar">{geometries:arrayOf(geometricObject), shapes:arrayOf(shape)}</span> The shapes constitute the visible form of the geometric objects. The algorithm <span class="textVar">generateDrops</span> calls <span class="userDefinedText">generateDrop</span> repeatedly on randomly selected points  on the canvas. It checks whether any of the geometries in the current drop collide with any of the geometries already dropped. If so the drop is rejected. If not the geometries are added to the array of all geometries dropped so far, and the shapes are added to the visible world. Both the shapes and geometries should be returned in their zero position; <span class="textVar">generateDrops</span> moves them into position. The reason that geometries and shapes are generated separately is that it allows the coder full control of how the geometries are made visible. The argument <span class="textVar">dropParams</span> to <span class="textVar">generateDrops</span> has the form <span class="textVar">{dropTries:number,maxDrops=Infinity:number}</span>. If <span class="textVar">generateDrops</span> encounters  <span class="textVar">dropTries</span> sequential failures to drop due to collision, the algorithm terminates. It also terminates once there have been <span class="textVar">maxDrops</span> successful drops.</p>
+<p> The geometric types that can be droppped are LineSegment, and Circle.</p>
+<p> If <span class="userDefinedText">  rs.initialDrop()</span> is defined it should return structure of the same form as  <span class="userDefinedText">  rs.generateDrop(p:Point)</span>. 
+If defined, it is called first, and initializes the dropped geometries and visible world.</p>
+
+</div>
+</div>
+</body>
+</html>
+
+
+

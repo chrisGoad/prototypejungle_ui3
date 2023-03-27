@@ -1,0 +1,108 @@
+npm install uglify-js-es6
+npm install terser 
+
+
+ initial setup
+ 
+cd c:\prototypejungle\public
+git init
+git branch -M main
+git config --global user.name "Chris Goad"
+git config --global user.email "cagoad@gmail.com"
+git remote add origin https://github.com/chrisGoad/prototypejungle.git
+
+git checkout -b main (maybe)
+
+
+cd c:\prototypejungle_ui2
+git init
+git branch -M master
+git config --global user.name "Chris Goad"
+git config --global user.email "cagoad@gmail.com"
+git remote add origin https://github.com/chrisGoad/prototypejungle_ui2.git
+git fetch --all
+git checkout origin/master
+
+info commands:
+git branch --list 
+git branch -r
+This Git command will show you remote branches 
+git remote -v
+shows the remote URLs
+
+every time
+cd c:\prototypejungle_ui2
+git add admin public 
+git commit -m "misc"
+git push origin master
+
+
+or 
+
+
+cd c:\prototypejungle\public
+git add admin doc generators images images_hi_res instances js json mlib server shape thumbs
+git commit -m "misc"
+git push origin main 
+git push -u origin main (first time, maybe)
+
+zip the public directory in c:\prototypejungle
+change its name to prototypejungle.zip
+upload it to the prototypejungle bucket at aws
+
+
+cd c:\prototypejungle_clone
+git clone https://github.com/chrisGoad/prototypejungle.git
+
+to deploy to kop
+cd c:\prototypejungle
+node admin/genGalleries top 1
+node admin/genGalleries web 1
+node admin/genGalleries drop 1
+node admin/genGalleries partition 1
+node admin/genGalleries lines 1
+node admin/genGalleries anim 1
+node admin/genGalleries grid 1
+node admin/updateKOP
+node admin/imagesToKop
+
+drop the 1s for local use with source
+
+copy the jpgs by hand from public/doc from prototypejungle to kop
+
+cd c:\kop
+firebase deploy --only hosting
+
+
+to reinstall firebase
+install firebase tools
+in a shell started with admin priviledges 
+  (search for powershell in start then click  run as administrator) in that shell:
+Set-ExecutionPolicy RemoteSigned
+then
+cd c:\kop
+firebase init
+
+
+npm install -g firebase-tools
+
+
+cd c:\prototypejungle
+node admin/genGrids forPJ
+
+firebase deploy --only hosting
+
+cd c:\prototypejungle
+node admin/update
+node admin/genGrids images
+
+
+cd c:\prototypejungle\public
+node server/server
+
+
+cd c:\prototypejungle\public
+node admin/assemble geom
+
+
+cd c:\prototypejungle

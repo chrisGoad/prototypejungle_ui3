@@ -1,0 +1,117 @@
+{{boilerplate1}}
+<p class="title">Geometry</p>
+<p>PrototypeJungle defines geometric types (implemented as prototypes) and methods that are directly accessible in any context. Geometic objects are used in the course of geometric computations, but do not have a visible form. <span class="textVar"><a href="shapes.html">shapes</a></span>, covered in the next section, are the visible elements.</p>
+<p>The geometric types and their properties and methods are specified below.</p>
+
+<p class="textVar" id="Point">Point</p>
+
+<p>Constructor:</p>
+<pre style="padding-left:20px;font-size:10pt;font-weight:bold" class="code">
+Point.mk(x:number&gt;,y:number&gt;)
+</pre>
+<p> Properties of Point <span class="textVar">p</span>,</p>
+<pre style="padding-left:20px;font-size:10pt;font-weight:bold" class="code">
+p.x:number;
+p.y:number;
+</pre>
+<p>Methods for Point <span class="textVar">p</span>,</p>
+<pre style="padding-left:20px;font-size:10pt;font-weight:bold" class="code">
+p.plus(q:Point):Point; // returns the vector sum p and q
+p.difference(q:Point):Point; // returns the vector subtraction of q from p
+p.distance(q:Point):number; // returns distance from p to q
+p.normalize():Point; // returns p shrunk or extended to a unit vector with the same direction
+p.normal():Point; // returns a vector which is orthogonal to p
+p.times(s:number):Point; // return p scaled by s
+</pre>
+
+<hr/>
+<p class="textVar">LineSegment</p>
+<pre style="padding-left:20px;font-size:10pt;font-weight:bold" class="code">
+LineSegment.mk(end0:Point,end1:Point)
+</pre>
+<p> Properties of LineSegment <span class="textVar">s</span>,</p>
+<pre style="padding-left:20px;font-size:10pt;font-weight:bold" class="code">
+s.end0:Point;
+s.end1:Point;
+</pre>
+<p>Methods for LineSegment <span class="textVar">s</span>,</p>
+<pre style="padding-left:20px;font-size:10pt;font-weight:bold" class="code">
+s.length():number;
+s.pointAlong(n:number):Point; // for 0&lt;=n&lt;=1, returns the point fraction n of the way from end0 to end1
+</pre>
+
+<hr/>
+<p class="textVar">Rectangle</p>
+<pre style="padding-left:20px;font-size:10pt;font-weight:bold" class="code">
+Rectangle.mk(corner:Point:extent:Point)
+</pre>
+<p> Properties of Rectangle <span class="textVar">r</span>,</p>
+<pre style="padding-left:20px;font-size:10pt;font-weight:bold" class="code">
+s.corner:Point;
+s.extent:Point;
+</pre>
+<p>Methods for Rectangle <span class="textVar">r</span>,</p>
+<pre style="padding-left:20px;font-size:10pt;font-weight:bold" class="code">
+r.contains(p:Point):boolean;
+</pre>
+
+<hr/>
+<p class="textVar">Circle</p>
+<pre style="padding-left:20px;font-size:10pt;font-weight:bold" class="code">
+Circle.mk(center:Point,radius:number)
+</pre>
+<p> Properties of Circle <span class="textVar">c</span>,</p>
+<pre style="padding-left:20px;font-size:10pt;font-weight:bold" class="code">
+c.center:Point
+c.radius:number;
+</pre>
+<hr/>
+<p class="textVar" id="Point3d">Point3d</p>
+
+
+<p>Constructor:</p>
+<pre style="padding-left:20px;font-size:10pt;font-weight:bold" class="code">
+Point3d.mk(x:number,y:number,z:number)
+</pre>
+<p> Properties of Point3d <span class="textVar">p</span>,</p>
+<pre style="padding-left:20px;font-size:10pt;font-weight:bold" class="code">
+p.x:number;
+p.y:number;
+p.z:number;
+</pre>
+<p>Methods for Point3d <span class="textVar">p</span>,</p>
+<pre style="padding-left:20px;font-size:10pt;font-weight:bold" class="code">
+p.plus(q:Point):Point3d; // returns the vector sum p and q
+p.difference(q:Point):Point3d;; // returns the vector subtraction of q from p
+p.distance(q:Point):number; // returns distance from p to q
+p.times(s:number):Point3d;; // return p scaled by s
+</pre>
+<hr/>
+<p class="textVar" id="Camera">Camera</p>
+
+
+
+<p>Constructor:</p>
+<pre style="padding-left:20px;font-size:10pt;font-weight:bold" class="code">
+Camera.mk(focalPoint:Point3d,focalLength:number,scaling:number,axis:string)
+</pre>
+<p><span class="textVar">axis</span> should be one of "x", "y", "z"
+<p> Properties of Camera <span class="textVar">c</span>,</p>
+<pre style="padding-left:20px;font-size:10pt;font-weight:bold" class="code">
+c.focalPoint
+c.focalLength:number;
+p.scaling:number;
+p.axis:string; // one of 'x','y','z'
+</pre>
+<p>Methods for Camera <span class="textVar">c</span>,</p>
+<pre style="padding-left:20px;font-size:10pt;font-weight:bold" class="code">
+c.project(p:Point3d); // returns the projection of p onto the focal plane
+</pre>
+
+
+
+</div>
+</div>
+</body>
+</html>
+
