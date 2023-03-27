@@ -10,7 +10,7 @@ addPathMethods(rs);
 let wd = 200;
 let nr = 5;
 rs.setName('poly_grid');
-let topParams = {width:wd,height:wd,numRows:nr,numCols:nr,framePadding:.0*wd,frameStroke:'rgb(2,2,2)',frameStrokeWidth:1,saveAnimation:0,numSteps:100}
+let topParams = {width:wd,height:wd,numRows:nr,numCols:nr,framePadding:.0*wd,frameStroke:'rgb(2,2,2)',frameStrokeWidth:1,saveAnimation:0,numSteps:50}
 Object.assign(rs,topParams);
 /*
 rs.addPath = function (nm,speed) {
@@ -73,7 +73,13 @@ rs.lrIndex = function (i,j) {
   let {numRows:nr,numCols:nc} = this;
   return nc*(i+1)+j+1;
 }
-   
+
+rs.randomColorArray = function () {
+  let  r = Math.floor(Math.random()*255);
+  let  g = Math.floor(Math.random()*255);
+  let  b = Math.floor(Math.random()*255);
+  return [r,g,b];
+}
 
 rs.addPolys = function() {
   let {numRows:nr,numCols:nc,grid,polygonP} = this;
@@ -156,6 +162,7 @@ rs.buildColorArrays = function () {
   setCa(ca1,3,2,0);
   setCa(ca1,3,3,0);
   this.colors=[[255,0,0],[0,0,255]];
+  this.colors=[this.randomColorArray(),this.randomColorArray()];
   let colorArrays = this.colorArrays = [];
   let lna = caa.length;
   for (let i = 0;i<lna;i++) {
@@ -209,8 +216,9 @@ rs.initialize =  function () {
   this.initProtos();
   this.buildGrid();
   this.buildColorArrays();
+  let {colorArrays} = this;
   this.addPolys();
- // this.setColors(this.caa[1]);
+   this.setColors(colorArrays[0]);
 }
 
 rs.interpolate = function (frmv,tov,fr) {
