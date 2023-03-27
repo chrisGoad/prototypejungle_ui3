@@ -196,10 +196,21 @@ rs.buildColorArrays = function () {
   for (let i = 0;i<lna;i++) {
     colorArrays[i] = this.cchoicea2ca(caa[i]);
   }
-  this.states = [0,2,1,2,0]
-    
-  
+  let sd = this.slowDown = 2;
+  let script = this.script = [{state:0,dur:5,pause:2} ,{state:2,dur:5,pause:2},{state:1,dur:5,pause:2},{state:2,dur:5,pause:2}];
+  let time = 0;
+  script.forEach((step) => {
+    let {pause,dur} = step;;
+    step.beginPause = time*sd;
+    time = time + pause*sd;
+    step.beginInterpolation = time;
+    time = time + dur*sd;
+  });
+  this.numSteps = time;
 }
+  
+  
+
 
 rs.ca2fill = function (ca) {
   let r = ca[0];
@@ -248,6 +259,7 @@ rs.initialize =  function () {
   let {colorArrays} = this;
   this.addPolys();
    this.setColors(colorArrays[0]);
+   this.stepNum = 0;
 }
 
 rs.interpolate = function (frmv,tov,fr) {
@@ -280,26 +292,30 @@ rs.interpolateArrayOfArrays = function (frma,toa,fr) {
     
     
 rs.updateState = function () {
-  let {polys,stepsSoFar:ssf,numSteps,colorArrays,states} =this;
-  let lns = states.length;
-  //let fr = ssf/numSteps;
-  
-  let stl = Math.floor(numSteps/lns);
-  let ws = Math.min(Math.floor(ssf/stl),lns-1);
-  let sst = ws*stl; // step start
-  let sfr = (ssf-sst)/stl; //fraction within step
-  let st0 = states[ws];
-  let ca0 = colorArrays[st0];
-  let ns = (ws+1)%lns;
-  let st1 = states[ns];
-  console.log('ws',ws,'sfr',sfr);
-  let ca1 = colorArrays[st1];
-  if ((!ca0)||(!ca1)) {
-    debugger;
+  let {polys,stepsSoFar:ssf,numSteps,colorArrays,states,stepNum,script,slowDown} =this;
+  debugger;
+  let lns = script.length;
+  let step = script[stepNum];
+  let nextStep = script[(stepNum+1)%lns];
+  let {pause,dur,state,beginPause:bp,beginInterpolation:bi} =step;
+  if (ssf < bi) {
+    return;
   }
-  let ca = this.interpolateArrayOfArrays(ca0,ca1,sfr);
-  this.setColors(ca);
+  let {beginPause:bns,state:ns} = nextStep;
+  if (ssf < bns) {
+    let fr = (ssf - bi)/dur;
+    let ca0 = colorArrays[state];
+    let ca1 = colorArrays[ns];
+    let ca = this.interpolateArrayOfArrays(ca0,ca1,fr);
+    this.setColors(ca);
+    return;
+  }
+  this.stepNum = stepNum+1;
 }
+  
+    
+  
+    
 
 
     
