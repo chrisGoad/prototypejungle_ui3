@@ -190,23 +190,37 @@ rs.buildColorArrays = function () {
   
   let caa = [ca0,ca1,ca2]
   this.colors=[[255,0,0],[0,0,255]];
-  this.colors=[this.randomColorArray(),this.randomColorArray(),this.randomColorArray()];
+  let clr1 = this.randomColorArray();
+  //let clr1 = [0,0,0];
+  //this.colors=[this.randomColorArray(),this.randomColorArray(),this.randomColorArray()];
+  this.colors=[this.randomColorArray(),clr1,clr1];
+  //this.colors=[[255,255,255],clr1,clr1];
   let colorArrays = this.colorArrays = [];
   let lna = caa.length;
   for (let i = 0;i<lna;i++) {
     colorArrays[i] = this.cchoicea2ca(caa[i]);
   }
-  let sd = this.slowDown = 2;
-  let script = this.script = [{state:0,dur:5,pause:2} ,{state:2,dur:5,pause:2},{state:1,dur:5,pause:2},{state:2,dur:5,pause:2}];
+  let sd = this.slowDown = 8;
+  let dur =4;
+  let pause = 2;
+  let script = this.script = [{state:0,dur,pause} ,{state:2,dur,pause},{state:1,dur,pause},{state:2,dur,pause}];
   let time = 0;
-  script.forEach((step) => {
-    let {pause,dur} = step;;
+  let step0 = script[0];
+  let step0copy = {};
+  Object.assign(step0copy,step0);
+  debugger;
+  script.push(step0copy);
+  const processStep = (step) => {
+    let {pause,dur} = step;
+    debugger;
     step.beginPause = time*sd;
-    time = time + pause*sd;
-    step.beginInterpolation = time;
-    time = time + dur*sd;
-  });
-  this.numSteps = time;
+    time = time + pause;
+    step.beginInterpolation = time*sd;
+    time = time + dur;
+  }
+  script.forEach(processStep);
+  debugger;
+  this.numSteps = time*sd;
 }
   
   
@@ -293,24 +307,28 @@ rs.interpolateArrayOfArrays = function (frma,toa,fr) {
     
 rs.updateState = function () {
   let {polys,stepsSoFar:ssf,numSteps,colorArrays,states,stepNum,script,slowDown} =this;
-  debugger;
   let lns = script.length;
   let step = script[stepNum];
   let nextStep = script[(stepNum+1)%lns];
-  let {pause,dur,state,beginPause:bp,beginInterpolation:bi} =step;
+  let {dur,state,beginPause:bp,beginInterpolation:bi} =step;
   if (ssf < bi) {
+    debugger;
     return;
   }
   let {beginPause:bns,state:ns} = nextStep;
-  if (ssf < bns) {
-    let fr = (ssf - bi)/dur;
+  if (ssf <= bns) {
+    let fr = (ssf - bi)/(dur*slowDown);
     let ca0 = colorArrays[state];
     let ca1 = colorArrays[ns];
     let ca = this.interpolateArrayOfArrays(ca0,ca1,fr);
     this.setColors(ca);
+    debugger;
+
     return;
   }
   this.stepNum = stepNum+1;
+  debugger;
+
 }
   
     
