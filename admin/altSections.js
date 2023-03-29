@@ -49,7 +49,8 @@ sections:
  [0,'quad_11_4','instances',1,'Quad 11 4',{likes:0,posted:0,category:'quad'}],*/
  // [0,'quad_0_19','instances',1,'Quad 0 19',{likes:0,posted:0,category:'quad'}], 
  // [0,'part_0_19','instances',1,'Part 0 19',{likes:0,posted:0,category:'part'}], 
-  [0,'wiggle_grid_0','generators',1,'wiggle grid 0',{likes:0,posted:0,category:'quad'}], 
+    [0,'rotate_grid','generators',1,'rotate grid',{likes:0,posted:0,category:'quad'}], 
+   [0,'wiggle_grid_0','generators',1,'wiggle grid 0',{likes:0,posted:0,category:'quad'}], 
   [0,'poly_grid','generators',1,'poly grid',{likes:0,posted:0,category:'quad'}], 
   [0,'moving_drop_0','generators',1,'moving drop 0',{likes:0,posted:0,category:'quad'}], 
   [0,'step_ring_0','generators',1,'step ring 0',{likes:0,posted:0,category:'quad'}], 
