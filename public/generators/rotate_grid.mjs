@@ -39,6 +39,19 @@ rs.rect2lineSegs = function (rect) {
   return [ls0,ls1,ls2,ls3];
 }
 
+rs.rectFromRowsCols = function (params) {
+  let {lowRow,highRow,lowCol,highCol} = params;
+  let {width,numRows:nr,deltaX} = this;
+  let minx = -0.5*width;
+  let bminx = minx+deltaX*lowRow;
+  let bmaxx = minx+deltaX*highRow;
+  let extx = bmaxx-bminx;
+  let ext = Point.mk(extx,extx);
+  let corner = Point.mk(bminx,bminx);
+  let rect = Rectangle.mk(corner,ext);
+  return rect;
+ }
+
 rs.intersectLineSegsLineSeg = function (rect,segs,seg) {
   let {end0:e0,end1:e1} = seg;
   let c0 = rect.contains(e0);
@@ -178,7 +191,7 @@ rs.rotateSegs = function (segs,angle,center,box) {
   });
 }
 
-rs.adjustSegs= function() {
+rs.adjustSegs= function(hideBox) {
   let {grid} = this;
   let ln = grid.length;
   for (let i=0;i<ln;i++) {
@@ -189,11 +202,14 @@ rs.adjustSegs= function() {
       let tor = grid[toRight];
       let e1=(tor.basePos).plus(tor.offset);
       hseg.setEnds(e0,e1);
+      hseg.hidden = hideBox.contains(e0) || hideBox.contains(e1);
     }
     if (vseg) {
       let bl = grid[below];
       let e1=(bl.basePos).plus(bl.offset);
       vseg.setEnds(e0,e1);
+      vseg.hidden = hideBox.contains(e0) || hideBox.contains(e1);
+
     }
   }
 }
@@ -205,7 +221,7 @@ rs.segs2lines = function () {
     let sg = segs[i];
     let ln = lines[i];
 
-    if (sg) {
+    if (sg&& (!sg.hidden)) {
       let {end0,end1} = sg;
       ln.setEnds(end0,end1);
       ln.show();
@@ -251,9 +267,12 @@ rs.initialize =  function () {
   debugger;
   this.initProtos();
   this.buildGrid();
+    let hb = this.rectFromRowsCols({lowRow:2,highRow:4});
+
   this.addLines();
-  this.adjustSegs();
+  this.adjustSegs(hb);
   this.segs2lines();
+  return;
   let {segs} =this;
   this.rotateSegs(segs,0.04*Math.PI*2,Point.mk(0,0));
   this.segs2lines();
