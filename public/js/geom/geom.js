@@ -974,6 +974,12 @@ LineSegment.intersectsLineSegment = function (seg) {
 	return !!this.intersect(seg);
 }
 */
+LineSegment.setEnds = function (e0,e1) {
+  let {end0,end1} = this;
+  end0.copyto(e0);
+  end1.copyto(e1);
+}
+  
 LineSegment.distanceTo = function (p) {
   let {end0,end1} = this;
   let vec = end1.difference(end0);

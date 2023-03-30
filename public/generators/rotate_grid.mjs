@@ -24,6 +24,77 @@ rs.pstate = {pspace:{},cstate:{});
 */
 rs.grid = [];
 
+rs.rect2lineSegs = function (rect) {
+  let {corner,extent} = rect;
+  let {x:cx,y:cy} = corner;
+  let {x:ex,y:ey} = extent;
+  let c0 = Point.mk(cx,cy);
+  let c1 = Point.mk(cx+ex,cy);
+  let c2 = Point.mk(cx+ex,cy+ey);
+  let c3 = Point.mk(cx,cy+ey);
+  let ls0 = LineSegment.mk(c0,c1);
+  let ls1 = LineSegment.mk(c1,c2);
+  let ls2 = LineSegment.mk(c2,c3);
+  let ls3 = LineSegment.mk(c3,c0);
+  return [ls0,ls1,ls2,ls3];
+}
+
+rs.intersectLineSegsLineSeg = function (rect,segs,seg) {
+  let {end0:e0,end1:e1} = seg;
+  let c0 = rect.contains(e0);
+  let c1 = rect.contains(e1);
+  
+  if (c0 && c1) {
+    return seg;
+  }
+  let cOne = c0||c1;
+  let inside = c0?e0:e1;
+  const buildSeg = function (ints) {
+    if (ints.length > 1) {
+      return LineSegment.mk(ints[0],ints[1]);
+    }
+    if (cOne && (ints.length)) {
+      return LineSegment.mk(inside,ints[0]);
+    }
+  }
+  let ints = [];
+  let [sg0,sg1,sg2,sg3] = segs;
+  let i0 = seg.intersect(sg0);
+  if (i0 && (typeof i0 === 'object')) {
+    ints.push(i0);
+  }
+  let bs = buildSeg(ints);
+  if (bs) {
+    return bs;
+  }
+  let i1 = seg.intersect(sg1);
+  if (i1 && (typeof i1 === 'object')) {
+    ints.push(i1);
+  }
+  bs = buildSeg(ints);
+  if (bs) {
+    return bs;
+  }
+  let i2 = seg.intersect(sg2);
+  if (i2 && (typeof i2 === 'object')) {
+    ints.push(i2);
+  }
+  bs = buildSeg(ints);
+  if (bs) {
+    return bs;
+  }
+  let i3 = seg.intersect(sg3);
+  if (i3 && (typeof i3 === 'object')) {
+    ints.push(i3);
+  }
+  bs = buildSeg(ints);
+  if (bs) {
+    return bs;
+  }
+}
+  
+    
+  
 
 
 rs.buildGrid = function () {
@@ -57,18 +128,24 @@ rs.buildGrid = function () {
 
 rs.addLines = function() {
   let {numRows:nr,numCols:nc,grid,lineP} = this;
-  let hlines =  this.set('hlines',arrayShape.mk());
-  let vlines =  this.set('vlines',arrayShape.mk());
+  let lines =  this.set('lines',arrayShape.mk());
+  let segs = this.set('segs',arrayShape.mk());
   for (let i=0;i<nc;i++) {
     for (let j=0;j<nr;j++) {
       let hline = (i === nc-1)?null:lineP.instantiate();
       let vline = (j === nr-1)?null:lineP.instantiate();
-      hlines.push(hline);
-      vlines.push(vline);
+      let hseg = (i === nc-1)?null:LineSegment.mk(Point.mk(0,0),Point.mk(0,0));
+      let vseg = (j === nr-1)?null:LineSegment.mk(Point.mk(0,0),Point.mk(0,0));
+      lines.push(hline);
+      lines.push(vline);
+      segs.push(hseg);
+      segs.push(vseg);
       let idx =i*nr+j;
       let g = grid[idx];
       g.hline = hline;
       g.vline = vline;
+      g.hseg = hseg;
+      g.vseg = vseg;
     }
   }
 }
@@ -85,46 +162,85 @@ rs.rotatePoint = function(p,angle,center) {
   return center.plus(Point.mk(rx,ry));
 }
 
-rs.rotateLine = function (line,angle,center,box) {
-  if (!line) {
-    debugger;
+rs.rotateSeg = function (seg,angle,center,box) {
+  if (!seg) {
     return;
   }
-  let {end0:e0,end1:e1} = line;
+  let {end0:e0,end1:e1} = seg;
   let re0  = this.rotatePoint(e0,angle,center);
   let re1  = this.rotatePoint(e1,angle,center);
-  line.setEnds(re0,re1);
-  line.update();
+  seg.setEnds(re0,re1);
 }
 
-rs.rotateLines = function (lines,angle,center,box) {
-  lines.forEach ((line) => {
-    this.rotateLine(line,angle,center,box);
+rs.rotateSegs = function (segs,angle,center,box) {
+  segs.forEach ((seg) => {
+    this.rotateSeg(seg,angle,center,box);
   });
 }
 
-rs.adjustLines = function() {
+rs.adjustSegs= function() {
   let {grid} = this;
   let ln = grid.length;
   for (let i=0;i<ln;i++) {
     let g=grid[i]
-    let {basePos:bp,offset,hline,vline,below,toRight} = g;
+    let {basePos:bp,offset,hseg,vseg,below,toRight} = g;
     let e0 = bp.plus(offset);
-    if (hline) {
+    if (hseg) {
       let tor = grid[toRight];
       let e1=(tor.basePos).plus(tor.offset);
-      hline.setEnds(e0,e1);
-      hline.update();
+      hseg.setEnds(e0,e1);
     }
-    if (vline) {
+    if (vseg) {
       let bl = grid[below];
       let e1=(bl.basePos).plus(bl.offset);
-      vline.setEnds(e0,e1);
-      vline.update();
+      vseg.setEnds(e0,e1);
     }
   }
 }
 
+rs.segs2lines = function () {
+  let {segs,lines} = this;
+  let ln = segs.length;
+  for (let i=0;i<ln;i++) {
+    let sg = segs[i];
+    let ln = lines[i];
+
+    if (sg) {
+      let {end0,end1} = sg;
+      ln.setEnds(end0,end1);
+      ln.show();
+      ln.update();
+    } else if (ln) {
+      ln.hide();
+      ln.update();
+    }
+  }
+}
+rs.theBoxR = Rectangle.mk(Point.mk(-50,-50),Point.mk(100,100));
+//rs.theBoxR = Rectangle.mk(Point.mk(-25,-25),Point.mk(50,50));
+
+
+rs.intersectSegs = function () {
+  let {segs,theBoxR,theBox} = this;
+  let nsegs = [];
+  segs.forEach((seg) =>{
+    if (seg) {
+      let nseg = this.intersectLineSegsLineSeg(theBoxR,theBox,seg);
+      nsegs.push(nseg);
+      if (nseg) {
+       // debugger;
+        let abc = this.intersectLineSegsLineSeg(theBoxR,theBox,seg);
+       // debugger;
+      }
+       
+    } else {
+      nsegs.push(null);
+    }
+  });
+  this.segs = nsegs;
+}
+     
+  
 rs.initProtos = function () {
   let lineP = this.lineP = linePP.instantiate();
   lineP['stroke-width'] = .2;
@@ -136,9 +252,16 @@ rs.initialize =  function () {
   this.initProtos();
   this.buildGrid();
   this.addLines();
-  this.adjustLines();
-  let {vlines} =this;
-  this.rotateLines(vlines,0.02*Math.PI*2,Point.mk(0,0))
+  this.adjustSegs();
+  this.segs2lines();
+  let {segs} =this;
+  this.rotateSegs(segs,0.04*Math.PI*2,Point.mk(0,0));
+  this.segs2lines();
+  this.theBox = this.rect2lineSegs(this.theBoxR);
+  this.intersectSegs();
+  this.segs2lines();
+
+  
 }
 
 rs.updateState = function () {
