@@ -193,21 +193,35 @@ rs.rotatePoint = function(p,angle,center) {
   return center.plus(Point.mk(rx,ry));
 }
 
-rs.rotateSeg = function (seg,angle,center,box) {
-  if (!seg) {
+rs.rotateSeg = function (oseg,iseg,angle,center,box) {
+  if (!iseg) {
     return;
   }
-  let {end0:e0,end1:e1} = seg;
+  let {end0:e0,end1:e1} = iseg;
   let re0  = this.rotatePoint(e0,angle,center);
   let re1  = this.rotatePoint(e1,angle,center);
-  seg.setEnds(re0,re1);
+  oseg.setEnds(re0,re1);
 }
 
-rs.rotateSegs = function (segs,angle,center,box) {
-  segs.forEach ((seg) => {
-    this.rotateSeg(seg,angle,center,box);
-  });
+rs.rotateSegs = function (osegs,isegs,angle,center,box) {
+  let ln = isegs.length;
+  for (let i=0;i<ln;i++) {
+    let iseg = isegs[i];
+    let oseg = osegs[i];
+    this.rotateSeg(oseg,iseg,angle,center,box);
+  };
 }
+
+rs.copySegs = function (isegs) {
+  let osegs = [];
+  isegs.forEach((iseg) => {
+    let {end0:e0,end1:e1} = iseg;
+    let oseg = LineSegment.mk(e0,e1);
+    osegs.push(oseg);
+  });
+  return osegs;
+}
+    
 
 rs.boxFilter= function(box) {
   let {grid} = this;
@@ -245,16 +259,22 @@ rs.boxFilter= function(box) {
   return {inBox:inSegs,outBox:outSegs};
 }
 
-rs.segs2lines = function (lines,segs) {
+rs.segs2lines = function (lines,segs,update) {
   let {lineP} = this;
   let ln = segs.length;
   for (let i=0;i<ln;i++) {
     let sg = segs[i];
-    let ln = lineP.instantiate();
-    let {end0,end1} = sg;
-    ln.setEnds(end0,end1);
-    lines.push(ln);
-    ln.show();
+    let ln = update?lines[i]:lineP.instantiate();
+    if (!sg) {
+      ln.hide();
+    } else {
+      let {end0,end1} = sg;
+      ln.setEnds(end0,end1);
+      ln.show();
+    }
+    if (!update) {
+      lines.push(ln);
+    }
     ln.update();
   }
 }
@@ -262,24 +282,23 @@ rs.theBoxR = Rectangle.mk(Point.mk(-50,-50),Point.mk(100,100));
 //rs.theBoxR = Rectangle.mk(Point.mk(-25,-25),Point.mk(50,50));
 
 
-rs.intersectSegs = function () {
-  let {segs,theBoxR,theBox} = this;
+rs.intersectSegs = function (boxR,box,segs) {
   let nsegs = [];
   segs.forEach((seg) =>{
     if (seg) {
-      let nseg = this.intersectLineSegsLineSeg(theBoxR,theBox,seg);
+      let nseg = this.intersectLineSegsLineSeg(boxR,box,seg);
       nsegs.push(nseg);
-      if (nseg) {
+     /* if (nseg) {
        // debugger;
         let abc = this.intersectLineSegsLineSeg(theBoxR,theBox,seg);
        // debugger;
-      }
+      }*/
        
     } else {
       nsegs.push(null);
     }
   });
-  this.segs = nsegs;
+  return nsegs;
 }
      
   
@@ -294,37 +313,38 @@ rs.initialize =  function () {
   this.initProtos();
   this.buildGrid();
   this.addSegs();
-    let hb = this.rectFromRowsCols({lowRow:2,highRow:4,shrinkBy:0.98});
-  let lines =  this.set('lines',arrayShape.mk());
-  let fs = this.boxFilter(hb);
-  //this.adjustSegs(hb);
- this.segs2lines(lines,fs.outBox);
- this.segs2lines(lines,fs.inBox);
+  let boxR = this.boxR = this.rectFromRowsCols({lowRow:2,highRow:5,shrinkBy:0.98});
+  let boxC = this.boxC = boxR.center();
+  let box = this.box = this.rect2lineSegs(this.theBoxR);
+  let linesI =  this.set('linesI',arrayShape.mk());
+  let linesO =  this.set('linesO',arrayShape.mk());
+ let fs = this.boxFilter(boxR);
+   let segsI = this.segsI = fs.inBox;
+   let segsIbuf = this.segsIbuf = this.copySegs(segsI);
+   let segsO = this.segsO = fs.outBox;
 
-  return;
-  let {segs} =this;
-  this.rotateSegs(segs,0.04*Math.PI*2,Point.mk(0,0));
-  this.segs2lines();
-  this.theBox = this.rect2lineSegs(this.theBoxR);
-  this.intersectSegs();
-  this.segs2lines();
+  //this.adjustSegs(hb);
+ this.segs2lines(linesO,segsO);
+ this.segs2lines(linesI,segsI);
+ linesI.forEach((line) => {line.stroke ='blue',line.update();});
+return;
+  this.rotateSegs(segsI,0.04*Math.PI*2,Point.mk(0,0));
+  let nsegs = this.intersectSegs(boxR,box,segsI);
+  this.segs2lines(linesI,nsegs,1);
 
   
 }
 
 rs.updateState = function () {
-  let {grid,stepsSoFar:ssf,numSteps,deltaX} =this;
-  let ln = grid.length;
-  for (let i=0;i<ln;i++) {
-    let g = grid[i];
-    let {speed} = g;
-    let fr = ssf/numSteps;
-    let a = fr*speed;
-    let fc = .2;
-    let vec = Point.mk(Math.cos(a),Math.sin(a)).times(fc*deltaX);
-    g.offset = vec;
-  }
-  this.adjustLines();
+  let {stepsSoFar:ssf,numSteps,segsI,segsIbuf,boxR,boxC,box,linesI} =this;
+  debugger;
+  let fr = ssf/numSteps;
+  let a = fr * 2.5 * Math.PI;
+  console.log('angle',a*(180/Math.PI));
+  this.rotateSegs(segsIbuf,segsI,a,boxC);
+  let nsegs = this.intersectSegs(boxR,box,segsIbuf);
+  //this.segs2lines(linesI,nsegs,1);
+  this.segs2lines(linesI,segsIbuf,1);
 }  
 
 
