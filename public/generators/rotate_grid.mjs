@@ -39,8 +39,25 @@ rs.rect2lineSegs = function (rect) {
   return [ls0,ls1,ls2,ls3];
 }
 
+
+rs.shrinkBy = function (rect,shr) {
+ let {corner,extent} = rect;
+ let {x:cx,y:cy} = corner;
+ let {x:ex,y:ey} = extent;
+ let cnx = cx + 0.5*ex;
+ let cny = cy + 0.5*ey;
+ let nex =ex*shr;
+ let ney =ey*shr;
+ let ncx = cnx - 0.5*nex;
+ let ncy = cny - 0.5*ney;
+ let nc = Point.mk(ncx,ncy);
+ let ne = Point.mk(nex,ney);
+ let nr = Rectangle.mk(nc,ne);
+ return nr;
+}
+ 
 rs.rectFromRowsCols = function (params) {
-  let {lowRow,highRow,lowCol,highCol} = params;
+  let {lowRow,highRow,lowCol,highCol,shrinkBy} = params;
   let {width,numRows:nr,deltaX} = this;
   let minx = -0.5*width;
   let bminx = minx+deltaX*lowRow;
@@ -48,8 +65,10 @@ rs.rectFromRowsCols = function (params) {
   let extx = bmaxx-bminx;
   let ext = Point.mk(extx,extx);
   let corner = Point.mk(bminx,bminx);
+  
   let rect = Rectangle.mk(corner,ext);
-  return rect;
+  let srect = this.shrinkBy(rect,shrinkBy);
+  return srect;
  }
 
 rs.intersectLineSegsLineSeg = function (rect,segs,seg) {
@@ -139,24 +158,23 @@ rs.buildGrid = function () {
 }
 
 
-rs.addLines = function() {
+rs.addSegs = function() {
   let {numRows:nr,numCols:nc,grid,lineP} = this;
-  let lines =  this.set('lines',arrayShape.mk());
-  let segs = this.set('segs',arrayShape.mk());
+  //let segs = this.set('segs',arrayShape.mk());
   for (let i=0;i<nc;i++) {
     for (let j=0;j<nr;j++) {
-      let hline = (i === nc-1)?null:lineP.instantiate();
-      let vline = (j === nr-1)?null:lineP.instantiate();
+      //let hline = (i === nc-1)?null:lineP.instantiate();
+      //let vline = (j === nr-1)?null:lineP.instantiate();
       let hseg = (i === nc-1)?null:LineSegment.mk(Point.mk(0,0),Point.mk(0,0));
       let vseg = (j === nr-1)?null:LineSegment.mk(Point.mk(0,0),Point.mk(0,0));
-      lines.push(hline);
-      lines.push(vline);
-      segs.push(hseg);
-      segs.push(vseg);
+      //lines.push(hline);
+      //lines.push(vline);
+      //segs.push(hseg);
+      //segs.push(vseg);
       let idx =i*nr+j;
       let g = grid[idx];
-      g.hline = hline;
-      g.vline = vline;
+     // g.hline = hline;
+     // g.vline = vline;
       g.hseg = hseg;
       g.vseg = vseg;
     }
@@ -191,9 +209,11 @@ rs.rotateSegs = function (segs,angle,center,box) {
   });
 }
 
-rs.adjustSegs= function(hideBox) {
+rs.boxFilter= function(box) {
   let {grid} = this;
   let ln = grid.length;
+  let inSegs = [];
+  let outSegs = [];
   for (let i=0;i<ln;i++) {
     let g=grid[i]
     let {basePos:bp,offset,hseg,vseg,below,toRight} = g;
@@ -202,34 +222,40 @@ rs.adjustSegs= function(hideBox) {
       let tor = grid[toRight];
       let e1=(tor.basePos).plus(tor.offset);
       hseg.setEnds(e0,e1);
-      hseg.hidden = hideBox.contains(e0) || hideBox.contains(e1);
+      let inBox = box.contains(e0) || box.contains(e1);
+      if (inBox) {
+        inSegs.push(hseg);
+      } else {
+        outSegs.push(hseg);
+      }
+      
     }
     if (vseg) {
       let bl = grid[below];
       let e1=(bl.basePos).plus(bl.offset);
       vseg.setEnds(e0,e1);
-      vseg.hidden = hideBox.contains(e0) || hideBox.contains(e1);
-
+      let inBox = box.contains(e0) || box.contains(e1);
+      if (inBox) {
+        inSegs.push(vseg);
+      } else {
+        outSegs.push(vseg);
+      }
     }
   }
+  return {inBox:inSegs,outBox:outSegs};
 }
 
-rs.segs2lines = function () {
-  let {segs,lines} = this;
+rs.segs2lines = function (lines,segs) {
+  let {lineP} = this;
   let ln = segs.length;
   for (let i=0;i<ln;i++) {
     let sg = segs[i];
-    let ln = lines[i];
-
-    if (sg&& (!sg.hidden)) {
-      let {end0,end1} = sg;
-      ln.setEnds(end0,end1);
-      ln.show();
-      ln.update();
-    } else if (ln) {
-      ln.hide();
-      ln.update();
-    }
+    let ln = lineP.instantiate();
+    let {end0,end1} = sg;
+    ln.setEnds(end0,end1);
+    lines.push(ln);
+    ln.show();
+    ln.update();
   }
 }
 rs.theBoxR = Rectangle.mk(Point.mk(-50,-50),Point.mk(100,100));
@@ -267,11 +293,14 @@ rs.initialize =  function () {
   debugger;
   this.initProtos();
   this.buildGrid();
-    let hb = this.rectFromRowsCols({lowRow:2,highRow:4});
+  this.addSegs();
+    let hb = this.rectFromRowsCols({lowRow:2,highRow:4,shrinkBy:0.98});
+  let lines =  this.set('lines',arrayShape.mk());
+  let fs = this.boxFilter(hb);
+  //this.adjustSegs(hb);
+ this.segs2lines(lines,fs.outBox);
+ this.segs2lines(lines,fs.inBox);
 
-  this.addLines();
-  this.adjustSegs(hb);
-  this.segs2lines();
   return;
   let {segs} =this;
   this.rotateSegs(segs,0.04*Math.PI*2,Point.mk(0,0));
