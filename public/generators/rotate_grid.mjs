@@ -10,7 +10,7 @@ addPathMethods(rs);
 let wd = 200;
 let nr = 8;
 rs.setName('rotate_grid');
-let topParams = {width:wd,height:wd,numRows:nr,numCols:nr,framePadding:.0*wd,frameStroke:'rgb(2,2,2)',frameStrokeWidth:1,saveAnimation:0,numSteps:1000}
+let topParams = {width:wd,height:wd,numRows:nr,numCols:nr,framePadding:.0*wd,frameStroke:'rgb(2,2,2)',frameStrokeWidth:1,saveAnimation:0,numSteps:51}
 Object.assign(rs,topParams);
 /*
 rs.addPath = function (nm,speed) {
@@ -70,6 +70,12 @@ rs.rectFromRowsCols = function (params) {
   let srect = this.shrinkBy(rect,shrinkBy);
   return srect;
  }
+ /*
+ A configuration is a triple {box:Rectangle,osegs:array_of(LineSegment),rsegs:array_of(LineSegment),lines:array_of(LineShape)}
+ 
+ osegs (original segments) are the segments clipped out of the grid by box, rsegs are osegs rotated,and lines are the lines corresponding to rsegs,
+ */
+ /* a step is a period when a given configuration is in force. {startTime:integer,dur,config,*/
 
 rs.intersectLineSegsLineSeg = function (rect,segs,seg) {
   let {end0:e0,end1:e1} = seg;
@@ -203,12 +209,14 @@ rs.rotateSeg = function (oseg,iseg,angle,center,box) {
   oseg.setEnds(re0,re1);
 }
 
-rs.rotateSegs = function (osegs,isegs,angle,center,box) {
-  let ln = isegs.length;
+rs.rotateSegs = function (rsegs,osegs,angle,center,box) {
+  let ln = osegs.length;
   for (let i=0;i<ln;i++) {
-    let iseg = isegs[i];
-    let oseg = osegs[i];
-    this.rotateSeg(oseg,iseg,angle,center,box);
+    let oseg = osegs[i];    
+    let rseg = rsegs[i];
+
+    
+    this.rotateSeg(rseg,oseg,angle,center,box);
   };
 }
 
@@ -300,51 +308,66 @@ rs.intersectSegs = function (boxR,box,segs) {
   });
   return nsegs;
 }
-     
+   /*
+ A configuration is an object {box:Rectangle,boxCenter:Poing,osegs:array_of(LineSegment),rsegs:array_of(LineSegment),lines:array_of(LineShape)}
+ 
+ osegs (original segments) are the segments clipped out of the grid by box, rsegs are osegs rotated,and lines are the lines corresponding to rsegs,
+ */
+ /* a step is a period when a given configuration is in force. {startTime:integer,dur,config,*/
   
+rs.mkConfig = function (box) {
+  let {lineP} = this;
+  let boxSegs = this.rect2lineSegs(box);
+  let fs = this.boxFilter(box);
+  let osegs = fs.inBox;
+  let rsegs =[];
+  let lines = this.set('lines',arrayShape.mk());
+  osegs.forEach((seg) => {
+    rsegs.push(LineSegment.mk(Point.mk(0,0),Point.mk(0,0)));
+    lines.push(lineP.instantiate());
+  });
+  let config = {box,center:box.center(),boxSegs,osegs,rsegs,lines}
+  return config;
+}
+
+rs.configSetFraction = function (c,fr) {
+  let {rsegs,osegs,lines,center} = c;
+  let a = fr * 2.0 * Math.PI;
+  console.log('angle',a*(180/Math.PI));
+  this.rotateSegs(rsegs,osegs,a,center);
+
+  //let nsegs = this.intersectSegs(boxR,box,segsIbuf);
+  //this.segs2lines(linesI,nsegs,1);
+  this.segs2lines(lines,rsegs,1);
+}
+  
+
 rs.initProtos = function () {
   let lineP = this.lineP = linePP.instantiate();
   lineP['stroke-width'] = .2;
   lineP.stroke = 'white';
+}
+   
   
-}  
+  
+  
+
 rs.initialize =  function () {
   debugger;
   this.initProtos();
   this.buildGrid();
   this.addSegs();
-  let boxR = this.boxR = this.rectFromRowsCols({lowRow:2,highRow:5,shrinkBy:0.98});
-  let boxC = this.boxC = boxR.center();
-  let box = this.box = this.rect2lineSegs(this.theBoxR);
-  let linesI =  this.set('linesI',arrayShape.mk());
-  let linesO =  this.set('linesO',arrayShape.mk());
- let fs = this.boxFilter(boxR);
-   let segsI = this.segsI = fs.inBox;
-   let segsIbuf = this.segsIbuf = this.copySegs(segsI);
-   let segsO = this.segsO = fs.outBox;
-
-  //this.adjustSegs(hb);
- this.segs2lines(linesO,segsO);
- this.segs2lines(linesI,segsI);
- linesI.forEach((line) => {line.stroke ='blue',line.update();});
-return;
-  this.rotateSegs(segsI,0.04*Math.PI*2,Point.mk(0,0));
-  let nsegs = this.intersectSegs(boxR,box,segsI);
-  this.segs2lines(linesI,nsegs,1);
-
+  let box =this.rectFromRowsCols({lowRow:2,highRow:5,shrinkBy:0.98});
+  let config = this.config  = this.mkConfig(box);
+  this.configSetFraction(config,0);
   
 }
 
 rs.updateState = function () {
-  let {stepsSoFar:ssf,numSteps,segsI,segsIbuf,boxR,boxC,box,linesI} =this;
+  let {stepsSoFar:ssf,numSteps,config} =this;
   debugger;
-  let fr = ssf/numSteps;
-  let a = fr * 2.5 * Math.PI;
-  console.log('angle',a*(180/Math.PI));
-  this.rotateSegs(segsIbuf,segsI,a,boxC);
-  let nsegs = this.intersectSegs(boxR,box,segsIbuf);
-  //this.segs2lines(linesI,nsegs,1);
-  this.segs2lines(linesI,segsIbuf,1);
+  let fr = ssf/(numSteps-1);
+  this.configSetFraction(config,fr);
 }  
 
 

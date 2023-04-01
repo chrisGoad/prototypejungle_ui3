@@ -6,7 +6,8 @@ let rs = generatorP.instantiate();
 let ns=6*64;
 let vr = 'b';
 //rs.setName('line_path_2_9_'+ns);
-rs.setName('line_path_2_11'+vr);
+//rs.setName('line_path_2_11'+vr);
+rs.setName('line_path_2_11');
 
  let ht = 100;
   let d = 0.5*ht;
