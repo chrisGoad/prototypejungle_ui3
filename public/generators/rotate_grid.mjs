@@ -79,6 +79,23 @@ rs.rectFromRowsCols = function (params) {
  osegs (original segments) are the segments clipped out of the grid by box, rsegs are osegs rotated,and lines are the lines corresponding to rsegs,
  */
  /* a step is a period when a given configuration is in force. {startTime:integer,dur,config,*/
+rs.intersectLineSegLineSeg = function (seg0,seg1) {
+  let {end0:s0e0,end1:s0e1} = seg0;
+  let {end0:s1e0,end1:s1e1} = seg1;
+  let {x:a,y:b} = s0e0;
+  let v0 = s0e1.difference(s0e0);
+  let {x:c,y:d} = v0;
+  let {x:A,y:B} = s1e0;
+  let v1 = s1e1.difference(s1e0);
+  let {x:C,y:D} = v1;
+  let t2 = B-b- ((A-a)*d)/c;//((A - a)*d/c) - B;
+  let t1 =(C*d)/c - D;
+  let T = t2/t1;
+  let x = A + T*C;
+  let y = B+ T*D;
+  let p = Point.mk(x,y);
+  return p;
+}
 
 rs.intersectLineSegsLineSeg = function (rect,segs,seg) {
   let {end0:e0,end1:e1} = seg;
@@ -415,6 +432,10 @@ rs.setNumSteps = function () {
 
 rs.initialize =  function () {
   debugger;
+  let seg0 = LineSegment.mk(Point.mk(-10,-10),Point.mk(10,10));
+  let seg1 = LineSegment.mk(Point.mk(-10,10),Point.mk(10,-10));
+  let p = this.intersectLineSegLineSeg(seg0,seg1);
+  
   this.initProtos();
   this.addFrame();
   this.buildGrid();
@@ -433,13 +454,9 @@ rs.initialize =  function () {
   
   start = 12;
   let boxUL =this.rectFromRowsCols({lowRow:0,highRow:3,lowCol:0,highCol:3,shrinkBy:0.98});
-  //addAstep(boxUL,start,dur,count);
   let boxUR =this.rectFromRowsCols({lowRow:0,highRow:3,lowCol:6,highCol:9,shrinkBy:0.98});
-  //addAstep(boxUR,start,dur,count);
   let boxLL =this.rectFromRowsCols({lowRow:6,highRow:9,lowCol:0,highCol:3,shrinkBy:0.98});
-  //addAstep(boxLL,start,dur,count);
   let boxLR =this.rectFromRowsCols({lowRow:6,highRow:9,lowCol:6,highCol:9,shrinkBy:0.98});
-  //addAstep(boxLR,start,dur,count);
   boxes = [boxUL,boxUR,boxLL,boxLR];
   boxes.forEach((box) => {
     addAstep(box,start,dur,count);
@@ -448,16 +465,28 @@ rs.initialize =  function () {
 
   start = 24;
   let boxLM =this.rectFromRowsCols({lowRow:3,highRow:6,lowCol:0,highCol:3,shrinkBy:0.98});
-  addAstep(boxLM,start,dur,count);
+  //addAstep(boxLM,start,dur,count);
   let boxRM =this.rectFromRowsCols({lowRow:3,highRow:6,lowCol:6,highCol:9,shrinkBy:0.98});
-  addAstep(boxRM,start,dur,count);
+  //addAstep(boxRM,start,dur,count);
   let boxTM =this.rectFromRowsCols({lowRow:0,highRow:3,lowCol:3,highCol:6,shrinkBy:0.98});
-  addAstep(boxTM,start,dur,count);
+  //addAstep(boxTM,start,dur,count);
   let boxBM =this.rectFromRowsCols({lowRow:6,highRow:9,lowCol:3,highCol:6,shrinkBy:0.98});
-  addAstep(boxBM,start,dur,count);
-  
+  //addAstep(boxBM,start,dur,count);
+  boxes = [boxLM,boxRM,boxTM,boxBM];
+  boxes.forEach((box) => {
+    addAstep(box,start,dur,count);
+   });
   start = 36;
  
+  start = 36;
+  let bboxUL =this.rectFromRowsCols({lowRow:0,highRow:4,lowCol:0,highCol:4,shrinkBy:0.98});
+  let bboxUR =this.rectFromRowsCols({lowRow:0,highRow:4,lowCol:5,highCol:9,shrinkBy:0.98});
+  let bboxLL =this.rectFromRowsCols({lowRow:5,highRow:9,lowCol:0,highCol:4,shrinkBy:0.98});
+  let bboxLR =this.rectFromRowsCols({lowRow:5,highRow:9,lowCol:5,highCol:9,shrinkBy:0.98});
+  boxes = [bboxUL,bboxUR,bboxLL,bboxLR];
+  boxes.forEach((box) => {
+    addAstep(box,start,dur,count);
+   });
   this.setNumSteps();
   //this.configSetFraction(config,0);
   this.updateState();
