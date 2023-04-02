@@ -8,9 +8,9 @@ let rs = basicP.instantiate();
 addPathMethods(rs);
 
 let wd = 200;
-let nr = 8;
+let nr = 10;
 rs.setName('rotate_grid');
-let topParams = {width:wd,height:wd,numRows:nr,numCols:nr,framePadding:.0*wd,frameStroke:'rgb(2,2,2)',frameStrokeWidth:1,saveAnimation:0,numSteps:51}
+let topParams = {width:wd,height:wd,numRows:nr,numCols:nr,framePadding:.1*wd,frameStrokee:'rgb(2,2,2)',frameStroke:'white',frameStrokeWidth:1,saveAnimation:1,numSteps:51}
 Object.assign(rs,topParams);
 /*
 rs.addPath = function (nm,speed) {
@@ -59,12 +59,15 @@ rs.shrinkBy = function (rect,shr) {
 rs.rectFromRowsCols = function (params) {
   let {lowRow,highRow,lowCol,highCol,shrinkBy} = params;
   let {width,numRows:nr,deltaX} = this;
-  let minx = -0.5*width;
-  let bminx = minx+deltaX*lowRow;
-  let bmaxx = minx+deltaX*highRow;
-  let extx = bmaxx-bminx;
-  let ext = Point.mk(extx,extx);
-  let corner = Point.mk(bminx,bminx);
+  let lowx = -0.5*width;
+  let miny = lowx+deltaX*lowRow;
+  let maxy = lowx+deltaX*highRow;
+  let exty = maxy-miny;
+  let minx = lowx+deltaX*lowCol;
+  let maxx = lowx+deltaX*highCol;
+  let extx = maxx-minx;
+  let ext = Point.mk(extx,exty);
+  let corner = Point.mk(minx,miny);
   
   let rect = Rectangle.mk(corner,ext);
   let srect = this.shrinkBy(rect,shrinkBy);
@@ -138,8 +141,8 @@ rs.intersectLineSegsLineSeg = function (rect,segs,seg) {
 rs.buildGrid = function () {
   let gr = this.grid = [];
   let {numRows:nr,numCols:nc,height:ht,width:wd} = this;
-  let deltaX = this.deltaX =wd/nc;
-  let deltaY = this.deltaY = ht/nr;
+  let deltaX = this.deltaX =wd/(nc-1);
+  let deltaY = this.deltaY = ht/(nr-1);
   let minX = -0.5*wd;
   let minY = -0.5*ht;
   for (let i=0;i<nc;i++) {
@@ -230,42 +233,6 @@ rs.copySegs = function (isegs) {
   return osegs;
 }
     
-
-rs.boxFilterrr= function(box) {
-  let {grid} = this;
-  let ln = grid.length;
-  let inSegs = [];
-  let outSegs = [];
-  for (let i=0;i<ln;i++) {
-    let g=grid[i]
-    let {basePos:bp,offset,hseg,vseg,below,toRight} = g;
-    let e0 = bp.plus(offset);
-    if (hseg) {
-      let tor = grid[toRight];
-      let e1=(tor.basePos).plus(tor.offset);
-      hseg.setEnds(e0,e1);
-      let inBox = box.contains(e0) || box.contains(e1);
-      if (inBox) {
-        inSegs.push(hseg);
-      } else {
-        outSegs.push(hseg);
-      }
-      
-    }
-    if (vseg) {
-      let bl = grid[below];
-      let e1=(bl.basePos).plus(bl.offset);
-      vseg.setEnds(e0,e1);
-      let inBox = box.contains(e0) || box.contains(e1);
-      if (inBox) {
-        inSegs.push(vseg);
-      } else {
-        outSegs.push(vseg);
-      }
-    }
-  }
-  return {inBox:inSegs,outBox:outSegs};
-}
 
 
 rs.boxFilter= function(box) {
@@ -418,10 +385,10 @@ rs.configSetFraction = function (c,fr) {
 
 rs.theScript = [];
 
-  
-rs.addStep = function (config,startTime,duration) {
-  let {theScript} = this;
-  let step = {config,startTime,duration};
+rs.baseDur = 4;
+rs.addStep = function (config,startTime,duration,count) {
+  let {theScript,baseDur} = this;
+  let step = {config,startTime:baseDur*startTime,duration:baseDur*duration,count};
   theScript.push(step);
 }
    
@@ -449,12 +416,48 @@ rs.setNumSteps = function () {
 rs.initialize =  function () {
   debugger;
   this.initProtos();
+  this.addFrame();
   this.buildGrid();
   this.addSegs();
   this.initOutSegs();
-  let box =this.rectFromRowsCols({lowRow:2,highRow:5,shrinkBy:0.98});
-  let config = this.mkConfig(box);
-  this.addStep(config,0,10);
+  let count = 2;
+  let dur = 10;
+  let start = 0;
+  let box,config,boxes;
+  const addAstep = (box,start,duration,count) =>{
+    let config = this.mkConfig(box);
+    this.addStep(config,start,duration,count);
+  }
+  let boxC =this.rectFromRowsCols({lowRow:3,highRow:6,lowCol:3,highCol:6,shrinkBy:0.98});
+  addAstep(boxC,start,dur,count);
+  
+  start = 12;
+  let boxUL =this.rectFromRowsCols({lowRow:0,highRow:3,lowCol:0,highCol:3,shrinkBy:0.98});
+  //addAstep(boxUL,start,dur,count);
+  let boxUR =this.rectFromRowsCols({lowRow:0,highRow:3,lowCol:6,highCol:9,shrinkBy:0.98});
+  //addAstep(boxUR,start,dur,count);
+  let boxLL =this.rectFromRowsCols({lowRow:6,highRow:9,lowCol:0,highCol:3,shrinkBy:0.98});
+  //addAstep(boxLL,start,dur,count);
+  let boxLR =this.rectFromRowsCols({lowRow:6,highRow:9,lowCol:6,highCol:9,shrinkBy:0.98});
+  //addAstep(boxLR,start,dur,count);
+  boxes = [boxUL,boxUR,boxLL,boxLR];
+  boxes.forEach((box) => {
+    addAstep(box,start,dur,count);
+   });
+
+
+  start = 24;
+  let boxLM =this.rectFromRowsCols({lowRow:3,highRow:6,lowCol:0,highCol:3,shrinkBy:0.98});
+  addAstep(boxLM,start,dur,count);
+  let boxRM =this.rectFromRowsCols({lowRow:3,highRow:6,lowCol:6,highCol:9,shrinkBy:0.98});
+  addAstep(boxRM,start,dur,count);
+  let boxTM =this.rectFromRowsCols({lowRow:0,highRow:3,lowCol:3,highCol:6,shrinkBy:0.98});
+  addAstep(boxTM,start,dur,count);
+  let boxBM =this.rectFromRowsCols({lowRow:6,highRow:9,lowCol:3,highCol:6,shrinkBy:0.98});
+  addAstep(boxBM,start,dur,count);
+  
+  start = 36;
+ 
   this.setNumSteps();
   //this.configSetFraction(config,0);
   this.updateState();
@@ -465,16 +468,22 @@ rs.initialize =  function () {
 
 
 rs.executeStep = function (step) {
-  let {startTime,duration,config} = step;
+  let {startTime,duration,config,count} = step;
   let {box} = config;
   let {stepsSoFar:ssf} = this;
     debugger;
 
   let relTime = ssf - startTime;
   if ((relTime <0)||(relTime > duration)) {
+    debugger;
+    let {lines} = config;
+    lines.forEach((line) => {
+      line.hide();
+      line.update();
+    });
     return null;
   }
-  let fr = relTime/duration;
+  let fr = count*(relTime/duration);
   this.configSetFraction(config,fr);
   return config;
 }
