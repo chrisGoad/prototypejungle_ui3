@@ -156,7 +156,7 @@ rs.buildGrid = function () {
      // let speed = (minSpeed+dSpeed*Math.random())*2*Math.PI;
       let speed = (Math.random()>0.5?30:-30)*2*Math.PI;
     //  this.addPath(name,speed);
-      let g = {name,row:i,col:i,index:idx,basePos:p,below:idx+1,toRight:idx+nr,offset:Point.mk(0,0),speed};
+      let g = {name,row:j,col:i,index:idx,basePos:p,below:idx+1,toRight:idx+nr,offset:Point.mk(0,0),speed};
      //let g = {name,row:i,col:i,index:idx,basePos:p,below:idx+1,toRight:idx+nr,offset:Point.mk(fc*Math.random()*deltaX,fc*Math.random()*deltaY)};
       gr.push(g);
     }
@@ -166,25 +166,25 @@ rs.buildGrid = function () {
 
 rs.addSegs = function() {
   let {numRows:nr,numCols:nc,grid,lineP} = this;
-  //let segs = this.set('segs',arrayShape.mk());
-  for (let i=0;i<nc;i++) {
-    for (let j=0;j<nr;j++) {
-      //let hline = (i === nc-1)?null:lineP.instantiate();
-      //let vline = (j === nr-1)?null:lineP.instantiate();
-      let hseg = (i === nc-1)?null:LineSegment.mk(Point.mk(0,0),Point.mk(0,0));
-      let vseg = (j === nr-1)?null:LineSegment.mk(Point.mk(0,0),Point.mk(0,0));
-      //lines.push(hline);
-      //lines.push(vline);
-      //segs.push(hseg);
-      //segs.push(vseg);
-      let idx =i*nr+j;
-      let g = grid[idx];
-     // g.hline = hline;
-     // g.vline = vline;
+  let allSegs = this.allSegs = [];
+  grid.forEach((g) => {
+    let {basePos:bp,offset,hseg,vseg,below,toRight,row:j,col:i} = g;
+    let e0 = bp.plus(offset);
+    if (i < (nc - 1)) {
+      let tor = grid[toRight];
+      let e1=(tor.basePos).plus(tor.offset);
+      let hseg = LineSegment.mk(e0,e1);
       g.hseg = hseg;
-      g.vseg = vseg;
+      allSegs.push(hseg);
     }
-  }
+    if (j < (nr - 1)) {
+      let b = grid[below];
+      let e1=(b.basePos).plus(b.offset);
+      let vseg = LineSegment.mk(e0,e1);
+      g.vseg = vseg;
+      allSegs.push(vseg);
+    }
+  });
 }
 
 rs.rotatePoint = function(p,angle,center) {
@@ -231,7 +231,7 @@ rs.copySegs = function (isegs) {
 }
     
 
-rs.boxFilter= function(box) {
+rs.boxFilterrr= function(box) {
   let {grid} = this;
   let ln = grid.length;
   let inSegs = [];
@@ -266,6 +266,21 @@ rs.boxFilter= function(box) {
   }
   return {inBox:inSegs,outBox:outSegs};
 }
+
+
+rs.boxFilter= function(box) {
+  let {allSegs} = this;
+  let segs = [];
+  allSegs.forEach((seg) => {
+    let {end0:e0,end1:e1} = seg;
+    let inBox = box.contains(e0) || box.contains(e1);
+    if (inBox) {
+      segs.push(seg);
+    }
+  });
+  return segs;
+}  
+
 
 rs.segs2lines = function (lines,segs,update) {
   let {lineP} = this;
@@ -309,30 +324,90 @@ rs.intersectSegs = function (boxR,box,segs) {
   return nsegs;
 }
    /*
- A configuration is an object {box:Rectangle,boxCenter:Poing,osegs:array_of(LineSegment),rsegs:array_of(LineSegment),lines:array_of(LineShape)}
+ A configuration is an object {index:integer,box:Rectangle,boxCenter:Point,osegs:array_of(LineSegment),rsegs:array_of(LineSegment),lines:array_of(LineShape)}
  
  osegs (original segments) are the segments clipped out of the grid by box, rsegs are osegs rotated,and lines are the lines corresponding to rsegs,
  */
- /* a step is a period when a given configuration is in force. {startTime:integer,dur,config,*/
-  
+ /* a step is a configuration together with the period when the configuration is in force. {startTime:integer,duration,config}
+ a script is a time-ordered array of steps. The updateState method runs rs.theScript.*/
+
+rs.configs =  [];
+
 rs.mkConfig = function (box) {
-  let {lineP} = this;
+  let {lineP,configs} = this;
+  let index = configs.length;
   let boxSegs = this.rect2lineSegs(box);
-  let fs = this.boxFilter(box);
-  let osegs = fs.inBox;
+  let osegs = this.boxFilter(box);
   let rsegs =[];
-  let lines = this.set('lines',arrayShape.mk());
+  let lines = this.set('lines_'+index,arrayShape.mk());
   osegs.forEach((seg) => {
     rsegs.push(LineSegment.mk(Point.mk(0,0),Point.mk(0,0)));
     lines.push(lineP.instantiate());
   });
-  let config = {box,center:box.center(),boxSegs,osegs,rsegs,lines}
+  let config = {index,box,center:box.center(),boxSegs,osegs,rsegs,lines};
+  configs.push(config);
   return config;
 }
 
+rs.initOutSegs = function () {
+  this.outSegs = [];
+  this.set('outLines',arrayShape.mk());
+}
+
+rs.displayOutSegs = function (configs) {
+  let {outLines,allSegs,lineP} = this; 
+  debugger;
+  outLines.forEach((line) => {
+    line.hide();
+    line.update();
+  });
+  let outSegs = [];
+  let numLines = outLines.length;
+  let numConfigs = configs.length;
+  allSegs.forEach((seg) => {
+    let inConfig = 0;
+    for (let i=0;i<numConfigs;i++) {
+      if (inConfig) {
+        break;
+      }
+      let config = configs[i];
+      let {osegs} = config;
+      let numOsegs = osegs.length;
+      for (let j=0;j<numOsegs;j++) {
+        let oseg = osegs[j];
+        if (oseg === seg) {
+          inConfig = 1;
+          break;
+        }
+      }
+    }
+    if (!inConfig) {
+      outSegs.push(seg);
+    }
+  });
+  let numOutSegs = outSegs.length;
+  for (let i=0;i<numOutSegs;i++) {
+    let seg = outSegs[i];
+    let {end0:e0,end1:e1} = seg;
+    let line;
+    if (i<numLines) {
+      line = outLines[i];
+    } else {
+      line = lineP.instantiate();
+      outLines.push(line);
+    }
+    line.show();
+    line.setEnds(e0,e1);
+    line.update();
+  } 
+}  
+    
+        
+      
+    
 rs.configSetFraction = function (c,fr) {
   let {rsegs,osegs,lines,center} = c;
-  let a = fr * 2.0 * Math.PI;
+  let a = fr * 0.5 * Math.PI;
   console.log('angle',a*(180/Math.PI));
   this.rotateSegs(rsegs,osegs,a,center);
 
@@ -340,7 +415,17 @@ rs.configSetFraction = function (c,fr) {
   //this.segs2lines(linesI,nsegs,1);
   this.segs2lines(lines,rsegs,1);
 }
+
+rs.theScript = [];
+
   
+rs.addStep = function (config,startTime,duration) {
+  let {theScript} = this;
+  let step = {config,startTime,duration};
+  theScript.push(step);
+}
+   
+
 
 rs.initProtos = function () {
   let lineP = this.lineP = linePP.instantiate();
@@ -350,25 +435,69 @@ rs.initProtos = function () {
    
   
   
-  
+rs.setNumSteps = function () {
+  let {theScript} = this;
+  let mx = 0;
+  theScript.forEach((step) => {
+    let {startTime,duration} = step;
+    let endTime = startTime+duration;
+    mx = Math.max(mx,endTime);    
+  });
+  this.numSteps = mx+1;
+}
 
 rs.initialize =  function () {
   debugger;
   this.initProtos();
   this.buildGrid();
   this.addSegs();
+  this.initOutSegs();
   let box =this.rectFromRowsCols({lowRow:2,highRow:5,shrinkBy:0.98});
-  let config = this.config  = this.mkConfig(box);
-  this.configSetFraction(config,0);
+  let config = this.mkConfig(box);
+  this.addStep(config,0,10);
+  this.setNumSteps();
+  //this.configSetFraction(config,0);
+  this.updateState();
+  //this.displayOutSegs(activeConfigs);
+
   
 }
 
+
+rs.executeStep = function (step) {
+  let {startTime,duration,config} = step;
+  let {box} = config;
+  let {stepsSoFar:ssf} = this;
+    debugger;
+
+  let relTime = ssf - startTime;
+  if ((relTime <0)||(relTime > duration)) {
+    return null;
+  }
+  let fr = relTime/duration;
+  this.configSetFraction(config,fr);
+  return config;
+}
+  
 rs.updateState = function () {
-  let {stepsSoFar:ssf,numSteps,config} =this;
+  let {stepsSoFar:ssf,numSteps,theScript} =this;
+  let activeConfigs = [];
+  theScript.forEach((step) => {
+    let config = this.executeStep(step);
+    if (config) {
+      activeConfigs.push(config);
+    }
+  });
+  this.displayOutSegs(activeConfigs);
+} 
+
+/* 
+rs.updateState = function () {
+  let {stepsSoFar:ssf,numSteps,theScript} =this;
   debugger;
   let fr = ssf/(numSteps-1);
   this.configSetFraction(config,fr);
-}  
+}  */
 
 
     
