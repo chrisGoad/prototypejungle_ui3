@@ -131,60 +131,6 @@ rs.intersectLineSegLineSegs = function (seg,segs) {
 }
     
 
-
-rs.intersectLineSegsLineSeg = function (rect,segs,seg) {
-  let {end0:e0,end1:e1} = seg;
-  let c0 = rect.contains(e0);
-  let c1 = rect.contains(e1);
-  
-  if (c0 && c1) {
-    return seg;
-  }
-  let cOne = c0||c1;
-  let inside = c0?e0:e1;
-  const buildSeg = function (ints) {
-    if (ints.length > 1) {
-      return LineSegment.mk(ints[0],ints[1]);
-    }
-    if (cOne && (ints.length)) {
-      return LineSegment.mk(inside,ints[0]);
-    }
-  }
-  let ints = [];
-  let [sg0,sg1,sg2,sg3] = segs;
-  let i0 = seg.intersect(sg0);
-  if (i0 && (typeof i0 === 'object')) {
-    ints.push(i0);
-  }
-  let bs = buildSeg(ints);
-  if (bs) {
-    return bs;
-  }
-  let i1 = seg.intersect(sg1);
-  if (i1 && (typeof i1 === 'object')) {
-    ints.push(i1);
-  }
-  bs = buildSeg(ints);
-  if (bs) {
-    return bs;
-  }
-  let i2 = seg.intersect(sg2);
-  if (i2 && (typeof i2 === 'object')) {
-    ints.push(i2);
-  }
-  bs = buildSeg(ints);
-  if (bs) {
-    return bs;
-  }
-  let i3 = seg.intersect(sg3);
-  if (i3 && (typeof i3 === 'object')) {
-    ints.push(i3);
-  }
-  bs = buildSeg(ints);
-  if (bs) {
-    return bs;
-  }
-}
   
     
   
@@ -242,6 +188,34 @@ rs.addSegs = function() {
   });
 }
 
+
+rs.addCenters = function() {
+  let {numRows:nr,numCols:nc,grid,circleP,centerShapes} = this;
+  let allCenters = this.allCenters = [];
+  grid.forEach((g) => {
+    let {basePos:bp,offset,hseg,vseg,below,toRight,row:j,col:i} = g;
+    let base = bp.plus(offset);
+    if ((i < (nc - 1))&&(j < (nr - 1))) {
+      let tor = grid[toRight];
+      let b = grid[below];
+
+      let cph=(tor.basePos).plus(tor.offset);
+      let cphv = cph.difference(base).times(0.5);
+      
+      
+      let cpv=(b.basePos).plus(b.offset);
+      let cpvv = cpv.difference(base).times(0.5);
+      let cp = base.plus(cphv).plus(cpvv);
+      allCenters.push(cp);
+      let crc = circleP.instantiate();
+      crc.moveto(cp);
+      centerShapes.push(crc);
+      
+    }
+  });
+}
+
+
 rs.rotatePoint = function(p,angle,center) {
   let v = p.difference(center);
   let m00 = Math.cos(angle);
@@ -254,6 +228,10 @@ rs.rotatePoint = function(p,angle,center) {
   return center.plus(Point.mk(rx,ry));
 }
 
+rs.rotatePointInto = function(rp,op,angle,center) {
+  let p = this.rotatePoint(op,angle,center);
+  rp.copyTo(p);
+}
 rs.rotateSeg = function (oseg,iseg,angle,center,box) {
   if (!iseg) {
     return;
@@ -273,6 +251,20 @@ rs.rotateSegs = function (rsegs,osegs,angle,center,box) {
     
     this.rotateSeg(rseg,oseg,angle,center,box);
   };
+}
+
+
+rs.rotateCenters = function (ocenters,angle,center,box) {
+  let ln = ocenters.length;
+  let rcenters = [];
+  for (let i=0;i<ln;i++) {
+    let p = ocenters[i];    
+    let rseg = rcenters[i];
+
+    
+    let rp = this.rotatePoint(p,angle,center,box);
+  };
+  return rcenters;
 }
 
 rs.copySegs = function (isegs) {
@@ -299,6 +291,20 @@ rs.boxFilter= function(box) {
   });
   return segs;
 }  
+
+
+rs.boxFilterCenters= function(box) {
+  let {allCenters} = this;
+  let centers = [];
+  allCenters.forEach((p) => {
+    let inBox = box.contains(p);
+    if (inBox) {
+      centers.push(p);
+    }
+  });
+  return centers;
+}  
+
 
 
 rs.segs2lines = function (lines,segs,update) {
@@ -343,7 +349,9 @@ rs.intersectSegs = function (boxR,box,segs) {
   return nsegs;
 }
    /*
- A configuration is an object {index:integer,box:Rectangle,boxCenter:Point,osegs:array_of(LineSegment),rsegs:array_of(LineSegment),lines:array_of(LineShape)}
+ A configuration is an object {index:integer,box:Rectangle,boxCenter:Point,osegs:array_of(LineSegment),
+   ocenters:array_of(Point),rsegs:array_of(LineSegment),lines:array_of(LineShape),
+   reverse:boolean}
  
  osegs (original segments) are the segments clipped out of the grid by box, rsegs are osegs rotated,and lines are the lines corresponding to rsegs,
  */
@@ -352,18 +360,19 @@ rs.intersectSegs = function (boxR,box,segs) {
 
 rs.configs =  [];
 
-rs.mkConfig = function (box) {
+rs.mkConfig = function (box,reverse) {
   let {lineP,configs} = this;
   let index = configs.length;
   let boxSegs = this.rect2lineSegs(box);
   let osegs = this.boxFilter(box);
+  let ocenters = this.boxFilterCenters(box);
   let rsegs =[];
   let lines = this.set('lines_'+index,arrayShape.mk());
   osegs.forEach((seg) => {
     rsegs.push(LineSegment.mk(Point.mk(0,0),Point.mk(0,0)));
     lines.push(lineP.instantiate());
   });
-  let config = {index,box,center:box.center(),boxSegs,osegs,rsegs,lines};
+  let config = {index,box,center:box.center(),boxSegs,osegs,ocenters,rsegs,lines,reverse};
   configs.push(config);
   return config;
 }
@@ -425,10 +434,11 @@ rs.displayOutSegs = function (configs) {
       
     
 rs.configSetFraction = function (c,fr) {
-  let {rsegs,osegs,lines,center,boxSegs,box} = c;
-  let a = fr * 0.5 * Math.PI;
+  let {rsegs,osegs,ocenters,lines,center,boxSegs,box,reverse} = c;
+  let a = (reverse?-fr:fr) * 0.5 * Math.PI;
   console.log('angle',a*(180/Math.PI));
   this.rotateSegs(rsegs,osegs,a,center);
+  let rcenters = this.rotateCenters(ocenters,a,center);
   let ln=rsegs.length;
   for (let i=0;i<ln;i++) {
     let rseg = rsegs[i];
@@ -487,7 +497,7 @@ rs.setNumSteps = function (n) {
   this.numSteps = mx+1+n;
 }
 
-rs.initialize =  function () {
+rs.initializee =  function () {
   debugger;
   //let seg0 = LineSegment.mk(Point.mk(-10,-10),Point.mk(10,12));
   let seg0 = LineSegment.mk(Point.mk(1,1),Point.mk(10,10));
@@ -503,8 +513,11 @@ rs.initialize =  function () {
   let dur = 10;
   let start = 0;
   let box,config,boxes;
-  const addAstep = (box,start,duration,count) =>{
-    let config = this.mkConfig(box);
+  const addAstep = (ibox,start,duration,count) =>{
+    let isa = Array.isArray(ibox);
+    let reverse = isa;
+    let box = isa?ibox[0]:ibox;
+    let config = this.mkConfig(box,reverse);
     this.addStep(config,start,duration,count);
   }
   
@@ -516,12 +529,11 @@ rs.initialize =  function () {
   let boxUR =this.rectFromRowsCols({lowRow:0,highRow:3,lowCol:6,highCol:9,shrinkBy:0.98});
   let boxLL =this.rectFromRowsCols({lowRow:6,highRow:9,lowCol:0,highCol:3,shrinkBy:0.98});
   let boxLR =this.rectFromRowsCols({lowRow:6,highRow:9,lowCol:6,highCol:9,shrinkBy:0.98});
-  boxes = [boxUL,boxUR,boxLL,boxLR];
+  boxes = [boxUL,boxLL,[boxUR],[boxLR]];
   boxes.forEach((box) => {
     addAstep(box,start,dur,count);
    });
-
-
+  
   start = 24;
   let boxLM =this.rectFromRowsCols({lowRow:3,highRow:6,lowCol:0,highCol:3,shrinkBy:0.98});
   let boxRM =this.rectFromRowsCols({lowRow:3,highRow:6,lowCol:6,highCol:9,shrinkBy:0.98});
@@ -531,6 +543,8 @@ rs.initialize =  function () {
   boxes.forEach((box) => {
     addAstep(box,start,dur,count);
    });
+     boxes = [boxLM,boxRM,boxTM,boxBM];
+
   start = 36;
  
   start = 36;
@@ -538,7 +552,7 @@ rs.initialize =  function () {
   let bboxUR =this.rectFromRowsCols({lowRow:0,highRow:4,lowCol:5,highCol:9,shrinkBy:0.98});
   let bboxLL =this.rectFromRowsCols({lowRow:5,highRow:9,lowCol:0,highCol:4,shrinkBy:0.98});
   let bboxLR =this.rectFromRowsCols({lowRow:5,highRow:9,lowCol:5,highCol:9,shrinkBy:0.98});
-  boxes = [bboxUL,bboxUR,bboxLL,bboxLR];
+  boxes = [bboxUL,[bboxUR],bboxLL,[bboxLR]];
   boxes.forEach((box) => {
     addAstep(box,start,dur,count);
    });
@@ -546,7 +560,7 @@ rs.initialize =  function () {
   start = 48;
   //let bboxC = this.rectFromRowsCols({lowRow:1,highRow:8,lowCol:1,highCol:8,shrinkBy:0.98});
   let bboxC = this.rectFromRowsCols({lowRow:0,highRow:9,lowCol:0,highCol:9,shrinkBy:0.98});
-  addAstep(bboxC,start,dur,count);
+  addAstep([bboxC],start,dur,count);
   
   this.setNumSteps(4);
   //this.configSetFraction(config,0);
