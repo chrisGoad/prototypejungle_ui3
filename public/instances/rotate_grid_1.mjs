@@ -18,7 +18,7 @@ rs.initProtos = function () {
   lineP['stroke-width'] = .4;
   lineP.stroke = 'white';
   let circleP = this.circleP = circlePP.instantiate();
-  circleP.dimension= 2;
+  circleP.dimension= 3;
   circleP.fill = 'red';
 }
    

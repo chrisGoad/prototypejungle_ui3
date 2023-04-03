@@ -147,7 +147,7 @@ rs.updateState= function () {
   this.resetShapes();
 }
 
-rs.partVisiblee  = function (prt) {
+rs.partVisible  = function (prt) {
   //debugger;
   let w = prt.where;
   let ln = w.length;

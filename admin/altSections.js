@@ -65,6 +65,7 @@ sections:
   [0,'mathematicians_0','instances',1,'mathematicians_0',{likes:0,posted:0,category:'quad'}], 
   [0,'logic','instances',1,'logic',{likes:0,posted:0,category:'quad'}], 
   [0,'part2_0_58b','instances',1,'Part2 0 58b',{likes:0,posted:0,category:'quad'}], 
+  [0,'part2_0_58c','instances',1,'Part2 0 58c',{likes:0,posted:0,category:'quad'}], 
 
   [0,'drop_move','generators',1,'Drop Move',{likes:0,posted:0,category:'quad'}], 
   [0,'path_avoidance_0','generators',1,'Path Avoidance 0',{likes:0,posted:0,category:'quad'}], 
