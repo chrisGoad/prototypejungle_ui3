@@ -92,7 +92,6 @@ rs.intersectRays = function (p0,v0,p1,v1) {
   let x = A + T*C;
   let y = B+ T*D;
   let p = Point.mk(x,y);
-  debugger;
   return p;
 }
 
@@ -113,7 +112,6 @@ rs.intersectLineSegs = function (seg0,seg1) {
   let v0 = p01.difference(p00);
   let v1 = p11.difference(p10);
   let p = this.intersectRays(p00,v0,p10,v1);
-  debugger;
   let onsegs = this.onSeg(p,seg0) && this.onSeg(p,seg1);
   return onsegs?p:null;
 }
@@ -207,9 +205,9 @@ rs.addCenters = function() {
       let cpvv = cpv.difference(base).times(0.5);
       let cp = base.plus(cphv).plus(cpvv);
       allCenters.push(cp);
-      let crc = circleP.instantiate();
+      /*let crc = circleP.instantiate();
       crc.moveto(cp);
-      centerShapes.push(crc);
+      centerShapes.push(crc);*/
       
     }
   });
@@ -259,10 +257,8 @@ rs.rotateCenters = function (ocenters,angle,center,box) {
   let rcenters = [];
   for (let i=0;i<ln;i++) {
     let p = ocenters[i];    
-    let rseg = rcenters[i];
-
-    
     let rp = this.rotatePoint(p,angle,center,box);
+    rcenters.push(rp);
   };
   return rcenters;
 }
@@ -330,24 +326,6 @@ rs.theBoxR = Rectangle.mk(Point.mk(-50,-50),Point.mk(100,100));
 //rs.theBoxR = Rectangle.mk(Point.mk(-25,-25),Point.mk(50,50));
 
 
-rs.intersectSegs = function (boxR,box,segs) {
-  let nsegs = [];
-  segs.forEach((seg) =>{
-    if (seg) {
-      let nseg = this.intersectLineSegsLineSeg(boxR,box,seg);
-      nsegs.push(nseg);
-     /* if (nseg) {
-       // debugger;
-        let abc = this.intersectLineSegsLineSeg(theBoxR,theBox,seg);
-       // debugger;
-      }*/
-       
-    } else {
-      nsegs.push(null);
-    }
-  });
-  return nsegs;
-}
    /*
  A configuration is an object {index:integer,box:Rectangle,boxCenter:Point,osegs:array_of(LineSegment),
    ocenters:array_of(Point),rsegs:array_of(LineSegment),lines:array_of(LineShape),
@@ -361,18 +339,23 @@ rs.intersectSegs = function (boxR,box,segs) {
 rs.configs =  [];
 
 rs.mkConfig = function (box,reverse) {
-  let {lineP,configs} = this;
+  let {lineP,circleP,configs} = this;
   let index = configs.length;
   let boxSegs = this.rect2lineSegs(box);
   let osegs = this.boxFilter(box);
   let ocenters = this.boxFilterCenters(box);
   let rsegs =[];
   let lines = this.set('lines_'+index,arrayShape.mk());
+  let circles = this.set('circles_'+index,arrayShape.mk());
   osegs.forEach((seg) => {
     rsegs.push(LineSegment.mk(Point.mk(0,0),Point.mk(0,0)));
     lines.push(lineP.instantiate());
   });
-  let config = {index,box,center:box.center(),boxSegs,osegs,ocenters,rsegs,lines,reverse};
+  ocenters.forEach((p) => {
+    //rsegs.push(LineSegment.mk(Point.mk(0,0),Point.mk(0,0)));
+    circles.push(circleP.instantiate());
+  });
+  let config = {index,box,center:box.center(),boxSegs,osegs,ocenters,rsegs,lines,circles,reverse};
   configs.push(config);
   return config;
 }
@@ -380,16 +363,21 @@ rs.mkConfig = function (box,reverse) {
 rs.initOutSegs = function () {
   this.outSegs = [];
   this.set('outLines',arrayShape.mk());
+  this.set('outCircles',arrayShape.mk());
 }
 
 rs.displayOutSegs = function (configs) {
-  let {outLines,allSegs,lineP} = this; 
-  debugger;
+  let {outLines,outCircles,allSegs,centerShapes,allCenters,lineP,circleP} = this; 
   outLines.forEach((line) => {
     line.hide();
     line.update();
   });
+  outCircles.forEach((crc) => {
+    crc.hide();
+    crc.update();
+  });
   let outSegs = [];
+  let outCenters = [];
   let numLines = outLines.length;
   let numConfigs = configs.length;
   allSegs.forEach((seg) => {
@@ -413,6 +401,23 @@ rs.displayOutSegs = function (configs) {
       outSegs.push(seg);
     }
   });
+  allCenters.forEach((c) => {
+    let inConfig = 0;
+    for (let i=0;i<numConfigs;i++) {
+      if (inConfig) {
+        break;
+      }
+      let config = configs[i];
+      let box = config.box;
+      if (box.contains(c)) {
+        inConfig = 1;
+        break;
+      }
+    }
+    if (!inConfig) {
+      outCenters.push(c);
+    }
+  });
   let numOutSegs = outSegs.length;
   for (let i=0;i<numOutSegs;i++) {
     let seg = outSegs[i];
@@ -428,22 +433,39 @@ rs.displayOutSegs = function (configs) {
     line.setEnds(e0,e1);
     line.update();
   } 
+   let numOutCenters = outCenters.length;
+   let numOutCircles = outCircles.length;
+  for (let i=0;i<numOutCenters;i++) {
+    let p = outCenters[i];
+    let crc;
+    if (i<numOutCircles) {
+      crc = outCircles[i];
+    } else {
+      crc = circleP.instantiate();
+      crc.fill ='blue';
+      outCircles.push(crc);
+    }
+    crc.show();
+    crc.moveto(p);
+    crc.update();
+  } 
 }  
     
         
       
     
 rs.configSetFraction = function (c,fr) {
-  let {rsegs,osegs,ocenters,lines,center,boxSegs,box,reverse} = c;
-  let a = (reverse?-fr:fr) * 0.5 * Math.PI;
+  let {rsegs,osegs,ocenters,lines,circles,center,boxSegs,box,reverse} = c;
+  let a = (reverse?fr:fr) * 0.5 * Math.PI;
   console.log('angle',a*(180/Math.PI));
   this.rotateSegs(rsegs,osegs,a,center);
   let rcenters = this.rotateCenters(ocenters,a,center);
   let ln=rsegs.length;
+  let lnc = rcenters.length;
   for (let i=0;i<ln;i++) {
     let rseg = rsegs[i];
     if ((fr  % 1)===0) {
-      debugger;
+      //debugger;
     } else {
       let {end0:e0,end1:e1} = rseg;
       if ((!box.contains(e0)) && (!box.contains(e1))) {
@@ -462,6 +484,18 @@ rs.configSetFraction = function (c,fr) {
       }
     }
   }
+  for (let i=0;i<lnc;i++) {
+    let rp = rcenters[i];
+    let crc = circles[i];
+
+    if (box.contains(rp)) {
+      crc.show();
+      crc.moveto(rp);
+    } else {
+      crc.hide();
+    }
+  }
+
   //let nsegs = this.intersectSegs(boxR,box,segsIbuf);
   //this.segs2lines(linesI,nsegs,1);
   this.segs2lines(lines,rsegs,1);
@@ -497,75 +531,26 @@ rs.setNumSteps = function (n) {
   this.numSteps = mx+1+n;
 }
 
-rs.initializee =  function () {
-  debugger;
-  //let seg0 = LineSegment.mk(Point.mk(-10,-10),Point.mk(10,12));
-  let seg0 = LineSegment.mk(Point.mk(1,1),Point.mk(10,10));
-  let seg1 = LineSegment.mk(Point.mk(-10,10),Point.mk(10,-10));
-  let p = this.intersectLineSegs(seg0,seg1);
-  
-  this.initProtos();
-  this.addFrame();
-  this.buildGrid();
-  this.addSegs();
-  this.initOutSegs();
-  let count = 2;
-  let dur = 10;
-  let start = 0;
-  let box,config,boxes;
-  const addAstep = (ibox,start,duration,count) =>{
+rs.addAstep = function (ibox,start,duration,count) {
     let isa = Array.isArray(ibox);
     let reverse = isa;
     let box = isa?ibox[0]:ibox;
     let config = this.mkConfig(box,reverse);
     this.addStep(config,start,duration,count);
   }
-  
-  let boxC =this.rectFromRowsCols({lowRow:3,highRow:6,lowCol:3,highCol:6,shrinkBy:0.98});
-  addAstep(boxC,start,dur,count);
-  
-  start = 12;
-  let boxUL =this.rectFromRowsCols({lowRow:0,highRow:3,lowCol:0,highCol:3,shrinkBy:0.98});
-  let boxUR =this.rectFromRowsCols({lowRow:0,highRow:3,lowCol:6,highCol:9,shrinkBy:0.98});
-  let boxLL =this.rectFromRowsCols({lowRow:6,highRow:9,lowCol:0,highCol:3,shrinkBy:0.98});
-  let boxLR =this.rectFromRowsCols({lowRow:6,highRow:9,lowCol:6,highCol:9,shrinkBy:0.98});
-  boxes = [boxUL,boxLL,[boxUR],[boxLR]];
-  boxes.forEach((box) => {
-    addAstep(box,start,dur,count);
-   });
-  
-  start = 24;
-  let boxLM =this.rectFromRowsCols({lowRow:3,highRow:6,lowCol:0,highCol:3,shrinkBy:0.98});
-  let boxRM =this.rectFromRowsCols({lowRow:3,highRow:6,lowCol:6,highCol:9,shrinkBy:0.98});
-  let boxTM =this.rectFromRowsCols({lowRow:0,highRow:3,lowCol:3,highCol:6,shrinkBy:0.98});
-  let boxBM =this.rectFromRowsCols({lowRow:6,highRow:9,lowCol:3,highCol:6,shrinkBy:0.98});
-  boxes = [boxLM,boxRM,boxTM,boxBM];
-  boxes.forEach((box) => {
-    addAstep(box,start,dur,count);
-   });
-     boxes = [boxLM,boxRM,boxTM,boxBM];
-
-  start = 36;
- 
-  start = 36;
-  let bboxUL =this.rectFromRowsCols({lowRow:0,highRow:4,lowCol:0,highCol:4,shrinkBy:0.98});
-  let bboxUR =this.rectFromRowsCols({lowRow:0,highRow:4,lowCol:5,highCol:9,shrinkBy:0.98});
-  let bboxLL =this.rectFromRowsCols({lowRow:5,highRow:9,lowCol:0,highCol:4,shrinkBy:0.98});
-  let bboxLR =this.rectFromRowsCols({lowRow:5,highRow:9,lowCol:5,highCol:9,shrinkBy:0.98});
-  boxes = [bboxUL,[bboxUR],bboxLL,[bboxLR]];
-  boxes.forEach((box) => {
-    addAstep(box,start,dur,count);
-   });
-   
-  start = 48;
-  //let bboxC = this.rectFromRowsCols({lowRow:1,highRow:8,lowCol:1,highCol:8,shrinkBy:0.98});
-  let bboxC = this.rectFromRowsCols({lowRow:0,highRow:9,lowCol:0,highCol:9,shrinkBy:0.98});
-  addAstep([bboxC],start,dur,count);
+rs.initialize =  function () {
+  debugger;
+  this.initProtos();
+  this.addFrame();
+  this.buildGrid();
+  this.addSegs();
+  this.initOutSegs();
+ this.set('centerShapes',arrayShape.mk());
+  this.addCenters();
+  this.addSteps();
   
   this.setNumSteps(4);
-  //this.configSetFraction(config,0);
   this.updateState();
-  //this.displayOutSegs(activeConfigs);
 
   
 }
@@ -575,7 +560,6 @@ rs.executeStep = function (step) {
   let {startTime,duration,config,count} = step;
   let {box} = config;
   let {stepsSoFar:ssf} = this;
-    debugger;
 
   let relTime = ssf - startTime;
   if ((relTime <0)||(relTime > duration)) {
@@ -584,6 +568,11 @@ rs.executeStep = function (step) {
     lines.forEach((line) => {
       line.hide();
       line.update();
+    });
+    let {circles} = config;
+    circles.forEach((crc) => {
+      crc.hide();
+      crc.update();
     });
     return null;
   }
@@ -603,14 +592,6 @@ rs.updateState = function () {
   });
   this.displayOutSegs(activeConfigs);
 } 
-
-/* 
-rs.updateState = function () {
-  let {stepsSoFar:ssf,numSteps,theScript} =this;
-  debugger;
-  let fr = ssf/(numSteps-1);
-  this.configSetFraction(config,fr);
-}  */
 
 
     
