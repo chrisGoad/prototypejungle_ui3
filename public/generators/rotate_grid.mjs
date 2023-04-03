@@ -10,7 +10,7 @@ addPathMethods(rs);
 let wd = 200;
 let nr = 10;
 rs.setName('rotate_grid');
-let topParams = {width:wd,height:wd,numRows:nr,numCols:nr,framePadding:.1*wd,frameStrokee:'rgb(2,2,2)',frameStroke:'white',frameStrokeWidth:1,saveAnimation:1,numSteps:51}
+let topParams = {width:wd,height:wd,numRows:nr,numCols:nr,framePadding:.1*wd,frameStroke:'rgb(2,2,2)',frameStrokee:'white',frameStrokeWidth:1,saveAnimation:1,numSteps:51}
 Object.assign(rs,topParams);
 /*
 rs.addPath = function (nm,speed) {
@@ -99,7 +99,7 @@ rs.intersectRays = function (p0,v0,p1,v1) {
 rs.onSeg = function(p,seg0) {
   let {end0:e0,end1:e1} = seg0;
   let v0 = p.difference(e0);
-  let v1 = e1.difference(e1);
+  let v1 = e1.difference(p);
   let v = e1.difference(e0);
   let d0 = v0.dotp(v);
   let d1 = v1.dotp(v);
@@ -117,6 +117,19 @@ rs.intersectLineSegs = function (seg0,seg1) {
   let onsegs = this.onSeg(p,seg0) && this.onSeg(p,seg1);
   return onsegs?p:null;
 }
+
+rs.intersectLineSegLineSegs = function (seg,segs) {
+  let ln = segs.length;
+  for (let i=0;i<ln;i++) {
+    let sseg = segs[i];
+    let isct = this.intersectLineSegs(seg,sseg);
+    if (isct) {
+      return isct;
+    }
+  }
+  return null;
+}
+    
 
 
 rs.intersectLineSegsLineSeg = function (rect,segs,seg) {
@@ -294,7 +307,7 @@ rs.segs2lines = function (lines,segs,update) {
   for (let i=0;i<ln;i++) {
     let sg = segs[i];
     let ln = update?lines[i]:lineP.instantiate();
-    if (!sg) {
+    if ((!sg)||(sg.hidden)) {
       ln.hide();
     } else {
       let {end0,end1} = sg;
@@ -412,11 +425,33 @@ rs.displayOutSegs = function (configs) {
       
     
 rs.configSetFraction = function (c,fr) {
-  let {rsegs,osegs,lines,center} = c;
+  let {rsegs,osegs,lines,center,boxSegs,box} = c;
   let a = fr * 0.5 * Math.PI;
   console.log('angle',a*(180/Math.PI));
   this.rotateSegs(rsegs,osegs,a,center);
-
+  let ln=rsegs.length;
+  for (let i=0;i<ln;i++) {
+    let rseg = rsegs[i];
+    if ((fr  % 1)===0) {
+      debugger;
+    } else {
+      let {end0:e0,end1:e1} = rseg;
+      if ((!box.contains(e0)) && (!box.contains(e1))) {
+        rseg.hidden = 1;
+      } else {
+        rseg.hidden = 0;
+        let p = this.intersectLineSegLineSegs(rseg,boxSegs);
+        if (p) {
+          let {end0:e0,end1:e1} = rseg;
+          if (box.contains(e0)) {
+            rseg.setEnds(e0,p);
+          } else if (box.contains(e1)) {
+            rseg.setEnds(p,e1);
+          }
+        }
+      }
+    }
+  }
   //let nsegs = this.intersectSegs(boxR,box,segsIbuf);
   //this.segs2lines(linesI,nsegs,1);
   this.segs2lines(lines,rsegs,1);
@@ -435,13 +470,13 @@ rs.addStep = function (config,startTime,duration,count) {
 
 rs.initProtos = function () {
   let lineP = this.lineP = linePP.instantiate();
-  lineP['stroke-width'] = .2;
+  lineP['stroke-width'] = .4;
   lineP.stroke = 'white';
 }
    
   
   
-rs.setNumSteps = function () {
+rs.setNumSteps = function (n) {
   let {theScript} = this;
   let mx = 0;
   theScript.forEach((step) => {
@@ -449,7 +484,7 @@ rs.setNumSteps = function () {
     let endTime = startTime+duration;
     mx = Math.max(mx,endTime);    
   });
-  this.numSteps = mx+1;
+  this.numSteps = mx+1+n;
 }
 
 rs.initialize =  function () {
@@ -472,6 +507,7 @@ rs.initialize =  function () {
     let config = this.mkConfig(box);
     this.addStep(config,start,duration,count);
   }
+  
   let boxC =this.rectFromRowsCols({lowRow:3,highRow:6,lowCol:3,highCol:6,shrinkBy:0.98});
   addAstep(boxC,start,dur,count);
   
@@ -488,13 +524,9 @@ rs.initialize =  function () {
 
   start = 24;
   let boxLM =this.rectFromRowsCols({lowRow:3,highRow:6,lowCol:0,highCol:3,shrinkBy:0.98});
-  //addAstep(boxLM,start,dur,count);
   let boxRM =this.rectFromRowsCols({lowRow:3,highRow:6,lowCol:6,highCol:9,shrinkBy:0.98});
-  //addAstep(boxRM,start,dur,count);
   let boxTM =this.rectFromRowsCols({lowRow:0,highRow:3,lowCol:3,highCol:6,shrinkBy:0.98});
-  //addAstep(boxTM,start,dur,count);
   let boxBM =this.rectFromRowsCols({lowRow:6,highRow:9,lowCol:3,highCol:6,shrinkBy:0.98});
-  //addAstep(boxBM,start,dur,count);
   boxes = [boxLM,boxRM,boxTM,boxBM];
   boxes.forEach((box) => {
     addAstep(box,start,dur,count);
@@ -510,7 +542,13 @@ rs.initialize =  function () {
   boxes.forEach((box) => {
     addAstep(box,start,dur,count);
    });
-  this.setNumSteps();
+   
+  start = 48;
+  //let bboxC = this.rectFromRowsCols({lowRow:1,highRow:8,lowCol:1,highCol:8,shrinkBy:0.98});
+  let bboxC = this.rectFromRowsCols({lowRow:0,highRow:9,lowCol:0,highCol:9,shrinkBy:0.98});
+  addAstep(bboxC,start,dur,count);
+  
+  this.setNumSteps(4);
   //this.configSetFraction(config,0);
   this.updateState();
   //this.displayOutSegs(activeConfigs);
