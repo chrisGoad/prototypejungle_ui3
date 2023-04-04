@@ -10,7 +10,8 @@ addPathMethods(rs);
 let wd = 200;
 let nr = 10;
 rs.setName('rotate_grid');
-let topParams = {width:wd,height:wd,numRows:nr,numCols:nr,framePadding:.1*wd,frameStroke:'rgb(2,2,2)',frameStrokee:'white',frameStrokeWidth:1,saveAnimation:1,numSteps:51}
+let topParams = {width:wd,height:wd,numRows:nr,numCols:nr,framePadding:.1*wd,
+                 smooth:1,frameStroke:'rgb(2,2,2)',frameStrokee:'white',frameStrokeWidth:1,saveAnimation:1,numSteps:51}
 Object.assign(rs,topParams);
 /*
 rs.addPath = function (nm,speed) {
@@ -23,6 +24,21 @@ rs.addPath = function (nm,speed) {
 rs.pstate = {pspace:{},cstate:{});
 */
 rs.grid = [];
+
+rs.sinusoidVal = function (sv,ev,vel,cstep) {
+  let down = ev<sv;
+  let delta = Math.abs(ev-sv);
+  //let steps = delta/step;
+  let steps = Math.ceil(delta/vel);
+  
+  let fr = cstep/steps;
+  let nvl = down?sv - fr*delta:sv+fr*delta;
+  
+  let phase = (Math.PI)*(cstep/steps) - Math.PI/2; 
+  let nvn =  (1+ Math.sin(phase))/2;
+  let nv = down?sv - nvn*delta:sv+nvn*delta;
+  return {nosin:nvl,sin:nv};
+}
 
 rs.rect2lineSegs = function (rect) {
   let {corner,extent} = rect;
@@ -557,6 +573,7 @@ rs.initialize =  function () {
 
 
 rs.executeStep = function (step) {
+  let {smooth} = this;
   let {startTime,duration,config,count} = step;
   let {box} = config;
   let {stepsSoFar:ssf} = this;
@@ -576,8 +593,9 @@ rs.executeStep = function (step) {
     });
     return null;
   }
-  let fr = count*(relTime/duration);
-  this.configSetFraction(config,fr);
+  let ifr = relTime/duration;
+  let fr = smooth?(1+ Math.sin((Math.PI)*ifr - Math.PI/2))/2:ifr;
+  this.configSetFraction(config,count*fr);
   return config;
 }
   

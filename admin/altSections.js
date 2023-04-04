@@ -52,6 +52,7 @@ sections:
     [0,'rotate_grid','generators',1,'rotate grid',{likes:0,posted:0,category:'quad'}], 
     [0,'rotate_grid_1','instances',1,'rotate grid 1',{likes:0,posted:0,category:'quad'}], 
     [0,'rotate_grid_0','instances',1,'rotate grid 0',{likes:0,posted:0,category:'quad'}], 
+    [0,'rotate_grid_0s','instances',1,'rotate grid 0 smooth',{likes:0,posted:0,category:'quad'}], 
    [0,'wiggle_grid_0','generators',1,'wiggle grid 0',{likes:0,posted:0,category:'quad'}], 
   [0,'poly_grid','generators',1,'poly grid',{likes:0,posted:0,category:'quad'}], 
   [0,'moving_drop_0','generators',1,'moving drop 0',{likes:0,posted:0,category:'quad'}], 

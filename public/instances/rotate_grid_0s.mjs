@@ -4,7 +4,7 @@ import {rs as generatorP} from '/generators/rotate_grid.mjs';
 
 let rs = generatorP.instantiate();
 
-rs.setName('rotate_grid_0');
+rs.setName('rotate_grid_0s');
 
 let wd = 200;
 let nr = 10;
