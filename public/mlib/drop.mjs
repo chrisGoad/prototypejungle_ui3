@@ -191,7 +191,7 @@ rs.generateDrops = function (params) {
     if (acn) {
       lc = gi.length;
       if (lc > 1) {
-        debugger;
+      //  debugger;
       }
     }
     if (gi && ((lc >1) || !acn)) {

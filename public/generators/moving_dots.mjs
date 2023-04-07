@@ -41,6 +41,7 @@ rs.buildGrid = function () {
     for (let j=0;j<nr;j++) {
       let y = minY + j*deltaY;
       let p = Point.mk(x,y);
+      
       let idx =i*nr+j;
     //  this.addPath(name,speed);
       let below = idx+1;
@@ -51,28 +52,65 @@ rs.buildGrid = function () {
       toRight = toRight>maxIdx?-1:toRight;
       let toLeft = idx-nr;
       toLeft = toLeft<0?-1:toLeft;
-      let g = {name,row:j,col:i,index:idx,pos:p,below,above,toRight,toLeft,occupants:null,occupant:null};
+      let centerPos = p.plus(Point.mk(0.5*deltaX,0.5*deltaY));
+      let g = {name,row:j,col:i,index:idx,pos:p,centerPos,below,above,toRight,toLeft,occupants:null,occupant:null};
       gr.push(g);
     }
   }
   return gr;
 }
-// pos is {row,col}
+// pos is {row,col}; dir is 'up','down','left',right'
 rs.addDot = function (pos,dir) {
-  let {numRows,numCols,dots,dotShapes,grid,circleP} = this;
+  let {numRows,numCols,dots,dotShapes,grid,circleP,deltaX} = this;
   let dot ={pos,dir,stopped:0};
   let {row:i,col:j} = pos;
   let idx = i*nr+j;
   let g = grid[idx];
-  let {occupant,pos:gridPos} = g;
+  let {occupant,centerPos} = g;
   if (occupant) {
     return null;
   }
   let ds = circleP.instantiate();
   dotShapes.push(ds);
+  
   dot.shape = ds;
+  ds.moveto(centerPos);
   return dot;
 }
+
+rs.placeDotInNextGrid = function (dot) {
+  let {grid,nextGrid} = this;
+  let {pos,dir} = dot;
+  let {row:i,col:j} = pos;
+  let idx = i*nr+j;
+  let g = grid[idx];
+  let dest;
+  if (dir === 'up') {
+    dest  = g.above;
+  }
+  if (dir === 'down') {
+    dest  = g.below;
+  }
+   if (dir === 'right') {
+    dest  = g.toRight;
+  }
+   if (dir === 'left') {
+    dest  = g.toLeft;
+  }
+  if (dest === -1} {
+    return 0;
+  }
+  let ng = nextGrid[dest];
+  dot.next = ng;
+  let {occupants}= ng;
+  occupants.push(dot);
+  return 1;
+}
+  
+  
+
+  
+  
   
   
   
@@ -118,6 +156,7 @@ rs.initialize = function() {
   this.set('dotShapes',arrayShape.mk());
   this.dots = [];
   this.addLines();
+  this.addDots();
  
   //this.updateState();
 

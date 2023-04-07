@@ -27,6 +27,7 @@ rs.initProtos = function () {
 
   
 rs.addDots = function () {
+  this.addDot({row:0,col:0},'right');
 
 }
 

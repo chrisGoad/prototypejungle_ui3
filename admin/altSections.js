@@ -49,6 +49,8 @@ sections:
  [0,'quad_11_4','instances',1,'Quad 11 4',{likes:0,posted:0,category:'quad'}],*/
  // [0,'quad_0_19','instances',1,'Quad 0 19',{likes:0,posted:0,category:'quad'}], 
  // [0,'part_0_19','instances',1,'Part 0 19',{likes:0,posted:0,category:'part'}], 
+   [0,'drop_circles_14_5x7','generators',1,'Circles 14 5x7',{likes:0,posted:0,category:'drop'}], 
+
        [0,'moving_dots_0','instances',1,'moving dots 0',{likes:0,posted:0,category:'quad'}], 
   [0,'rotate_grid_1','instances',1,'rotate grid 1',{likes:0,posted:0,category:'quad'}], 
   [0,'rotate_grid_0','instances',1,'rotate grid 0',{likes:0,posted:0,category:'quad'}], 
