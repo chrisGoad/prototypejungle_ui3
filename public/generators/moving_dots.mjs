@@ -9,9 +9,10 @@ addPathMethods(rs);
 
 let wd = 200;
 let nr = 10;
+nr = 3;
 rs.setName('rotate_grid');
-let topParams = {width:wd,height:wd,numRows:nr,numCols:nr,framePadding:.1*wd,
-                 smooth:1,frameStroke:'rgb(2,2,2)',frameStrokee:'white',frameStrokeWidth:1,saveAnimation:1,numSteps:51}
+let topParams = {width:wd,height:wd,numRows:nr,numCols:nr,framePadding:.1*wd,stepsPerMove:10,numSteps:100,
+                 smooth:1,frameStroke:'rgb(2,2,2)',frameStrokee:'white',frameStrokeWidth:1,saveAnimation:1}
 Object.assign(rs,topParams);
 /*
 rs.addPath = function (nm,speed) {
@@ -59,17 +60,22 @@ rs.buildGrid = function () {
   }
   return gr;
 }
+debugger;
 // pos is {row,col}; dir is 'up','down','left',right'
 rs.addDot = function (pos,dir) {
-  let {numRows,numCols,dots,dotShapes,grid,circleP,deltaX} = this;
+  let {numRows:nr,numCols:nc,dots,dotShapes,grid,circleP,deltaX} = this;
   let dot ={pos,dir,stopped:0};
-  let {row:i,col:j} = pos;
+  let {row:j,col:i} = pos;
   let idx = i*nr+j;
   let g = grid[idx];
+  debugger;
   let {occupant,centerPos} = g;
   if (occupant) {
     return null;
   }
+  dots.push(dot);
+  g.occupant = dot;
+  dot.occupies = g;
   let ds = circleP.instantiate();
   dotShapes.push(ds);
   
@@ -79,43 +85,137 @@ rs.addDot = function (pos,dir) {
 }
 
 rs.placeDotInNextGrid = function (dot) {
-  let {grid,nextGrid} = this;
+  let {grid,nextGrid,numRows:nr,numCols:nc} = this;   
   let {pos,dir} = dot;
-  let {row:i,col:j} = pos;
+  let {row:j,col:i} = pos;
   let idx = i*nr+j;
   let g = grid[idx];
-  let dest;
-  if (dir === 'up') {
+  let dest
+  if (dot.stopped) {
+    dest = idx;
+  } else if (dir === 'up') {
     dest  = g.above;
-  }
-  if (dir === 'down') {
+  } else if (dir === 'down') {
     dest  = g.below;
-  }
-   if (dir === 'right') {
+  } else if (dir === 'right') {
     dest  = g.toRight;
-  }
-   if (dir === 'left') {
+  } else if (dir === 'left') {
     dest  = g.toLeft;
   }
-  if (dest === -1} {
+  if (dest === -1) { 
+    dot.removed = 1;
     return 0;
   }
   let ng = nextGrid[dest];
-  dot.next = ng;
+  dot.dest = ng;
   let {occupants}= ng;
   occupants.push(dot);
   return 1;
 }
   
-  
+rs.placeDotsInNextGrid = function () {
+  let {dots} = this;
+  dots.forEach((dot) => {
+     dot.stopped = 0;
+    if (!dot.removed) {
+      this.placeDotInNextGrid(dot);
+    }
+  });
+}
 
+rs.moveDots = function () {
+  let {dots} = this;
+  dots.forEach((dot) => {
+    //debugger;
+    if (dot.stopped && (!dot.mover)) {
+      return;
+    }
+    let dest = dot.dest;
+    dot.occupies = dest;
+    let {row,col,index} = dest;
+    dot.pos = {row,col,index};
+    dot.stopped = 0;
+    dot.mover = 0;
+  });
+}
+  
+debugger;
+
+rs.clearOccupants = function () {
+  let {nextGrid} = this;
+  nextGrid.forEach((ng) => {
+    ng.occupants = [];
+  });
+}
+
+rs.stopDots = function () {
+  let {nextGrid} = this;
+  let stopCount = 0;
+  nextGrid.forEach((ng) => {
+    let {occupants}  = ng;
+    let ln = occupants.length;
+    if (ln < 2) {
+      return;
+    }
+      debugger;
+    let isStop = 0;
+    for (let i=0;i<ln;i++) {
+      let dot = occupants[i];
+      if (dot.stopped || dot.mover) {
+       isStop = 1
+       break;
+      } 
+    }      
+    if (isStop) {
+      for (let i=0;i<ln;i++) {
+        let dot = occupants[i];
+        if (!dot.stopped) {
+          dot.stopped = 1;
+          stopCount++;
+        }
+      }
+      
+      return;
+    }
+    let rn = Math.floor(Math.random()*ln);
+    for (let i=0;i<ln;i++) {
+      let dot = occupants[i];
+      if (i===rn) {
+          dot.mover =1;
+      } else {
+          dot.stopped = 1;
+          stopCount++;
+      }
+
+    }
+      
+  });
+  return stopCount;
+}
+
+rs.performDotMove = function (dot,fr) {
+ // debugger;
+  let {occupies:g,dest:ng,stopped,removed,shape} = dot;
+  if (stopped || removed) {
+    return;
+  }
+  let pos0 = g.centerPos;
+  let pos1 = ng.centerPos;
+  let vec =pos1.difference(pos0);
+  let mvec = vec.times(fr);
+  let npos = pos0.plus(mvec);
+  shape.moveto(npos);
+}
+
+rs.performMove = function(fr) {
+  let {dots} = this;
+  dots.forEach((dot) => {
+    this.performDotMove(dot,fr);
+  });
+}
   
   
-  
-  
-  
-  
-  
+ 
   
   
 rs.addLines = function() {
@@ -157,22 +257,30 @@ rs.initialize = function() {
   this.dots = [];
   this.addLines();
   this.addDots();
- 
+} 
   //this.updateState();
 
   
-}
 
 rs.updateState = function () {
-  let {stepsSoFar:ssf,numSteps,theScript} =this;
-  let activeConfigs = [];
-  theScript.forEach((step) => {
-    let config = this.executeStep(step);
-    if (config) {
-      activeConfigs.push(config);
+  let {stepsSoFar:ssf,numSteps,stepsPerMove} =this;
+  let stinm = ssf%stepsPerMove;
+  let fr = stinm/stepsPerMove;
+  debugger;
+  if (stinm === 0) {
+    debugger;
+    if (ssf>0) {
+      this.moveDots();
     }
-  });
-  this.displayOutSegs(activeConfigs);
+    this.clearOccupants();
+    this.placeDotsInNextGrid();
+    for (let i=0;i<4;i++) {
+      let stopped =this.stopDots(0);
+      console.log('stopped',stopped);
+    }
+    
+  }
+  this.performMove(fr);    
 } 
 
 
