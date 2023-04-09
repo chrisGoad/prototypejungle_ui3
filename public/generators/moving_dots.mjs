@@ -8,7 +8,7 @@ let rs = basicP.instantiate();
 addPathMethods(rs);
 
 let wd = 200;
-let nr = 10;
+let nr = 20;
 nr = 3;
 rs.setName('rotate_grid');
 let topParams = {width:wd,height:wd,numRows:nr,numCols:nr,framePadding:.1*wd,stepsPerMove:10,numSteps:100,
@@ -28,7 +28,22 @@ rs.grid = [];
 
 
 
-
+rs.rc2point = function (pos) {
+  let {width:wd,height:ht,deltaX,deltaY} = this;
+  let {row:j,col:i} = pos;
+  let minX = -0.5*wd;
+  let minY = -0.5*ht;
+  let x = minX+i*deltaX;
+  let y = minY+j*deltaY;
+  return Point.mk(x,y);
+ }
+ 
+ rs.rc2cpoint = function (pos) {
+  let {deltaX,deltaY} = this;
+   let p = this.rc2point(pos);
+   let pp = p.plus(Point.mk(0.5*deltaX,0.5*deltaY));
+   return pp;
+ }
 rs.buildGrid = function () {
   let gr =  [];
   let {numRows:nr,numCols:nc,height:ht,width:wd} = this;
@@ -41,18 +56,20 @@ rs.buildGrid = function () {
     let x = minX+i*deltaX;
     for (let j=0;j<nr;j++) {
       let y = minY + j*deltaY;
-      let p = Point.mk(x,y);
-      
+   //   let p = Point.mk(x,y);
+      let p = this.rc2point({row:j,col:i});
+      let nrm1=nr-1;
+      let ncm1=nc-1;
       let idx =i*nr+j;
     //  this.addPath(name,speed);
       let below = idx+1;
-      below = below>maxIdx?-1:below;
+      below = j===ncm1?-1:below;
       let above = idx-1;
-      above = above<0?-1:above;
+      above = j===0?-1:above;
       let toRight = idx+nr;
-      toRight = toRight>maxIdx?-1:toRight;
+      toRight = i===nrm1?-1:toRight;
       let toLeft = idx-nr;
-      toLeft = toLeft<0?-1:toLeft;
+      toLeft = i===0?-1:toLeft;
       let centerPos = p.plus(Point.mk(0.5*deltaX,0.5*deltaY));
       let g = {name,row:j,col:i,index:idx,pos:p,centerPos,below,above,toRight,toLeft,occupants:null,occupant:null};
       gr.push(g);
@@ -60,18 +77,17 @@ rs.buildGrid = function () {
   }
   return gr;
 }
-debugger;
 // pos is {row,col}; dir is 'up','down','left',right'
 rs.addDot = function (pos,dir) {
   let {numRows:nr,numCols:nc,dots,dotShapes,grid,circleP,deltaX} = this;
-  let dot ={pos,dir,stopped:0};
+  let dot ={pos,dir,stopped:0,numStops:0};
   let {row:j,col:i} = pos;
   let idx = i*nr+j;
   let g = grid[idx];
-  debugger;
+ // debugger;
   let {occupant,centerPos} = g;
   if (occupant) {
-    return null;
+  //  return null;
   }
   dots.push(dot);
   g.occupant = dot;
@@ -124,22 +140,30 @@ rs.placeDotsInNextGrid = function () {
 }
 
 rs.moveDots = function () {
-  let {dots} = this;
+  let {dots,lineP,lines} = this;
   dots.forEach((dot) => {
     //debugger;
-    if (dot.stopped && (!dot.mover)) {
+    if ((dot.stopped && (!dot.mover))||dot.removed) {
       return;
     }
     let dest = dot.dest;
+    if (!dest) {
+      return;
+    }
     dot.occupies = dest;
     let {row,col,index} = dest;
+    let sp = this.rc2point(dot.pos);
+    let fp = this.rc2point(dest);
     dot.pos = {row,col,index};
     dot.stopped = 0;
     dot.mover = 0;
+    /*let line = lineP.instantiate();
+    line.setEnds(sp,fp);
+    lines.push(line);
+    line.update();*/
   });
 }
   
-debugger;
 
 rs.clearOccupants = function () {
   let {nextGrid} = this;
@@ -148,16 +172,31 @@ rs.clearOccupants = function () {
   });
 }
 
+rs.dirs = ['left','up'];
+rs.resetDots = function () {
+  let {dots,dirs}=this;
+  dots.forEach((dot) =>{
+    dot.mover=0;
+    dot.stopped = 0;
+    if (0 && (Math.random()<-0.02)) {
+     dot.dir = (Math.random()<0.5)?'down':'right';
+    }
+  });
+}
+
+rs.stops = 0;
 rs.stopDots = function () {
-  let {nextGrid} = this;
+  let {nextGrid,stops,circleP,dotShapes} = this;
+  this.stops = this.stops+1;
   let stopCount = 0;
+ // debugger;
   nextGrid.forEach((ng) => {
     let {occupants}  = ng;
     let ln = occupants.length;
     if (ln < 2) {
       return;
     }
-      debugger;
+    //  debugger;
     let isStop = 0;
     for (let i=0;i<ln;i++) {
       let dot = occupants[i];
@@ -169,7 +208,7 @@ rs.stopDots = function () {
     if (isStop) {
       for (let i=0;i<ln;i++) {
         let dot = occupants[i];
-        if (!dot.stopped) {
+        if (!(dot.stopped||dot.mover)) {
           dot.stopped = 1;
           stopCount++;
         }
@@ -178,13 +217,29 @@ rs.stopDots = function () {
       return;
     }
     let rn = Math.floor(Math.random()*ln);
+    //rn = stops%2;
     for (let i=0;i<ln;i++) {
       let dot = occupants[i];
       if (i===rn) {
           dot.mover =1;
       } else {
+          let ns = dot.numStops;
+          dot.numStops = ns+1;
+          let sh = dot.shape;
+          let fill = sh.fill;
+          if (fill == 'cyan') {
+            sh.fill = 'yellow';
+          } else {
+            sh.fill = 'cyan';
+          }
+          sh.update();
           dot.stopped = 1;
           stopCount++;
+          let crc = circleP.instantiate();
+          crc.fill = 'red';
+          let p = this.rc2cpoint(dot.pos);
+          crc.moveto(p);
+          dotShapes.push(crc);
       }
 
     }
@@ -194,7 +249,7 @@ rs.stopDots = function () {
 }
 
 rs.performDotMove = function (dot,fr) {
- // debugger;
+ //debugger;
   let {occupies:g,dest:ng,stopped,removed,shape} = dot;
   if (stopped || removed) {
     return;
@@ -255,8 +310,8 @@ rs.initialize = function() {
   this.set('lines',arrayShape.mk());
   this.set('dotShapes',arrayShape.mk());
   this.dots = [];
-  this.addLines();
-  this.addDots();
+ // this.addLines();
+//  this.addDots();
 } 
   //this.updateState();
 
@@ -266,13 +321,18 @@ rs.updateState = function () {
   let {stepsSoFar:ssf,numSteps,stepsPerMove} =this;
   let stinm = ssf%stepsPerMove;
   let fr = stinm/stepsPerMove;
-  debugger;
-  if (stinm === 0) {
+  if ((ssf%(stepsPerMove*2)) === 0) {
     debugger;
+    this.addDots();
+  }
+//  debugger;
+  if (stinm === 0) {
+    //debugger;
     if (ssf>0) {
       this.moveDots();
     }
     this.clearOccupants();
+    this.resetDots();
     this.placeDotsInNextGrid();
     for (let i=0;i<4;i++) {
       let stopped =this.stopDots(0);
