@@ -20,6 +20,8 @@ sections:
  //  [0,'quad_0_11','instances',1,'Quad 0 11',{likes:0,posted:0,category:'quad'}], 
  //  [0,'part_0_7','instances',1,'Part 0 7',{likes:0,posted:0,category:'quad'}], 
    [0,'part2_0_7','instances',1,'Part2 0 7',{likes:0,posted:0,category:'quad'}], 
+   [0,'part2_0_49d','instances',1,'Part2 0 49 d',{likes:0,posted:0,category:'quad'}], 
+   [0,'quad_grid','generators',1,'Quad Grid',{likes:0,posted:0,category:'quad'}], 
 /*[0,'quad_9_3','instances',1,'Quad 9 3',{likes:0,posted:0,category0_:'quad'}], 
     [0,'quad_0_12','instances',1,'Quad 0 12',{likes:0,posted:0,category:'quad'}], 
 [0,'quad_9_5','instances',1,'Quad 9 5',{likes:0,posted:0,category:'quad'}], 

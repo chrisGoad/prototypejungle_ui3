@@ -310,7 +310,7 @@ rs.initialize = function() {
   this.set('lines',arrayShape.mk());
   this.set('dotShapes',arrayShape.mk());
   this.dots = [];
- // this.addLines();
+  this.addLines();
 //  this.addDots();
 } 
   //this.updateState();

@@ -9,6 +9,7 @@ rs.setName('moving_dots_0');
 let wd = 200;
 let nr = 10;
 nr = 40;
+nr=3;
 let topParams = {width:wd,height:wd,numRows:nr,numCols:nr,framePadding:.1*wd,frameStroke:'rgb(2,2,2)',stepsPerMove:10,numSteps:1000,
                   frameStrokee:'white',frameStrokeWidth:1,saveAnimation:1,chopOffBeginning:400}
 Object.assign(rs,topParams);
