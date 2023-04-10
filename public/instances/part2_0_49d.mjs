@@ -1,9 +1,11 @@
+import {rs as addQuadGridMethods} from '/mlib/quad_grid.mjs';	
 
 import {rs as generatorP} from '/instances/part2_0_49.mjs';
 
 let rs = generatorP.instantiate();
 
-rs.setName('part2_0_49b');
+addQuadGridMethods(rs);
+rs.setName('part2_0_49d');
 
 let levels = 9;
 levels = 2;

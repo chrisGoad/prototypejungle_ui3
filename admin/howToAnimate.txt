@@ -171,6 +171,8 @@ c:\ffmpeg\bin\ffmpeg  -framerate 10 -i animations/poly_grid_f%03d.jpg -s 500x500
 c:\ffmpeg\bin\ffmpeg  -framerate 20 -i animations/rotate_grid_f%03d.jpg -s 500x500  export/rotate_grid.gif
 c:\ffmpeg\bin\ffmpeg  -framerate 20 -i animations/rotate_grid_1_f%03d.jpg -s 500x500  export/rotate_grid_1.gif
 c:\ffmpeg\bin\ffmpeg  -framerate 20 -i animations/rotate_grid_0_f%03d.jpg -s 500x500  export/rotate_grid_0.gif
+c:\ffmpeg\bin\ffmpeg  -framerate 20 -i animations/rotate_grid_0s_f%03d.jpg -s 500x500  export/rotate_grid_0s.gif
+c:\ffmpeg\bin\ffmpeg  -framerate 20 -i animations/moving_dots_0_f%03d.jpg -s 500x500  export/moving_dots_0.gif
 
 
 rm animations/spatter0_7*
