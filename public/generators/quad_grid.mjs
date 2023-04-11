@@ -41,10 +41,10 @@ rs.initialize = function() {
   this.initProtos();
   this.addFrame();
   this.initGrid();
-  this.set('lines',arrayShape.mk());
+  //this.set('lines',arrayShape.mk());
   this.set('dotShapes',arrayShape.mk());
   this.dots = [];
-  this.addLines();
+  //this.addLines();
   this.updateLines(corners);
   this.updateLines();
 //  this.addDots();

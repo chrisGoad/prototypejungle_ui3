@@ -26,7 +26,7 @@ item.rc2rpoint = function (pos) {
  item.alongSeg = function (p0,p1,fr) {
    let vec = p1.difference(p0);
    let svec  = vec.times(fr);
-   let p = p1.plus(svec);
+   let p = p0.plus(svec);
    return p;
 }
 
@@ -54,7 +54,20 @@ item.rc2qpoint = function (pos,corners) {
   //let pp = p.plus(Point.mk(0.5*deltaX,0.5*deltaY));
   return p;
  }
- 
+
+
+item.initLines = function () {
+  let {numRows:nr,numCols:nc,lineP} = this;
+   let lines = this.set('lines',arrayShape.mk());
+   for (let j=0;j<=nr;j++) {
+     let line = lineP.instantiate();
+     lines.push(line);
+  }
+  for (let i=0;i<=nc;i++) {
+    let line = lineP.instantiate();
+     lines.push(line);
+  }
+} 
 
 item.initGrid = function () {
   let gr =  [];
@@ -63,6 +76,7 @@ item.initGrid = function () {
   let deltaY = this.deltaY = ht/nr;
   let minX = this.minX =-0.5*wd;
   let minY = this.minY = -0.5*ht;
+  this.initLines();
 }
 
 item.hseg = function (j,corners) {
@@ -119,8 +133,6 @@ item.updateVline = function (j,line,corners) {
 
 
 
-
-  
   
 item.addLines = function(corners) {
   let {numRows:nr,numCols:nc} = this;
@@ -158,6 +170,34 @@ item.initProtoss = function () {
   circleP.dimension= 2;
   circleP.fill = 'cyan';
 }
+
+
+   /*
+ A motion is an object {index:integer,startTime,duration,startPoint:point,endPoint:Point,shape:shape,finished:boolean}
+  
+ */
+ /* 
+ a script is an array of motions. The updateState method runs rs.theScript.*/
+ 
+rs.motionSetTime=  function (m,t) {
+  let {startTime:st,duration:dur,startPoint:sp,endPoint:ep,shape,finished} = m;
+  if (finished) {
+   return;
+  }
+  let et = st+dur;
+  if ((t<st)||(t>et)) {
+    return;
+  }
+  let fr = (t-st)/dur;
+  let vec = ep.difference(sp);
+  let svec = vec.times(fr);
+  let cp = sp.plus(svec);
+  shape.moveto(cp);
+}
+   
+ 
+
+rs.configs =  [];
 
 item.initializee = function() { 
   debugger;
