@@ -201,19 +201,35 @@ item.execMotions = function (t) {
   let {motions} = this;
   motions.forEach((m)=>{
     this.execMotion(m,t);
-  }
+  });
 }
 
-item.addVDot = function (i,t) {
-  let {numRows:nr,numCols:nc,dotShapes,duration,circleP,motions} = this;
-  let spos = {row:0,col:i};
-  let epos = {row:nr,col:i};
+item.addAdot = function (spos,epos,t) {
+  let {dotShapes,duration,circleP,motions} = this;
   let sp = this.rc2point(spos);
   let ep = this.rc2point(epos);
   let crc = circleP.instantiate();
   dotShapes.push(crc);
+  crc.show();
   let m =  {startTime:t,duration,startPoint:sp,endPoint:ep,shape:crc};
   motions.push(m);
+}
+
+item.addVdot = function (i,t) {
+  let {numRows:nr,numCols:nc} = this;
+  let epos = {row:0,col:i};
+  let spos = {row:nr,col:i};
+  this.addAdot(spos,epos,t);
+  
+}
+ 
+ 
+item.addHdot = function (i,t) {
+  let {numRows:nr,numCols:nc} = this;
+  let spos = {row:i,col:0};
+  let epos = {row:i,col:nc};
+  this.addAdot(spos,epos,t);
+  
 }
  
 
