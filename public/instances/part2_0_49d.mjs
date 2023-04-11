@@ -7,7 +7,7 @@ let rs = generatorP.instantiate();
 addQuadGridMethods(rs);
 rs.setName('part2_0_49d');
 let nr =20;
-let topParams = {numRows:nr,numCols:nr};
+let topParams = {numRows:nr,numCols:nr,saveAnimation:1};
 Object.assign(rs,topParams);
 
 let levels = 9;
@@ -22,7 +22,7 @@ rs.computeFills = function () {
   let af = {};
   
   aw.forEach((w) => {
-    debugger;
+    //debugger;
     let r = rshade();
     let g = rshade();
     let b = rshade();
@@ -47,7 +47,7 @@ rs.partFill  = function (prt) {
       let cln = corners.length;
       let wln = w.length;
       if ((cln === 4)&&(wln===2)) {
-        debugger;
+        //debugger;
         if (!gridReady) {
           this.initGrid();
           this.gridReady=1;

@@ -53,7 +53,14 @@ rs.partSplitParams = function (prt) {
   }
   let {pstate} = this;
   let {cstate} = pstate;
-  const vl = (nm) => cstate[nm].value;
+  const vl = (nm) => {
+    let cs= cstate[nm];
+    if (!cs) {
+      debugger;
+    } else {
+      return cs.value;
+    }
+  }
   //console.log('qpcs',qpc0,qpc1,qpc2,qpc3);
   let p;
   if (quad) {
@@ -136,7 +143,7 @@ rs.partFill  = function (prt) {
 
 rs.saveAnimation = 1;
 rs.numSteps = 500;
-rs.numISteps = 60;
+rs.numISteps = 120;
 
 
   

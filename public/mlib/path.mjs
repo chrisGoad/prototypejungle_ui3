@@ -497,9 +497,12 @@ item.oneInterpolationStep = function () {
    if (this.updateState) {
     this.updateState();
   } else {
+      debugger;
+      this.pstate.cstate = this.interpolateStates(this.interpFrom,this.interpTo,i/this.numISteps);
+
     this.resetShapes();
   }
-  this.pstate.cstate = this.interpolateStates(this.interpFrom,this.interpTo,i/this.numISteps);
+ // this.pstate.cstate = this.interpolateStates(this.interpFrom,this.interpTo,i/this.numISteps);
   if (this.saveAnimation) {
     draw.saveFrame(this.numSteps+this.iStepsSoFar-2);
   }
@@ -614,7 +617,7 @@ item.concatTraceBundles = function (trb0,trb1) {
 }
   
   
-item.interpolateStates = function (iState,fState,fr) {
+item.interpolateArrayStates = function (iState,fState,fr) {
  
   let rState = [];
   let ln = iState.length;

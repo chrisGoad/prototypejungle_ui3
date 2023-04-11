@@ -64,8 +64,8 @@ rs.initialize = function() {
   this.set('dotShapes',arrayShape.mk());
   this.dots = [];
   //this.addLines();
-  this.updateLines(corners);
-  this.updateLines();
+  //this.updateLines(corners);
+  //this.updateLines();
  this.addDots();
 } 
   //this.updateState();
