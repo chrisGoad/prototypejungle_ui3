@@ -77,6 +77,8 @@ item.initGrid = function () {
   let minX = this.minX =-0.5*wd;
   let minY = this.minY = -0.5*ht;
   this.initLines();
+  this.set('dotShapes',arrayShape.mk());
+  this.motions = [];
 }
 
 item.hseg = function (j,corners) {
@@ -179,7 +181,7 @@ item.initProtoss = function () {
  /* 
  a script is an array of motions. The updateState method runs rs.theScript.*/
  
-rs.motionSetTime=  function (m,t) {
+item.execMotion=  function (m,t) {
   let {startTime:st,duration:dur,startPoint:sp,endPoint:ep,shape,finished} = m;
   if (finished) {
    return;
@@ -194,7 +196,25 @@ rs.motionSetTime=  function (m,t) {
   let cp = sp.plus(svec);
   shape.moveto(cp);
 }
-   
+
+item.execMotions = function (t) {
+  let {motions} = this;
+  motions.forEach((m)=>{
+    this.execMotion(m,t);
+  }
+}
+
+item.addVDot = function (i,t) {
+  let {numRows:nr,numCols:nc,dotShapes,duration,circleP,motions} = this;
+  let spos = {row:0,col:i};
+  let epos = {row:nr,col:i};
+  let sp = this.rc2point(spos);
+  let ep = this.rc2point(epos);
+  let crc = circleP.instantiate();
+  dotShapes.push(crc);
+  let m =  {startTime:t,duration,startPoint:sp,endPoint:ep,shape:crc};
+  motions.push(m);
+}
  
 
 rs.configs =  [];
