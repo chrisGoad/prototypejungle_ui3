@@ -27,7 +27,28 @@ rs.computeFills = function () {
     af[wn] = rcolor;
   });
   this.colors = af;
-  debugger;
+}
+
+rs.partFill  = function (prt) {
+ 
+  let w = prt.where;
+  let pgon = prt.polygon;
+  if (pgon) {
+    let corners = pgon.corners;
+    if (corners) {
+      let cln = corners.length;
+      if (cln === 4) {
+        debugger;
+      }
+    }
+  }
+  let ln = w.length;
+  if (ln < 1) {
+    return 'black';
+  }
+  let ws = this.whereString(w);
+  let clr = this.colors[ws];
+  return clr;
 }
 
 rs.computeFills();

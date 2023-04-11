@@ -13,7 +13,7 @@ Object.assign(rs,topParams);
 */
 
 
-item.rc2point = function (pos) {
+item.rc2rpoint = function (pos) {
   let {width:wd,height:ht,deltaX,deltaY} = this;
   let {row:j,col:i} = pos;
   let minX = -0.5*wd;
@@ -24,7 +24,7 @@ item.rc2point = function (pos) {
  }
  
  item.alongSeg = function (p0,p1,fr) {
-   let vec = p1.difference(p);
+   let vec = p1.difference(p0);
    let svec  = vec.times(fr);
    let p = p1.plus(svec);
    return p;
@@ -44,11 +44,15 @@ item.rc2qpoint = function (pos,corners) {
   
 
  
- item.rc2cpoint = function (pos) {
+ item.rc2point = function (pos,corners) {
   let {deltaX,deltaY} = this;
-   let p = this.rc2point(pos);
-   let pp = p.plus(Point.mk(0.5*deltaX,0.5*deltaY));
-   return pp;
+  if (corners) {
+     let p = this.rc2qpoint(pos,corners);
+     return p;
+  }
+  let p = this.rc2rpoint(pos);
+  //let pp = p.plus(Point.mk(0.5*deltaX,0.5*deltaY));
+  return p;
  }
  
 
@@ -61,26 +65,26 @@ item.initGrid = function () {
   let minY = this.minY = -0.5*ht;
 }
 
-item.hseg = function (j) {
+item.hseg = function (j,corners) {
   let {numCols:nc,numRows:nr} = this;
-  let e0 = this.rc2point({col:0,row:j});
-  let e1 = this.rc2point({col:nr,row:j});
+  let e0 = this.rc2point({col:0,row:j},corners);
+  let e1 = this.rc2point({col:nr,row:j},corners);
   let seg = LineSegment.mk(e0,e1);
   return seg;
 }
 
-item.vseg = function (i) {
+item.vseg = function (i,corners) {
   let {numCols:nc,numRows:nr} = this;
-  let e0 = this.rc2point({col:i,row:0});
-  let e1 = this.rc2point({col:i,row:nr});
+  let e0 = this.rc2point({col:i,row:0},corners);
+  let e1 = this.rc2point({col:i,row:nr},corners);
   let seg = LineSegment.mk(e0,e1);
   return seg;
 }
 
-item.addLine = function (v,vertical) {
+item.addAline = function (seg) {
 
   let {lineP,lines} = this;
-  let seg = vertical?this.vseg(v):this.hseg(v);
+  //let seg = vertical?this.vseg(v):this.hseg(v);
   let {end0,end1} = seg;
   let line = lineP.instantiate();
   line.setEnds(end0,end1);
@@ -88,28 +92,61 @@ item.addLine = function (v,vertical) {
   line.show();
 }
   
-item.addHline = function (j) {
-  this.addLine(j,0);
+item.addHline = function (j,corners) {
+  let seg = this.hseg(j,corners);
+  this.addAline(seg);
+}
+
+item.updateHline = function (j,line,corners) {
+  let seg = this.hseg(j,corners);
+  let {end0,end1} = seg;
+  line.setEnds(end0,end1);
+}
+
+item.addVline = function (i,corners) {
+  let seg = this.vseg(i,corners);
+  this.addAline(seg);
 }
 
 
-  
-item.addVline = function (j) {
-  this.addLine(j,1);
+
+item.updateVline = function (j,line,corners) {
+  let seg = this.vseg(j,corners);
+  let {end0,end1} = seg;
+  line.setEnds(end0,end1);
 }
 
 
+
+
+
   
   
-item.addLines = function() {
+item.addLines = function(corners) {
   let {numRows:nr,numCols:nc} = this;
   for (let j=0;j<=nr;j++) {
-    this.addHline(j);
+    this.addHline(j,corners);
   }
   for (let i=0;i<=nc;i++) {
-    this.addVline(i);
+    this.addVline(i,corners);
   }
 }
+
+
+  
+item.updateLines = function(corners) {
+  let {numRows:nr,numCols:nc,lines} = this;
+  let cnt =0;
+  for (let j=0;j<=nr;j++) {
+    let line = lines[cnt++];
+    this.updateHline(j,line,corners);
+  }
+  for (let i=0;i<=nc;i++) {
+    let line = lines[cnt++];
+    this.updateVline(i,line,corners);
+  }
+}
+ 
  
 
 item.initProtoss = function () {

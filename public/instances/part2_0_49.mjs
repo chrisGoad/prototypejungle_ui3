@@ -124,7 +124,6 @@ rs.computeFills();
 
 
 rs.partFill  = function (prt) {
-  //debugger;
   let w = prt.where;
   let ln = w.length;
   if (ln < 1) {

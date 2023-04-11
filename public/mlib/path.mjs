@@ -210,10 +210,10 @@ item.adjustSweepToNewStep = function (pstate,component,nstep) {
 item.sweepNextState = function (pspace,cstate,component) {
   let {stepsSoFar:ssf} = this;
   if (ssf > 0) {
-    debugger;
+    //debugger;
   }
   if (component === 'spin') {
-    debugger;
+    //debugger;
   }
   let pspc = pspace[component];
   let {sinusoidal,min,max,vel,bounce,startDown,once,startAtStep:sas} = pspc;
@@ -221,7 +221,7 @@ item.sweepNextState = function (pspace,cstate,component) {
     //console.log('sas',sas);
   }
   if (sas === 198) {
-    debugger;
+    //debugger;
   }
   let csc = cstate[component];
   let {cycleCount} = csc;
@@ -302,7 +302,7 @@ item.sweepNextState = function (pspace,cstate,component) {
 
 
 item.sweepFixedDurNextState = function (pspace,cstate,component) {
-  debugger;
+  //debugger;
   let {stepsSoFar:ssf} = this;
   let pspc = pspace[component];
   let {min,max,dur} = pspc;
@@ -519,7 +519,7 @@ item.oneStep = function (one) {
   //this.stepsSoFar++;
   if  (this.stepsSoFar >= (this.numSteps-this.chopOffEnd)) {
     if (this.numISteps) {
-      debugger;
+      //debugger;
       this.iStepsSoFar = 0;
       this.interpFrom = this.deepCopy(this.pstate.cstate);
       this.interpTo = this.copyOfInitState;
@@ -536,7 +536,7 @@ item.oneStep = function (one) {
   } else {
     this.resetShapes();
   }
-  debugger;
+  //debugger;
   this.timeStep(this.pstate);
     this.stepsSoFar++;
 
@@ -596,7 +596,7 @@ item.firstTraceBundleState = function (traceB) {
 }
 
 item.lastTraceBundleState = function (traceB) {
-debugger;
+//debugger;
   let ln = this.traceBundleTraceLength(traceB);
   return this.nthTraceBundleState(traceB,ln-1);
 }
@@ -652,7 +652,7 @@ item.interpolateBetweenGridStates = function (iState,fState,n) {
 /*
 
 item.interpolateStates = function (iState,fState,n) {
-  debugger;
+  //debugger;
   let {cstate,pspace}= this.pstate;
   let props = Object.getOwnPropertyNames(pspace);
   let traces = {};
