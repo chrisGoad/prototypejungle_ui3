@@ -20,12 +20,16 @@ Object.assign(rs,topParams);
    return p;
 }
 
+
 item.rc2qpoint = function (pos,corners) {
   let {width:wd,height:ht} = this;
   let {x,y} = pos;
+  let minX = -0.5*wd;
+  let minY = -0.5*ht;
   let [LL,UL,UR,LR] = corners;
-  let frx = x/wd;
-  let fry = y/ht;
+  debugger;
+  let frx = (x-minX)/wd;
+  let fry = (y-minY)/ht;
   let bp = this.alongSeg(LL,LR,frx);
   let tp = this.alongSeg(UL,UR,frx);
   let p = this.alongSeg(bp,tp,fry);
@@ -56,8 +60,7 @@ item.initLines = function () {
  a script is an array of motions. The updateState method runs rs.theScript.*/
  
 item.execMotion=  function (m,t) {
-  let {startPhase:sph,startTime:st,duration:dur,cycles,center,radius,map} = m;
- 
+  let {startPhase:sph,startTime:st,duration:dur,cycles,center,radius,map,shape} = m;
   let et = st+dur;
   if ((t<st)||(t>et)) {
     return;
@@ -79,79 +82,8 @@ item.execMotions = function (t) {
   });
 }
 
-item.addAdot = function (center,radius,t) {
-  let {dotShapes,duration,ccircleP,motions} = this;
-  let crc = circleP.instantiate();
-  dotShapes.push(crc);
-  crc.show();
-  let m =  {startTime:t,duration,startPoint:sp,endPoint:ep,shape:crc};
-  motions.push(m);
-}
-
-item.addVdot = function (i,t) {
-  let {numRows:nr,numCols:nc} = this;
-  let epos = {row:0,col:i};
-  let spos = {row:nr,col:i};
-  this.addAdot(spos,epos,t);
-  
-}
- 
- 
-item.addHdot = function (i,t) {
-  let {numRows:nr,numCols:nc} = this;
-  let spos = {row:i,col:0};
-  let epos = {row:i,col:nc};
-  this.addAdot(spos,epos,t);
-  
-}
- 
-
-rs.configs =  [];
-
-item.initializee = function() { 
-  debugger;
-  this.initProtos();
-  this.addFrame();
-  this.initGrid();
-  this.set('lines',arrayShape.mk());
-  this.set('dotShapes',arrayShape.mk());
-  this.dots = [];
-  this.addLines();
-//  this.addDots();
-} 
-  //this.updateState();
-
-  
-
-item.updateStatee = function () {
-  let {stepsSoFar:ssf,numSteps,stepsPerMove} =this;
-  let stinm = ssf%stepsPerMove;
-  let fr = stinm/stepsPerMove;
-  if ((ssf%(stepsPerMove*2)) === 0) {
-    debugger;
-    this.addDots();
-  }
-//  debugger;
-  if (stinm === 0) {
-    //debugger;
-    if (ssf>0) {
-      this.moveDots();
-    }
-    this.clearOccupants();
-    this.resetDots();
-    this.placeDotsInNextGrid();
-    for (let i=0;i<4;i++) {
-      let stopped =this.stopDots(0);
-      console.log('stopped',stopped);
-    }
     
-  }
-  this.performMove(fr);    
-} 
-
 }
-    
-
   
 export {rs};
 

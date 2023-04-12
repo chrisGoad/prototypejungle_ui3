@@ -4,6 +4,7 @@ import {rs as addAnimationMethods} from '/mlib/animate0.mjs';
 
 import {rs as linePP} from '/shape/line.mjs';
 import {rs as circlePP} from '/shape/circle.mjs';
+import {rs as polygonPP} from '/shape/polygon.mjs';
 
 import {rs as basicP} from '/generators/basics.mjs';
 let rs = basicP.instantiate();
@@ -19,9 +20,10 @@ let topParams = {width:wd,height:wd,framePadding:.1*wd,stepsPerMove:10,numSteps:
                  cycles:3,frameStroke:'rgb(2,2,2)',frameStrokee:'white',frameStrokeWidth:1,saveAnimation:1}
 Object.assign(rs,topParams);
 let dim = 100;
-let LL = Point.mk(-dim,0);
+let hdim = 0.5*dim;
+let LL = Point.mk(-hdim,0);
 let UL = Point.mk(0,dim);
-let UR = Point.mk(dim,0);
+let UR = Point.mk(hdim,0);
 let LR = Point.mk(0,-dim);
 
 rs.corners = [LL,UL,UR,LR];
@@ -30,8 +32,10 @@ rs.corners = [LL,UL,UR,LR];
 rs.initProtos = function () {
   let lineP = this.lineP = linePP.instantiate();
   lineP['stroke-width'] = .4;
-  //lineP['stroke-width'] = .8;
   lineP.stroke = 'cyan';
+  let polygonP = this.polygonP = polygonPP.instantiate();
+  polygonP['stroke-width'] = .4;
+  polygonP.stroke = 'cyan';
   let circleP = this.circleP = circlePP.instantiate();
   circleP.dimension= 5;
   circleP.fill = 'cyan';
@@ -40,25 +44,34 @@ rs.initProtos = function () {
 rs.addDot = function () {
   let {circleP,dotShapes} = this;
   let crc = circleP.instantiate();
-  dotShape.push(crc);
+  dotShapes.push(crc);
   return crc;
 }
 
-rs.mkMotion = fuction () {
-  let {numSteps,cycles,center,radius} = this;
+rs.toQuad = function(p) {
+  let {corners} = this;
+  let qp = this.rc2qpoint(p,corners);
+  return qp;
+}
+
+rs.mkMotion = function () {
+  let {numSteps,cycles,center,radius,toQuad} = this;
   let dot = this.addDot();
-  let m = {startTime:0,cycles,center,radius,shape:dot,duration:numSteps}
+  let m = {startTime:0,cycles,center,radius,shape:dot,duration:numSteps,map:toQuad}
   return m;
 }
   
 
 rs.initialize = function() { 
   debugger;
-  let {corners} =this;
   this.initProtos();
+  let {corners,polygonP} =this;
   this.addFrame();
   //this.set('lines',arrayShape.mk());
   this.set('dotShapes',arrayShape.mk());
+  let pgon = polygonP.instantiate();
+  pgon.corners = corners;
+  this.set('pgon',pgon);
    let m = this.mkMotion();
    this.motions =[m];
 } 
