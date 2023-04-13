@@ -1,9 +1,14 @@
+import {rs as addQuadMethods} from '/mlib/rect2quad.mjs';	
 
 import {rs as generatorP} from '/instances/part2_0_58.mjs';
 
 let rs = generatorP.instantiate();
 
-rs.setName('part2_0_58b');
+addQuadMethods(rs);
+let wd = rs.width;
+rs.setName('part2_0_58d');
+let topParams = {center:Point.mk(0,0),radius:.4*wd,cycles:2,saveAnimation:1};
+Object.assign(rs,topParams);
 
 let levels = 9;
 levels = 1;
@@ -23,7 +28,7 @@ rs.computeFills = function () {
     let wn = w[0];
     let rcolor = `rgb(${r},${g},${b})`;
     af[wn] = rcolor;
-    //af[wn] = 'transparent';
+    af[wn] = 'transparent';
   });
   this.colors = af;
   debugger;
@@ -64,6 +69,41 @@ rs.buildSeqOb = function () {
   return this.randomSeqOb({props,lb:-0.4,ub:0.4,numCycles:numCycles-1});
 }
 
+rs.afterUpdateState = function () {
+  let {stepsSoFar:ssf} = this;
+  debugger;
+  let part = this.topPart.P0;
+  let pgon = part.polygon;
+  let c = pgon.corners; if (c) {
+    this.corners = c;
+    this.execMotions(ssf);
+  }
+  23;
+
+}
+
+
+rs.mkMotion = function (phase) {
+  let {numSteps,cycles,center,radius,toQuad} = this;
+  let dot = this.addDot();
+  let startPhase = phase?phase:0;
+  let m = {startPhase,startTime:0,cycles,center,radius,shape:dot,duration:numSteps,map:toQuad}
+  //let m = {startTime:0,cycles,center,radius,shape:dot,duration:numSteps}
+  return m;
+}
+
+rs.afterInitialize = function () {
+  let {circleP} = this;
+  debugger;
+  23;
+  circleP.dimension = 4;
+  this.set('dotShapes',arrayShape.mk());
+  //let m = this.mkMotion();
+  //this.motions = [m];
+  this.motions =[];
+  this.mkMotions(4,this.mkMotion);
+
+}
 
 rs.loopingSeqOb(rs.buildSeqOb);
 

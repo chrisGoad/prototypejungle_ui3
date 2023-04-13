@@ -44,12 +44,6 @@ rs.addDot = function () {
   return crc;
 }
 
-rs.toQuad = function(p) {
-  let {corners} = this;
-  let qp = this.rc2qpoint(p,corners);
-  return qp;
-}
-
 rs.mkMotion = function (phase) {
   let {numSteps,cycles,center,radius,toQuad} = this;
   let dot = this.addDot();

@@ -50,6 +50,13 @@ item.initLines = function () {
   }
 } 
 
+item.addDot = function () {
+  let {circleP,dotShapes} = this;
+  let crc = circleP.instantiate();
+  dotShapes.push(crc);
+  return crc;
+}
+
 
    /*
  A circular motion is an object {startTime,startPhase,duration,cycles:integer,center:point,radius,shape:shape}
@@ -92,7 +99,14 @@ item.mkMotions = function (n,mkMotion) {
     motions.push(m);
   }
 }
-    
+ 
+
+rs.toQuad = function(p) {
+  let {corners} = this;
+  let qp = this.rc2qpoint(p,corners);
+  return qp;
+}
+ 
 
     
 }
