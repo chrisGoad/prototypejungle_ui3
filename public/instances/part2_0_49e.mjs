@@ -78,7 +78,7 @@ rs.partFill  = function (prt) {
           //let m = this.mkMotion();
           //this.motions = [m];
           this.motions =[];
-          this.mkMotion(4,this.mkMotion);
+          this.mkMotions(4,this.mkMotion);
 
           this.spinReady = 1;
         }
