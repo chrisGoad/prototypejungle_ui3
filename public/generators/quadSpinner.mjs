@@ -54,10 +54,11 @@ rs.toQuad = function(p) {
   return qp;
 }
 
-rs.mkMotion = function () {
+rs.mkMotion = function (phase) {
   let {numSteps,cycles,center,radius,toQuad} = this;
   let dot = this.addDot();
-  let m = {startTime:0,cycles,center,radius,shape:dot,duration:numSteps,map:toQuad}
+  let startPhase = phase?phase:0
+  let m = {startPhase,startTime:0,cycles,center,radius,shape:dot,duration:numSteps,map:toQuad}
   return m;
 }
   
@@ -72,8 +73,10 @@ rs.initialize = function() {
   let pgon = polygonP.instantiate();
   pgon.corners = corners;
   this.set('pgon',pgon);
-   let m = this.mkMotion();
-   this.motions =[m];
+  this.motions = [];
+  // let m = this.mkMotion();
+  // this.motions =[m];
+  this.mkMotions(8,this.mkMotion);
 } 
   //this.updateState();
 

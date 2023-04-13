@@ -50,10 +50,11 @@ rs.toQuad = function(p) {
   return qp;
 }
 
-rs.mkMotion = function () {
+rs.mkMotion = function (phase) {
   let {numSteps,cycles,center,radius,toQuad} = this;
   let dot = this.addDot();
-  let m = {startTime:0,cycles,center,radius,shape:dot,duration:numSteps,map:toQuad}
+  let startPhase = phase?phase:0;
+  let m = {startPhase,startTime:0,cycles,center,radius,shape:dot,duration:numSteps,map:toQuad}
   //let m = {startTime:0,cycles,center,radius,shape:dot,duration:numSteps}
   return m;
 }
@@ -71,10 +72,14 @@ rs.partFill  = function (prt) {
       let wln = w.length;
       if ((cln === 4)&&(wln===2)) {
         if (!spinReady) {
+          debugger;
           circleP.dimension = 4;
           this.set('dotShapes',arrayShape.mk());
-          let m = this.mkMotion();
-          this.motions = [m];
+          //let m = this.mkMotion();
+          //this.motions = [m];
+          this.motions =[];
+          this.mkMotion(4,this.mkMotion);
+
           this.spinReady = 1;
         }
         this.corners = c;

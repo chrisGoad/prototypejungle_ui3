@@ -68,7 +68,7 @@ item.execMotion=  function (m,t) {
   let cycleDur = dur/cycles;
   let rt = t-st;
   let ic = (rt%cycleDur)/cycleDur;
-  let a = 2*Math.PI*ic;
+  let a = 2*Math.PI*ic+sph;
   let vec = Point.mk(Math.cos(a),Math.sin(a)).times(radius);
   let cp = center.plus(vec);
   let rp = map?map.call(this,cp):cp;
@@ -81,6 +81,18 @@ item.execMotions = function (t) {
     this.execMotion(m,t);
   });
 }
+
+item.mkMotions = function (n,mkMotion) {
+  let {motions} = this;
+  debugger;
+  let step = (2*Math.PI)/n;
+  for (let i=0;i<n;i++) {
+    let phase = i*step;
+    let m=mkMotion.call(this,phase);
+    motions.push(m);
+  }
+}
+    
 
     
 }
