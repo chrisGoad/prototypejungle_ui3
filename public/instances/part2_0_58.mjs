@@ -115,7 +115,7 @@ let strokeWidths = rs.partParams.strokeWidths = [];
 rs.computeExponentials({dest:strokeWidths,n:20,root:0.4,factor:.7});
 // the same set of paths are reused at each turn of the cycle
 rs.updateState= function () {
-  debugger;
+  //debugger;
   this.enterNewPart();
   this.resetShapes();
   this.callIfDefined('afterUpdateState');

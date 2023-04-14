@@ -71,7 +71,7 @@ rs.buildSeqOb = function () {
 
 rs.afterUpdateState = function () {
   let {stepsSoFar:ssf} = this;
-  debugger;
+  //debugger;
   let part = this.topPart.P0;
   let pgon = part.polygon;
   let c = pgon.corners; if (c) {

@@ -93,6 +93,7 @@ rs.enterNewPart = function () {
       let ivl = ivls[prop];
       if (!fvls) {
         debugger;
+        return;
       }
       let fvl = fvls[prop]
       psc.min=ivl;

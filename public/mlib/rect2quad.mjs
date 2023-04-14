@@ -71,13 +71,17 @@ item.execMotion=  function (m,t,i) {
   let {lineP,lines,mpositions} = this;
   
   let et = st+dur;
-  if ((t<st)||(t>et)) {
+  let rt = t-st;
+  if ((t<st)||(t>=et)) {
     return;
   }
   let cycleDur = dur/cycles;
-  let rt = t-st;
   let ic = (rt%cycleDur)/cycleDur;
   let a = 2*Math.PI*ic+sph;
+
+  if ((rt === 0) || (rt == 191)) {
+    console.log('rt',rt,'ic',ic,'t',t);
+  }
   let vec = Point.mk(Math.cos(a),Math.sin(a)).times(radius);
   let cp = center.plus(vec);
   let rp = map?map.call(this,cp):cp;
