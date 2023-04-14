@@ -66,9 +66,9 @@ item.addDot = function () {
  /* 
  a script is an array of motions. The updateState method runs rs.theScript.*/
  
-item.execMotion=  function (m,t) {
+item.execMotion=  function (m,t,i) {
   let {startPhase:sph,startTime:st,duration:dur,cycles,center,radius,map,shape} = m;
-  let {lineP,lines} = this;
+  let {lineP,lines,mpositions} = this;
   
   let et = st+dur;
   if ((t<st)||(t>et)) {
@@ -81,31 +81,39 @@ item.execMotion=  function (m,t) {
   let vec = Point.mk(Math.cos(a),Math.sin(a)).times(radius);
   let cp = center.plus(vec);
   let rp = map?map.call(this,cp):cp;
-  let lp = m.lastPos;
-  if (0&&lp&&lines) {
-    let line = lineP.instantiate();
-    line.setEnds(lp,rp);
-    lines.push(line);
-  }
-  m.lastPos = rp;
+  mpositions[i] = rp;
+  shape.hide();
   shape.moveto(rp);
 }
 
 item.execMotions = function (t) {
-  let {motions} = this;
-  motions.forEach((m)=>{
-    this.execMotion(m,t);
-  });
+  let {motions,mpositions,mlines} = this;
+  let ln = motions.length;
+  for (let i=0;i<ln;i++) {
+    let m = motions[i];
+    this.execMotion(m,t,i);
+  }
+  
+  for (let i=0;i<ln;i++) {
+    let mline = mlines[i];
+    let e0 = mpositions[i];
+    let e1 = mpositions[(i+1)%ln];
+    mline.setEnds(e0,e1);
+  }
+ 
 }
 
 item.mkMotions = function (n,mkMotion) {
-  let {motions} = this;
+  let {motions,mlines,lineP} = this;
   debugger;
   let step = (2*Math.PI)/n;
   for (let i=0;i<n;i++) {
     let phase = i*step;
     let m=mkMotion.call(this,phase);
     motions.push(m);
+    let mline = lineP.instantiate();
+   // mline.hide();
+    mlines.push(mline);
   }
 }
  

@@ -7,7 +7,7 @@ let rs = generatorP.instantiate();
 addQuadMethods(rs);
 let wd = rs.width;
 rs.setName('part2_0_58d');
-let topParams = {center:Point.mk(0,0),radius:.4*wd,cycles:2,saveAnimation:1};
+let topParams = {center:Point.mk(0,0),radius:.4*wd,cycles:1,saveAnimation:1};
 Object.assign(rs,topParams);
 
 let levels = 9;
@@ -103,7 +103,9 @@ rs.afterInitialize = function () {
   //let m = this.mkMotion();
   //this.motions = [m];
   this.motions =[];
-  this.mkMotions(4,this.mkMotion);
+  this.mpositions =[];
+  this.set('mlines',arrayShape.mk());
+  this.mkMotions(6,this.mkMotion);
 
 }
 
