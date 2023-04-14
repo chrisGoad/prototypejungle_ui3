@@ -26,9 +26,9 @@ rs.computeFills = function () {
     let g = rshade();
     let b = rshade();
     let wn = w[0];
-    let rcolor = `rgb(${r},${g},${b})`;
+    let rcolor = `rgba(${r},${g},${b},.5)`;
     af[wn] = rcolor;
-    af[wn] = 'transparent';
+    //af[wn] = 'transparent';
   });
   this.colors = af;
   debugger;
@@ -85,6 +85,7 @@ rs.afterUpdateState = function () {
 
 rs.mkMotion = function (phase) {
   let {numSteps,cycles,center,radius,toQuad} = this;
+  debugger;
   let dot = this.addDot();
   let startPhase = phase?phase:0;
   let m = {startPhase,startTime:0,cycles,center,radius,shape:dot,duration:numSteps,map:toQuad}
@@ -98,6 +99,7 @@ rs.afterInitialize = function () {
   23;
   circleP.dimension = 4;
   this.set('dotShapes',arrayShape.mk());
+  this.set('lines',arrayShape.mk());
   //let m = this.mkMotion();
   //this.motions = [m];
   this.motions =[];

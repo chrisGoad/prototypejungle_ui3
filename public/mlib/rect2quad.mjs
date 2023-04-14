@@ -68,6 +68,8 @@ item.addDot = function () {
  
 item.execMotion=  function (m,t) {
   let {startPhase:sph,startTime:st,duration:dur,cycles,center,radius,map,shape} = m;
+  let {lineP,lines} = this;
+  
   let et = st+dur;
   if ((t<st)||(t>et)) {
     return;
@@ -79,6 +81,13 @@ item.execMotion=  function (m,t) {
   let vec = Point.mk(Math.cos(a),Math.sin(a)).times(radius);
   let cp = center.plus(vec);
   let rp = map?map.call(this,cp):cp;
+  let lp = m.lastPos;
+  if (0&&lp&&lines) {
+    let line = lineP.instantiate();
+    line.setEnds(lp,rp);
+    lines.push(line);
+  }
+  m.lastPos = rp;
   shape.moveto(rp);
 }
 
@@ -101,7 +110,7 @@ item.mkMotions = function (n,mkMotion) {
 }
  
 
-rs.toQuad = function(p) {
+item.toQuad = function(p) {
   let {corners} = this;
   let qp = this.rc2qpoint(p,corners);
   return qp;
