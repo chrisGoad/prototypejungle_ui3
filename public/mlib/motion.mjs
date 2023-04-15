@@ -41,7 +41,7 @@ item.execMotionGroup = function (mg,t,i) {
 item.execMotion=  function (mg,m,t,i) {
   let {startTime:st,duration:dur,cycles,map,positions,radius,center} = mg;
   let {startPhase:sph,shape} = m;
-  
+  debugger;
   let et = st+dur;
   let rt = t-st;
   if ((t<st)||(t>=et)) {
@@ -82,6 +82,8 @@ item.execMotionGroups = function (t) {
 
 item.mkCircularMotion = function (mg,startPhase) {
   let {motions,shapeP} = mg;
+  let {mshapes} = this;
+  debugger;
   //let {motions,mshapes,stepsSoFar:ssf} = this;
   let shape = shapeP.instantiate();
   mshapes.push(shape);
@@ -92,14 +94,15 @@ item.mkCircularMotion = function (mg,startPhase) {
  
 
 item.mkCircularMotionGroup = function (n,params) {
-  let {stepsSoFar:ssf} = this;
-  let {duration,cycles,map,radius,center,shapeP} = mg;
-  let mg = {kind:'circular',duration,cycles,map,positions:[],startTime};
+  let {stepsSoFar:ssf,motionGroups} = this;
+  let {duration,cycles,map,radius,center,shapeP} = params;
+  let mg = {kind:'circular',duration,cycles,center,radius,map,positions:[],startTime:ssf,shapeP,motions:[]};
   let step = (2*Math.PI)/n;
   for (let i=0;i<n;i++) {
     let phase = i*step;
     this.mkCircularMotion(mg,phase);
   }
+  motionGroups.push(mg);
 
 }
  

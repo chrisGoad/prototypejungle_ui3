@@ -70,7 +70,7 @@ rs.addMotions = function () {
   let duration = numSteps;
   cells.forEach((cell) =>{
     let {center} = cell;
-    let ms = this.mkCircularMotionGroup(4,{center,radius,cycles,duration,shapeP:circleP});
+    this.mkCircularMotionGroup(4,{center,radius,cycles,duration,shapeP:circleP});
   });
 }
        
@@ -81,7 +81,7 @@ rs.initialize = function() {
   let {corners,polygonP} =this;
   this.addFrame();
   this.initGrid();
-  this.motions = [];
+  this.motionGroups = [];
   this.set('mshapes',arrayShape.mk());
   this.addMotions();
  // this.set('lines',arrayShape.mk());
@@ -106,7 +106,7 @@ rs.initialize = function() {
 rs.updateState = function () {
   let {stepsSoFar:ssf} =this;
   debugger;
-  this.execMotions(ssf);
+  this.execMotionGroups(ssf);
 } 
 
 
