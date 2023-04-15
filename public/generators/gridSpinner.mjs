@@ -41,9 +41,10 @@ rs.initProtos = function () {
   let polygonP = this.polygonP = polygonPP.instantiate();
   polygonP['stroke-width'] = .4;
   polygonP.stroke = 'cyan';
+  polygonP.fill = 'red';
   let circleP = this.circleP = circlePP.instantiate();
-  circleP.dimension= 5;
-  circleP.fill = 'cyan';
+  circleP.dimension= 2;
+  circleP.fill = 'white';
 }
 
 
@@ -64,13 +65,13 @@ rs.mkMotion = function (phase) {
  */
 
 rs.addMotions = function () {
-  let {cells,deltaX,numSteps,circleP} = this;
-  let radius = 0.7*0.5*deltaX;
+  let {cells,deltaX,numSteps,circleP,polygonP} = this;
+  let radius = 0.4*0.5*deltaX;
   let cycles = 2;
   let duration = numSteps;
   cells.forEach((cell) =>{
     let {center} = cell;
-    this.mkCircularMotionGroup(4,{center,radius,cycles,duration,shapeP:circleP});
+    this.mkCircularMotionGroup(8,{center,radius,cycles,duration,shapeP:circleP,polyP:polygonP});
   });
 }
        
