@@ -38,7 +38,7 @@ item.execMotionGroup = function (mg,t,i) {
   });
 }
 
-item.execMotion=  function (mg,m,t,i) {
+item.execCircularMotion=  function (mg,m,t,i) {
   let {startTime:st,duration:dur,cycles,map,positions,radius,center} = mg;
   let {startPhase:sph,shape} = m;
   let et = st+dur;
@@ -60,6 +60,13 @@ item.execMotion=  function (mg,m,t,i) {
   //shape.hide();
   if (shape) {
     shape.moveto(rp);
+  }
+}
+
+item.execMotion = function (mg,m,t,i) {
+  let {kind} = mg;
+  if (kind === 'circular') {
+    this.execCircularMotion(mg,m,t,i);
   }
 }
 

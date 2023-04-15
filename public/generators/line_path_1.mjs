@@ -59,6 +59,7 @@ rs.hitSide = function (p,dir,fromSide) {
   let vec = Point.mk(Math.cos(dir),Math.sin(dir));
   let lvec = vec.times(10*ht);
   let seg = LineSegment.mk(p,p.plus(lvec));
+  //debugger;
   let toP,toSide;
   for (let i=0;i<4;i++) {
     if (i!==fromSide) {
@@ -113,6 +114,7 @@ rs.addPathPair = function (params) {
   params1.name = nm1;
   params0.startAtStep = sas0;
   params1.startAtStep = sas1;
+  //debugger;
   this.addPath(params0);
   this.addPath(params1);
   let seg = LineSegment.mk(Point.mk(0,0),Point.mk(0,0));
@@ -193,6 +195,7 @@ rs.updateStateOfSeg = function (n){
   let e1 = fromP.plus(vec.times(vl1));
   seg.end0 = e0;
   seg.end1 = e1;
+//  debugger;
   if ((ssf>part0tm)&& (line.length()>5)&& turnBlack) {
     line.stroke='black';
   }

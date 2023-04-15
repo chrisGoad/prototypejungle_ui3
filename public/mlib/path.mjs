@@ -177,8 +177,9 @@ item.randomValueNextState = function (pspace,cstate,component) {
 
 
 //item.sinusoidVal = function (sv,ev,step,cstep) {
-item.sinusoidVal = function (sv,ev,vel,cstep) {
+item.sinusoidVal = function (sv,ev,ivel,cstep) {
   let down = ev<sv;
+  let vel = ivel?ivel:1;
   let delta = Math.abs(ev-sv);
   //let steps = delta/step;
   let steps = Math.ceil(delta/vel);
@@ -189,6 +190,9 @@ item.sinusoidVal = function (sv,ev,vel,cstep) {
   let phase = (Math.PI)*(cstep/steps) - Math.PI/2; 
   let nvn =  (1+ Math.sin(phase))/2;
   let nv = down?sv - nvn*delta:sv+nvn*delta;
+  if (isNaN(nvl)) {
+    debugger;
+  }
   return {nosin:nvl,sin:nv};
 }
 
@@ -295,6 +299,10 @@ item.sweepNextState = function (pspace,cstate,component) {
     csc.cstep++;
   }
   if (!atCycleEnd) {
+    let val = sinusoidal?sin:nosin;
+    if (isNaN(val)) {
+      debugger;
+    }
     csc.value = sinusoidal?sin:nosin;
   }
  // csc.value = nosin;
@@ -534,6 +542,7 @@ item.oneStep = function (one) {
   if (ns&&this.saveAnimation&&(ns>this.chopOffBeginning)) { // for some reason, the first frame is corrupted 
     draw.saveFrame(ns-Math.max(this.chopOffBeginning+1,1));
   }
+  debugger;
   if (this.updateState) {
     this.updateState();
   } else {
