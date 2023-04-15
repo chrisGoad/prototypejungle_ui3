@@ -14,8 +14,6 @@ Object.assign(rs,topParams);
 
 let levels = 9;
 levels = 1;
-//levels = 7;
-//topLevels = 6;
 
 rs.partParams.levels = levels;
 
