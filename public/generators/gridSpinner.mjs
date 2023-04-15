@@ -1,6 +1,7 @@
 
 import {rs as addGridMethods} from '/mlib/quadGrid.mjs';	
 import {rs as addQuadMethods} from '/mlib/rect2quad.mjs';	
+import {rs as addMotionMethods} from '/mlib/motion.mjs';	
 import {rs as addAnimationMethods} from '/mlib/animate0.mjs';
 
 import {rs as linePP} from '/shape/line.mjs';
@@ -10,6 +11,7 @@ import {rs as polygonPP} from '/shape/polygon.mjs';
 import {rs as basicP} from '/generators/basics.mjs';
 let rs = basicP.instantiate();
 addGridMethods(rs);
+addMotionMethods(rs);
 
 //addQuadMethods(rs);
 addAnimationMethods(rs);
@@ -44,19 +46,13 @@ rs.initProtos = function () {
   circleP.fill = 'cyan';
 }
 
-rs.addDot = function () {
-  let {circleP,dotShapes} = this;
-  let crc = circleP.instantiate();
-  dotShapes.push(crc);
-  return crc;
-}
 
 rs.toQuad = function(p) {
   let {corners} = this;
   let qp = this.rc2qpoint(p,corners);
   return qp;
 }
-
+/*
 rs.mkMotion = function (phase) {
   let {numSteps,cycles,center,radius,toQuad} = this;
   let dot = this.addDot();
@@ -65,7 +61,19 @@ rs.mkMotion = function (phase) {
   let m = {startPhase,startTime:0,cycles,center,radius,shape:dot,duration:numSteps}
   return m;
 }
-  
+ */
+
+rs.addMotions = function () {
+  let {cells,deltaX,numSteps,circleP} = this;
+  let radius = 0.7*0.5*deltaX;
+  let cycles = 2;
+  let duration = numSteps;
+  cells.forEach((cell) =>{
+    let {center} = cell;
+    let ms = this.mkCircularMotionGroup(4,{center,radius,cycles,duration,shapeP:circleP});
+  });
+}
+       
 
 rs.initialize = function() { 
   debugger;
@@ -73,6 +81,9 @@ rs.initialize = function() {
   let {corners,polygonP} =this;
   this.addFrame();
   this.initGrid();
+  this.motions = [];
+  this.set('mshapes',arrayShape.mk());
+  this.addMotions();
  // this.set('lines',arrayShape.mk());
  // this.set('dotShapes',arrayShape.mk());
  // this.dots = [];
@@ -93,7 +104,7 @@ rs.initialize = function() {
   
 
 rs.updateState = function () {
-  let {stepsSoFar:ssf,numSteps} =this;
+  let {stepsSoFar:ssf} =this;
   debugger;
   this.execMotions(ssf);
 } 

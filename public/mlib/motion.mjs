@@ -12,43 +12,7 @@ let topParams = {width:wd,height:wd,numRows:nr,numCols:nr,framePadding:.1*wd,ste
 Object.assign(rs,topParams);
 */
 
- 
- item.alongSeg = function (p0,p1,fr) {
-   let vec = p1.difference(p0);
-   let svec  = vec.times(fr);
-   let p = p0.plus(svec);
-   return p;
-}
 
-
-item.rc2qpoint = function (pos,corners) {
-  let {width:wd,height:ht} = this;
-  let {x,y} = pos;
-  let minX = -0.5*wd;
-  let minY = -0.5*ht;
-  let [LL,UL,UR,LR] = corners;
-  debugger;
-  let frx = (x-minX)/wd;
-  let fry = (y-minY)/ht;
-  let bp = this.alongSeg(LL,LR,frx);
-  let tp = this.alongSeg(UL,UR,frx);
-  let p = this.alongSeg(bp,tp,fry);
-  return p;
-}
-  
-
-item.initLines = function () {
-  let {numRows:nr,numCols:nc,lineP} = this;
-   let lines = this.set('lines',arrayShape.mk());
-   for (let j=0;j<=nr;j++) {
-     let line = lineP.instantiate();
-     lines.push(line);
-  }
-  for (let i=0;i<=nc;i++) {
-    let line = lineP.instantiate();
-     lines.push(line);
-  }
-} 
 
 item.addDot = function () {
   let {circleP,dotShapes} = this;
@@ -64,11 +28,19 @@ item.addDot = function () {
   duration is the duration of the whole motion, which includes the given number of cycles
  */
  /* 
- a script is an array of motions. The updateState method runs rs.theScript.*/
+ a motion group is an array of motions that share a common  startTime duration,cycles, and positions
+ a script is an array of motion groups. The updateState method runs rs.theScript.*/
  
-item.execMotion=  function (m,t,i) {
-  let {startPhase:sph,startTime:st,duration:dur,cycles,center,radius,map,shape} = m;
-  let {lineP,lines,mpositions} = this;
+item.execMotionGroup = function (mg,t,i) {
+  let {startTime,duration,cycles,map,motions} = mg;
+  motions.forEach( (m) => {
+     this.execMotion(mg,m,t,i);
+  });
+}
+
+item.execMotion=  function (mg,m,t,i) {
+  let {startTime:st,duration:dur,cycles,map,positions,radius,center} = mg;
+  let {startPhase:sph,shape} = m;
   
   let et = st+dur;
   let rt = t-st;
@@ -85,48 +57,53 @@ item.execMotion=  function (m,t,i) {
   let vec = Point.mk(Math.cos(a),Math.sin(a)).times(radius);
   let cp = center.plus(vec);
   let rp = map?map.call(this,cp):cp;
-  mpositions[i] = rp;
-  shape.hide();
+ // mpositions[i] = rp;
+  //shape.hide();
   shape.moveto(rp);
 }
 
-item.execMotions = function (t) {
-  let {motions,mpositions,mlines,innerPgon:ip} = this;
+item.execMotionGroup = function (mg,t) {
+  let {motions} = mg;
   let ln = motions.length;
   for (let i=0;i<ln;i++) {
     let m = motions[i];
-    this.execMotion(m,t,i);
+    this.execMotion(mg,m,t,i);
   }
-  ip.corners = mpositions;
-  for (let i=0;i<-1;i++) {
-    let mline = mlines[i];
-    let e0 = mpositions[i];
-    let e1 = mpositions[(i+1)%ln];
-    mline.setEnds(e0,e1);
-  }
+ // ip.corners = mpositions;
  
 }
 
-item.mkMotions = function (n,mkMotion) {
-  let {motions,mlines,lineP} = this;
-  debugger;
+item.execMotionGroups = function (t) {
+  let {motionGroups} = this;
+  motionGroups.forEach((mg) => {
+    this.execMotionGroup(mg,t);
+  });
+}
+
+item.mkCircularMotion = function (mg,startPhase) {
+  let {motions,shapeP} = mg;
+  //let {motions,mshapes,stepsSoFar:ssf} = this;
+  let shape = shapeP.instantiate();
+  mshapes.push(shape);
+  let m= {shape,startPhase};
+  motions.push(m);
+  
+}
+ 
+
+item.mkCircularMotionGroup = function (n,params) {
+  let {stepsSoFar:ssf} = this;
+  let {duration,cycles,map,radius,center,shapeP} = mg;
+  let mg = {kind:'circular',duration,cycles,map,positions:[],startTime};
   let step = (2*Math.PI)/n;
   for (let i=0;i<n;i++) {
     let phase = i*step;
-    let m=mkMotion.call(this,phase);
-    motions.push(m);
-    //let mline = lineP.instantiate();
-   // mline.hide();
-    //mlines.push(mline);
+    this.mkCircularMotion(mg,phase);
   }
+
 }
  
 
-item.toQuad = function(p) {
-  let {corners} = this;
-  let qp = this.rc2qpoint(p,corners);
-  return qp;
-}
  
 
     

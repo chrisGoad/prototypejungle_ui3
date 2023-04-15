@@ -203,6 +203,7 @@ item.initProtoss = function () {
  /* 
  a script is an array of motions. The updateState method runs rs.theScript.*/
  
+ /*
 item.execMotion=  function (m,t) {
   let {startTime:st,duration:dur,startPoint:sp,endPoint:ep,shape,finished} = m;
   if (finished) {
@@ -297,7 +298,7 @@ item.updateStatee = function () {
   }
   this.performMove(fr);    
 } 
-
+*/
 }
     
 
