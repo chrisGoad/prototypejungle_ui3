@@ -1,10 +1,14 @@
-import {rs as addQuadGridMethods} from '/mlib/quad_grid.mjs';	
+//import {rs as addQuadGridMethods} from '/mlib/quad_grid.mjs';	
+import {rs as addQuadMethods} from '/mlib/rect2quad.mjs';	
+//import {rs as addGridMethods} from '/mlib/quad_grid.mjs';	
+import {rs as addGridMethods} from '/mlib/grid2.mjs';	
 
 import {rs as generatorP} from '/instances/part2_0_49.mjs';
 
 let rs = generatorP.instantiate();
 
-addQuadGridMethods(rs);
+addQuadMethods(rs);
+addGridMethods(rs);
 rs.setName('part2_0_49d');
 let nr =20;
 let topParams = {numRows:nr,numCols:nr,saveAnimation:1};

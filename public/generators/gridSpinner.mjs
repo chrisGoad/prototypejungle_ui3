@@ -1,5 +1,5 @@
 
-import {rs as addGridMethods} from '/mlib/quadGrid.mjs';	
+import {rs as addGridMethods} from '/mlib/grid2.mjs';	
 import {rs as addQuadMethods} from '/mlib/rect2quad.mjs';	
 import {rs as addMotionMethods} from '/mlib/motion.mjs';	
 import {rs as addAnimationMethods} from '/mlib/animate0.mjs';

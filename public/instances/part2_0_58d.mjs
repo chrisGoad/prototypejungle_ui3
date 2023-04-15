@@ -77,7 +77,9 @@ rs.buildSeqOb = function () {
 }
 
 rs.afterUpdateState = function () {
-  let {stepsSoFar:ssf} =this;
+  let {stepsSoFar:ssf,topPart} =this;
+  let pgon = topPart.P0.polygon;
+  this.corners = pgon.corners;
   debugger;
   this.execMotionGroups(ssf);
 }
@@ -100,10 +102,9 @@ rs.mkMotionn = function (phase) {
 }
 
 rs.afterInitialize = function () {
-  let {circleP,polygonP} = this;
-  debugger;
-  23;
-  circleP.dimension = 4;
+ /* let {circleP,polygonP,topPart} = this;
+  let pgon = topPart.P0.polygon;
+  this.corners = pgon.corners;*/
   this.motionGroups = [];
   this.set('mshapes',arrayShape.mk());
   this.addMotion();
