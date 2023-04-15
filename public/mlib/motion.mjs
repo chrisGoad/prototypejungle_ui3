@@ -58,7 +58,9 @@ item.execMotion=  function (mg,m,t,i) {
   let rp = map?map.call(this,cp):cp;
   positions[i] = rp;
   //shape.hide();
-  shape.moveto(rp);
+  if (shape) {
+    shape.moveto(rp);
+  }
 }
 
 item.execMotionGroup = function (mg,t) {
@@ -70,9 +72,11 @@ item.execMotionGroup = function (mg,t) {
     this.execMotion(mg,m,t,i);
   }
   debugger;
-  polygon.corners = positions;
-  polygon.show();
-  polygon.update();
+  if (polygon) {
+    polygon.corners = positions;
+    polygon.show();
+    polygon.update();
+  }
  
 }
 
@@ -88,8 +92,10 @@ item.mkCircularMotion = function (mg,startPhase) {
   let {mshapes} = this;
   debugger;
   //let {motions,mshapes,stepsSoFar:ssf} = this;
-  let shape = shapeP.instantiate();
-  mshapes.push(shape);
+  let shape = shapeP?shapeP.instantiate():null;
+  if (shape) {
+    mshapes.push(shape);
+  }
   let m= {shape,startPhase};
   motions.push(m);
   
@@ -99,8 +105,10 @@ item.mkCircularMotion = function (mg,startPhase) {
 item.mkCircularMotionGroup = function (n,params) {
   let {stepsSoFar:ssf,motionGroups,mshapes} = this;
   let {duration,cycles,map,radius,center,shapeP,polyP} = params;
-  let polygon = polyP.instantiate();
-   mshapes.push(polygon);
+  let polygon = polyP?polyP.instantiate():null;
+  if (polygon) {
+    mshapes.push(polygon);
+  }
   let mg = {kind:'circular',duration,cycles,center,radius,map,positions:[],startTime:ssf,shapeP,polygon,motions:[]};
   let step = (2*Math.PI)/n;
   for (let i=0;i<n;i++) {

@@ -20,7 +20,6 @@ Object.assign(rs,topParams);
    return p;
 }
 
-
 item.rc2qpoint = function (pos,corners) {
   let {width:wd,height:ht} = this;
   let {x,y} = pos;
@@ -65,7 +64,7 @@ item.addDot = function () {
  */
  /* 
  a script is an array of motions. The updateState method runs rs.theScript.*/
- 
+ /*
 item.execMotion=  function (m,t,i) {
   let {startPhase:sph,startTime:st,duration:dur,cycles,center,radius,map,shape} = m;
   let {lineP,lines,mpositions} = this;
@@ -121,7 +120,7 @@ item.mkMotions = function (n,mkMotion) {
   }
 }
  
-
+*/
 item.toQuad = function(p) {
   let {corners} = this;
   let qp = this.rc2qpoint(p,corners);

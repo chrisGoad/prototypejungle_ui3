@@ -1,10 +1,12 @@
 import {rs as addQuadMethods} from '/mlib/rect2quad.mjs';	
+import {rs as addMotionMethods} from '/mlib/motion.mjs';	
 
 import {rs as generatorP} from '/instances/part2_0_58.mjs';
 
 let rs = generatorP.instantiate();
 
 addQuadMethods(rs);
+addMotionMethods(rs);
 let wd = rs.width;
 rs.setName('part2_0_58d');
 let topParams = {center:Point.mk(0,0),radius:.4*wd,cycles:1,saveAnimation:1};
@@ -75,20 +77,19 @@ rs.buildSeqOb = function () {
 }
 
 rs.afterUpdateState = function () {
-  let {stepsSoFar:ssf} = this;
-  //debugger;
-  let part = this.topPart.P0;
-  let pgon = part.polygon;
-  let c = pgon.corners; if (c) {
-    this.corners = c;
-    this.execMotions(ssf);
-  }
-  23;
-
+  let {stepsSoFar:ssf} =this;
+  debugger;
+  this.execMotionGroups(ssf);
 }
 
 
-rs.mkMotion = function (phase) {
+rs.addMotion = function () {
+  let {numSteps,polygonP,center,radius,cycles,toQuad} = this;
+  this.mkCircularMotionGroup(6,{center,radius,cycles,duration:numSteps,shapeP:null,polyP:polygonP,map:toQuad}); //only polygons
+}
+       
+
+rs.mkMotionn = function (phase) {
   let {numSteps,cycles,center,radius,toQuad} = this;
   debugger;
   let dot = this.addDot();
@@ -103,17 +104,12 @@ rs.afterInitialize = function () {
   debugger;
   23;
   circleP.dimension = 4;
-  this.set('dotShapes',arrayShape.mk());
-  this.set('lines',arrayShape.mk());
-  //let m = this.mkMotion();
-  //this.motions = [m];
-  this.motions =[];
-  this.mpositions =[];
-  this.set('mlines',arrayShape.mk());
-  let  pgon = polygonP.instantiate();
-  pgon.fill = this.randomColor();
-  this.set('innerPgon',pgon);
-  this.mkMotions(6,this.mkMotion);
+  this.motionGroups = [];
+  this.set('mshapes',arrayShape.mk());
+  this.addMotion();
+  
+  //pgon.fill = this.randomColor();
+ 
 
 }
 

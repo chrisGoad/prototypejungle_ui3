@@ -37,12 +37,6 @@ rs.computeFills = function () {
 
 rs.spinReady = 0;
 
-rs.addDot = function () {
-  let {circleP,dotShapes} = this;
-  let crc = circleP.instantiate();
-  dotShapes.push(crc);
-  return crc;
-}
 
 rs.mkMotion = function (phase) {
   let {numSteps,cycles,center,radius,toQuad} = this;

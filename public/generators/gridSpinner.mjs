@@ -71,7 +71,9 @@ rs.addMotions = function () {
   let duration = numSteps;
   cells.forEach((cell) =>{
     let {center} = cell;
-    this.mkCircularMotionGroup(8,{center,radius,cycles,duration,shapeP:circleP,polyP:polygonP});
+    //this.mkCircularMotionGroup(8,{center,radius,cycles,duration,shapeP:circleP,polyP:polygonP});
+    //this.mkCircularMotionGroup(8,{center,radius,cycles,duration,shapeP:null,polyP:polygonP}); //only polygons
+    this.mkCircularMotionGroup(8,{center,radius,cycles,duration,shapeP:circleP,polyP:null});//only dots
   });
 }
        
