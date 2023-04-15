@@ -11,15 +11,15 @@ import {rs as basicP} from '/generators/basics.mjs';
 let rs = basicP.instantiate();
 addGridMethods(rs);
 
-addQuadMethods(rs);
+//addQuadMethods(rs);
 addAnimationMethods(rs);
 
 let wd = 200;
 let nr = 20;
 //
-nr =20;
-rs.setName('quad_grid');
-let topParams = {width:wd,height:wd,framePadding:.1*wd,stepsPerMove:10,numSteps:200,center:Point.mk(0,0),radius:wd/4,
+nr =5;
+rs.setName('gridSpinner');
+let topParams = {width:wd,height:wd,numRows:nr,numCols:nr,framePadding:.1*wd,stepsPerMove:10,numSteps:200,center:Point.mk(0,0),radius:wd/4,
                  cycles:3,frameStroke:'rgb(2,2,2)',frameStrokee:'white',frameStrokeWidth:1,saveAnimation:1}
 Object.assign(rs,topParams);
 let dim = 100;
@@ -72,6 +72,12 @@ rs.initialize = function() {
   this.initProtos();
   let {corners,polygonP} =this;
   this.addFrame();
+  this.initGrid();
+ // this.set('lines',arrayShape.mk());
+ // this.set('dotShapes',arrayShape.mk());
+ // this.dots = [];
+  this.addLines();
+  return;
   //this.set('lines',arrayShape.mk());
   this.set('dotShapes',arrayShape.mk());
   let pgon = polygonP.instantiate();

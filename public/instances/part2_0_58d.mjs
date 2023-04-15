@@ -16,17 +16,22 @@ levels = 1;
 //topLevels = 6;
 
 rs.partParams.levels = levels;
-rs.computeFills = function () {
+
+rs.randomColor = function () {
   const rshade =() => Math.floor(Math.random()*255);
+    let r = rshade();
+    let g = rshade();
+    let b = rshade();
+    let rcolor = `rgba(${r},${g},${b},.5)`;
+    return rcolor;
+}
+rs.computeFills = function () {
   let aw = this.allWheres(this.partParams.levels,5);
   let af = {};
   
   aw.forEach((w) => {
-    let r = rshade();
-    let g = rshade();
-    let b = rshade();
+    let rcolor = this.randomColor();
     let wn = w[0];
-    let rcolor = `rgba(${r},${g},${b},.5)`;
     af[wn] = rcolor;
     //af[wn] = 'transparent';
   });
@@ -94,7 +99,7 @@ rs.mkMotion = function (phase) {
 }
 
 rs.afterInitialize = function () {
-  let {circleP} = this;
+  let {circleP,polygonP} = this;
   debugger;
   23;
   circleP.dimension = 4;
@@ -105,6 +110,9 @@ rs.afterInitialize = function () {
   this.motions =[];
   this.mpositions =[];
   this.set('mlines',arrayShape.mk());
+  let  pgon = polygonP.instantiate();
+  pgon.fill = this.randomColor();
+  this.set('innerPgon',pgon);
   this.mkMotions(6,this.mkMotion);
 
 }

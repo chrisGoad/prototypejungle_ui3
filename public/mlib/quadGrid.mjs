@@ -69,16 +69,38 @@ item.initLines = function () {
   }
 } 
 
+
+item.initCells = function () { 
+  let {deltaX,deltaY,minX,minY,numRows:nr,numCols:nc,cells} = this;
+  let hdx=0.5*deltaX;
+  let hdy=0.5*deltaY;
+  for (let i=0;i<nc;i++) {
+    let x = minX+deltaX*i+hdx;
+    for (let j=0;j<nr;j++) {
+      let y = minY+deltaY*j+hdy;
+      let index = i*(nc-1)+j;
+      let center = Point.mk(x,y);
+      let cell={center,index,row:i,col:j};
+      cells.push(cell);
+    }
+  }
+}
+
+
 item.initGrid = function () {
   let gr =  [];
   let {numRows:nr,numCols:nc,height:ht,width:wd} = this;
   let deltaX = this.deltaX =wd/nc;
   let deltaY = this.deltaY = ht/nr;
   let minX = this.minX =-0.5*wd;
-  let minY = this.minY = -0.5*ht;
+  let minY = this.minY = -0.5*ht
+  this.cells = [];
   this.initLines();
   this.set('dotShapes',arrayShape.mk());
   this.motions = [];
+  this.cells = [];
+  this.initCells();
+  debugger;
 }
 
 item.hseg = function (j,corners) {
