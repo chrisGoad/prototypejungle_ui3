@@ -1,6 +1,6 @@
 //import {rs as addQuadGridMethods} from '/mlib/quad_grid.mjs';	
 import {rs as addQuadMethods} from '/mlib/rect2quad.mjs';	
-//import {rs as addGridMethods} from '/mlib/quad_grid.mjs';	
+//import {rs as addGridMethods} from '/mlib/quad_grid2.mjs';	
 import {rs as addGridMethods} from '/mlib/grid2.mjs';	
 
 import {rs as generatorP} from '/instances/part2_0_49.mjs';
@@ -11,6 +11,7 @@ addQuadMethods(rs);
 addGridMethods(rs);
 rs.setName('part2_0_49d');
 let nr =20;
+//nr = 1;
 let topParams = {numRows:nr,numCols:nr,saveAnimation:1};
 Object.assign(rs,topParams);
 
@@ -47,6 +48,7 @@ rs.partFill  = function (prt) {
   if (pgon) {
     let corners = pgon.corners;
     if (corners) {
+      this.corners =corners;
       let c = corners;
       let cln = corners.length;
       let wln = w.length;
@@ -54,12 +56,14 @@ rs.partFill  = function (prt) {
         //debugger;
         if (!gridReady) {
           this.initGrid();
+          this.map = (p) => {
+             let c = this.corners;
+             let rc = [c[0],c[3],c[2],c[1]];
+            return this.rc2point(p,rc);
+          }
           this.gridReady=1;
         }
-        let rc = [c[2],c[3],c[0],c[1]]
-        rc = [c[1],c[0],c[3],c[2]]
-        rc = [c[0],c[3],c[2],c[1]]
-        this.updateLines(rc);
+        this.updateCells();
       }
     }
   }

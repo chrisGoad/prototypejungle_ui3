@@ -26,7 +26,6 @@ item.rc2qpoint = function (pos,corners) {
   let minX = -0.5*wd;
   let minY = -0.5*ht;
   let [LL,UL,UR,LR] = corners;
-  debugger;
   let frx = (x-minX)/wd;
   let fry = (y-minY)/ht;
   let bp = this.alongSeg(LL,LR,frx);
