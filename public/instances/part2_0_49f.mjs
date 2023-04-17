@@ -59,7 +59,7 @@ rs.partFill  = function (prt) {
           this.map = (p) => {
              let c = this.corners;
              let rc = [c[0],c[3],c[2],c[1]];
-            return this.rc2qpoint(p,rc);
+            return this.rc2point(p,rc);
           }
           this.gridReady=1;
         }

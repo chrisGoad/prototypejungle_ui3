@@ -20,17 +20,20 @@ Object.assign(rs,topParams);
    return p;
 }
 
-item.rc2qpoint = function (pos,corners) {
-  let {width:wd,height:ht} = this;
+item.usq2qpoint = function (pos,corners) { // unit square to quad coords
+  //let {width:wd,height:ht} = this;
   let {x,y} = pos;
-  let minX = -0.5*wd;
-  let minY = -0.5*ht;
+ // let minX = -0.5*wd;
+ // let minY = -0.5*ht;
   let [LL,UL,UR,LR] = corners;
-  let frx = (x-minX)/wd;
-  let fry = (y-minY)/ht;
-  let bp = this.alongSeg(LL,LR,frx);
-  let tp = this.alongSeg(UL,UR,frx);
-  let p = this.alongSeg(bp,tp,fry);
+ // let frx = (x-minX)/wd;
+ // let fry = (y-minY)/ht;
+  //let bp = this.alongSeg(LL,LR,frx);
+  let bp = this.alongSeg(LL,LR,x);
+  //let tp = this.alongSeg(UL,UR,frx);
+  let tp = this.alongSeg(UL,UR,x);
+  //let p = this.alongSeg(bp,tp,fry);
+  let p = this.alongSeg(bp,tp,y);
   return p;
 }
   
@@ -122,7 +125,7 @@ item.mkMotions = function (n,mkMotion) {
 */
 item.toQuad = function(p) {
   let {corners} = this;
-  let qp = this.rc2qpoint(p,corners);
+  let qp = this.usq2qpoint(p,corners);
   return qp;
 }
  

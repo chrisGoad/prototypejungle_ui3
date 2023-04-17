@@ -12,6 +12,7 @@ import {rs as basicP} from '/generators/basics.mjs';
 let rs = basicP.instantiate();
 addGridMethods(rs);
 addMotionMethods(rs);
+addQuadMethods(rs);
 
 //addQuadMethods(rs);
 addAnimationMethods(rs);
@@ -42,6 +43,9 @@ rs.initProtos = function () {
   polygonP['stroke-width'] = .4;
   polygonP.stroke = 'cyan';
   polygonP.fill = 'red';
+  let iPolygonP = this.iPolygonP = polygonPP.instantiate();
+  iPolygonP['stroke-width'] = 0;
+  iPolygonP.fill = 'green'; 
   let circleP = this.circleP = circlePP.instantiate();
   circleP.dimension= 2;
   circleP.fill = 'white';
@@ -65,15 +69,26 @@ rs.mkMotion = function (phase) {
  */
 
 rs.addMotions = function () {
-  let {cells,deltaX,numSteps,circleP,polygonP} = this;
-  let radius = 0.4*0.5*deltaX;
+  let {cells,deltaX,numSteps,circleP,iPolygonP} = this;
+  //let radius = 0.4*0.5*deltaX;
+  let radius = 0.2;
   let cycles = 2;
   let duration = numSteps;
   cells.forEach((cell) =>{
-    let {center} = cell;
-    //this.mkCircularMotionGroup(8,{center,radius,cycles,duration,shapeP:circleP,polyP:polygonP});
-    //this.mkCircularMotionGroup(8,{center,radius,cycles,duration,shapeP:null,polyP:polygonP}); //only polygons
-    this.mkCircularMotionGroup(8,{center,radius,cycles,duration,shapeP:circleP,polyP:null});//only dots
+    debugger;
+    let {polygon,coords} = cell;
+    let {x,y} = coords;
+    let shapeP,polyP,numSides;
+    if (x%2) {
+      numSides = 4;
+      polyP = iPolygonP;
+      shapeP = null;
+    } else {
+      numSides = 8;
+      polyP = null;
+      shapeP = circleP;
+    }
+    this.mkCircularMotionGroup(numSides,{radius,cycles,duration,shapeP,polyP,oPoly:polygon});
   });
 }
        

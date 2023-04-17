@@ -2,9 +2,9 @@
 
 let rs = function (item) {
 
-item.rc2rpoint = function (pos,grid) {
+item.rc2rpoint = function (pos,grid) {  //row col 2 coords
   let theGrid = grid?grid:this;
-  let {width:wd,height:ht,deltaX,deltaY} = theGrid;
+  let {width:wd,height:ht,deltaX,deltaY,numRows:nr,numCols:nc} = theGrid;
   let {x:i,y:j} = pos;
   let minX = -0.5*wd;
   let minY = -0.5*ht;
@@ -13,19 +13,40 @@ item.rc2rpoint = function (pos,grid) {
   return Point.mk(x,y);
  }
  
+ item.rc2qpoint = function (pos,corners,grid) {
+   let theGrid = grid?grid:this;
+  let {numRows:nr,numCols:nc} = theGrid;
+  let {x,y} = pos;
+  let sx = x/nc;
+  let sy = y/nc;
+  let rp = this.usq2qpoint(Point.mk(sx,sy),corners);
+  return rp;
+}
  item.rc2point = function (pos,corners,grid) {
-  let rp = this.rc2rpoint(pos,grid);
+  let theGrid = grid?grid:this;
+  let {numRows:nr,numCols:nc} = theGrid;
+  let {x,y} = pos;
   if (corners) {
-     let p = this.rc2qpoint(rp,corners,grid);
+     let p = this.rc2qpoint(pos,corners,grid);
      return p;
   }
+  let rp = this.rc2rpoint(pos,grid);
   return rp;
  }
 
-
+item.rcCoords2unitCoods = function (p,grid) {
+  let theGrid = grid?grid:this;
+  let {numCols:nc,numRows:nr,width:wd,height:ht} = theGrid;
+  let mx = x/nc;
+  let my = y/nr;
+  let rp =  Point.mk(mx,my);
+  return rp;
+}
 item.cellCorners = function (pos,map) {
-  let {numRows,numCols} = this;
+  let {numRows:nr,numCols:nc} = this;
   let {x,y} = pos;
+  debugger;
+
   let UL = map.call(this,Point.mk(x,y));
   let UR = map.call(this,Point.mk(x+1,y));
   let LR = map.call(this,Point.mk(x+1,y+1));
@@ -46,7 +67,7 @@ item.cellCenter = function (corners) {
 }
 
 item.addCell = function (pos,grid) {
-  debugger;
+ // debugger;
   let theGrid = grid?grid:this;
   let {cells,map,polygons,polygonP,numCols:nc} = theGrid;
   let {x,y} =pos;

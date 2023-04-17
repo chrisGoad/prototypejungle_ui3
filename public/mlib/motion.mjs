@@ -39,7 +39,7 @@ item.execMotionGroup = function (mg,t,i) {
 }
 
 item.execCircularMotion=  function (mg,m,t,i) {
-  let {startTime:st,duration:dur,cycles,map,positions,radius,center} = mg;
+  let {startTime:st,duration:dur,cycles,oPoly,positions,radius} = mg;
   let {startPhase:sph,shape} = m;
   let et = st+dur;
   let rt = t-st;
@@ -53,9 +53,44 @@ item.execCircularMotion=  function (mg,m,t,i) {
   if ((rt === 0) || (rt == 191)) {
     console.log('rt',rt,'ic',ic,'t',t);
   }
-  let vec = Point.mk(Math.cos(a),Math.sin(a)).times(radius);
-  let cp = center.plus(vec);
-  let rp = map?map.call(this,cp):cp;
+  debugger;
+  let cp = Point.mk(Math.cos(a),Math.sin(a)).times(radius);
+  let acp = cp.plus(Point.mk(.5,.5));
+  let rp = this.usq2qpoint(acp,oPoly.corners);
+  positions[i] = rp;
+  //shape.hide();
+  if (shape) {
+    shape.moveto(rp);
+  }
+}
+
+// back and forth
+item.execBAFmotion=  function (poly,mg,m,t,i) {
+  let {startTime:st,duration:dur,cycles,map,positions,upAndDown,where,howMuch} = mg;
+  let {startPhase:sph,shape} = m;
+  let et = st+dur;
+  let rt = t-st;
+  if ((t<st)||(t>=et)) {
+    return;
+  }
+  let cycleDur = dur/cycles;
+  let ic = (rt%cycleDur)/cycleDur;
+  let a = 2*Math.PI*ic+sph;
+
+  if ((rt === 0) || (rt == 191)) {
+    console.log('rt',rt,'ic',ic,'t',t);
+  }
+  let hf =  Math.cos(a)*howMuch;
+  let x,y;
+  if (upAndDown) {
+    y = hf;
+    x = where;
+  } else {
+    x  = hf;
+    y = where;
+  }
+  let cp = Point.mk(x,y);
+  let rp = this.rc2qpoint(poly.corners,cp);
   positions[i] = rp;
   //shape.hide();
   if (shape) {
@@ -111,12 +146,12 @@ item.mkCircularMotion = function (mg,startPhase) {
 
 item.mkCircularMotionGroup = function (n,params) {
   let {stepsSoFar:ssf,motionGroups,mshapes} = this;
-  let {duration,cycles,map,radius,center,shapeP,polyP} = params;
+  let {duration,cycles,map,radius,center,shapeP,polyP,oPoly} = params;
   let polygon = polyP?polyP.instantiate():null;
   if (polygon) {
     mshapes.push(polygon);
   }
-  let mg = {kind:'circular',duration,cycles,center,radius,map,positions:[],startTime:ssf,shapeP,polygon,motions:[]};
+  let mg = {kind:'circular',duration,cycles,center,radius,map,positions:[],startTime:ssf,shapeP,polygon,motions:[],oPoly};
   let step = (2*Math.PI)/n;
   for (let i=0;i<n;i++) {
     let phase = i*step;
