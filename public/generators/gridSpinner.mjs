@@ -18,9 +18,9 @@ addQuadMethods(rs);
 addAnimationMethods(rs);
 
 let wd = 200;
-let nr = 20;
+let nr = 8;
 //
-nr =5;
+nr =8;
 rs.setName('gridSpinner');
 let topParams = {width:wd,height:wd,numRows:nr,numCols:nr,framePadding:.1*wd,stepsPerMove:10,numSteps:200,center:Point.mk(0,0),radius:wd/4,
                  cycles:3,frameStroke:'rgb(2,2,2)',frameStrokee:'white',frameStrokeWidth:1,saveAnimation:1}
@@ -39,10 +39,10 @@ rs.initProtos = function () {
   let lineP = this.lineP = linePP.instantiate();
   lineP['stroke-width'] = .4;
   lineP.stroke = 'cyan';
-  let polygonP = this.polygonP = polygonPP.instantiate();
-  polygonP['stroke-width'] = .4;
-  polygonP.stroke = 'cyan';
-  polygonP.fill = 'red';
+  let gridPolygonP = this.gridPolygonP = polygonPP.instantiate();
+  gridPolygonP['stroke-width'] = .4;
+  gridPolygonP.stroke = 'cyan';
+  gridPolygonP.fill = 'red';
   let iPolygonP = this.iPolygonP = polygonPP.instantiate();
   iPolygonP['stroke-width'] = 0;
   iPolygonP.fill = 'green'; 
@@ -57,16 +57,6 @@ rs.toQuad = function(p) {
   let qp = this.rc2qpoint(p,corners);
   return qp;
 }
-/*
-rs.mkMotion = function (phase) {
-  let {numSteps,cycles,center,radius,toQuad} = this;
-  let dot = this.addDot();
-  let startPhase = phase?phase:0
-  //let m = {startPhase,startTime:0,cycles,center,radius,shape:dot,duration:numSteps,map:toQuad}
-  let m = {startPhase,startTime:0,cycles,center,radius,shape:dot,duration:numSteps}
-  return m;
-}
- */
 
 rs.addMotions = function () {
   let {cells,deltaX,numSteps,circleP,iPolygonP} = this;
@@ -79,11 +69,13 @@ rs.addMotions = function () {
     let {polygon,coords} = cell;
     let {x,y} = coords;
     let shapeP,polyP,numSides;
-    if (x%2) {
+    if ((x+y)%2) {
       numSides = 4;
+      radius = .4;
       polyP = iPolygonP;
       shapeP = null;
     } else {
+      radius = .2;
       numSides = 8;
       polyP = null;
       shapeP = circleP;
@@ -102,20 +94,6 @@ rs.initialize = function() {
   this.motionGroups = [];
   this.set('mshapes',arrayShape.mk());
   this.addMotions();
- // this.set('lines',arrayShape.mk());
- // this.set('dotShapes',arrayShape.mk());
- // this.dots = [];
- // this.addLines();
-  return;
-  //this.set('lines',arrayShape.mk());
-  this.set('dotShapes',arrayShape.mk());
-  let pgon = polygonP.instantiate();
-  pgon.corners = corners;
-  this.set('pgon',pgon);
-  this.motions = [];
-  // let m = this.mkMotion();
-  // this.motions =[m];
-  this.mkMotions(8,this.mkMotion);
 } 
   //this.updateState();
 

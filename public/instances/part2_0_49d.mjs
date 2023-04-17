@@ -2,6 +2,7 @@
 import {rs as addQuadMethods} from '/mlib/rect2quad.mjs';	
 //import {rs as addGridMethods} from '/mlib/quad_grid2.mjs';	
 import {rs as addGridMethods} from '/mlib/grid2.mjs';	
+import {rs as polygonPP} from '/shape/polygon.mjs';
 
 import {rs as generatorP} from '/instances/part2_0_49.mjs';
 
@@ -73,11 +74,37 @@ rs.partFill  = function (prt) {
   }
   let ws = this.whereString(w);
   let clr = this.colors[ws];
+  return null;
   return clr;
 }
 
 rs.computeFills();
 
+
+
+rs.initProtos = function () {
+  this.polygonP =  polygonPP.instantiate();
+  this.polygonP.stroke = 'white';
+  this.polygonP.fill = 'transparent';
+  this.polygonP['stroke-width'] =1;
+  this.gridPolygonP =  polygonPP.instantiate();
+  this.gridPolygonP.stroke = 'white';
+  this.gridPolygonP.fill = 'green';
+  this.gridPolygonP['stroke-width'] =.1; 
+  /*this.lineP =  linePP.instantiate();
+  this.lineP.stroke = 'white';
+  this.lineP['stroke-width'] =.5 ;
+    this.circleP =  circlePP.instantiate();
+  this.circleP.stroke = 'white';
+  this.circleP.fill = 'blue';
+  this.circleP['stroke-width'] =.05;
+   let textP = this.textP =  textPP.instantiate();
+  textP["font-size"] = "12";
+  textP["font-style"] = "normal";
+  textP["font-family"] = "arial";
+  textP["font-weight"] = "normal";
+  textP.stroke = 'white';*/
+}
 
 
 

@@ -65,8 +65,8 @@ item.execCircularMotion=  function (mg,m,t,i) {
 }
 
 // back and forth
-item.execBAFmotion=  function (poly,mg,m,t,i) {
-  let {startTime:st,duration:dur,cycles,map,positions,upAndDown,where,howMuch} = mg;
+item.execBAFmotion=  function (mg,m,t,i) {
+  let {startTime:st,duration:dur,cycles,map,positions,upAndDown,where,howMuch,oPoly} = mg;
   let {startPhase:sph,shape} = m;
   let et = st+dur;
   let rt = t-st;
@@ -90,7 +90,7 @@ item.execBAFmotion=  function (poly,mg,m,t,i) {
     y = where;
   }
   let cp = Point.mk(x,y);
-  let rp = this.rc2qpoint(poly.corners,cp);
+  let rp = this.usq2qpoint(cp,oPoly.corners);
   positions[i] = rp;
   //shape.hide();
   if (shape) {
@@ -102,6 +102,8 @@ item.execMotion = function (mg,m,t,i) {
   let {kind} = mg;
   if (kind === 'circular') {
     this.execCircularMotion(mg,m,t,i);
+  } else  if (kind === 'BAF') {
+    this.execBAFmotion(mg,m,t,i);
   }
 }
 
@@ -129,6 +131,20 @@ item.execMotionGroups = function (t) {
   });
 }
 
+
+item.mkBAFmotion = function (mg,startPhase) {
+  let {motions,shapeP} = mg;
+  let {mshapes} = this;
+  debugger;
+  //let {motions,mshapes,stepsSoFar:ssf} = this;
+  let shape = shapeP?shapeP.instantiate():null;
+  if (shape) {
+    mshapes.push(shape);
+  }
+  let m= {shape,startPhase};
+  motions.push(m);
+  
+}
 item.mkCircularMotion = function (mg,startPhase) {
   let {motions,shapeP} = mg;
   let {mshapes} = this;
@@ -160,10 +176,38 @@ item.mkCircularMotionGroup = function (n,params) {
   motionGroups.push(mg);
 
 }
- 
 
- 
+item.mkCircularMotionGroup = function (n,params) {
+  let {stepsSoFar:ssf,motionGroups,mshapes} = this;
+  let {duration,cycles,map,radius,center,shapeP,polyP,oPoly} = params;
+  let polygon = polyP?polyP.instantiate():null;
+  if (polygon) {
+    mshapes.push(polygon);
+  }
+  let mg = {kind:'circular',duration,cycles,center,radius,map,positions:[],startTime:ssf,shapeP,polygon,motions:[],oPoly};
+  let step = (2*Math.PI)/n;
+  for (let i=0;i<n;i++) {
+    let phase = i*step;
+    this.mkCircularMotion(mg,phase);
+  }
+  motionGroups.push(mg);
 
+}
+
+
+item.mkBAFmotionGroup = function (n,params) {
+  let {stepsSoFar:ssf,motionGroups,mshapes} = this;
+  let {duration,cycles,map,wheres,howMuches,shapeP,oPoly} = params;
+
+  let mg = {kind:'BAF',duration,cycles,center,radius,map,positions:[],startTime:ssf,shapeP,motions:[],oPoly};
+  let step = (2*Math.PI)/n;
+  for (let i=0;i<n;i++) {
+    let phase = i*step;
+    this.mkBAFmotion(mg,wheres[i],howMuches[i]);
+  }
+  motionGroups.push(mg);
+
+}
     
 }
   

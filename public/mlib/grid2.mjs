@@ -67,14 +67,14 @@ item.cellCenter = function (corners) {
 }
 
 item.addCell = function (pos,grid) {
- // debugger;
+  debugger;
   let theGrid = grid?grid:this;
-  let {cells,map,polygons,polygonP,numCols:nc} = theGrid;
+  let {cells,map,polygons,gridPolygonP,numCols:nc} = theGrid;
   let {x,y} =pos;
   let index =x*(nc-1)+y;
   let corners = this.cellCorners(pos,map);
   let center = this.cellCenter(corners);
-  let polygon =  polygonP.instantiate();
+  let polygon =  gridPolygonP.instantiate();
   polygon.corners = corners;
   polygons.push(polygon);
   let cell = {coords:pos,corners,center,polygon};
