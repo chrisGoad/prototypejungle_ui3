@@ -45,8 +45,6 @@ item.rcCoords2unitCoods = function (p,grid) {
 item.cellCorners = function (pos,map) {
   let {numRows:nr,numCols:nc} = this;
   let {x,y} = pos;
-  debugger;
-
   let UL = map.call(this,Point.mk(x,y));
   let UR = map.call(this,Point.mk(x+1,y));
   let LR = map.call(this,Point.mk(x+1,y+1));
@@ -67,7 +65,7 @@ item.cellCenter = function (corners) {
 }
 
 item.addCell = function (pos,grid) {
-  debugger;
+ // debugger;
   let theGrid = grid?grid:this;
   let {cells,map,polygons,gridPolygonP,numCols:nc} = theGrid;
   let {x,y} =pos;

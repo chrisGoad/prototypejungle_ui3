@@ -11,7 +11,7 @@ let rs = generatorP.instantiate();
 addQuadMethods(rs);
 addGridMethods(rs);
 rs.setName('part2_0_49d');
-let nr =20;
+let nr =10;
 //nr = 1;
 let topParams = {numRows:nr,numCols:nr,saveAnimation:1};
 Object.assign(rs,topParams);

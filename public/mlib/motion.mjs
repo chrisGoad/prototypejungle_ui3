@@ -38,21 +38,28 @@ item.execMotionGroup = function (mg,t,i) {
   });
 }
 
-item.execCircularMotion=  function (mg,m,t,i) {
-  let {startTime:st,duration:dur,cycles,oPoly,positions,radius} = mg;
-  let {startPhase:sph,shape} = m;
+
+item.inCycle = function (mg,t) {
+  let {startTime:st,duration:dur,cycles} = mg;
   let et = st+dur;
   let rt = t-st;
   if ((t<st)||(t>=et)) {
-    return;
+    return null;
   }
   let cycleDur = dur/cycles;
   let ic = (rt%cycleDur)/cycleDur;
+  return ic;
+}
+
+item.execCircularMotion=  function (mg,m,t,i) {
+  let {startTime:st,duration:dur,cycles,oPoly,positions,radius} = mg;
+  let {startPhase:sph,shape} = m;
+  let ic = this.inCycle(mg,t);
+  if (ic === null) {
+    return;
+  }
   let a = 2*Math.PI*ic+sph;
 
-  if ((rt === 0) || (rt == 191)) {
-    console.log('rt',rt,'ic',ic,'t',t);
-  }
   debugger;
   let cp = Point.mk(Math.cos(a),Math.sin(a)).times(radius);
   let acp = cp.plus(Point.mk(.5,.5));
@@ -64,34 +71,82 @@ item.execCircularMotion=  function (mg,m,t,i) {
   }
 }
 
-// back and forth
-item.execBAFmotion=  function (mg,m,t,i) {
-  let {startTime:st,duration:dur,cycles,map,positions,upAndDown,where,howMuch,oPoly} = mg;
-  let {startPhase:sph,shape} = m;
-  let et = st+dur;
+item.segLengths = function (path) {
+  let ln = path.length;
+  let slns = [];
+  for (let i=0;i<ln-1;i++) {
+    let p0 = path[i]
+    let p1 = path[i+1]
+    let d = p0.distance(p1);
+    slns.push(d);
+  }
+  return slns;
+}
+
+item.pathLength = function (path) {
+  let slns = this.segLengths(path);
+  let ln = slns.reduce((a,b) => a+b,0);
+  return ln;
+}
+
+
+item.alongPath = function (path,fr) {
+  //debugger;
+  let ds2p0 = 0; // distance to begining of current segment (segment i);
+  let slns = this.segLengths(path);
+  let pln = slns.reduce((a,b) => a+b,0);
+  let ln = path.length;
+  let targetln = pln*fr;
+  for (let i=0;i<ln-1;i++) {
+    let sln = slns[i];
+    let ds2p1 = ds2p0+ sln;
+    if (ds2p1 >= targetln) { // our target point is in this segment
+       let p0 = path[i];
+       let p1 = path[i+1];
+       let lnis = targetln - ds2p0; // length in this segment
+       let csln = slns[i];
+       let sfr = lnis/csln;
+       let vec = p1.difference(p0);
+       let target = p0.plus(vec.times(sfr));
+       return target;
+    } 
+    ds2p0 = ds2p1;
+  }
+}
+       
+  
+
+  
+// point to point
+item.execP2Pmotion=  function (mg,m,t,i) {
+  let {startTime:st,duration:dur,cycles} = mg;
+  let {p0,p1,phase,shape,oPoly} = m;
+  debugger;
+  let ic = this.inCycle(mg,t);
+  if (ic === null) {
+    return;
+  }
+  /*let et = st+dur;
   let rt = t-st;
   if ((t<st)||(t>=et)) {
     return;
   }
   let cycleDur = dur/cycles;
   let ic = (rt%cycleDur)/cycleDur;
-  let a = 2*Math.PI*ic+sph;
 
   if ((rt === 0) || (rt == 191)) {
     console.log('rt',rt,'ic',ic,'t',t);
-  }
-  let hf =  Math.cos(a)*howMuch;
-  let x,y;
-  if (upAndDown) {
-    y = hf;
-    x = where;
-  } else {
-    x  = hf;
-    y = where;
-  }
-  let cp = Point.mk(x,y);
+  }*/
+  let vec = p1.difference(p0);
+  let  hvec = vec.times(0.5);
+  let mp = p0.plus(hvec);
+  let hcp = ic<=0.5?ic*2:1-(ic-.5)*2; // half cycle parameter
+  //let a = 2*Math.PI*hcp+sph;
+  let a = 2*Math.PI*ic;
+  let hf =  Math.cos(a);
+ // let cp = p0.plus(vec.times(hf));
+  let cp = mp.plus(hvec.times(hf));
   let rp = this.usq2qpoint(cp,oPoly.corners);
-  positions[i] = rp;
   //shape.hide();
   if (shape) {
     shape.moveto(rp);
@@ -102,8 +157,8 @@ item.execMotion = function (mg,m,t,i) {
   let {kind} = mg;
   if (kind === 'circular') {
     this.execCircularMotion(mg,m,t,i);
-  } else  if (kind === 'BAF') {
-    this.execBAFmotion(mg,m,t,i);
+  } else  if (kind === 'P2P') {
+    this.execP2Pmotion(mg,m,t,i);
   }
 }
 
@@ -132,16 +187,17 @@ item.execMotionGroups = function (t) {
 }
 
 
-item.mkBAFmotion = function (mg,startPhase) {
+item.mkP2Pmotion = function (mg,params) { //point to point
   let {motions,shapeP} = mg;
   let {mshapes} = this;
+  let {p0,p1,phase,oPoly} = params;
   debugger;
   //let {motions,mshapes,stepsSoFar:ssf} = this;
   let shape = shapeP?shapeP.instantiate():null;
   if (shape) {
     mshapes.push(shape);
   }
-  let m= {shape,startPhase};
+  let m= {shape,p0,p1,phase,oPoly};
   motions.push(m);
   
 }
@@ -176,7 +232,7 @@ item.mkCircularMotionGroup = function (n,params) {
   motionGroups.push(mg);
 
 }
-
+/*
 item.mkCircularMotionGroup = function (n,params) {
   let {stepsSoFar:ssf,motionGroups,mshapes} = this;
   let {duration,cycles,map,radius,center,shapeP,polyP,oPoly} = params;
@@ -192,22 +248,22 @@ item.mkCircularMotionGroup = function (n,params) {
   }
   motionGroups.push(mg);
 
-}
+}*/
 
 
-item.mkBAFmotionGroup = function (n,params) {
+item.mkP2PmotionGroup = function (params) {
   let {stepsSoFar:ssf,motionGroups,mshapes} = this;
-  let {duration,cycles,map,wheres,howMuches,shapeP,oPoly} = params;
-
-  let mg = {kind:'BAF',duration,cycles,center,radius,map,positions:[],startTime:ssf,shapeP,motions:[],oPoly};
-  let step = (2*Math.PI)/n;
-  for (let i=0;i<n;i++) {
-    let phase = i*step;
-    this.mkBAFmotion(mg,wheres[i],howMuches[i]);
+  let {duration,cycles,p0s,p1s,shapeP,oPolys} = params;
+  debugger;
+  let mg = {kind:'P2P',duration,cycles,startTime:ssf,shapeP,motions:[]};
+  let ln = p0s.length;
+  for (let i=0;i<ln;i++) {
+    this.mkP2Pmotion(mg,{p0:p0s[i],p1:p1s[i],oPoly:oPolys[i]});
   }
   motionGroups.push(mg);
 
 }
+
     
 }
   

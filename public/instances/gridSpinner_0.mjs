@@ -21,7 +21,7 @@ let wd = 200;
 let nr = 8;
 //
 nr =8;
-rs.setName('gridSpinner');
+rs.setName('gridSpinner_0');
 let topParams = {width:wd,height:wd,numRows:nr,numCols:nr,framePadding:.1*wd,stepsPerMove:10,numSteps:200,center:Point.mk(0,0),radius:wd/4,
                  cycles:3,frameStroke:'rgb(2,2,2)',frameStrokee:'white',frameStrokeWidth:1,saveAnimation:1}
 Object.assign(rs,topParams);
