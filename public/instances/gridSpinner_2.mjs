@@ -22,7 +22,7 @@ let nr = 8;
 //
 nr =2;
 rs.setName('gridSpinner_0');
-let topParams = {width:wd,height:wd,numRows:nr,numCols:nr,framePadding:.1*wd,stepsPerMove:10,numSteps:200,center:Point.mk(0,0),radius:wd/4,
+let topParams = {width:wd,height:wd,numRows:nr,numCols:nr,framePadding:.1*wd,stepsPerMove:10,numSteps:2000,center:Point.mk(0,0),radius:wd/4,
                  cycles:3,frameStroke:'rgb(2,2,2)',frameStrokee:'white',frameStrokeWidth:1,saveAnimation:1}
 Object.assign(rs,topParams);
 
@@ -31,6 +31,9 @@ rs.initProtos = function () {
   let lineP = this.lineP = linePP.instantiate();
   lineP['stroke-width'] = .4;
   lineP.stroke = 'cyan';
+   let connectorP = this.connectorP = linePP.instantiate();
+  connectorP['stroke-width'] = .9;
+  connectorP.stroke = 'cyan';
   let gridPolygonP = this.gridPolygonP = polygonPP.instantiate();
   gridPolygonP['stroke-width'] = .4;
   gridPolygonP.stroke = 'cyan';
@@ -50,11 +53,24 @@ rs.toQuad = function(p) {
   return qp;
 }
 
+
+rs.shapeConnector = function (mg) {
+  debugger;
+  let {connectedShapes:cns} = this;
+  let shapes = mg.shapes;
+  for (let i=0;i<10;i++) {
+    let sh0 = shapes[i];
+    let sh1 = shapes[i+7];
+    cns.push([sh0,sh1]);
+  }
+}
+
 rs.addMotions = function () {
-  let {cells,deltaX,numSteps,circleP,iPolygonP} = this;
+  let {cells,deltaX,numSteps,circleP,iPolygonP,shapeConnector} = this;
+  this.connectedShapes = [];
   //let radius = 0.4*0.5*deltaX;
   let radius = 0.2;
-  let cycles = 1;
+  let cycles = 4;
   let duration = numSteps;
   let d = 0.3;
   let p0 = Point.mk(0.5-d,0.5+d);
@@ -75,7 +91,7 @@ rs.addMotions = function () {
     let {polygon,coords} = cell;
     let {x,y} = coords;
     let shapeP=circleP;
-    this.mkPathMotionGroup({phases,path,cycles,duration,shapeP,oPoly:polygon});
+    this.mkPathMotionGroup({phases,path,cycles,duration,shapeP,oPoly:polygon,shapeConnector});
   });
 }
        
@@ -89,6 +105,7 @@ rs.initialize = function() {
   this.motionGroups = [];
   this.set('mshapes',arrayShape.mk());
   this.addMotions();
+  this.connectShapes();
 } 
   //this.updateState();
 

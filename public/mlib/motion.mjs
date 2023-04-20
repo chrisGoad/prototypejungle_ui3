@@ -187,6 +187,7 @@ item.execMotionGroups = function (t) {
   motionGroups.forEach((mg) => {
     this.execMotionGroup(mg,t);
   });
+  this.updateConnectors();
 }
 
 
@@ -209,7 +210,7 @@ item.mkPathMotion = function (mg,params) { //point to point
   let {motions,shapeP} = mg;
   let {mshapes} = this;
   let {phase,oPoly} = params;
-  debugger;
+  //debugger;
   //let {motions,mshapes,stepsSoFar:ssf} = this;
   let shape = shapeP?shapeP.instantiate():null;
   if (shape) {
@@ -217,6 +218,7 @@ item.mkPathMotion = function (mg,params) { //point to point
   }
   let m= {shape,phase,oPoly};
   motions.push(m);
+  return shape;
   
 }
 item.mkCircularMotion = function (mg,startPhase) {
@@ -285,17 +287,47 @@ item.mkP2PmotionGroup = function (params) {
 
 item.mkPathMotionGroup = function (params) {
   let {stepsSoFar:ssf,motionGroups,mshapes} = this;
-  let {duration,cycles,path,shapeP,oPoly,phases} = params;
+  let {duration,cycles,path,shapeP,oPoly,phases,shapeConnector} = params;
   debugger;
   let mg = {kind:'Path',duration,cycles,startTime:ssf,shapeP,path,motions:[]};
   let ln = phases.length;
+  let shapes = [];
   for (let i=0;i<ln;i++) {
     let params = {phase:phases[i],oPoly:oPoly}
-    this.mkPathMotion(mg,params);
+    shapes.push(this.mkPathMotion(mg,params));
+  }
+  mg.shapes = shapes;
+  if (shapeConnector) {
+    shapeConnector.call(this,mg);
   }
   motionGroups.push(mg);
 
 }
+
+item.connectShapes = function () {
+  let {connectorP,connectedShapes:cns} = this;
+  let connectors = this.set('connectors',arrayShape.mk());
+  let ln = cns.length;
+  for (let i=0;i<ln;i++) {
+     let line = connectorP.instantiate();
+     connectors.push(line);
+  }
+}
+
+item.updateConnectors = function () {
+  let {connectors,connectedShapes:cns} = this;
+  let ln = cns.length;
+  for (let i=0;i<ln;i++) {
+    let connector = connectors[i];
+    let connection = cns[i];
+    let tr0 = connection[0].getTranslation();
+    let tr1 = connection[1].getTranslation();
+    connector.setEnds(tr0,tr1);
+    connector.update();
+  }
+}
+    
+
 
     
 }
