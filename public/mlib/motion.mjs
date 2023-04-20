@@ -122,7 +122,8 @@ item.execPathMotion=  function (mg,m,t,i) {
   if (ic === null) {
     return;
   }
-  let cp = this.alongPath(path,ic);
+  let fr = (ic+phase)%1;
+  let cp = this.alongPath(path,fr);
   let rp = this.usq2qpoint(cp,oPoly.corners);
   if (shape) {
     shape.moveto(rp);
@@ -154,10 +155,13 @@ item.execP2Pmotion=  function (mg,m,t,i) {
 
 item.execMotion = function (mg,m,t,i) {
   let {kind} = mg;
+  debugger;
   if (kind === 'circular') {
     this.execCircularMotion(mg,m,t,i);
   } else  if (kind === 'P2P') {
     this.execP2Pmotion(mg,m,t,i);
+  } else if (kind === 'Path') {
+    this.execPathMotion(mg,m,t,i);
   }
 }
 
@@ -211,7 +215,7 @@ item.mkPathMotion = function (mg,params) { //point to point
   if (shape) {
     mshapes.push(shape);
   }
-  let m= {shape,path,phase,oPoly};
+  let m= {shape,phase,oPoly};
   motions.push(m);
   
 }
@@ -267,12 +271,12 @@ item.mkCircularMotionGroup = function (n,params) {
 
 item.mkP2PmotionGroup = function (params) {
   let {stepsSoFar:ssf,motionGroups,mshapes} = this;
-  let {duration,cycles,p0s,p1s,shapeP,oPolys} = params;
+  let {duration,cycles,p0s,p1s,shapeP,oPoly} = params;
   debugger;
   let mg = {kind:'P2P',duration,cycles,startTime:ssf,shapeP,motions:[]};
   let ln = p0s.length;
   for (let i=0;i<ln;i++) {
-    this.mkP2Pmotion(mg,{p0:p0s[i],p1:p1s[i],oPoly:oPolys[i]});
+    this.mkP2Pmotion(mg,{p0:p0s[i],p1:p1s[i],oPoly});
   }
   motionGroups.push(mg);
 
@@ -281,12 +285,13 @@ item.mkP2PmotionGroup = function (params) {
 
 item.mkPathMotionGroup = function (params) {
   let {stepsSoFar:ssf,motionGroups,mshapes} = this;
-  let {duration,cycles,path,shapeP,oPolys} = params;
+  let {duration,cycles,path,shapeP,oPoly,phases} = params;
   debugger;
-  let mg = {kind:'P2P',duration,cycles,startTime:ssf,shapeP,path,motions:[]};
+  let mg = {kind:'Path',duration,cycles,startTime:ssf,shapeP,path,motions:[]};
   let ln = phases.length;
   for (let i=0;i<ln;i++) {
-    this.mkP2Pmotion(mg,{phase:phases[i],oPoly:oPolys[i]});
+    let params = {phase:phases[i],oPoly:oPoly}
+    this.mkPathMotion(mg,params);
   }
   motionGroups.push(mg);
 
