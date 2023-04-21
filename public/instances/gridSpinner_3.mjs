@@ -20,7 +20,7 @@ addAnimationMethods(rs);
 let wd = 200;
 let nr = 8;
 //
-nr =2;
+nr =4;
 rs.setName('gridSpinner_2');
 let topParams = {width:wd,height:wd,numRows:nr,numCols:nr,framePadding:.1*wd,stepsPerMove:10,numStepss:24,numSteps:1000,center:Point.mk(0,0),radius:wd/4,
                  cycles:3,frameStroke:'rgb(2,2,2)',frameStrokee:'white',frameStrokeWidth:1,saveAnimation:1,stepInterval:40,pauseAtt:[29,30,59,60]}
@@ -84,6 +84,17 @@ const mkPath0 = function() {
   let path = [p0,p1,p2,p3];//,p4,p3,p2,p1,p0];
   return path;
 }
+const mkPath1 = function () {
+  let d = 0.3;
+  let p0 = Point.mk(0.5-d,0.5+d);
+  let p1 = Point.mk(0.5+d,0.5+d);
+  let p2 = Point.mk(0.5+d,0.5);
+  let p3 = Point.mk(0.5-d,0.5);
+  let p4 = Point.mk(0.5-d,0.5-d);
+  let p5 = Point.mk(0.5+d,0.5-d);
+  let path = [p0,p1,p2,p3,p4,p5];
+  return path;
+}
 
 rs.addMotionsForCell = function (cell,path,numPhases) {
   let {deltaX,numSteps,circleP,iPolygonP,shapeConnector0,cycles} = this;
@@ -106,7 +117,7 @@ rs.addMotionsForCell = function (cell,path,numPhases) {
 rs.addMotions = function () {
   let {cells} = this;
   this.connectedShapes = [];
-  let path0 = mkPath0();
+  let path0 = mkPath1();
   cells.forEach((cell) =>{
     this.addMotionsForCell(cell,path0,17);
   });
