@@ -1,27 +1,17 @@
 
-import {rs as addGridMethods} from '/mlib/grid2.mjs';	
-import {rs as addQuadMethods} from '/mlib/rect2quad.mjs';	
-import {rs as addMotionMethods} from '/mlib/motion.mjs';	
-import {rs as addAnimationMethods} from '/mlib/animate0.mjs';
 
+import {rs as generatorP} from '/generators/gridSpinner.mjs';
+
+let rs = generatorP.instantiate();
 import {rs as linePP} from '/shape/line.mjs';
 import {rs as circlePP} from '/shape/circle.mjs';
 import {rs as polygonPP} from '/shape/polygon.mjs';
-
-import {rs as basicP} from '/generators/basics.mjs';
-let rs = basicP.instantiate();
-addGridMethods(rs);
-addMotionMethods(rs);
-addQuadMethods(rs);
-
-//addQuadMethods(rs);
-addAnimationMethods(rs);
 
 let wd = 200;
 let nr = 8;
 //
 nr =4;
-rs.setName('gridSpinner_3');
+rs.setName('gridSpinner_4');
 let topParams = {width:wd,height:wd,numRows:nr,numCols:nr,framePadding:.1*wd,stepsPerMove:10,numStepss:24,numSteps:200,center:Point.mk(0,0),radius:wd/4,
                  cycles:1,frameStroke:'rgb(2,2,2)',frameStrokee:'white',frameStrokeWidth:1,saveAnimation:1,stepInterval:40,pauseAtt:[29,30,59,60]}
 Object.assign(rs,topParams);
@@ -48,7 +38,7 @@ rs.initProtos = function () {
   
 }
 
-
+/*
 rs.toQuad = function(p) {
   let {corners} = this;
   let qp = this.rc2qpoint(p,corners);
@@ -68,9 +58,9 @@ rs.shapeConnector = function (mg,numConnections,connectJump) {
     cns.push([sh0,sh1]);
   }
 }
-
-rs.shapeConnector0 = function (mg) {
-  this.shapeConnector(mg,10,7);
+*/
+rs.shapeConnector = function (mg) {
+  this.shapeConnectorC(mg,10,7);
 }
 
 const mkPath0 = function() {
@@ -93,7 +83,7 @@ const mkPath1 = function () {
   let path = [p0,p1,p2,p3,p4,p5];
   return path;
 }
-
+/*
 rs.addMotionsForCell = function (cell,path,numPhases) {
   let {deltaX,numSteps,circleP,iPolygonP,shapeConnector0,cycles} = this;
   //let radius = 0.4*0.5*deltaX;
@@ -111,18 +101,19 @@ rs.addMotionsForCell = function (cell,path,numPhases) {
   let shapeP=circleP;
   this.mkPathMotionGroup({phases,path,cycles,duration,shapeP,oPoly:polygon,shapeConnector:shapeConnector0});
 }
+*/
 
 rs.addMotions = function () {
   let {cells} = this;
   this.connectedShapes = [];
-  let path0 = mkPath1();
+  let path = mkPath1();
   cells.forEach((cell) =>{
-    this.addMotionsForCell(cell,path0,17);
+    this.addMotionsForCell(cell,path,17);
   });
  
 }
        
-
+/*
 rs.initialize = function() { 
   debugger;
   this.initProtos();
@@ -136,7 +127,7 @@ rs.initialize = function() {
   this.hideUnconnectedShapes();
   debugger;
 } 
-  //this.updateState();
+ */ //this.updateState();
 
   
 

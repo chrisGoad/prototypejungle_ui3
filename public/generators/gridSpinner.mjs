@@ -20,28 +20,13 @@ addAnimationMethods(rs);
 let wd = 200;
 let nr = 8;
 //
-nr =8;
-rs.setName('gridSpinner');
-let topParams = {width:wd,height:wd,numRows:nr,numCols:nr,framePadding:.1*wd,stepsPerMove:10,numSteps:200,center:Point.mk(0,0),radius:wd/4,
-                 cycles:3,frameStroke:'rgb(2,2,2)',frameStrokee:'white',frameStrokeWidth:1,saveAnimation:1}
+nr =4;
+rs.setName('gridSpinner_3');
+let topParams = {width:wd,height:wd,numRows:nr,numCols:nr,framePadding:.1*wd,stepsPerMove:10,numStepss:24,numSteps:200,center:Point.mk(0,0),radius:wd/4,
+                 cycles:1,frameStroke:'rgb(2,2,2)',frameStrokee:'white',frameStrokeWidth:1,saveAnimation:1,stepInterval:40,pauseAtt:[29,30,59,60]}
 Object.assign(rs,topParams);
 
 
-rs.initProtos = function () {
-  let lineP = this.lineP = linePP.instantiate();
-  lineP['stroke-width'] = .4;
-  lineP.stroke = 'cyan';
-  let gridPolygonP = this.gridPolygonP = polygonPP.instantiate();
-  gridPolygonP['stroke-width'] = .4;
-  gridPolygonP.stroke = 'cyan';
-  gridPolygonP.fill = 'red';
-  let iPolygonP = this.iPolygonP = polygonPP.instantiate();
-  iPolygonP['stroke-width'] = 0;
-  iPolygonP.fill = 'green'; 
-  let circleP = this.circleP = circlePP.instantiate();
-  circleP.dimension= 2;
-  circleP.fill = 'white';
-}
 
 
 rs.toQuad = function(p) {
@@ -50,30 +35,43 @@ rs.toQuad = function(p) {
   return qp;
 }
 
-rs.addMotions = function () {
-  let {cells,deltaX,numSteps,circleP,iPolygonP} = this;
-  //let radius = 0.4*0.5*deltaX;
-  let radius = 0.2;
-  let cycles = 2;
+
+rs.shapeConnectorC = function (mg,numConnections,connectJump) {
+  let {connectedShapes:cns} = this;
+  let shapes = mg.shapes;
+  let ln = shapes.length;
+  for (let i=0;i<numConnections;i++) {
+    let sh0 = shapes[i];
+    let j = Math.floor(Math.random()*ln);
+   // let sh1 = shapes[i+connectJump];
+    let sh1 = shapes[j];
+    cns.push([sh0,sh1]);
+  }
+}
+
+
+rs.addMotionsForCell = function (cell,path,numPhases) {
+  let {deltaX,numSteps,circleP,iPolygonP,shapeConnector,cycles} = this;
   let duration = numSteps;
+  let ip = 1/numPhases;
+  let phases =[];
+  for (let i=0;i<numPhases;i++) {
+    phases.push(i*ip);
+  }
+  let {polygon,coords} = cell;
+  let {x,y} = coords;
+  let shapeP=circleP;
+  this.mkPathMotionGroup({phases,path,cycles,duration,shapeP,oPoly:polygon,shapeConnector});
+}
+
+rs.addMotions = function () {
+  let {cells} = this;
+  this.connectedShapes = [];
+  let path0 = mkPath1();
   cells.forEach((cell) =>{
-    debugger;
-    let {polygon,coords} = cell;
-    let {x,y} = coords;
-    let shapeP,polyP,numSides;
-    if ((x+y)%2) {
-      numSides = 4;
-      radius = .4;
-      polyP = iPolygonP;
-      shapeP = null;
-    } else {
-      radius = .2;
-      numSides = 8;
-      polyP = null;
-      shapeP = circleP;
-    }
-    this.mkCircularMotionGroup(numSides,{radius,cycles,duration,shapeP,polyP,oPoly:polygon});
+    this.addMotionsForCell(cell,path0,17);
   });
+ 
 }
        
 
@@ -86,6 +84,9 @@ rs.initialize = function() {
   this.motionGroups = [];
   this.set('mshapes',arrayShape.mk());
   this.addMotions();
+  this.connectShapes();
+  this.hideUnconnectedShapes();
+  debugger;
 } 
   //this.updateState();
 
@@ -93,7 +94,7 @@ rs.initialize = function() {
 
 rs.updateState = function () {
   let {stepsSoFar:ssf} =this;
-  debugger;
+//  debugger;
   this.execMotionGroups(ssf);
 } 
 
