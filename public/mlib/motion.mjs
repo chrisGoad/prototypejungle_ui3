@@ -303,7 +303,7 @@ item.mkP2PmotionGroup = function (params) {
 item.mkPathMotionGroup = function (params) {
   let {stepsSoFar:ssf,motionGroups,mshapes} = this;
   let {duration,cycles,path,shapeP,oPoly,phases,shapeConnector} = params;
-  debugger;
+  //debugger;
   let mg = {kind:'Path',duration,cycles,startTime:ssf,shapeP,path,motions:[]};
   let ln = phases.length;
   let shapes = [];
@@ -369,7 +369,25 @@ item.updateConnectors = function () {
   }
 }
     
-
+item.hideUnconnectedShapes = function () {
+  let {mshapes,connectedShapes} = this;
+  let allCns = [];
+  connectedShapes.forEach( (cs) => {
+    let c0 = cs[0];
+    let c1 = cs[1];
+    if (allCns.indexOf(c0) === -1) {
+      allCns.push(c0);
+    }
+     if (allCns.indexOf(c1) === -1) {
+      allCns.push(c1);
+    }
+  });
+  mshapes.forEach( (s) => {
+    if (allCns.indexOf(s)  === -1) {
+      s.hide();
+    }
+  });
+}
 
     
 }

@@ -20,8 +20,8 @@ addAnimationMethods(rs);
 let wd = 200;
 let nr = 8;
 //
-nr =4;
-rs.setName('gridSpinner_2');
+nr =5;
+rs.setName('gridSpinner_3');
 let topParams = {width:wd,height:wd,numRows:nr,numCols:nr,framePadding:.1*wd,stepsPerMove:10,numStepss:24,numSteps:1000,center:Point.mk(0,0),radius:wd/4,
                  cycles:3,frameStroke:'rgb(2,2,2)',frameStrokee:'white',frameStrokeWidth:1,saveAnimation:1,stepInterval:40,pauseAtt:[29,30,59,60]}
 Object.assign(rs,topParams);
@@ -57,7 +57,6 @@ rs.toQuad = function(p) {
 
 
 rs.shapeConnector = function (mg,numConnections,connectJump) {
-  debugger;
   let {connectedShapes:cns} = this;
   let shapes = mg.shapes;
   let ln = shapes.length;
@@ -71,7 +70,6 @@ rs.shapeConnector = function (mg,numConnections,connectJump) {
 }
 
 rs.shapeConnector0 = function (mg) {
-  debugger;
   this.shapeConnector(mg,10,7);
 }
 
@@ -135,6 +133,8 @@ rs.initialize = function() {
   this.set('mshapes',arrayShape.mk());
   this.addMotions();
   this.connectShapes();
+  this.hideUnconnectedShapes();
+  debugger;
 } 
   //this.updateState();
 
