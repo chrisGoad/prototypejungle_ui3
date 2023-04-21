@@ -47,18 +47,20 @@ item.inCycle = function (mg,t) {
     return null;
   }
   let cycleDur = dur/cycles;
-  let ic = (rt%cycleDur)/cycleDur;
-  return ic;
+  let cycleNum = Math.floor(rt/cycleDur);
+  let hf = (rt%cycleDur)/cycleDur;
+  return {cycleNum,howFar:hf};
 }
 
 item.execCircularMotion=  function (mg,m,t,i) {
   let {startTime:st,duration:dur,cycles,oPoly,positions,radius} = mg;
   let {startPhase:sph,shape} = m;
-  let ic = this.inCycle(mg,t);
-  if (ic === null) {
+  let inC = this.inCycle(mg,t);
+  let hf = inC.howFar;
+  if (hf === null) {
     return;
   }
-  let a = 2*Math.PI*ic+sph;
+  let a = 2*Math.PI*hf+sph;
   debugger;
   let cp = Point.mk(Math.cos(a),Math.sin(a)).times(radius);
   let acp = cp.plus(Point.mk(.5,.5));
@@ -116,16 +118,28 @@ item.alongPath = function (path,fr) {
   
 item.execPathMotion=  function (mg,m,t,i) {
   let {startTime:st,duration:dur,cycles,path} = mg;
-  let {phase,shape,oPoly} = m;
-  debugger;
-  let ic = this.inCycle(mg,t);
-  if (ic === null) {
+  let {phase,shape,oPoly,lastCycle} = m;
+ // debugger;
+  let inC = this.inCycle(mg,t);
+  let {cycleNum,howFar:hf} = inC;
+  if (cycleNum !== lastCycle) {
+  //  debugger;
+  }
+  if (hf === null) {
     return;
   }
-  let fr = (ic+phase)%1;
+  let ef = hf+phase;
+  console.log('phase',phase,'ef',ef);
+
+  if (ef > 1) {
+   // debugger;
+  }
+  let fr = ef%1;
   let cp = this.alongPath(path,fr);
   let rp = this.usq2qpoint(cp,oPoly.corners);
+  m.lastCycle = cycleNum;
   if (shape) {
+    shape.alongPath = fr;
     shape.moveto(rp);
   }
 }
@@ -136,17 +150,18 @@ item.execP2Pmotion=  function (mg,m,t,i) {
   let {startTime:st,duration:dur,cycles} = mg;
   let {p0,p1,phase,shape,oPoly} = m;
   debugger;
-  let ic = this.inCycle(mg,t);
-  if (ic === null) {
+  let inC = this.inCycle(mg,t);
+  let hf = inC.howFar;
+  if (hf === null) {
     return;
   }
   let vec = p1.difference(p0);
   let  hvec = vec.times(0.5);
   let mp = p0.plus(hvec);
-  let hcp = ic<=0.5?ic*2:1-(ic-.5)*2; // half cycle parameter
-  let a = 2*Math.PI*ic;
-  let hf =  Math.cos(a);
-  let cp = mp.plus(hvec.times(hf));
+  let hcp = hf<=0.5?hf*2:1-(hf-.5)*2; // half cycle parameter
+  let a = 2*Math.PI*hf;
+  let cs =  Math.cos(a);
+  let cp = mp.plus(hvec.times(cs));
   let rp = this.usq2qpoint(cp,oPoly.corners);
   if (shape) {
     shape.moveto(rp);
@@ -155,7 +170,7 @@ item.execP2Pmotion=  function (mg,m,t,i) {
 
 item.execMotion = function (mg,m,t,i) {
   let {kind} = mg;
-  debugger;
+ // debugger;
   if (kind === 'circular') {
     this.execCircularMotion(mg,m,t,i);
   } else  if (kind === 'P2P') {
@@ -173,7 +188,7 @@ item.execMotionGroup = function (mg,t) {
     let m = motions[i];
     this.execMotion(mg,m,t,i);
   }
-  debugger;
+  //debugger;
   if (polygon) {
     polygon.corners = positions;
     polygon.show();
@@ -273,12 +288,12 @@ item.mkCircularMotionGroup = function (n,params) {
 
 item.mkP2PmotionGroup = function (params) {
   let {stepsSoFar:ssf,motionGroups,mshapes} = this;
-  let {duration,cycles,p0s,p1s,shapeP,oPoly} = params;
+  let {duration,cycles,p0s,p1s,shapeP,oPolys} = params;
   debugger;
   let mg = {kind:'P2P',duration,cycles,startTime:ssf,shapeP,motions:[]};
   let ln = p0s.length;
   for (let i=0;i<ln;i++) {
-    this.mkP2Pmotion(mg,{p0:p0s[i],p1:p1s[i],oPoly});
+    this.mkP2Pmotion(mg,{p0:p0s[i],p1:p1s[i],oPoly:oPolys[i]});
   }
   motionGroups.push(mg);
 
@@ -316,12 +331,39 @@ item.connectShapes = function () {
 
 item.updateConnectors = function () {
   let {connectors,connectedShapes:cns} = this;
+  if (!cns) {
+    return;
+  }
   let ln = cns.length;
   for (let i=0;i<ln;i++) {
     let connector = connectors[i];
     let connection = cns[i];
-    let tr0 = connection[0].getTranslation();
-    let tr1 = connection[1].getTranslation();
+    let c0 = connection[0];
+    let c1 = connection[1]
+    let tr0 = c0.getTranslation();
+    let ap0 = c0.alongPath;
+    let tr1 = c1.getTranslation();
+    let ap1 = c1.alongPath;
+    let apMax = Math.max(ap0,ap1);
+    let apMin = Math.min(ap0,ap1);
+    let lowFade = .03;
+    let highFade = 1-lowFade;
+    let fadeLow=1;
+    let fadeHigh=1;
+    if (apMin < lowFade)  {
+      fadeLow = apMin/lowFade;
+    } 
+    if (apMax>highFade) {
+      fadeHigh = (1-apMax)/lowFade;
+    }
+    let minFade = Math.min(fadeLow,fadeHigh);
+    console.log('apMax',apMax,'apMin',apMin,'fadeLow',fadeLow,'fadeHigh',fadeHigh);
+    let clr = `rgba(255,255,255,${minFade})`;
+    connector.stroke = clr;
+    c0.fill = clr;
+    c0.update();
+    c1.fill = clr;
+    c1.update();
     connector.setEnds(tr0,tr1);
     connector.update();
   }

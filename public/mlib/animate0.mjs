@@ -14,6 +14,7 @@ item.saveAnimation = 0;
 item.chopOffBeginning = 0; // in steps
 item.chopOffEnd = 0; // in steps
 item.stepInterval = 40;
+item.pauseAt = [];
 
 item.oneStep = function (one) {
   if (this.paused) {
@@ -21,6 +22,7 @@ item.oneStep = function (one) {
   }
 
   let ns = this.stepsSoFar;	
+  
        //console.log('ns',ns,'tns',this.numSteps);
   if  (this.stepsSoFar >= (this.numSteps-this.chopOffEnd)) {
     return;
@@ -30,7 +32,11 @@ item.oneStep = function (one) {
   }
   this.updateState();
     this.stepsSoFar++;
-
+  let pauseAt = this.pauseAt;
+  if (pauseAt && (pauseAt.indexOf(ns)>=0)) {
+    this.paused = 1;
+    return;
+  }
  if (!one) {
    setTimeout(() => this.oneStep(),this.stepInterval);
  }
