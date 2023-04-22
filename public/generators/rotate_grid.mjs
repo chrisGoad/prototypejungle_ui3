@@ -96,56 +96,6 @@ rs.rectFromRowsCols = function (params) {
  */
  /* a step is a period when a given configuration is in force. {startTime:integer,dur,config,*/
 
-/*
-rs.intersectRays = function (p0,v0,p1,v1) {
-  let {x:a,y:b} = p0;
-  let {x:c,y:d} = v0;
-  let {x:A,y:B} = p1;
-  let {x:C,y:D} = v1;
-  let t2 = B-b- ((A-a)*d)/c;//((A - a)*d/c) - B;
-  let t1 =(C*d)/c - D;
-  let T = t2/t1;
-  let x = A + T*C;
-  let y = B+ T*D;
-  let p = Point.mk(x,y);
-  return p;
-}
-
-rs.onSeg = function(p,seg0) {
-  let {end0:e0,end1:e1} = seg0;
-  let v0 = p.difference(e0);
-  let v1 = e1.difference(p);
-  let v = e1.difference(e0);
-  let d0 = v0.dotp(v);
-  let d1 = v1.dotp(v);
-  let s0 = d0>=0?1:0;
-  let s1 = d1>=0?1:0;
-  return s0 === s1;
-}
-rs.intersectLineSegs = function (seg0,seg1) {
-  let {end0:p00,end1:p01} = seg0;
-  let {end0:p10,end1:p11} = seg1;
-  let v0 = p01.difference(p00);
-  let v1 = p11.difference(p10);
-  let p = this.intersectRays(p00,v0,p10,v1);
-  let onsegs = this.onSeg(p,seg0) && this.onSeg(p,seg1);
-  return onsegs?p:null;
-}
-*/
-
-rs.intersectLineSegLineSegs = function (seg,segs) {
-  let ln = segs.length;
-  for (let i=0;i<ln;i++) {
-    let sseg = segs[i];
-    //let isct = this.intersectLineSegs(seg,sseg);
-    let isct = seg.intersect(sseg);
-    if (isct) {
-      return isct;
-    }
-  }
-  return null;
-}
-    
 
   
     
@@ -490,7 +440,9 @@ rs.configSetFraction = function (c,fr) {
         rseg.hidden = 1;
       } else {
         rseg.hidden = 0;
-        let p = this.intersectLineSegLineSegs(rseg,boxSegs);
+       // let p = this.intersectLineSegLineSegs(rseg,boxSegs);
+        debugger;
+        let p = rseg.firstIntersection(boxSegs);
         if (p) {
           let {end0:e0,end1:e1} = rseg;
           if (box.contains(e0)) {
@@ -582,7 +534,6 @@ rs.executeStep = function (step) {
 
   let relTime = ssf - startTime;
   if ((relTime <0)||(relTime > duration)) {
-    debugger;
     let {lines} = config;
     lines.forEach((line) => {
       line.hide();

@@ -2439,11 +2439,43 @@ LineSegment.intersect = function (seg1) {
   let {end0:p10,end1:p11} = seg1;
   let v0 = p01.difference(p00);
   let v1 = p11.difference(p10);
-  let p = this.intersectRays(p00,v0,p10,v1);
+  let p = intersectRays(p00,v0,p10,v1);
   //let onsegs = this.onSeg(p,seg0) && this.onSeg(p,seg1);
   let onsegs = seg0.onSeg(p) && seg1.onSeg(p);
   return onsegs?p:null;
 }
 
+
+LineSegment.intersections = function (segs) {
+  let seg = this;
+  let ln = segs.length;
+  let iscts = [];
+  for (let i=0;i<ln;i++) {
+    let sseg = segs[i];
+    //let isct = this.intersectLineSegs(seg,sseg);
+    let isct = seg.intersect(sseg);
+    if (isct) {
+      iscts.push(isct)
+    }
+  }
+  return istcs;
+}
+
+LineSegment.firstIntersection = function (segs) {
+  let seg = this;
+  let ln = segs.length;
+  let iscts = [];
+  for (let i=0;i<ln;i++) {
+    let sseg = segs[i];
+    //let isct = this.intersectLineSegs(seg,sseg);
+    let isct = seg.intersect(sseg);
+    if (isct) {
+      return isct;
+    }
+  }
+  return null;
+}
+    
+    
 export {rotationMatrix,movetoInGlobalCoords,toOwnCoords,toPoint,angleToDirection,Point,Line,Rectangle,Polygon,Transform,Ray,degreesToRadians,
         LineSegment,Circle,Arc,boundsForRectangles,rp_time,pointArrayToLineSegments,geometriesIntersect,moveBy,oneDf};
