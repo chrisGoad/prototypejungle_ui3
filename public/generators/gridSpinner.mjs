@@ -37,14 +37,14 @@ rs.toQuad = function(p) {
 
 
 rs.shapeConnectorC = function (mg,numConnections,connectJump) {
-  let {connectedShapes:cns} = this;
+  let {connectedShapes:cns,randomConnections:rc} = this;
   let shapes = mg.shapes;
   let ln = shapes.length;
   for (let i=0;i<numConnections;i++) {
-    let sh0 = shapes[i];
     let j = Math.floor(Math.random()*ln);
-   // let sh1 = shapes[i+connectJump];
-    let sh1 = shapes[j];
+    let k = Math.floor(Math.random()*ln);
+    let sh0 = shapes[j];
+    let sh1 = rc?shapes[k]:shapes[(j+connectJump)%ln];
     cns.push([sh0,sh1]);
   }
 }
@@ -64,15 +64,7 @@ rs.addMotionsForCell = function (cell,path,numPhases) {
   this.mkPathMotionGroup({phases,path,cycles,duration,shapeP,oPoly:polygon,shapeConnector});
 }
 
-rs.addMotions = function () {
-  let {cells} = this;
-  this.connectedShapes = [];
-  let path0 = mkPath1();
-  cells.forEach((cell) =>{
-    this.addMotionsForCell(cell,path0,17);
-  });
  
-}
        
 
 rs.initialize = function() { 

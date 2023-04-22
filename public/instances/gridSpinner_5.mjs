@@ -11,9 +11,10 @@ let wd = 200;
 let nr = 8;
 //
 nr =4;
-rs.setName('gridSpinner_4');
+rs.setName('gridSpinner_5');
 let topParams = {width:wd,height:wd,numRows:nr,numCols:nr,framePadding:.1*wd,stepsPerMove:10,numStepss:24,numSteps:200,center:Point.mk(0,0),radius:wd/4,
-                 cycles:1,frameStroke:'rgb(2,2,2)',frameStrokee:'white',frameStrokeWidth:1,saveAnimation:1,stepInterval:40,pauseAtt:[29,30,59,60]}
+                 cycles:1,frameStroke:'rgb(2,2,2)',frameStrokee:'white',frameStrokeWidth:1,saveAnimation:1,stepInterval:40,randomConnections:1,
+                 pauseAtt:[29,30,59,60]}
 Object.assign(rs,topParams);
 
 
@@ -51,6 +52,7 @@ const mkPath0 = function() {
   let path = [p0,p1,p2,p3];//,p4,p3,p2,p1,p0];
   return path;
 }
+
 const mkPath1 = function () {
   let d = 0.3;
   let p0 = Point.mk(0.5-d,0.5+d);
@@ -63,12 +65,45 @@ const mkPath1 = function () {
   return path;
 }
 
+
+const mkPath2 = function () {
+  let d = 0.3;
+  let p0 = Point.mk(0.5+d,0.5+d);
+  let p1 = Point.mk(0.5-d,0.5-d);
+  let p2 = Point.mk(0.5+d,0.5-d);
+  let p3 = Point.mk(0.5-d,0.5+d);
+  let p4 = Point.mk(0.5+d,0.5+d);
+
+  let path = [p0,p1,p2,p3,p4];
+  return path;
+}
+const mkPath3 = function () {
+  let d = 0.3;
+  let p0 = Point.mk(0.5-d,0.5+d);
+  let p1 = Point.mk(0.5-d,0.5-d);
+  let p2 = Point.mk(0.5+d,0.5-d);
+  let p3 = Point.mk(0.5+d,0.5+d);
+  let p4 = Point.mk(0.5-d,0.5+d);
+
+  let path = [p0,p1,p2,p3,p4];
+  return path;
+}
 rs.addMotions = function () {
   let {cells} = this;
   this.connectedShapes = [];
-  let path = mkPath1();
+  let path0 = mkPath0();
+  let path1 = mkPath1();
+  let path2 = mkPath2();
+  let path3 = mkPath3();
+  let paths = [path1,path0,path2,path3];
   cells.forEach((cell) =>{
-    this.addMotionsForCell(cell,path,17);
+    let {coords} = cell;
+    debugger;
+    let {x,y} = coords;
+    let z = (x+y)%4;
+    let path=paths[x];
+    //let path=paths[z];
+    this.addMotionsForCell(cell,path,30);
   });
  
 }

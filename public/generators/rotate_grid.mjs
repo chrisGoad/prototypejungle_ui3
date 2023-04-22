@@ -96,7 +96,7 @@ rs.rectFromRowsCols = function (params) {
  */
  /* a step is a period when a given configuration is in force. {startTime:integer,dur,config,*/
 
-
+/*
 rs.intersectRays = function (p0,v0,p1,v1) {
   let {x:a,y:b} = p0;
   let {x:c,y:d} = v0;
@@ -131,12 +131,14 @@ rs.intersectLineSegs = function (seg0,seg1) {
   let onsegs = this.onSeg(p,seg0) && this.onSeg(p,seg1);
   return onsegs?p:null;
 }
+*/
 
 rs.intersectLineSegLineSegs = function (seg,segs) {
   let ln = segs.length;
   for (let i=0;i<ln;i++) {
     let sseg = segs[i];
-    let isct = this.intersectLineSegs(seg,sseg);
+    //let isct = this.intersectLineSegs(seg,sseg);
+    let isct = seg.intersect(sseg);
     if (isct) {
       return isct;
     }

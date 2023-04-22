@@ -30,6 +30,7 @@ sections:
    [0,'gridSpinner_2','instances',1,'Grid Spinner 2',{likes:0,posted:0,category:'quad'}], 
    [0,'gridSpinner_3','instances',1,'Grid Spinner 3',{likes:0,posted:0,category:'quad'}], 
    [0,'gridSpinner_4','instances',1,'Grid Spinner 4',{likes:0,posted:0,category:'quad'}], 
+   [0,'gridSpinner_5','instances',1,'Grid Spinner 5',{likes:0,posted:0,category:'quad'}], 
 /*[0,'quad_9_3','instances',1,'Quad 9 3',{likes:0,posted:0,category0_:'quad'}], 
     [0,'quad_0_12','instances',1,'Quad 0 12',{likes:0,posted:0,category:'quad'}], 
 [0,'quad_9_5','instances',1,'Quad 9 5',{likes:0,posted:0,category:'quad'}], 

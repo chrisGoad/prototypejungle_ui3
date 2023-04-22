@@ -896,6 +896,7 @@ LineSegment.intersectsLineSegment = function (line1) {
   let isct = this.intersect(line1);
   return !!isct;
 } 
+/* new version at bottom
 LineSegment.intersect = function (line1) {
 	let verbose = false;
   let line0 = this;
@@ -968,7 +969,7 @@ LineSegment.intersect = function (line1) {
 	}
   return false;
   
-}
+}*/
 /*
 LineSegment.intersectsLineSegment = function (seg) {
 	return !!this.intersect(seg);
@@ -2402,7 +2403,47 @@ oneDf.mkArc = function (cntr,radius,fromAngle=0,toAngle=2*Math.PI) {
   return {value:ov}
 }
 
+// fresh, tested LineSegment intersection
 
+
+const intersectRays = function (p0,v0,p1,v1) {
+  let {x:a,y:b} = p0;
+  let {x:c,y:d} = v0;
+  let {x:A,y:B} = p1;
+  let {x:C,y:D} = v1;
+  let t2 = B-b- ((A-a)*d)/c;//((A - a)*d/c) - B;
+  let t1 =(C*d)/c - D;
+  let T = t2/t1;
+  let x = A + T*C;
+  let y = B+ T*D;
+  let p = Point.mk(x,y);
+  return p;
+}
+
+LineSegment.onSeg = function(p) {
+  let seg0 = this;
+  let {end0:e0,end1:e1} = seg0;
+  let v0 = p.difference(e0);
+  let v1 = e1.difference(p);
+  let v = e1.difference(e0);
+  let d0 = v0.dotp(v);
+  let d1 = v1.dotp(v);
+  let s0 = d0>=0?1:0;
+  let s1 = d1>=0?1:0;
+  return s0 === s1;
+}
+
+LineSegment.intersect = function (seg1) {
+  let seg0 = this;
+  let {end0:p00,end1:p01} = seg0;
+  let {end0:p10,end1:p11} = seg1;
+  let v0 = p01.difference(p00);
+  let v1 = p11.difference(p10);
+  let p = this.intersectRays(p00,v0,p10,v1);
+  //let onsegs = this.onSeg(p,seg0) && this.onSeg(p,seg1);
+  let onsegs = seg0.onSeg(p) && seg1.onSeg(p);
+  return onsegs?p:null;
+}
 
 export {rotationMatrix,movetoInGlobalCoords,toOwnCoords,toPoint,angleToDirection,Point,Line,Rectangle,Polygon,Transform,Ray,degreesToRadians,
         LineSegment,Circle,Arc,boundsForRectangles,rp_time,pointArrayToLineSegments,geometriesIntersect,moveBy,oneDf};

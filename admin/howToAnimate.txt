@@ -176,7 +176,8 @@ c:\ffmpeg\bin\ffmpeg  -framerate 20 -i animations/moving_dots_0_f%03d.jpg -s 500
 c:\ffmpeg\bin\ffmpeg  -framerate 20 -i animations/part2_0_49d_f%03d.jpg -s 500x500  export/part2_0_49d.gif
 c:\ffmpeg\bin\ffmpeg  -framerate 4 -i animations/part2_0_58d_f%03d.jpg -s 500x500  export/part2_0_58d.gif
 c:\ffmpeg\bin\ffmpeg  -framerate 10 -i animations/part2_0_58d_f%03d.jpg -s 500x500  export/part2_0_58d.mp4
-c:\ffmpeg\bin\ffmpeg  -framerate 10 -i animations/gridSpinner_4_f%03d.jpg -s 500x500  export/gridSpinner_4.gif
+c:\ffmpeg\bin\ffmpeg  -framerate 15 -i animations/gridSpinner_4_f%03d.jpg -s 500x500  export/gridSpinner_4.gif
+c:\ffmpeg\bin\ffmpeg  -framerate 15 -i animations/gridSpinner_5_f%03d.jpg -s 500x500  export/gridSpinner_5.gif
 
 
 rm animations/spatter0_7*
