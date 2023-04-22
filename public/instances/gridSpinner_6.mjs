@@ -11,7 +11,7 @@ let wd = 200;
 let nr = 8;
 //
 nr =4;
-rs.setName('gridSpinner_5');
+rs.setName('gridSpinner_6');
 let topParams = {width:wd,height:wd,numRows:nr,numCols:nr,framePadding:.1*wd,stepsPerMove:10,numStepss:24,numSteps:200,center:Point.mk(0,0),radius:wd/4,
                  cycles:1,frameStroke:'rgb(2,2,2)',frameStrokee:'white',frameStrokeWidth:1,saveAnimation:1,stepInterval:40,randomConnections:1,
                  pauseAtt:[29,30,59,60]}
@@ -38,12 +38,19 @@ rs.initProtos = function () {
   circleP['stroke-width'] = 0;
   
 }
-rs.selj = function (i,ln) {
+rs.selj = function (cell,i,ln) {
+  let {coords} = cell;
+  let {x,y} = coords;
+  return (i+y)%ln;
   return Math.floor(Math.random()*ln);
 }
-rs.shapeConnector = function (mg) {
-  let {selj} = this;
-  this.shapeConnectorC(mg,10,selj,selj);
+rs.selk = function (cell,j,ln) {
+  return (j+13)%ln;
+}
+
+rs.shapeConnector = function (mg,cell) {
+  let {selj,selk} = this;
+  this.shapeConnectorC(mg,cell,5,selj,selk);
 }
 
 const mkPath0 = function() {
@@ -106,7 +113,8 @@ rs.addMotions = function () {
     let z = (x+y)%4;
     let path=paths[x];
     //let path=paths[z];
-    this.addMotionsForCell(cell,path,30);
+    debugger;
+    this.addMotionsForCell(cell,path,30,this.shapeConnector);
   });
  
 }

@@ -36,22 +36,26 @@ rs.toQuad = function(p) {
 }
 
 
-rs.shapeConnectorC = function (mg,numConnections,connectJump) {
-  let {connectedShapes:cns,randomConnections:rc} = this;
+rs.shapeConnectorC = function (mg,cell,numConnections,selj,selk) { //,connectJump) {
+  let {connectedShapes:cns} = this;
+  debugger;
   let shapes = mg.shapes;
   let ln = shapes.length;
   for (let i=0;i<numConnections;i++) {
-    let j = Math.floor(Math.random()*ln);
-    let k = Math.floor(Math.random()*ln);
+    let j = selj.call(this,cell,i,ln);
+    let k = selk.call(this,cell,j,ln);
+   // let j = Math.floor(Math.random()*ln);
+   // let k = Math.floor(Math.random()*ln);
     let sh0 = shapes[j];
-    let sh1 = rc?shapes[k]:shapes[(j+connectJump)%ln];
+    let sh1 = shapes[k];
+    //let sh1 = rc?shapes[k]:shapes[(j+connectJump)%ln];
     cns.push([sh0,sh1]);
   }
 }
 
 
-rs.addMotionsForCell = function (cell,path,numPhases) {
-  let {deltaX,numSteps,circleP,iPolygonP,shapeConnector,cycles} = this;
+rs.addMotionsForCell = function (cell,path,numPhases,shapeConnector) {
+  let {deltaX,numSteps,circleP,iPolygonP,shapeConnectorr,cycles} = this;
   let duration = numSteps;
   let ip = 1/numPhases;
   let phases =[];
@@ -61,7 +65,7 @@ rs.addMotionsForCell = function (cell,path,numPhases) {
   let {polygon,coords} = cell;
   let {x,y} = coords;
   let shapeP=circleP;
-  this.mkPathMotionGroup({phases,path,cycles,duration,shapeP,oPoly:polygon,shapeConnector});
+  this.mkPathMotionGroup({cell,phases,path,cycles,duration,shapeP,oPoly:polygon,shapeConnector});
 }
 
  
