@@ -74,14 +74,18 @@ rs.addMotionsForCell = function (cell,path,numPhases,shapeConnector) {
 rs.initialize = function() { 
   debugger;
   this.initProtos();
-  let {corners,polygonP} =this;
+  let {corners,polygonP,showPaths} =this;
   this.addFrame();
+  if (this.showPaths()) {
+    return;
+  }
   this.initGrid();
   this.motionGroups = [];
   this.set('mshapes',arrayShape.mk());
   this.addMotions();
   this.connectShapes();
   this.hideUnconnectedShapes();
+  //this.callIfDefined('afterInitialize');
   debugger;
 } 
   //this.updateState();

@@ -38,13 +38,15 @@ rs.initProtos = function () {
   circleP['stroke-width'] = 0;
   
 }
-rs.selj = function (i,ln) {
+rs.selj = function (cell,i,ln) {
   return Math.floor(Math.random()*ln);
 }
-rs.shapeConnector = function (mg) {
-  let {selj} = this;
-  this.shapeConnectorC(mg,10,selj,selj);
+
+rs.shapeConnector = function (mg,cell) {
+  let {selj,selk} = this;
+  this.shapeConnectorC(mg,cell,5,selj,selj);
 }
+
 
 const mkPath0 = function() {
   let d = 0.3;
@@ -106,7 +108,9 @@ rs.addMotions = function () {
     let z = (x+y)%4;
     let path=paths[x];
     //let path=paths[z];
-    this.addMotionsForCell(cell,path,30);
+    this.addMotionsForCell(cell,path,30,this.shapeConnector);
+
+    //this.addMotionsForCell(cell,path,30);
   });
  
 }

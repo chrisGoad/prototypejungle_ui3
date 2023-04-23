@@ -115,8 +115,25 @@ item.alongPath = function (path,fr) {
   }
 }
        
-  
-item.execPathMotion=  function (mg,m,t,i) {
+item.showPath = function (path,fc) {
+  let {pathLines,connectorP} = this;
+  if (!pathLines) {
+    pathLines = this.set('pathLines',arrayShape.mk());
+  }
+  let ln = path.length;
+  for (let i=0;i<(ln-1);i++) {
+    let e0 = path[i].times(fc);
+    let e1 = path[i+1].times(fc);
+    let line = connectorP.instantiate();
+    line.show();
+    line.setEnds(e0,e1);
+    pathLines.push(line);
+  }
+}
+
+   
+    
+  item.execPathMotion=  function (mg,m,t,i) {
   let {startTime:st,duration:dur,cycles,path} = mg;
   let {phase,shape,oPoly,lastCycle} = m;
  // debugger;
@@ -321,7 +338,7 @@ item.mkPathMotionGroup = function (params) {
 
 item.connectShapes = function () {
   let {connectorP,connectedShapes:cns} = this;
-  let connectors = this.set('connectors',arrayShape.mk());
+  let connectors = this.set('connectors',arrayShape.mk());12
   let ln = cns.length;
   for (let i=0;i<ln;i++) {
      let line = connectorP.instantiate();
