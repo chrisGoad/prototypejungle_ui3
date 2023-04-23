@@ -27,6 +27,7 @@ rs.initProtos = function () {
   connectorP.stroke = 'cyan';
   let gridPolygonP = this.gridPolygonP = polygonPP.instantiate();
   gridPolygonP['stroke-width'] = .4;
+  gridPolygonP['stroke-width'] = 0;
   gridPolygonP.stroke = 'cyan';
   gridPolygonP.fill = 'red';
   gridPolygonP.fill = 'black';

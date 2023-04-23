@@ -21,14 +21,19 @@ Object.assign(rs,topParams);
 rs.initProtos = function () {
   let lineP = this.lineP = linePP.instantiate();
   lineP['stroke-width'] = .4;
+  lineP['stroke-width'] = 0;
   lineP.stroke = 'cyan';
+  lineP.stroke = 'black';
    let connectorP = this.connectorP = linePP.instantiate();
   connectorP['stroke-width'] = .9;
   connectorP.stroke = 'cyan';
   let gridPolygonP = this.gridPolygonP = polygonPP.instantiate();
   gridPolygonP['stroke-width'] = .4;
+  gridPolygonP['stroke-width'] = 0;
+  gridPolygonP.stroke = 'cyan';
   gridPolygonP.stroke = 'cyan';
   gridPolygonP.fill = 'red';
+  gridPolygonP.fill = 'black';
   let iPolygonP = this.iPolygonP = polygonPP.instantiate();
   iPolygonP['stroke-width'] = 0;
   iPolygonP.fill = 'green'; 
@@ -115,7 +120,7 @@ rs.addMotions = function () {
  
 }
   
-
+rs.showPaths = ()=>{};
   
 export {rs};
 
