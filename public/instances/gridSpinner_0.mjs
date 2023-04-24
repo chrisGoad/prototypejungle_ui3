@@ -1,4 +1,5 @@
 
+debugger;
 import {rs as addGridMethods} from '/mlib/grid2.mjs';	
 import {rs as addQuadMethods} from '/mlib/rect2quad.mjs';	
 import {rs as addMotionMethods} from '/mlib/motion.mjs';	

@@ -1,6 +1,23 @@
 
 let rs = function (item) {
-
+item.mkRandomPath = function (params) {
+  let {rectangle,numPoints:np} = params;
+  let rect =  rectangle?rectangle:Rectangle.mk(Point.mk(0,0),Point.mk(1,1));
+  let {corner,extent} = rect;
+  let {x:cx,y:cy} = corner;
+  let {x:ex,y:ey} = extent;
+  let path = [];
+  const randomPoint = () => {
+    let rx = cx+Math.random()*ex;
+    let ry = cy+Math.random()*ey;
+    return Point.mk(rx,ry);
+  }
+  for (let i=0;i<np;i++) {
+    path.push(randomPoint());
+  }
+  return path;
+}
+     
 item.mkCircle = function (params) {
   let {radius:r,numPoints:np,center,startAngle:sa} = params;
   let da = (2*Math.PI)/(np+1);

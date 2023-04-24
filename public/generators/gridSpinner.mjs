@@ -1,4 +1,4 @@
-
+debugger;
 import {rs as addGridMethods} from '/mlib/grid2.mjs';	
 import {rs as addQuadMethods} from '/mlib/rect2quad.mjs';	
 import {rs as addMotionMethods} from '/mlib/motion.mjs';	
@@ -78,14 +78,17 @@ rs.initialize = function() {
   this.initProtos();
   let {corners,polygonP,showThePath} =this;
   this.addFrame();
+ 
+  this.initGrid();
+  this.motionGroups = [];
+  this.connectedShapes = [];
+
+  this.set('mshapes',arrayShape.mk());
+  this.addMotions();
   if (showThePath) {
     this.showPaths();
     return;
   }
-  this.initGrid();
-  this.motionGroups = [];
-  this.set('mshapes',arrayShape.mk());
-  this.addMotions();
   this.connectShapes();
   this.hideUnconnectedShapes();
   //this.callIfDefined('afterInitialize');

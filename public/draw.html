@@ -120,7 +120,10 @@ window.addEventListener("DOMContentLoaded", () => {
   dom.vars.stdExtent = geom.Point.mk(200,200); // if there is no initial content, this is the area in image space originally in view
   core.tlog('doc ready');
   //core.loadTopDefs(() => {drawImage();draw.initPage()});// binds modules to global
-  core.loadTopDefs(() => {drawImage();});// binds modules to global
+  core.loadTopDefs(() => {
+   // debugger;
+    drawImage();
+  });// binds modules to global
   //core.loadTopDefs(() => {drawImage()});// binds modules to global
 });
 </script>
