@@ -115,8 +115,8 @@ item.alongPath = function (path,fr) {
   }
 }
        
-item.showPath = function (path,fc) {
-  let {pathLines,connectorP} = this;
+item.showPathh = function (path,fc,lineP) {
+  let {pathLines,conne} = this;
   if (!pathLines) {
     pathLines = this.set('pathLines',arrayShape.mk());
   }

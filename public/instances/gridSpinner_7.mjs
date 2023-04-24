@@ -14,7 +14,7 @@ nr =1;
 rs.setName('gridSpinner_7');
 let topParams = {width:wd,height:wd,numRows:nr,numCols:nr,framePadding:.1*wd,stepsPerMove:10,numStepss:24,numSteps:200,center:Point.mk(0,0),radius:wd/4,
                  cycles:1,frameStroke:'rgb(2,2,2)',frameStrokee:'white',frameStrokeWidth:1,saveAnimation:1,stepInterval:40,randomConnections:1,
-                 pauseAtt:[29,30,59,60]}
+                 pauseAtt:[29,30,59,60],showThePath:0}
 Object.assign(rs,topParams);
 
 
@@ -56,16 +56,45 @@ rs.shapeConnector = function (mg,cell) {
   this.shapeConnectorC(mg,cell,25,selj,selk);
 }
 
-const mkCircle = function (params) {
-  let {radius:r,numPoints:np,center,startAngle:sa} = params;
+const mkWavyCircle = function (params) {
+  let {radius:r,deltaRadius:dr,numWaves,numPoints:np,center,startAngle:sa} = params;
   let da = (2*Math.PI)/(np+1);
   let path = [];
-  for (let i=0;i<np;i++) {
+  for (let i=0;i<=np;i++) {
     let a = sa+i*da;
     let vec = Point.mk(Math.cos(a),Math.sin(a)).times(r);
     let dvec = vec.plus(center);
     path.push(dvec);
   }
+  return path;
+}
+
+const twoCircles = function (params) {
+  let {centers,startAngles} = params;
+  
+  let params0 = Object.assign({},params);
+  let params1 = Object.assign({},params);
+  Object.assign(params0,{center:centers[0],startAngle:startAngles[1]});
+  Object.assign(params1,{center:centers[1],startAngle:startAngles[1]});
+  let c0 = mkCircle(params0);
+  let c1 = mkCircle(params1);
+  let path = c0.concat(c1.reverse());
+  return path;
+}
+
+const threeCircles = function (params) {
+  let {centers,startAngles} = params;
+  
+  let params0 = Object.assign({},params);
+  let params1 = Object.assign({},params);
+  let params2 = Object.assign({},params);
+  Object.assign(params0,{center:centers[0],startAngle:startAngles[1]});
+  Object.assign(params1,{center:centers[1],startAngle:startAngles[1]});
+  Object.assign(params2,{center:centers[2],startAngle:startAngles[2]});
+  let c0 = mkCircle(params0);
+  let c1 = mkCircle(params1);
+  let c2 = mkCircle(params2);
+  let path = c0.concat(c1.reverse().concat(c2));
   return path;
 }
 
@@ -89,8 +118,16 @@ const mkSpiral = function(params) {
   return path;
 }
     
-      
-    
+rs.mkMyPath = function () {
+  let radius = 0.25;
+  let np = 18;
+  
+  let centers = [Point.mk(.25,0.25),Point.mk(0.75,0.25),Point.mk(0.5,0.75)];
+  //let startAngles = [-0.5*Math.PI,0.5*Math.PI,0.5*Math.PI];
+  let startAngles = [-0.5*Math.PI,0.5*Math.PI,0.5*Math.PI];
+  let path = this.threeCircles({radius,numPoints:np,centers,startAngles}); 
+ return path;
+} 
 rs.addMotions = function () {
   let {cells} = this;
   this.connectedShapes = [];
@@ -100,18 +137,24 @@ rs.addMotions = function () {
   let path3 = mkPath3();
   let paths = [path1,path0,path2,path3];*/
   let iRadius = 0.25;
-  let radius = 0.25;
   let deltaRadius = 0.1* iRadius;
+   /* let radius = 0.25;
+
   let np = 8;
-  let center0 = Point.mk(0.5,0.75);
-  let center1 = Point.mk(0.5,0.25);
+  let centers,startAngles,path;
+  centers = [Point.mk(0.5,0.75),Point.mk(0.5,0.25)];
+  startAngles = [-0.5*Math.PI,0.5*Math.PI];
   debugger;
-  let c0 = mkCircle({radius,numPoints:np,center:center0,startAngle:-0.5*Math.PI});
-  let c1 = mkCircle({radius,numPoints:np,center:center1,startAngle:0.5*Math.PI});
-  let path = c0.concat(c1.reverse());
- // let path = mkSpiral({turns:6,pointsPerTurn:18,iRadius,deltaRadius,center});
+  path = this.twoCircles({radius,numPoints:np,centers,startAngles});
+   centers = [Point.mk(.25,0.25),Point.mk(0.75,0.25),Point.mk(0.5,0.75)];
+  startAngles = [-0.5*Math.PI,0.5*Math.PI,0.5*Math.PI];*/
+  debugger;
+  let path = this.mkMyPath();
+
   this.addMotionsForCell(cells[0],path,100,this.shapeConnector);// put back
 /*
+ // let path = mkSpiral({turns:6,pointsPerTurn:18,iRadius,deltaRadius,center});
+
   cells.forEach((cell) =>{
     let {coords} = cell;
     //debugger;
@@ -126,17 +169,10 @@ rs.addMotions = function () {
  
 rs.showPaths= function () {
    debugger;
-   return 0;
-  let path = mkSpiral({turns:4,pointsPerTurn:18,iRadius:10,deltaRadius:1});
-  let lns = [];
-  let ln = path.length;
-  for (let i=0;i<ln;i++) {
-    let p = path[i];
-    let pl = p.length();
-    lns.push(pl);
-  }
-  debugger;
-  this.showPath(path,100);
+   let {connectorP} = this;
+  //return 0;
+  let path = this.mkMyPath(); 
+  this.showPath(path,100,connectorP);
   return 1;
 }
   

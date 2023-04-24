@@ -3,6 +3,7 @@ import {rs as addGridMethods} from '/mlib/grid2.mjs';
 import {rs as addQuadMethods} from '/mlib/rect2quad.mjs';	
 import {rs as addMotionMethods} from '/mlib/motion.mjs';	
 import {rs as addAnimationMethods} from '/mlib/animate0.mjs';
+import {rs as addPathMethods} from '/mlib/paths.mjs';
 
 import {rs as linePP} from '/shape/line.mjs';
 import {rs as circlePP} from '/shape/circle.mjs';
@@ -13,6 +14,7 @@ let rs = basicP.instantiate();
 addGridMethods(rs);
 addMotionMethods(rs);
 addQuadMethods(rs);
+addPathMethods(rs);
 
 //addQuadMethods(rs);
 addAnimationMethods(rs);
@@ -74,9 +76,10 @@ rs.addMotionsForCell = function (cell,path,numPhases,shapeConnector) {
 rs.initialize = function() { 
   debugger;
   this.initProtos();
-  let {corners,polygonP,showPaths} =this;
+  let {corners,polygonP,showThePath} =this;
   this.addFrame();
-  if (this.showPaths()) {
+  if (showThePath) {
+    this.showPaths();
     return;
   }
   this.initGrid();
