@@ -1,7 +1,7 @@
 
 
+debugger;
 import {rs as generatorP} from '/generators/gridSpinner.mjs';
-
 let rs = generatorP.instantiate();
 import {rs as linePP} from '/shape/line.mjs';
 import {rs as circlePP} from '/shape/circle.mjs';
@@ -10,11 +10,11 @@ import {rs as polygonPP} from '/shape/polygon.mjs';
 let wd = 200;
 let nr = 8;
 //
-nr =4;
-rs.setName('gridSpinner_6');
-let topParams = {width:wd,height:wd,numRows:nr,numCols:nr,framePadding:.1*wd,stepsPerMove:10,numStepss:24,numSteps:200,center:Point.mk(0,0),radius:wd/4,
+nr =1;
+rs.setName('gridSpinner_9');
+let topParams = {width:wd,height:wd,numRows:nr,numCols:nr,numConnections:400,framePadding:.1*wd,stepsPerMove:10,numStepss:24,numSteps:200,center:Point.mk(0,0),radius:wd/4,
                  cycles:1,frameStroke:'rgb(2,2,2)',frameStrokee:'white',frameStrokeWidth:1,saveAnimation:1,stepInterval:40,randomConnections:1,
-                 pauseAtt:[29,30,59,60]}
+                 pauseAtt:[29,30,59,60],showThePath:0}
 Object.assign(rs,topParams);
 
 
@@ -27,6 +27,7 @@ rs.initProtos = function () {
   connectorP.stroke = 'cyan';
   let gridPolygonP = this.gridPolygonP = polygonPP.instantiate();
   gridPolygonP['stroke-width'] = .4;
+  gridPolygonP['stroke-width'] = 0;
   gridPolygonP.stroke = 'cyan';
   gridPolygonP.fill = 'red';
   gridPolygonP.fill = 'black';
@@ -46,30 +47,25 @@ rs.selj = function (cell,i,ln) {
   return Math.floor(Math.random()*ln);
 }
 rs.selk = function (cell,j,ln) {
-  return (j+13)%ln;
+  return j+Math.floor(Math.random()*6)%ln;
+  return (j+6)%ln;
 }
-/*
-rs.shapeConnector = function (mg,cell) {
-  let {selj,selk} = this;
-  this.shapeConnectorC(mg,cell,5,selj,selk);
-}
-*/
-
 
 rs.shapeConnector = function (mg,cell) {
-  debugger;
   let {selj,selk} = this;
-  this.shapeConnectorC({motionGroup:mg,cell,numConnections:5,selj,selk});
+  this.shapeConnectorC({motionGroup:mg,cell,numConnections:40,selj,selk});
+  //this.shapeConnectorC(mg,cell,250,selj,selk);
 }
 
 rs.addMotions = function () {
+  debugger;
   let {cells} = this;
-  this.connectedShapes = [];
-  let path0 = this.mkPath0();
-  let path1 =this.mkPath1();
-  let path2 = this.mkPath2();
-  let path3 = this.mkPath3();
-  let paths = [path1,path0,path2,path3];
+  let radius = .25;
+  let path = this.thePath = this.mkWavyCircle({numPoints:50,radius,deltaRadius:radius*0.1,numWaves:8,center:Point.mk(.25,.25),startAngle:0});
+
+  this.addMotionsForCell(cells[0],path,100,this.shapeConnector);// put back
+/*
+  let path = mkSpiral({turns:6,pointsPerTurn:18,iRadius,deltaRadius,center});
   cells.forEach((cell) =>{
     let {coords} = cell;
     //debugger;
@@ -78,14 +74,15 @@ rs.addMotions = function () {
     let path=paths[x];
     //let path=paths[z];
     //debugger;
-    this.addMotionsForCell(cell,path,30,this.shapeConnector);// put back
-  });
+    this.addMotionsForCell(cell,path,130,this.shapeConnector);// put back
+  });*/
 }
  
 rs.showPaths= function () {
    debugger;
-   return 0;
-  this.showPath(mkPath0(),100);
+   let {connectorP,thePath} = this;
+  //return 0;
+  this.showPath(thePath,100,connectorP);
   return 1;
 }
   

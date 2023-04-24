@@ -1,5 +1,53 @@
 
 let rs = function (item) {
+
+item.mkPath0 = function() {
+  let d = 0.3;
+  let p0 = Point.mk(0.5+d,0.5+d);
+  let p1 = Point.mk(0.5-d,0.5+d);
+  let p2 = Point.mk(0.5-d,0.5-d);
+  let p3 = Point.mk(0.5+d,0.5-d);
+  let path = [p0,p1,p2,p3];//,p4,p3,p2,p1,p0];
+  return path;
+}
+
+item.mkPath1 = function () {
+  let d = 0.3;
+  let p0 = Point.mk(0.5-d,0.5+d);
+  let p1 = Point.mk(0.5+d,0.5+d);
+  let p2 = Point.mk(0.5+d,0.5);
+  let p3 = Point.mk(0.5-d,0.5);
+  let p4 = Point.mk(0.5-d,0.5-d);
+  let p5 = Point.mk(0.5+d,0.5-d);
+  let path = [p0,p1,p2,p3,p4,p5];
+  return path;
+}
+
+
+item.mkPath2 = function () {
+  let d = 0.3;
+  let p0 = Point.mk(0.5+d,0.5+d);
+  let p1 = Point.mk(0.5-d,0.5-d);
+  let p2 = Point.mk(0.5+d,0.5-d);
+  let p3 = Point.mk(0.5-d,0.5+d);
+  let p4 = Point.mk(0.5+d,0.5+d);
+
+  let path = [p0,p1,p2,p3,p4];
+  return path;
+}
+item.mkPath3 = function () {
+  let d = 0.3;
+  let p0 = Point.mk(0.5-d,0.5+d);
+  let p1 = Point.mk(0.5-d,0.5-d);
+  let p2 = Point.mk(0.5+d,0.5-d);
+  let p3 = Point.mk(0.5+d,0.5+d);
+  let p4 = Point.mk(0.5-d,0.5+d);
+
+  let path = [p0,p1,p2,p3,p4];
+  return path;
+}
+
+
 item.mkRandomPath = function (params) {
   let {rectangle,numPoints:np} = params;
   let rect =  rectangle?rectangle:Rectangle.mk(Point.mk(0,0),Point.mk(1,1));
@@ -20,7 +68,8 @@ item.mkRandomPath = function (params) {
      
 item.mkCircle = function (params) {
   let {radius:r,numPoints:np,center,startAngle:sa} = params;
-  let da = (2*Math.PI)/(np+1);
+  //let da = (2*Math.PI)/(np+1);
+  let da = (2*Math.PI)/np;
   let path = [];
   for (let i=0;i<=np;i++) {
     let a = sa+i*da;
@@ -32,12 +81,19 @@ item.mkCircle = function (params) {
 }
 
 item.mkWavyCircle = function (params) {
-  let {radius:r,deltaRadius:dr,numWaves:nw,numPoints:np,center,startAngle:sa} = params;
-  let da = (2*Math.PI)/(np+1);
+  let {radius:r,deltaRadius,numWaves:nw,numPoints:np,center,startAngle:sa} = params;
+  let da = (2*Math.PI)/np;
+  let wvl = (2*Math.PI)/nw;
   let path = [];
   for (let i=0;i<=np;i++) {
     let a = sa+i*da;
-    let vec = Point.mk(Math.cos(a),Math.sin(a)).times(r);
+    
+    let inwv = Math.floor(a/wvl);
+    let wvfr = (a - inwv*wvl)/wvl;
+    let wvv = wvfr*2*Math.PI;
+    let sn = Math.sin(wvv);
+    let dr = sn*deltaRadius;
+    let vec = Point.mk(Math.cos(a),Math.sin(a)).times(r+dr);
     let dvec = vec.plus(center);
     path.push(dvec);
   }

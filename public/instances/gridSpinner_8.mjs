@@ -50,10 +50,17 @@ rs.selk = function (cell,j,ln) {
   //return j+Math.floor(Math.random()*36)%ln;
   return (j+6)%ln;
 }
-
+/*
 rs.shapeConnector = function (mg,cell) {
   let {selj,selk} = this;
   this.shapeConnectorC(mg,cell,25,selj,selk);
+}
+
+*/
+
+rs.shapeConnector = function (mg,cell) {
+  let {selj,selk} = this;
+  this.shapeConnectorC({motionGroup:mg,cell,numConnections:25,selj,selk});
 }
 
 rs.addMotions = function () {

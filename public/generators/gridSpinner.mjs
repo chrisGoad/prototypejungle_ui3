@@ -38,8 +38,10 @@ rs.toQuad = function(p) {
 }
 
 
-rs.shapeConnectorC = function (mg,cell,numConnections,selj,selk) { //,connectJump) {
-  let {connectedShapes:cns} = this;
+//rs.shapeConnectorC = function (mg,cell,numConnections,selj,selk) { //,connectJump) {
+rs.shapeConnectorC = function (params) { //,connectJump) {
+  let {connectedShapes:cns,numC} = this;
+  let {motionGroup:mg,cell,numConnections,selj,selk} = params;
   debugger;
   let shapes = mg.shapes;
   let ln = shapes.length;

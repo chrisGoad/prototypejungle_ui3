@@ -1,21 +1,11 @@
 
-import {rs as addGridMethods} from '/mlib/grid2.mjs';	
-import {rs as addQuadMethods} from '/mlib/rect2quad.mjs';	
-import {rs as addMotionMethods} from '/mlib/motion.mjs';	
-import {rs as addAnimationMethods} from '/mlib/animate0.mjs';
+import {rs as generatorP} from '/generators/gridSpinner.mjs';
+
+let rs = generatorP.instantiate();
 
 import {rs as linePP} from '/shape/line.mjs';
 import {rs as circlePP} from '/shape/circle.mjs';
 import {rs as polygonPP} from '/shape/polygon.mjs';
-
-import {rs as basicP} from '/generators/basics.mjs';
-let rs = basicP.instantiate();
-addGridMethods(rs);
-addMotionMethods(rs);
-addQuadMethods(rs);
-
-//addQuadMethods(rs);
-addAnimationMethods(rs);
 
 let wd = 200;
 let nr = 8;
@@ -56,6 +46,18 @@ rs.toQuad = function(p) {
 }
 
 
+rs.shapeConnector = function (mg,cell) {
+  debugger;
+  let {selj,selk} = this;
+  this.shapeConnectorC({motionGroup:mg,cell,numConnections:5,selj,selk});
+}
+rs.selj = function (cell,i,ln) {
+  return i;
+}
+rs.selk = function (cell,j,ln) {
+  return (j+7)%ln;
+}
+/*
 rs.shapeConnector = function (mg) {
   debugger;
   let {connectedShapes:cns} = this;
@@ -66,7 +68,7 @@ rs.shapeConnector = function (mg) {
     cns.push([sh0,sh1]);
   }
 }
-
+*/
 rs.addMotions = function () {
   let {cells,deltaX,numSteps,circleP,iPolygonP,shapeConnector} = this;
   this.connectedShapes = [];
@@ -90,14 +92,16 @@ rs.addMotions = function () {
   }
   cells.forEach((cell) =>{
     debugger;
-    let {polygon,coords} = cell;
+    /*let {polygon,coords} = cell;
     let {x,y} = coords;
-    let shapeP=circleP;
-    this.mkPathMotionGroup({phases,path,cycles,duration,shapeP,oPoly:polygon,shapeConnector});
+    let shapeP=circleP;*/
+    this.addMotionsForCell(cell,path,17,this.shapeConnector);
+
+    //this.mkPathMotionGroup({phases,path,cycles,duration,shapeP,oPoly:polygon,shapeConnector});
   });
 }
        
-
+/*
 rs.initialize = function() { 
   debugger;
   this.initProtos();
@@ -109,6 +113,7 @@ rs.initialize = function() {
   this.addMotions();
   this.connectShapes();
 } 
+*/
   //this.updateState();
 
   

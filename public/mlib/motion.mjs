@@ -320,7 +320,7 @@ item.mkP2PmotionGroup = function (params) {
 item.mkPathMotionGroup = function (params) {
   let {stepsSoFar:ssf,motionGroups,mshapes} = this;
   let {cell,duration,cycles,path,shapeP,oPoly,phases,shapeConnector} = params;
-  //debugger;
+  debugger;
   let mg = {kind:'Path',duration,cycles,startTime:ssf,shapeP,path,motions:[]};
   let ln = phases.length;
   let shapes = [];

@@ -51,10 +51,17 @@ rs.selk = function (cell,j,ln) {
   return (j+36)%ln;
 }
 
+
+
 rs.shapeConnector = function (mg,cell) {
+  debugger;
+  let {selj,selk} = this;
+  this.shapeConnectorC({motionGroup:mg,cell,numConnections:25,selj,selk});
+}
+/*rs.shapeConnector = function (mg,cell) {
   let {selj,selk} = this;
   this.shapeConnectorC(mg,cell,25,selj,selk);
-}
+}*/
 
 const mkWavyCircle = function (params) {
   let {radius:r,deltaRadius:dr,numWaves,numPoints:np,center,startAngle:sa} = params;
@@ -130,7 +137,6 @@ rs.mkMyPath = function () {
 } 
 rs.addMotions = function () {
   let {cells} = this;
-  this.connectedShapes = [];
  /* let path0 = mkPath0();
   let path1 = mkPath1();
   let path2 = mkPath2();

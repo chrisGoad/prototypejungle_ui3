@@ -48,63 +48,18 @@ rs.selj = function (cell,i,ln) {
 }
 
 rs.shapeConnector = function (mg,cell) {
+  debugger;
   let {selj,selk} = this;
-  this.shapeConnectorC(mg,cell,5,selj,selj);
+  this.shapeConnectorC({motionGroup:mg,cell,numConnections:5,selj,selk:selj});
 }
 
-
-const mkPath0 = function() {
-  let d = 0.3;
-  let p0 = Point.mk(0.5+d,0.5+d);
-  let p1 = Point.mk(0.5-d,0.5+d);
-  let p2 = Point.mk(0.5-d,0.5-d);
-  let p3 = Point.mk(0.5+d,0.5-d);
-  let path = [p0,p1,p2,p3];//,p4,p3,p2,p1,p0];
-  return path;
-}
-
-const mkPath1 = function () {
-  let d = 0.3;
-  let p0 = Point.mk(0.5-d,0.5+d);
-  let p1 = Point.mk(0.5+d,0.5+d);
-  let p2 = Point.mk(0.5+d,0.5);
-  let p3 = Point.mk(0.5-d,0.5);
-  let p4 = Point.mk(0.5-d,0.5-d);
-  let p5 = Point.mk(0.5+d,0.5-d);
-  let path = [p0,p1,p2,p3,p4,p5];
-  return path;
-}
-
-
-const mkPath2 = function () {
-  let d = 0.3;
-  let p0 = Point.mk(0.5+d,0.5+d);
-  let p1 = Point.mk(0.5-d,0.5-d);
-  let p2 = Point.mk(0.5+d,0.5-d);
-  let p3 = Point.mk(0.5-d,0.5+d);
-  let p4 = Point.mk(0.5+d,0.5+d);
-
-  let path = [p0,p1,p2,p3,p4];
-  return path;
-}
-const mkPath3 = function () {
-  let d = 0.3;
-  let p0 = Point.mk(0.5-d,0.5+d);
-  let p1 = Point.mk(0.5-d,0.5-d);
-  let p2 = Point.mk(0.5+d,0.5-d);
-  let p3 = Point.mk(0.5+d,0.5+d);
-  let p4 = Point.mk(0.5-d,0.5+d);
-
-  let path = [p0,p1,p2,p3,p4];
-  return path;
-}
 rs.addMotions = function () {
   let {cells} = this;
   this.connectedShapes = [];
-  let path0 = mkPath0();
-  let path1 = mkPath1();
-  let path2 = mkPath2();
-  let path3 = mkPath3();
+  let path0 = this.mkPath0();
+  let path1 = this.mkPath1();
+  let path2 = this.mkPath2();
+  let path3 = this.mkPath3();
   let paths = [path1,path0,path2,path3];
   cells.forEach((cell) =>{
     let {coords} = cell;
