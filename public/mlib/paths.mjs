@@ -67,8 +67,11 @@ item.mkRandomPath = function (params) {
 }
      
 item.mkCircle = function (params) {
-  let {radius:r,numPoints:np,center,startAngle:sa} = params;
+  let {radius:r,numPoints:np,center,startAngle:sa,endAngle:ea,clockWise:clkw} = params;
   //let da = (2*Math.PI)/(np+1);
+ /* if (ea) {
+    let deltaA
+ */
   let da = (2*Math.PI)/np;
   let path = [];
   for (let i=0;i<=np;i++) {

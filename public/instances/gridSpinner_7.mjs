@@ -128,6 +128,7 @@ const mkSpiral = function(params) {
 rs.mkMyPath = function () {
   let radius = 0.25;
   let np = 18;
+  np = 3;
   
   let centers = [Point.mk(.25,0.25),Point.mk(0.75,0.25),Point.mk(0.5,0.75)];
   //let startAngles = [-0.5*Math.PI,0.5*Math.PI,0.5*Math.PI];
@@ -157,7 +158,7 @@ rs.addMotions = function () {
   debugger;
   let path = this.mkMyPath();
 
-  this.addMotionsForCell(cells[0],path,100,this.shapeConnector);// put back
+  this.addMotionsForCell(cells[0],[path],100,this.shapeConnectorr);
 /*
  // let path = mkSpiral({turns:6,pointsPerTurn:18,iRadius,deltaRadius,center});
 
@@ -169,7 +170,7 @@ rs.addMotions = function () {
     let path=paths[x];
     //let path=paths[z];
     //debugger;
-    this.addMotionsForCell(cell,path,30,this.shapeConnector);// put back
+    this.addMotionsForCell(cell,path,30,this.shapeConnectorr);
   });*/
 }
  

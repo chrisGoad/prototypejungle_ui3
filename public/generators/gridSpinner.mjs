@@ -58,7 +58,7 @@ rs.shapeConnectorC = function (params) { //,connectJump) {
 }
 
 
-rs.addMotionsForCell = function (cell,path,numPhases,shapeConnector) {
+rs.addMotionsForCell = function (cell,paths,numPhases,shapeConnector) {
   let {deltaX,numSteps,circleP,iPolygonP,shapeConnectorr,cycles} = this;
   let duration = numSteps;
   let ip = 1/numPhases;
@@ -69,7 +69,7 @@ rs.addMotionsForCell = function (cell,path,numPhases,shapeConnector) {
   let {polygon,coords} = cell;
   let {x,y} = coords;
   let shapeP=circleP;
-  this.mkPathMotionGroup({cell,phases,path,cycles,duration,shapeP,oPoly:polygon,shapeConnector});
+  this.mkPathMotionGroup({cell,phases,paths,cycles,duration,shapeP,oPoly:polygon,shapeConnector});
 }
 
  
@@ -92,7 +92,7 @@ rs.initialize = function() {
     return;
   }
   this.connectShapes();
-  this.hideUnconnectedShapes();
+  //this.hideUnconnectedShapes();
   //this.callIfDefined('afterInitialize');
   debugger;
 } 

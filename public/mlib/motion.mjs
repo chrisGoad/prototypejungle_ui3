@@ -134,9 +134,10 @@ item.showPathh = function (path,fc,lineP) {
    
     
   item.execPathMotion=  function (mg,m,t,i) {
-  let {startTime:st,duration:dur,cycles,path} = mg;
-  let {phase,shape,oPoly,lastCycle} = m;
- // debugger;
+  let {startTime:st,duration:dur,cycles,paths} = mg;
+  let {phase,shape,oPoly,lastCycle,pathNum} = m;
+  let path = paths[pathNum];
+  debugger;
   let inC = this.inCycle(mg,t);
   let {cycleNum,howFar:hf} = inC;
   if (cycleNum !== lastCycle) {
@@ -198,12 +199,16 @@ item.execMotion = function (mg,m,t,i) {
 }
 
 item.execMotionGroup = function (mg,t) {
-  let {motions,polygon} = mg;
+  let {motionsPerPath,polygon,paths} = mg;
   let positions = mg.positions = [];
-  let ln = motions.length;
-  for (let i=0;i<ln;i++) {
-    let m = motions[i];
-    this.execMotion(mg,m,t,i);
+  let pathsln = paths.length;
+  for (let i=0;i<pathsln;i++) {
+    let motions = motionsPerPath[i];
+    let ln = motions.length;
+    for (let i=0;i<ln;i++) {
+      let m = motions[i];
+      this.execMotion(mg,m,t,i);
+    }
   }
   //debugger;
   if (polygon) {
@@ -239,18 +244,18 @@ item.mkP2Pmotion = function (mg,params) { //point to point
 }
 
 item.mkPathMotion = function (mg,params) { //point to point
-  let {motions,shapeP} = mg;
+  let {shapeP} = mg;
   let {mshapes} = this;
-  let {phase,oPoly} = params;
+  let {phase,oPoly,motions,shapes,pathNum} = params;
   //debugger;
   //let {motions,mshapes,stepsSoFar:ssf} = this;
   let shape = shapeP?shapeP.instantiate():null;
   if (shape) {
     mshapes.push(shape);
   }
-  let m= {shape,phase,oPoly};
+  let m= {shape,phase,oPoly,pathNum};
   motions.push(m);
-  return shape;
+  shapes.push(shape);
   
 }
 item.mkCircularMotion = function (mg,startPhase) {
@@ -319,16 +324,23 @@ item.mkP2PmotionGroup = function (params) {
 
 item.mkPathMotionGroup = function (params) {
   let {stepsSoFar:ssf,motionGroups,mshapes} = this;
-  let {cell,duration,cycles,path,shapeP,oPoly,phases,shapeConnector} = params;
+  let {cell,duration,cycles,paths,shapeP,oPoly,phases,shapeConnector} = params;
   debugger;
-  let mg = {kind:'Path',duration,cycles,startTime:ssf,shapeP,path,motions:[]};
-  let ln = phases.length;
-  let shapes = [];
-  for (let i=0;i<ln;i++) {
-    let params = {phase:phases[i],oPoly:oPoly}
-    shapes.push(this.mkPathMotion(mg,params));
+  let mg = {kind:'Path',duration,cycles,startTime:ssf,shapeP,paths,shapesPerPath:[],motionsPerPath:[]};
+  let pathsln = paths.length;
+  let shapesPerPath = mg.shapesPerPath;
+  let motionsPerPath = mg.motionsPerPath;
+  for (let i = 0;i<pathsln;i++) {
+    let ln = phases.length;
+    let shapes = [];
+    let motions = [];
+    for (let j=0;j<ln;j++) {
+      let params = {phase:phases[j],oPoly:oPoly,motions,shapes,pathNum:i}
+      this.mkPathMotion(mg,params);
+    }
+    shapesPerPath.push(shapes);
+    motionsPerPath.push(motions);
   }
-  mg.shapes = shapes;
   if (shapeConnector) {
     shapeConnector.call(this,mg,cell);
   }

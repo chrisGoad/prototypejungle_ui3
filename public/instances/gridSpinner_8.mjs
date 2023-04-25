@@ -12,7 +12,7 @@ let nr = 8;
 //
 nr =1;
 rs.setName('gridSpinner_8');
-let topParams = {width:wd,height:wd,numRows:nr,numCols:nr,framePadding:.1*wd,stepsPerMove:10,numStepss:24,numSteps:200,center:Point.mk(0,0),radius:wd/4,
+let topParams = {width:wd,height:wd,numRows:nr,numCols:nr,framePadding:.1*wd,stepsPerMove:10,numStepss:24,numSteps:1000,center:Point.mk(0,0),radius:wd/4,
                  cycles:1,frameStroke:'rgb(2,2,2)',frameStrokee:'white',frameStrokeWidth:1,saveAnimation:1,stepInterval:40,randomConnections:1,
                  pauseAtt:[29,30,59,60],showThePath:0}
 Object.assign(rs,topParams);
@@ -48,7 +48,7 @@ rs.selj = function (cell,i,ln) {
 }
 rs.selk = function (cell,j,ln) {
   //return j+Math.floor(Math.random()*36)%ln;
-  return (j+6)%ln;
+  return (j+5)%ln;
 }
 /*
 rs.shapeConnector = function (mg,cell) {
@@ -60,14 +60,14 @@ rs.shapeConnector = function (mg,cell) {
 
 rs.shapeConnector = function (mg,cell) {
   let {selj,selk} = this;
-  this.shapeConnectorC({motionGroup:mg,cell,numConnections:25,selj,selk});
+  this.shapeConnectorC({motionGroup:mg,cell,numConnections:225,selj,selk});
 }
 
 rs.addMotions = function () {
   debugger;
   let {cells} = this;
 
-  let path = this.thePath = this.mkRandomPath({numPoints:10});
+  let path = this.thePath = this.mkRandomPath({numPoints:13});
 
   this.addMotionsForCell(cells[0],path,100,this.shapeConnector);// put back
 /*
