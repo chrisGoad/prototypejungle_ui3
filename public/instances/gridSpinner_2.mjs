@@ -46,29 +46,22 @@ rs.toQuad = function(p) {
 }
 
 
+
+
+rs.connectIndices = function (params) {
+  let {cell,pathIndex:pi,connectIndex:ci,pathLength:ln} = params;
+  let e0si = ci;
+  let e1pi = pi;
+  let e1si = (ci+7)%ln;
+  return {end0ShapeIndex:e0si,end1PathIndex:e1pi,end1ShapeIndex:e1si};
+}
+
 rs.shapeConnector = function (mg,cell) {
   debugger;
-  let {selj,selk} = this;
-  this.shapeConnectorC({motionGroup:mg,cell,numConnections:5,selj,selk});
+  let {connectIndices} = this;
+  this.shapeConnectorC({motionGroup:mg,cell,numConnections:5,connectIndices});
 }
-rs.selj = function (cell,i,ln) {
-  return i;
-}
-rs.selk = function (cell,j,ln) {
-  return (j+7)%ln;
-}
-/*
-rs.shapeConnector = function (mg) {
-  debugger;
-  let {connectedShapes:cns} = this;
-  let shapes = mg.shapes;
-  for (let i=0;i<10;i++) {
-    let sh0 = shapes[i];
-    let sh1 = shapes[i+7];
-    cns.push([sh0,sh1]);
-  }
-}
-*/
+
 rs.addMotions = function () {
   let {cells,deltaX,numSteps,circleP,iPolygonP,shapeConnector} = this;
   this.connectedShapes = [];
@@ -95,7 +88,7 @@ rs.addMotions = function () {
     /*let {polygon,coords} = cell;
     let {x,y} = coords;
     let shapeP=circleP;*/
-    this.addMotionsForCell(cell,path,17,this.shapeConnector);
+    this.addMotionsForCell(cell,[path],17,this.shapeConnector);
 
     //this.mkPathMotionGroup({phases,path,cycles,duration,shapeP,oPoly:polygon,shapeConnector});
   });

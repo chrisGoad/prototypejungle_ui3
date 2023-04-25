@@ -40,28 +40,21 @@ rs.initProtos = function () {
   circleP['stroke-width'] = 0;
   
 }
-rs.selj = function (cell,i,ln) {
-  let {coords} = cell;
-  let {x,y} = coords;
-  return (i+y)%ln;
-  return Math.floor(Math.random()*ln);
-}
-rs.selk = function (cell,j,ln) {
-  //return j+Math.floor(Math.random()*36)%ln;
-  return (j+5)%ln;
-}
-/*
-rs.shapeConnector = function (mg,cell) {
-  let {selj,selk} = this;
-  this.shapeConnectorC(mg,cell,25,selj,selk);
+
+rs.connectIndices = function (params) {
+  let {cell,pathIndex:pi,connectIndex:ci,pathLength:ln} = params;
+  let e0si = Math.floor(Math.random()*ln);
+  let e1pi = pi;
+  let e1si = (e0si + 5)%ln;
+  return {end0ShapeIndex:e0si,end1PathIndex:e1pi,end1ShapeIndex:e1si};
 }
 
-*/
-
 rs.shapeConnector = function (mg,cell) {
-  let {selj,selk} = this;
-  this.shapeConnectorC({motionGroup:mg,cell,numConnections:225,selj,selk});
+  debugger;
+  let {connectIndices} = this;
+  this.shapeConnectorC({motionGroup:mg,cell,numConnections:25,connectIndices});
 }
+
 
 rs.addMotions = function () {
   debugger;
@@ -69,7 +62,7 @@ rs.addMotions = function () {
 
   let path = this.thePath = this.mkRandomPath({numPoints:13});
 
-  this.addMotionsForCell(cells[0],path,100,this.shapeConnector);// put back
+  this.addMotionsForCell(cells[0],[path],100,this.shapeConnector);// put back
 /*
   let path = mkSpiral({turns:6,pointsPerTurn:18,iRadius,deltaRadius,center});
   cells.forEach((cell) =>{
@@ -80,7 +73,7 @@ rs.addMotions = function () {
     let path=paths[x];
     //let path=paths[z];
     //debugger;
-    this.addMotionsForCell(cell,path,30,this.shapeConnector);// put back
+    this.addMotionsForCell(cell,[path],30,this.shapeConnector);// put back
   });*/
 }
  

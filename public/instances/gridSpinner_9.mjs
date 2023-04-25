@@ -57,13 +57,29 @@ rs.shapeConnector = function (mg,cell) {
   //this.shapeConnectorC(mg,cell,250,selj,selk);
 }
 
+
+rs.connectIndices = function (params) {
+  let {cell,pathIndex:pi,connectIndex:ci,pathLength:ln} = params;
+  let e0si = ci;
+  let e1pi = pi;
+  let e1si = (ci+Math.floor(Math.random()*6))%ln;
+  return {end0ShapeIndex:e0si,end1PathIndex:e1pi,end1ShapeIndex:e1si};
+}
+
+rs.shapeConnector = function (mg,cell) {
+  debugger;
+  let {connectIndices} = this;
+  this.shapeConnectorC({motionGroup:mg,cell,numConnections:40,connectIndices});
+}
+
+
 rs.addMotions = function () {
   debugger;
   let {cells} = this;
   let radius = .25;
   let path = this.thePath = this.mkWavyCircle({numPoints:50,radius,deltaRadius:radius*0.1,numWaves:8,center:Point.mk(.25,.25),startAngle:0});
 
-  this.addMotionsForCell(cells[0],path,100,this.shapeConnector);// put back
+  this.addMotionsForCell(cells[0],[path],100,this.shapeConnector);// put back
 /*
   let path = mkSpiral({turns:6,pointsPerTurn:18,iRadius,deltaRadius,center});
   cells.forEach((cell) =>{
