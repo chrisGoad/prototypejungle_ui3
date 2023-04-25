@@ -57,6 +57,7 @@ rs.toQuad = function(p) {
 
 
 rs.shapeConnector = function (mg,numConnections,connectJump) {
+  debugger;
   let {connectedShapes:cns} = this;
   let shapes = mg.shapes;
   let ln = shapes.length;

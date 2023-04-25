@@ -137,7 +137,6 @@ item.showPathh = function (path,fc,lineP) {
   let {startTime:st,duration:dur,cycles,paths} = mg;
   let {phase,shape,oPoly,lastCycle,pathNum} = m;
   let path = paths[pathNum];
-  debugger;
   let inC = this.inCycle(mg,t);
   let {cycleNum,howFar:hf} = inC;
   if (cycleNum !== lastCycle) {
@@ -350,7 +349,7 @@ item.mkPathMotionGroup = function (params) {
 
 item.connectShapes = function () {
   let {connectorP,connectedShapes:cns} = this;
-  let connectors = this.set('connectors',arrayShape.mk());12
+  let connectors = this.set('connectors',arrayShape.mk());
   let ln = cns.length;
   for (let i=0;i<ln;i++) {
      let line = connectorP.instantiate();

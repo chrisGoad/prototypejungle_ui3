@@ -41,25 +41,31 @@ rs.toQuad = function(p) {
 //rs.shapeConnectorC = function (mg,cell,numConnections,selj,selk) { //,connectJump) {
 rs.shapeConnectorC = function (params) { //,connectJump) {
   let {connectedShapes:cns,numC} = this;
-  let {motionGroup:mg,cell,numConnections,selj,selk} = params;
+  let {motionGroup:mg,cell,numConnections,connectIndices:ci} = params;
   debugger;
-  let shapes = mg.shapes;
-  let ln = shapes.length;
-  for (let i=0;i<numConnections;i++) {
-    let j = selj.call(this,cell,i,ln);
-    let k = selk.call(this,cell,j,ln);
-   // let j = Math.floor(Math.random()*ln);
-   // let k = Math.floor(Math.random()*ln);
-    let sh0 = shapes[j];
-    let sh1 = shapes[k];
-    //let sh1 = rc?shapes[k]:shapes[(j+connectJump)%ln];
-    cns.push([sh0,sh1]);
+  let shapesPerPath = mg.shapesPerPath;
+  let pln = shapesPerPath.length;
+  for (let i = 0;i<pln;i++) {
+    let shapes = shapesPerPath[i];
+    let ln = shapes.length;
+    for (let j=0;j<numConnections;j++) {
+      let cparams = {cell,pathIndex:i,connectIndex:j,pathLength:ln}
+      let cis =  ci.call(this,cparams); 
+      //let s1i = selk.call(this,cell,s0is,ln);
+     // let j = Math.floor(Math.random()*ln);
+     // let k = Math.floor(Math.random()*ln);
+      let sh0 = shapes[cis.end0ShapeIndex];
+      let e1shapes = shapesPerPath[cis.end1PathIndex]; 
+      let sh1 = e1shapes[cis.end1ShapeIndex];
+      //let sh1 = rc?shapes[k]:shapes[(j+connectJump)%ln];
+      cns.push([sh0,sh1]);
+    }
   }
 }
 
 
 rs.addMotionsForCell = function (cell,paths,numPhases,shapeConnector) {
-  let {deltaX,numSteps,circleP,iPolygonP,shapeConnectorr,cycles} = this;
+  let {deltaX,numSteps,circleP,iPolygonP,cycles} = this;
   let duration = numSteps;
   let ip = 1/numPhases;
   let phases =[];
@@ -92,7 +98,7 @@ rs.initialize = function() {
     return;
   }
   this.connectShapes();
-  //this.hideUnconnectedShapes();
+  this.hideUnconnectedShapes();
   //this.callIfDefined('afterInitialize');
   debugger;
 } 
