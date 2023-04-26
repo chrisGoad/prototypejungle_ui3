@@ -14,7 +14,7 @@ nr =4;
 rs.setName('gridSpinner_5');
 let topParams = {width:wd,height:wd,numRows:nr,numCols:nr,framePadding:.1*wd,stepsPerMove:10,numStepss:24,numSteps:200,center:Point.mk(0,0),radius:wd/4,
                  cycles:1,frameStroke:'rgb(2,2,2)',frameStrokee:'white',frameStrokeWidth:1,saveAnimation:1,stepInterval:40,randomConnections:1,
-                 pauseAtt:[29,30,59,60]}
+                 pauseAtt:[29,30,59,60],numPhases:30,numConnections:10}
 Object.assign(rs,topParams);
 
 
@@ -41,11 +41,15 @@ rs.initProtos = function () {
   circleP.dimension= 2;
   circleP.fill = 'white';
   circleP['stroke-width'] = 0;
+  let icircleP = this.icircleP = circlePP.instantiate();
+  icircleP.dimension= 2;
+  icircleP.fill = 'red';
+  icircleP['stroke-width'] = 0;
   
 }
 
 rs.connectIndices = function (params) {
-  let {cell,pathIndex:pi,connectIndex:ci,pathLength:ln} = params;
+  let {cell,pathIndex:pi,connectIndex:ci,numPhases:ln} = params;
   
   let e0si = Math.floor(Math.random()*ln);
   let e1pi = pi;
@@ -62,7 +66,7 @@ rs.shapeConnector = function (mg,cell) {
 
 
 rs.addMotions = function () {
-  let {cells} = this;
+  let {cells,numPhases,shapeConnector} = this;
   this.connectedShapes = [];
   let path0 = this.mkPath0();
   let path1 = this.mkPath1();
@@ -76,7 +80,9 @@ rs.addMotions = function () {
     let z = (x+y)%4;
     let path=paths[x];
     //let path=paths[z];
-    this.addMotionsForCell(cell,[path],30,this.shapeConnector);
+      this.addMotionsForCell({cell,paths:[path],numPhases,shapeConnector});
+
+   // this.addMotionsForCell(cell,[path],30,this.shapeConnector);
 
     //this.addMotionsForCell(cell,path,30);
   });

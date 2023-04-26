@@ -2461,6 +2461,24 @@ LineSegment.intersections = function (segs) {
   return istcs;
 }
 
+const allSegmentIntersections = function (segs) {
+  let ln = segs.length;
+  let iscts = [];
+  for (let i=0;i<(ln-1);i++) {
+    let seg0 = segs[i];
+    for (let j=i+1;j<ln;j++) {
+      let seg1=segs[j];
+      let isct = seg0.intersect(seg1);
+      if (isct) {
+        iscts.push(isct);
+      }
+    }
+  }
+  return iscts;
+}
+
+
+           
 LineSegment.firstIntersection = function (segs) {
   let seg = this;
   let ln = segs.length;
@@ -2478,4 +2496,4 @@ LineSegment.firstIntersection = function (segs) {
     
     
 export {rotationMatrix,movetoInGlobalCoords,toOwnCoords,toPoint,angleToDirection,Point,Line,Rectangle,Polygon,Transform,Ray,degreesToRadians,
-        LineSegment,Circle,Arc,boundsForRectangles,rp_time,pointArrayToLineSegments,geometriesIntersect,moveBy,oneDf};
+        LineSegment,Circle,Arc,boundsForRectangles,rp_time,pointArrayToLineSegments,geometriesIntersect,moveBy,oneDf,allSegmentIntersections};

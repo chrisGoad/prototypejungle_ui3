@@ -65,6 +65,17 @@ item.mkRandomPath = function (params) {
   }
   return path;
 }
+
+item.mkRectangularPath = function (rect) {
+  let {corner:crn,extent:ext} = rect;
+  let {x:cx,y:cy} = crn;
+  let {x:ex,y:ey} = ext;
+  let LL = Point.mk(cx,cy+ey);
+  let UL = Point.mk(cx,cy);
+  let UR = Point.mk(cx+ex,cy);
+  let LR = Point.mk(cx+ex,cy+ey);
+  return [LL,UL,UR,LR,LL];
+}
      
 item.mkCircle = function (params) {
   let {radius:r,numPoints:np,center,startAngle:sa,endAngle:ea,clockWise:clkw} = params;

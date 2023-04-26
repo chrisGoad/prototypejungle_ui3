@@ -14,7 +14,7 @@ nr =1;
 rs.setName('gridSpinner_8');
 let topParams = {width:wd,height:wd,numRows:nr,numCols:nr,framePadding:.1*wd,stepsPerMove:10,numStepss:24,numSteps:1000,center:Point.mk(0,0),radius:wd/4,
                  cycles:1,frameStroke:'rgb(2,2,2)',frameStrokee:'white',frameStrokeWidth:1,saveAnimation:1,stepInterval:40,randomConnections:1,
-                 pauseAtt:[29,30,59,60],showThePath:0}
+                 pauseAtt:[29,30,59,60],numConnections:35,numPhases:50,showThePath:0}
 Object.assign(rs,topParams);
 
 
@@ -38,18 +38,21 @@ rs.initProtos = function () {
   circleP.dimension= 2;
   circleP.fill = 'white';
   circleP['stroke-width'] = 0;
-  
+  let icircleP = this.icircleP = circlePP.instantiate();
+  icircleP.dimension= 2;
+  icircleP.fill = 'red';
+  icircleP['stroke-width'] = 0;
 }
 
 rs.connectIndices = function (params) {
-  let {cell,pathIndex:pi,connectIndex:ci,pathLength:ln} = params;
+  let {cell,pathIndex:pi,connectIndex:ci,numPhases:ln} = params;
   let e0si = Math.floor(Math.random()*ln);
   let e1pi = pi;
-  let e1si = (e0si + 5)%ln;
+  let e1si = (e0si + 3)%ln;
   return {end0ShapeIndex:e0si,end1PathIndex:e1pi,end1ShapeIndex:e1si};
 }
 
-rs.shapeConnector = function (mg,cell) {
+rs.shapeConnectorrr = function (mg,cell) {
   debugger;
   let {connectIndices} = this;
   this.shapeConnectorC({motionGroup:mg,cell,numConnections:25,connectIndices});
@@ -58,11 +61,13 @@ rs.shapeConnector = function (mg,cell) {
 
 rs.addMotions = function () {
   debugger;
-  let {cells} = this;
+    let {cells,numPhases,shapeConnector} = this;
+
 
   let path = this.thePath = this.mkRandomPath({numPoints:13});
+  this.addMotionsForCell({cell:cells[0],paths:[path],numPhases,shapeConnector});
 
-  this.addMotionsForCell(cells[0],[path],100,this.shapeConnector);// put back
+  //this.addMotionsForCell(cells[0],[path],100,this.shapeConnector);// put back
 /*
   let path = mkSpiral({turns:6,pointsPerTurn:18,iRadius,deltaRadius,center});
   cells.forEach((cell) =>{

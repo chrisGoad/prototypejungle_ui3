@@ -323,9 +323,9 @@ item.mkP2PmotionGroup = function (params) {
 
 item.mkPathMotionGroup = function (params) {
   let {stepsSoFar:ssf,motionGroups,mshapes} = this;
-  let {cell,duration,cycles,paths,shapeP,oPoly,phases,shapeConnector} = params;
+  let {cell,duration,cycles,paths,phases,shapeP,oPoly,shapeConnector} = params;
   debugger;
-  let mg = {kind:'Path',duration,cycles,startTime:ssf,shapeP,paths,shapesPerPath:[],motionsPerPath:[]};
+  let mg = {kind:'Path',duration,cycles,phases,startTime:ssf,shapeP,paths,shapesPerPath:[],motionsPerPath:[]};
   let pathsln = paths.length;
   let shapesPerPath = mg.shapesPerPath;
   let motionsPerPath = mg.motionsPerPath;
@@ -350,21 +350,31 @@ item.mkPathMotionGroup = function (params) {
 item.connectShapes = function () {
   let {connectorP,connectedShapes:cns} = this;
   let connectors = this.set('connectors',arrayShape.mk());
+  let connectorSegs = this.set('connectorSegs',arrayShape.mk());
+  let connectorIntersections = this.set('connectorIntersections',arrayShape.mk());
   let ln = cns.length;
   for (let i=0;i<ln;i++) {
      let line = connectorP.instantiate();
      connectors.push(line);
+     let seg = LineSegment.mk(Point.mk(0,0),Point.mk(0,1));
+     connectorSegs.push(seg)
   }
 }
 
+  
+  
+  
 item.updateConnectors = function () {
-  let {connectors,connectedShapes:cns} = this;
+  let {connectors,connectorSegs:cnsegs,connectedShapes:cns,connectorIntersections:cints,icircleP} = this;
   if (!cns) {
     return;
   }
+  debugger;
+ 
   let ln = cns.length;
   for (let i=0;i<ln;i++) {
     let connector = connectors[i];
+    let connSeg = cnsegs[i];
     let connection = cns[i];
     let c0 = connection[0];
     let c1 = connection[1]
@@ -394,7 +404,28 @@ item.updateConnectors = function () {
     c1.update();
     connector.setEnds(tr0,tr1);
     connector.update();
+    connSeg.setEnds(tr0,tr1);
   }
+  let intscts = allSegmentIntersections(cnsegs);
+  let lnscts = intscts.length;
+  let lncints = cints.length;
+  if (lnscts >= lncints) {
+    for (let i=lncints;i<lnscts;i++) {
+      let crc = icircleP.instantiate();
+      cints.push(crc);
+    }
+  }
+  for (let i=0;i<lnscts;i++) {
+    let sct = intscts[i];
+    let crc = cints[i];
+    crc.show();
+    crc.moveto(sct);
+  }
+  for (let i=lnscts;i<lncints;i++) {
+    let crc = cints[i]
+    crc.hide();
+  }
+      
 }
     
 item.hideUnconnectedShapes = function () {

@@ -45,11 +45,12 @@ rs.shapeConnectorC = function (params) { //,connectJump) {
   debugger;
   let shapesPerPath = mg.shapesPerPath;
   let pln = shapesPerPath.length;
+  let numPhases = mg.phases.length;
   for (let i = 0;i<pln;i++) {
     let shapes = shapesPerPath[i];
     let ln = shapes.length;
     for (let j=0;j<numConnections;j++) {
-      let cparams = {cell,pathIndex:i,connectIndex:j,pathLength:ln}
+      let cparams = {cell,pathIndex:i,connectIndex:j,numPhases}
       let cis =  ci.call(this,cparams); 
       if (!cis) {
         continue;
@@ -61,6 +62,9 @@ rs.shapeConnectorC = function (params) { //,connectJump) {
       let e1shapes = shapesPerPath[cis.end1PathIndex]; 
       let sh1 = e1shapes[cis.end1ShapeIndex];
       //let sh1 = rc?shapes[k]:shapes[(j+connectJump)%ln];
+      if (!sh0) {
+         debugger;
+      }
       cns.push([sh0,sh1]);
     }
   }
@@ -75,7 +79,8 @@ rs.shapeConnector = function (mg,cell) {
 
 
 
-rs.addMotionsForCell = function (cell,paths,numPhases,shapeConnector) {
+rs.addMotionsForCell = function (params) {
+  let {cell,paths,numPhases,shapeConnector}  = params;
   let {deltaX,numSteps,circleP,iPolygonP,cycles} = this;
   let duration = numSteps;
   let ip = 1/numPhases;

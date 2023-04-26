@@ -14,7 +14,7 @@ nr =1;
 rs.setName('gridSpinner_9');
 let topParams = {width:wd,height:wd,numRows:nr,numCols:nr,numConnections:400,framePadding:.1*wd,stepsPerMove:10,numStepss:24,numSteps:200,center:Point.mk(0,0),radius:wd/4,
                  cycles:1,frameStroke:'rgb(2,2,2)',frameStrokee:'white',frameStrokeWidth:1,saveAnimation:1,stepInterval:40,randomConnections:1,
-                 pauseAtt:[29,30,59,60],showThePath:0}
+                 pauseAtt:[29,30,59,60],numConnections:35,numPhases:50,showThePath:0}
 Object.assign(rs,topParams);
 
 
@@ -38,6 +38,10 @@ rs.initProtos = function () {
   circleP.dimension= 2;
   circleP.fill = 'white';
   circleP['stroke-width'] = 0;
+  let icircleP = this.icircleP = circlePP.instantiate();
+  icircleP.dimension= 2;
+  icircleP.fill = 'red';
+  icircleP['stroke-width'] = 0;
   
 }
 rs.selj = function (cell,i,ln) {
@@ -51,7 +55,7 @@ rs.selk = function (cell,j,ln) {
   return (j+6)%ln;
 }
 
-rs.shapeConnector = function (mg,cell) {
+rs.shapeConnectorr = function (mg,cell) {
   let {selj,selk} = this;
   this.shapeConnectorC({motionGroup:mg,cell,numConnections:40,selj,selk});
   //this.shapeConnectorC(mg,cell,250,selj,selk);
@@ -59,14 +63,14 @@ rs.shapeConnector = function (mg,cell) {
 
 
 rs.connectIndices = function (params) {
-  let {cell,pathIndex:pi,connectIndex:ci,pathLength:ln} = params;
+  let {cell,pathIndex:pi,connectIndex:ci,numPhases:ln} = params;
   let e0si = ci;
   let e1pi = pi;
   let e1si = (ci+Math.floor(Math.random()*6))%ln;
   return {end0ShapeIndex:e0si,end1PathIndex:e1pi,end1ShapeIndex:e1si};
 }
 
-rs.shapeConnector = function (mg,cell) {
+rs.shapeConnectorrr = function (mg,cell) {
   debugger;
   let {connectIndices} = this;
   this.shapeConnectorC({motionGroup:mg,cell,numConnections:40,connectIndices});
@@ -75,11 +79,12 @@ rs.shapeConnector = function (mg,cell) {
 
 rs.addMotions = function () {
   debugger;
-  let {cells} = this;
+    let {cells,numPhases,shapeConnector} = this;
   let radius = .25;
   let path = this.thePath = this.mkWavyCircle({numPoints:50,radius,deltaRadius:radius*0.1,numWaves:8,center:Point.mk(.25,.25),startAngle:0});
+  this.addMotionsForCell({cell:cells[0],paths:[path],numPhases,shapeConnector});
 
-  this.addMotionsForCell(cells[0],[path],100,this.shapeConnector);// put back
+ // this.addMotionsForCell(cells[0],[path],100,this.shapeConnector);// put back
 /*
   let path = mkSpiral({turns:6,pointsPerTurn:18,iRadius,deltaRadius,center});
   cells.forEach((cell) =>{
