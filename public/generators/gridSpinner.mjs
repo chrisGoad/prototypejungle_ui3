@@ -51,6 +51,9 @@ rs.shapeConnectorC = function (params) { //,connectJump) {
     for (let j=0;j<numConnections;j++) {
       let cparams = {cell,pathIndex:i,connectIndex:j,pathLength:ln}
       let cis =  ci.call(this,cparams); 
+      if (!cis) {
+        continue;
+      }
       //let s1i = selk.call(this,cell,s0is,ln);
      // let j = Math.floor(Math.random()*ln);
      // let k = Math.floor(Math.random()*ln);
@@ -62,6 +65,14 @@ rs.shapeConnectorC = function (params) { //,connectJump) {
     }
   }
 }
+
+
+rs.shapeConnector = function (mg,cell) {
+  debugger;
+  let {connectIndices,numConnections} = this;
+  this.shapeConnectorC({motionGroup:mg,cell,numConnections,connectIndices});
+}
+
 
 
 rs.addMotionsForCell = function (cell,paths,numPhases,shapeConnector) {
