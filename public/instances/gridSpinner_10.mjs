@@ -49,9 +49,13 @@ rs.connectIndices = function (params) {
   let {cell,pathIndex:pi,connectIndex:ci,numPhases:ln} = params;
   debugger;;
   let e0si = Math.floor(Math.random()*ln);
-  let e1pi = (pi+1)%2
+  let e1pi;
+  if (pi === 0) {e1pi = 1};
+  if (pi === 1) {e1pi = 0};
+  if (pi === 2) {e1pi = 3};
+  if (pi === 3) {e1pi = 2};
   //let e1si = (e0si + 5)%ln;
-  let e1si = (e0si+Math.floor(Math.random()*5))%ln;
+  let e1si = (e0si+Math.floor(Math.random()*9))%ln;
   return {end0ShapeIndex:e0si,end1PathIndex:e1pi,end1ShapeIndex:e1si};
 }
 
@@ -64,8 +68,11 @@ rs.addMotions = function () {
   let radius = 0.25;
   let startAngle = 0;
 
-let d0 = 0.1;
-let d1 = 0.3;
+//let d0 = 0.0;
+//let d1 = 0.1;
+//let d3 = d1-d0;
+//let d2 = 0.3;
+//let d3 = 0.4;
   //let path0 = this.thePath = this.mkCircle({numPoints:np,radius,startAngle,center:Point.mk(0.25,0.5)});
   /*let LL = Point.mk(d,d);
   let UL = Point.mk(d,1-d);
@@ -76,18 +83,50 @@ let d1 = 0.3;
   let path2 =  [UR,LR];
   let path3 =  [LR,LL];*/
   debugger;
-  let rect0 = Rectangle.mk(Point.mk(d0,d0),Point.mk(1-2*d0,1-2*d0));
+ /*
+ let rect0 = Rectangle.mk(Point.mk(d0,d0),Point.mk(1-2*d0,1-2*d0));
   let rect1 = Rectangle.mk(Point.mk(d1,d1),Point.mk(1-2*d1,1-2*d1));
+  let rect2 = Rectangle.mk(Point.mk(d2,d2),Point.mk(1-2*d2,1-2*d2));
+  let rect3 = Rectangle.mk(Point.mk(d3,d3),Point.mk(1-2*d3,1-2*d3)); 
   
+  
+  let crn0 = Point.mk(0,0);
+  let crn1 = Point.mk(d1,d1);
+  let crn2 = Point.mk(.3,.3);
+  let crn3 = Point.mk(.3+d1,.3+d1);
+  let ext0 = Point.mk(.6,.6);
+  let ext1 = Point.mk(.6-2*d1,.6-2*d1);
+ */ 
+  let d1 = .1;
+  let d2 = .21
+  let d3 = d1+d2
+  let crn0 = Point.mk(0,0);
+  let crn1 = Point.mk(d1,d1);
+  let crn2 = Point.mk(d2,d2);
+  let crn3 = Point.mk(d3,d3);
+  let ext0 = Point.mk(1,1);
+  let ext1 = Point.mk(1-2*d1,1-2*d1);
+  let ext2 = Point.mk(1-2*d2,1-2*d2);
+  let ext3 = Point.mk(1-2*d3,1-2*d3);
+    debugger;
+
+   let rect0 = Rectangle.mk(crn0,ext0);
+   let rect1 = Rectangle.mk(crn1,ext1);
+   let rect2 = Rectangle.mk(crn2,ext2);
+   let rect3 = Rectangle.mk(crn3,ext3);
+  debugger;
   let path0 = this.mkRectangularPath(rect0);
   let path1 = this.mkRectangularPath(rect1);
+  let path2 = this.mkRectangularPath(rect2).reverse();
+  let path3 = this.mkRectangularPath(rect3).reverse();
   /*
   let path0 = this.mkRandomPath({numPoints:2,rectangle:Rectangle.mk(Point.mk(0,0),Point.mk(0.5,0.5))});
   let path1 =  this.mkRandomPath({numPoints:2,rectangle:Rectangle.mk(Point.mk(0.5,0),Point.mk(1,.5))});
   let path2 =  this.mkRandomPath({numPoints:2,rectangle:Rectangle.mk(Point.mk(.5,.5),Point.mk(1,1))});
   let path3 =  this.mkRandomPath({numPoints:2,rectangle:Rectangle.mk(Point.mk(0,.5),Point.mk(.5,1))});*/
   //let pat  this.addMotionsForCell({cell:cells[0],paths:[path],numPhases,shapeConnector});
-  this.addMotionsForCell({cell:cells[0],paths:[path0,path1],numPhases,shapeConnector});
+  this.addMotionsForCell({cell:cells[0],paths:[path0,path1,path2,path3],numPhases,shapeConnector});
+  //this.addMotionsForCell({cell:cells[0],paths:[path0,path1],numPhases,shapeConnector});
 
   //this.addMotionsForCell(cells[0],[path0,path1],200,this.shapeConnector);// put back
 /*

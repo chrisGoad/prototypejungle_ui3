@@ -1314,8 +1314,8 @@ Rectangle.mk = function (a0,a1) {
     c = a0.corner;
     e = a0.extent;
   }
-  rs.__setPoint("corner",c);
-  rs.__setPoint("extent",e);
+  rs.__setPoint("corner",c.copy());
+  rs.__setPoint("extent",e.copy());
   return rs;
 }
 
