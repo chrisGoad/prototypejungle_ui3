@@ -13,9 +13,8 @@ let nr = 8;
 nr =1;
 rs.setName('gridSpinner_10');
 let topParams = {width:wd,height:wd,numRows:nr,numCols:nr,framePadding:.1*wd,stepsPerMove:10,numStepss:24,numSteps:300,center:Point.mk(0,0),radius:wd/4,
-                 cycles:1,frameStroke:'rgb(2,2,2)',frameStrokee:'white',frameStrokeWidth:1,saveAnimation:1,stepInterval:40,
-                 pauseAtt:[29,30,59,60],numConnections:160,numPhases:200,showThePath:0,showIntersections:1}
-                // pauseAtt:[29,30,59,60],numConnections:100,numPhases:240,showThePath:0}
+                 cycles:1,frameStroke:'rgb(2,2,2)',frameStrokee:'white',frameStrokeWidth:1,saveAnimation:1,stepInterval:40,randomConnections:1,
+                 pauseAtt:[29,30,59,60],numConnections:160,numPhases:200,showThePath:0}
 Object.assign(rs,topParams);
 
 
@@ -24,7 +23,7 @@ rs.initProtos = function () {
   lineP['stroke-width'] = .4;
   lineP.stroke = 'cyan';
    let connectorP = this.connectorP = linePP.instantiate();
-  connectorP['stroke-width'] = .4;
+  connectorP['stroke-width'] = .9;
   connectorP.stroke = 'cyan';
   let gridPolygonP = this.gridPolygonP = polygonPP.instantiate();
   gridPolygonP['stroke-width'] = .4;
@@ -36,7 +35,7 @@ rs.initProtos = function () {
   iPolygonP['stroke-width'] = 0;
   iPolygonP.fill = 'green'; 
   let circleP = this.circleP = circlePP.instantiate();
-  circleP.dimension= 1;
+  circleP.dimension= 2;
   circleP.fill = 'white';
   circleP['stroke-width'] = 0;
    let icircleP = this.icircleP = circlePP.instantiate();
@@ -48,21 +47,17 @@ rs.initProtos = function () {
 
 rs.connectIndices = function (params) {
   let {cell,pathIndex:pi,connectIndex:ci,numPhases:ln} = params;
-  if (pi === 4) {
-    debugger;
-  }
-
+  debugger;;
   let e0si = Math.floor(Math.random()*ln);
-  //let e1si = (e0si+Math.floor(Math.random()*9))%ln;
   let e1si = (e0si+Math.floor(Math.random()*9))%ln;
+
   let e1pi;
   if (pi === 0) {e1pi = 1};
   if (pi === 1) {e1pi = 0};
   if (pi === 2) {e1pi = 3};
   if (pi === 3) {e1pi = 2};
-  if (pi === 4) {e1pi = pi;e1si = (e0si + 5)%ln;}
-  //e1pi = pi;//remove
-  ///if (pi === 4) {e1pi = pi;e1si = (e0si + 0)%ln;}
+  if (pi === 4) {e1pi = pi;e1si = (e0si + 3)%ln;}
+  //let e1si = (e0si + 5)%ln;
   return {end0ShapeIndex:e0si,end1PathIndex:e1pi,end1ShapeIndex:e1si};
 }
 
@@ -74,10 +69,40 @@ rs.addMotions = function () {
   let np =  5;
   let radius = 0.25;
   let startAngle = 0;
+
+//let d0 = 0.0;
+//let d1 = 0.1;
+//let d3 = d1-d0;
+//let d2 = 0.3;
+//let d3 = 0.4;
+  //let path0 = this.thePath = this.mkCircle({numPoints:np,radius,startAngle,center:Point.mk(0.25,0.5)});
+  /*let LL = Point.mk(d,d);
+  let UL = Point.mk(d,1-d);
+  let UR = Point.mk(1-d,1-d);
+  let LR = Point.mk(1-d,d);
+  let path0 =  [LL,UL];
+  let path1 =  [UL,UR];
+  let path2 =  [UR,LR];
+  let path3 =  [LR,LL];*/
+  debugger;
+ /*
+ let rect0 = Rectangle.mk(Point.mk(d0,d0),Point.mk(1-2*d0,1-2*d0));
+  let rect1 = Rectangle.mk(Point.mk(d1,d1),Point.mk(1-2*d1,1-2*d1));
+  let rect2 = Rectangle.mk(Point.mk(d2,d2),Point.mk(1-2*d2,1-2*d2));
+  let rect3 = Rectangle.mk(Point.mk(d3,d3),Point.mk(1-2*d3,1-2*d3)); 
+  
+  
+  let crn0 = Point.mk(0,0);
+  let crn1 = Point.mk(d1,d1);
+  let crn2 = Point.mk(.3,.3);
+  let crn3 = Point.mk(.3+d1,.3+d1);
+  let ext0 = Point.mk(.6,.6);
+  let ext1 = Point.mk(.6-2*d1,.6-2*d1);
+ */ 
   let d1 = .1;
   let d2 = .21
   let d3 = d1+d2;
-  let d4 = d3+.05;
+  let d4 = d3+.1;
   let crn0 = Point.mk(0,0);
   let crn1 = Point.mk(d1,d1);
   let crn2 = Point.mk(d2,d2);
@@ -101,17 +126,37 @@ rs.addMotions = function () {
   let path2 = this.mkRectangularPath(rect2).reverse();
   let path3 = this.mkRectangularPath(rect3).reverse();
     let path4 = this.thePath = this.mkRandomPath({rectangle:rect4,numPoints:13});
-    path4.numConnections = 35;
-    path4.numPhases = 50;
+
+  /*
+  let path0 = this.mkRandomPath({numPoints:2,rectangle:Rectangle.mk(Point.mk(0,0),Point.mk(0.5,0.5))});
+  let path1 =  this.mkRandomPath({numPoints:2,rectangle:Rectangle.mk(Point.mk(0.5,0),Point.mk(1,.5))});
+  let path2 =  this.mkRandomPath({numPoints:2,rectangle:Rectangle.mk(Point.mk(.5,.5),Point.mk(1,1))});
+  let path3 =  this.mkRandomPath({numPoints:2,rectangle:Rectangle.mk(Point.mk(0,.5),Point.mk(.5,1))});*/
+  //let pat  this.addMotionsForCell({cell:cells[0],paths:[path],numPhases,shapeConnector});
   this.addMotionsForCell({cell:cells[0],paths:[path0,path1,path2,path3,path4],numPhases,shapeConnector});
-  //this.addMotionsForCell({cell:cells[0],paths:[path4],numPhases,shapeConnector});
+  //this.addMotionsForCell({cell:cells[0],paths:[path0,path1],numPhases,shapeConnector});
+
+  //this.addMotionsForCell(cells[0],[path0,path1],200,this.shapeConnector);// put back
+/*
+  let path = mkSpiral({turns:6,pointsPerTurn:18,iRadius,deltaRadius,center});
+  cells.forEach((cell) =>{
+    let {coords} = cell;
+    //debugger;
+    let {x,y} = coords;
+    let z = (x+y)%4;
+    let path=paths[x];
+    //let path=paths[z];
+    //debugger;
+    this.addMotionsForCell(cell,[path],30,this.shapeConnector);// put back
+  });*/
 }
  
 rs.showPaths= function () {
    debugger;
    let {connectorP,thePath} = this;
+  //return 0;
   this.showPath(thePath,100,connectorP);
-  //return 1;
+  return 1;
 }
   
 

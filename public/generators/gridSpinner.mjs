@@ -41,14 +41,20 @@ rs.toQuad = function(p) {
 //rs.shapeConnectorC = function (mg,cell,numConnections,selj,selk) { //,connectJump) {
 rs.shapeConnectorC = function (params) { //,connectJump) {
   let {connectedShapes:cns,numC} = this;
-  let {motionGroup:mg,cell,numConnections,connectIndices:ci} = params;
+  let {motionGroup:mg,cell,numConnections:ncp,connectIndices:ci} = params;
+  let {paths} = mg;
   debugger;
   let shapesPerPath = mg.shapesPerPath;
   let pln = shapesPerPath.length;
-  let numPhases = mg.phases.length;
+  let numPhasesG = mg.numPhases;
   for (let i = 0;i<pln;i++) {
     let shapes = shapesPerPath[i];
     let ln = shapes.length;
+    let path = paths[i];
+    let pnc = path.numConnections;
+    let pnp = path.numPhases;
+    let numPhases = pnp?pnp:numPhasesG;
+    let numConnections = pnc?pnc:ncp
     for (let j=0;j<numConnections;j++) {
       let cparams = {cell,pathIndex:i,connectIndex:j,numPhases}
       let cis =  ci.call(this,cparams); 
@@ -72,8 +78,9 @@ rs.shapeConnectorC = function (params) { //,connectJump) {
 
 
 rs.shapeConnector = function (mg,cell) {
-  debugger;
-  let {connectIndices,numConnections} = this;
+  let {connectIndices,numConnections:ncg} = this;
+  let {numConnections:ncc} = cell;
+  let numConnections = ncc?ncc:ncg;
   this.shapeConnectorC({motionGroup:mg,cell,numConnections,connectIndices});
 }
 
@@ -83,15 +90,17 @@ rs.addMotionsForCell = function (params) {
   let {cell,paths,numPhases,shapeConnector}  = params;
   let {deltaX,numSteps,circleP,iPolygonP,cycles} = this;
   let duration = numSteps;
-  let ip = 1/numPhases;
+ /* let ip = 1/numPhases;
   let phases =[];
   for (let i=0;i<numPhases;i++) {
     phases.push(i*ip);
-  }
+  }*/
   let {polygon,coords} = cell;
   let {x,y} = coords;
   let shapeP=circleP;
-  this.mkPathMotionGroup({cell,phases,paths,cycles,duration,shapeP,oPoly:polygon,shapeConnector});
+  debugger;
+ // this.mkPathMotionGroup({cell,phases,paths,cycles,duration,shapeP,oPoly:polygon,shapeConnector});
+  this.mkPathMotionGroup({cell,numPhases,paths,cycles,duration,shapeP,oPoly:polygon,shapeConnector});
 }
 
  

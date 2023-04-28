@@ -137,6 +137,9 @@ item.showPathh = function (path,fc,lineP) {
   let {startTime:st,duration:dur,cycles,paths} = mg;
   let {phase,shape,oPoly,lastCycle,pathNum} = m;
   let path = paths[pathNum];
+  if (path.numPhases) {
+    debugger;
+  }
   let inC = this.inCycle(mg,t);
   let {cycleNum,howFar:hf} = inC;
   if (cycleNum !== lastCycle) {
@@ -246,6 +249,9 @@ item.mkPathMotion = function (mg,params) { //point to point
   let {shapeP} = mg;
   let {mshapes} = this;
   let {phase,oPoly,motions,shapes,pathNum} = params;
+  if (pathNum === 4) {
+    debugger;
+  }
   //debugger;
   //let {motions,mshapes,stepsSoFar:ssf} = this;
   let shape = shapeP?shapeP.instantiate():null;
@@ -323,14 +329,22 @@ item.mkP2PmotionGroup = function (params) {
 
 item.mkPathMotionGroup = function (params) {
   let {stepsSoFar:ssf,motionGroups,mshapes} = this;
-  let {cell,duration,cycles,paths,phases,shapeP,oPoly,shapeConnector} = params;
-  debugger;
-  let mg = {kind:'Path',duration,cycles,phases,startTime:ssf,shapeP,paths,shapesPerPath:[],motionsPerPath:[]};
+  //let {cell,duration,cycles,paths,phases,shapeP,oPoly,shapeConnector} = params;
+  let {cell,duration,cycles,paths,numPhases,shapeP,oPoly,shapeConnector} = params;
+  let mg = {kind:'Path',duration,cycles,numPhases,startTime:ssf,shapeP,paths,shapesPerPath:[],motionsPerPath:[]};
   let pathsln = paths.length;
   let shapesPerPath = mg.shapesPerPath;
   let motionsPerPath = mg.motionsPerPath;
+  debugger;
   for (let i = 0;i<pathsln;i++) {
-    let ln = phases.length;
+    let path = paths[i];
+    let pnp= path.numPhases;
+    let ln = pnp?pnp:numPhases;
+    let ip = 1/ln;
+    let phases =[];
+    for (let i=0;i<ln;i++) {
+      phases.push(i*ip);
+    }
     let shapes = [];
     let motions = [];
     for (let j=0;j<ln;j++) {
@@ -365,7 +379,7 @@ item.connectShapes = function () {
   
   
 item.updateConnectors = function () {
-  let {connectors,connectorSegs:cnsegs,connectedShapes:cns,connectorIntersections:cints,icircleP} = this;
+  let {connectors,connectorSegs:cnsegs,connectedShapes:cns,connectorIntersections:cints,icircleP,showIntersections} = this;
   if (!cns) {
     return;
   }
@@ -405,6 +419,9 @@ item.updateConnectors = function () {
     connector.setEnds(tr0,tr1);
     connector.update();
     connSeg.setEnds(tr0,tr1);
+  }
+  if (!showIntersections) {
+    return;
   }
   let intscts = allSegmentIntersections(cnsegs);
   let lnscts = intscts.length;

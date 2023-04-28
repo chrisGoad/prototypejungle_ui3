@@ -69,13 +69,13 @@ item.addCell = function (pos,grid) {
   let theGrid = grid?grid:this;
   let {cells,map,polygons,gridPolygonP,numCols:nc} = theGrid;
   let {x,y} =pos;
-  let index =x*(nc-1)+y;
+  let index =x*nc+y;
   let corners = this.cellCorners(pos,map);
   let center = this.cellCenter(corners);
   let polygon =  gridPolygonP.instantiate();
   polygon.corners = corners;
   polygons.push(polygon);
-  let cell = {coords:pos,corners,center,polygon};
+  let cell = {coords:pos,corners,center,index,polygon};
   cells.push(cell);
 }
 
