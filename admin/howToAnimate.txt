@@ -184,6 +184,7 @@ c:\ffmpeg\bin\ffmpeg  -framerate 15 -i animations/gridSpinner_8_f%03d.jpg -s 500
 c:\ffmpeg\bin\ffmpeg  -framerate 15 -i animations/gridSpinner_9_f%03d.jpg -s 500x500  export/gridSpinner_9.gif
 c:\ffmpeg\bin\ffmpeg  -framerate 15 -i animations/gridSpinner_10_f%03d.jpg -s 500x500  export/gridSpinner_10.gif
 c:\ffmpeg\bin\ffmpeg  -framerate 15 -i animations/gridSpinner_10_f%03d.jpg -s 500x500  export/gridSpinner_10.mp4
+c:\ffmpeg\bin\ffmpeg  -framerate 15 -i animations/gridSpinner_13_f%03d.jpg -s 500x500  export/gridSpinner_13.mp4
 
 
 rm animations/spatter0_7*

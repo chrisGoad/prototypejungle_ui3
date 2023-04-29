@@ -128,7 +128,6 @@ item.initGrid = function (grid,map) {
   }
   this.addCells(theGrid);
 
-  debugger;
 }
 
 item.hseg = function (j,corners) {

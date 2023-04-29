@@ -14,7 +14,7 @@ nr =1;
 rs.setName('gridSpinner_10');
 let topParams = {width:wd,height:wd,numRows:nr,numCols:nr,framePadding:.1*wd,stepsPerMove:10,numStepss:24,numSteps:300,center:Point.mk(0,0),radius:wd/4,
                  cycles:1,frameStroke:'rgb(2,2,2)',frameStrokee:'white',frameStrokeWidth:1,saveAnimation:1,stepInterval:40,
-                 pauseAtt:[29,30,59,60],numConnections:160,numPhases:200,showThePath:0,showIntersections:1}
+                 pauseAtt:[29,30,59,60],numConnections:160,numPhases:200,showThePath:0,showIntersections:0}
                 // pauseAtt:[29,30,59,60],numConnections:100,numPhases:240,showThePath:0}
 Object.assign(rs,topParams);
 
@@ -43,6 +43,12 @@ rs.initProtos = function () {
   icircleP.dimension= 2;
   icircleP.fill = 'red';
   icircleP['stroke-width'] = 0;
+   let icircleP2 = this.icircleP2 = circlePP.instantiate();
+  icircleP2.dimension= 2;
+  icircleP2.fill = 'blue';
+  icircleP['stroke-width'] = 0;
+  
+  
   
 }
 
@@ -69,7 +75,7 @@ rs.connectIndices = function (params) {
 
 rs.addMotions = function () {
   debugger;
-    let {cells,numPhases,shapeConnector} = this;
+    let {cells,numPhases,shapeConnector,icircleP2} = this;
 
   let np =  5;
   let radius = 0.25;
@@ -100,9 +106,11 @@ rs.addMotions = function () {
   let path1 = this.mkRectangularPath(rect1);
   let path2 = this.mkRectangularPath(rect2).reverse();
   let path3 = this.mkRectangularPath(rect3).reverse();
-    let path4 = this.thePath = this.mkRandomPath({rectangle:rect4,numPoints:13});
+    let path4 = this.thePath = this.mkRandomPath({rectangle:rect4,numPoints:5});
     path4.numConnections = 35;
     path4.numPhases = 50;
+    path4.doNotIntersect = 1;
+   // path4.ishapeP = icircleP2;
   this.addMotionsForCell({cell:cells[0],paths:[path0,path1,path2,path3,path4],numPhases,shapeConnector});
   //this.addMotionsForCell({cell:cells[0],paths:[path4],numPhases,shapeConnector});
 }

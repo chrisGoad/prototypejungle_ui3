@@ -2442,7 +2442,12 @@ LineSegment.intersect = function (seg1) {
   let p = intersectRays(p00,v0,p10,v1);
   //let onsegs = this.onSeg(p,seg0) && this.onSeg(p,seg1);
   let onsegs = seg0.onSeg(p) && seg1.onSeg(p);
-  return onsegs?p:null;
+  if (onsegs) {
+    p.seg0= seg0;
+    p.seg1 = seg1;
+    return p;
+  }
+    
 }
 
 

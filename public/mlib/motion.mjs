@@ -138,7 +138,7 @@ item.showPathh = function (path,fc,lineP) {
   let {phase,shape,oPoly,lastCycle,pathNum} = m;
   let path = paths[pathNum];
   if (path.numPhases) {
-    debugger;
+  //  debugger;
   }
   let inC = this.inCycle(mg,t);
   let {cycleNum,howFar:hf} = inC;
@@ -246,12 +246,16 @@ item.mkP2Pmotion = function (mg,params) { //point to point
 }
 
 item.mkPathMotion = function (mg,params) { //point to point
-  let {shapeP} = mg;
+  let {shapeP:shP} = mg;
+  let {paths} = mg;
   let {mshapes} = this;
   let {phase,oPoly,motions,shapes,pathNum} = params;
   if (pathNum === 4) {
     debugger;
   }
+  let path=paths[pathNum];
+  let pshapeP = path.shapeP;
+  let shapeP = pshapeP?pshapeP:shP;
   //debugger;
   //let {motions,mshapes,stepsSoFar:ssf} = this;
   let shape = shapeP?shapeP.instantiate():null;
@@ -392,6 +396,9 @@ item.updateConnectors = function () {
     let connection = cns[i];
     let c0 = connection[0];
     let c1 = connection[1]
+    let path = connection[2];
+    connSeg.doNotIntersect = path.doNotIntersect;
+    connSeg.ishapeP = path.ishapeP;
     let tr0 = c0.getTranslation();
     let ap0 = c0.alongPath;
     let tr1 = c1.getTranslation();
@@ -423,12 +430,22 @@ item.updateConnectors = function () {
   if (!showIntersections) {
     return;
   }
-  let intscts = allSegmentIntersections(cnsegs);
+  debugger;
+  
+  let filteredSegs = cnsegs.filter((seg) => !(seg.doNotIntersect));
+
+  let intscts = allSegmentIntersections(filteredSegs);
   let lnscts = intscts.length;
   let lncints = cints.length;
   if (lnscts >= lncints) {
+    debugger;
     for (let i=lncints;i<lnscts;i++) {
-      let crc = icircleP.instantiate();
+      
+      let sct = intscts[i];
+      let seg0 = sct.seg0;
+      let pishP = seg0.ishapeP;
+      let ishapeP = pishP?pishP:icircleP;
+      let crc = ishapeP.instantiate();
       cints.push(crc);
     }
   }

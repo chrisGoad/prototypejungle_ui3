@@ -11,7 +11,7 @@ let wd = 200;
 let nr = 8;
 //
 nr =3;
-rs.setName('gridSpinner_10');
+rs.setName('gridSpinner_11');
 let topParams = {width:wd,height:wd,numRows:nr,numCols:nr,framePadding:.1*wd,stepsPerMove:10,numStepss:24,numSteps:300,center:Point.mk(0,0),radius:wd/4,
                  cycles:1,frameStroke:'rgb(2,2,2)',frameStrokee:'white',frameStrokeWidth:1,saveAnimation:1,stepInterval:40,
                  //pauseAtt:[29,30,59,60],numConnections:160,numPhases:200,showThePath:0}

@@ -48,8 +48,50 @@ item.mkPath3 = function () {
 }
 
 
+
+
+
+item.mkRandomPathD = function (params) {
+  let {rectangle,numPoints:np,numDirections:nd,freePath} = params;
+  let rect =  rectangle?rectangle:Rectangle.mk(Point.mk(0,0),Point.mk(1,1));
+  let {corner,extent} = rect;
+  let {x:cx,y:cy} = corner;
+  let {x:ex,y:ey} = extent;
+  let fp = freePath?freePath:.15*Math.min(ex,ey); // free path
+  let path = [];
+  let ai = (2*Math.PI)/nd;
+  debugger;
+  const nextCandidate = (p) => {
+     debugger;
+    let dn = Math.floor(Math.random()*nd);
+    let a = dn*ai;
+    let vec = Point.mk(Math.cos(a),Math.sin(a));
+    let svec = vec.times(fp);
+    let np = p.plus(svec);
+    return np;
+  }
+  const nextPoint = (p) => {
+    while (1) {
+      let c = nextCandidate(p);
+      if (rect.contains(c)) {
+        return c;
+      }
+    }
+  }
+  let p = rect.center();
+  for (let i=0;i<np;i++) {
+    path.push(p);
+    p = nextPoint(p);
+  }
+  return path;
+}
+
+
 item.mkRandomPath = function (params) {
-  let {rectangle,numPoints:np} = params;
+  let {rectangle,numPoints:np,numDirections:nd} = params;
+  if (nd) {
+    return this.mkRandomPathD(params);
+  }
   let rect =  rectangle?rectangle:Rectangle.mk(Point.mk(0,0),Point.mk(1,1));
   let {corner,extent} = rect;
   let {x:cx,y:cy} = corner;
@@ -65,7 +107,6 @@ item.mkRandomPath = function (params) {
   }
   return path;
 }
-
 item.mkRectangularPath = function (rect) {
   let {corner:crn,extent:ext} = rect;
   let {x:cx,y:cy} = crn;
@@ -76,7 +117,37 @@ item.mkRectangularPath = function (rect) {
   let LR = Point.mk(cx+ex,cy+ey);
   return [LL,UL,UR,LR,LL];
 }
-     
+
+item.mkSnakePath = function (params) {
+  let {rectangle,numPoints:np,numTurns:nt} = params;
+  let rect =  rectangle?rectangle:Rectangle.mk(Point.mk(0,0),Point.mk(1,1));
+  let {corner,extent} = rect;
+  let {x:cx,y:cy} = corner;
+  let {x:ex,y:ey} = extent;
+  let UL = Point.mk(cx,cy);
+  let UR = Point.mk(cx+ex,cy);
+  let vecR= Point.mk(ex,0);
+  let vecL= Point.mk(-ex,0);
+  let vecD = Point.mk(0,ey/nt);
+  let path = [];
+  let goingRight = 1;
+  let cp = UL;
+  let hvec;
+  for (let i=0;i<nt;i++) {
+    path.push(cp);
+    hvec = goingRight?vecR:vecL;
+    cp = cp.plus(hvec);
+    path.push(cp);
+    cp = cp.plus(vecD);
+    path.push(cp);
+    goingRight = !goingRight;
+  }
+  hvec = goingRight?vecR:vecL;
+  cp = cp.plus(hvec);
+  path.push(cp);
+  return path;
+}
+    
 item.mkCircle = function (params) {
   let {radius:r,numPoints:np,center,startAngle:sa,endAngle:ea,clockWise:clkw} = params;
   //let da = (2*Math.PI)/(np+1);
