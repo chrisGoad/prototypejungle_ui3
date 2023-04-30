@@ -251,7 +251,7 @@ item.mkPathMotion = function (mg,params) { //point to point
   let {mshapes} = this;
   let {phase,oPoly,motions,shapes,pathNum} = params;
   if (pathNum === 4) {
-    debugger;
+  //  debugger;
   }
   let path=paths[pathNum];
   let pshapeP = path.shapeP;
