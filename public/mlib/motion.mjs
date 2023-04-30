@@ -417,11 +417,12 @@ item.updateConnectors = function () {
     }
     let minFade = Math.min(fadeLow,fadeHigh);
     console.log('apMax',apMax,'apMin',apMin,'fadeLow',fadeLow,'fadeHigh',fadeHigh);
-    let clr = `rgba(255,255,255,${minFade})`;
-    connector.stroke = clr;
-    c0.fill = clr;
+    let clrw = `rgba(255,255,255,${minFade})`;
+    let clrb = `rgba(0,0,255,${minFade})`;
+    connector.stroke = clrw;
+    c0.fill = clrb;
     c0.update();
-    c1.fill = clr;
+    c1.fill = clrb;
     c1.update();
     connector.setEnds(tr0,tr1);
     connector.update();

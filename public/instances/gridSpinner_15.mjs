@@ -15,7 +15,7 @@ rs.setName('gridSpinner_15');
 let topParams = {width:wd,height:wd,numRows:nr,numCols:nr,numConnections:400,framePadding:.1*wd,stepsPerMove:10,numStepss:24,numSteps:400,center:Point.mk(0,0),radius:wd/4,
                  cycles:1,frameStroke:'rgb(2,2,2)',frameStrokee:'white',frameStrokeWidth:1,saveAnimation:1,stepInterval:40,randomConnections:1,
            //      pauseAtt:[29,30,59,60],numConnections:100,numPhases:102,showThePath:1,showIntersections:1}
-                 pauseAtt:[29,30,59,60],numConnections:40,numPhases:102,showThePath:0,showIntersections:0,numSpokes:5}
+                 pauseAtt:[29,30,59,60],numConnections:40,numPhases:102,showThePath:0,showIntersections:0,numSpokes:11}
             //     pauseAtt:[29,30,59,60],numConnections:4,numPhases:10,showThePath:0,showIntersections:1,numSpokes:5}
 Object.assign(rs,topParams);
 
@@ -38,7 +38,7 @@ rs.initProtos = function () {
   iPolygonP.fill = 'green'; 
   let circleP = this.circleP = circlePP.instantiate();
   circleP.dimension= 2;
-  circleP.fill = 'white';
+  circleP.fill = 'blue';
   circleP['stroke-width'] = 0;
   let icircleP = this.icircleP = circlePP.instantiate();
   icircleP.dimension= 1;
@@ -53,7 +53,7 @@ rs.connectIndices = function (params) {
   let {cell,pathIndex:pi,connectIndex:ci,numPhases:ln} = params;
   let {numSpokes:ns} = this;
   debugger;
-  let e0si = ci;
+  let e0si = (17*ci)%ln;
   let e1pi = (pi+1)%ns;
   let e1si = (ci+Math.floor(Math.random()*20))%ln;
   return {end0ShapeIndex:e0si,end1PathIndex:e1pi,end1ShapeIndex:e1si};
