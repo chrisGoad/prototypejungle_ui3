@@ -118,6 +118,7 @@ item.mkRectangularPath = function (rect) {
   return [LL,UL,UR,LR,LL];
 }
 
+
 item.mkSnakePath = function (params) {
   let {rectangle,numPoints:np,numTurns:nt} = params;
   let rect =  rectangle?rectangle:Rectangle.mk(Point.mk(0,0),Point.mk(1,1));
@@ -149,11 +150,12 @@ item.mkSnakePath = function (params) {
 }
     
 item.mkCircle = function (params) {
-  let {radius:r,numPoints:np,center,startAngle:sa,endAngle:ea,clockWise:clkw} = params;
+  let {radius:r,numPoints:np,center,startAngle:sai,endAngle:ea,clockWise:clkw} = params;
   //let da = (2*Math.PI)/(np+1);
  /* if (ea) {
     let deltaA
  */
+  let sa = sai?sai:0;
   let da = (2*Math.PI)/np;
   let path = [];
   for (let i=0;i<=np;i++) {
@@ -166,7 +168,9 @@ item.mkCircle = function (params) {
 }
 
 item.mkWavyCircle = function (params) {
-  let {radius:r,deltaRadius,numWaves:nw,numPoints:np,center,startAngle:sa} = params;
+  let {radius:r,deltaRadius,numWaves:nw,numPoints:np,center,startAngle:sai} = params;
+    let sa = sai?sai:0;
+
   let da = (2*Math.PI)/np;
   let wvl = (2*Math.PI)/nw;
   let path = [];
@@ -236,9 +240,10 @@ item.mkSpiral = function(params) {
 
        
 item.showPath = function (path,fc,lineP) {
-  let {pathLines} = this;
+  let {pathLines,circleP,pathCircles} = this;
   if (!pathLines) {
     pathLines = this.set('pathLines',arrayShape.mk());
+    pathCircles = this.set('pathCircles',arrayShape.mk());
   }
   let ln = path.length;
   for (let i=0;i<(ln-1);i++) {
@@ -249,6 +254,19 @@ item.showPath = function (path,fc,lineP) {
     line.setEnds(e0,e1);
     pathLines.push(line);
   }
+  const addCircle = (n,fill) => {
+    let p = path[n];
+    let crc = circleP.instantiate();
+    crc.fill = fill;
+    crc.dimension = 10;
+    pathCircles.push(crc);
+    crc.moveto(p.times(fc));
+  // crc.update();
+  }
+  addCircle(0,'red');
+  addCircle(1,'yellow');
+  addCircle(2,'green');
+  addCircle(3,'blue');
 }
 }
  

@@ -11,10 +11,11 @@ let wd = 200;
 let nr = 8;
 //
 nr =1;
-rs.setName('gridSpinner_9');
-let topParams = {width:wd,height:wd,numRows:nr,numCols:nr,numConnections:400,framePadding:.1*wd,stepsPerMove:10,numStepss:24,numSteps:200,center:Point.mk(0,0),radius:wd/4,
+rs.setName('gridSpinner_14');
+let topParams = {width:wd,height:wd,numRows:nr,numCols:nr,numConnections:400,framePadding:.1*wd,stepsPerMove:10,numStepss:24,numSteps:400,center:Point.mk(0,0),radius:wd/4,
                  cycles:1,frameStroke:'rgb(2,2,2)',frameStrokee:'white',frameStrokeWidth:1,saveAnimation:1,stepInterval:40,randomConnections:1,
-                 pauseAtt:[29,30,59,60],numConnections:35,numPhases:50,showThePath:0}
+           //      pauseAtt:[29,30,59,60],numConnections:100,numPhases:102,showThePath:1,showIntersections:1}
+                 pauseAtt:[29,30,59,60],numConnections:40,numPhases:102,showThePath:0,showIntersections:1}
 Object.assign(rs,topParams);
 
 
@@ -23,7 +24,7 @@ rs.initProtos = function () {
   lineP['stroke-width'] = .4;
   lineP.stroke = 'cyan';
    let connectorP = this.connectorP = linePP.instantiate();
-  connectorP['stroke-width'] = .9;
+  connectorP['stroke-width'] = .4;
   connectorP.stroke = 'cyan';
   let gridPolygonP = this.gridPolygonP = polygonPP.instantiate();
   gridPolygonP['stroke-width'] = .4;
@@ -39,7 +40,7 @@ rs.initProtos = function () {
   circleP.fill = 'white';
   circleP['stroke-width'] = 0;
   let icircleP = this.icircleP = circlePP.instantiate();
-  icircleP.dimension= 2;
+  icircleP.dimension= 1;
   icircleP.fill = 'red';
   icircleP['stroke-width'] = 0;
   
@@ -51,7 +52,7 @@ rs.selj = function (cell,i,ln) {
   return Math.floor(Math.random()*ln);
 }
 rs.selk = function (cell,j,ln) {
-  return j+Math.floor(Math.random()*6)%ln;
+  return j+Math.floor(Math.random()*50)%ln;
   return (j+6)%ln;
 }
 
@@ -66,7 +67,7 @@ rs.connectIndices = function (params) {
   let {cell,pathIndex:pi,connectIndex:ci,numPhases:ln} = params;
   let e0si = ci;
   let e1pi = pi;
-  let e1si = (ci+Math.floor(Math.random()*6))%ln;
+  let e1si = (ci+Math.floor(Math.random()*20))%ln;
   return {end0ShapeIndex:e0si,end1PathIndex:e1pi,end1ShapeIndex:e1si};
 }
 
@@ -76,8 +77,11 @@ rs.addMotions = function () {
   debugger;
     let {cells,numPhases,shapeConnector} = this;
   let radius = .25;
-  let path = this.thePath = this.mkWavyCircle({numPoints:50,radius,deltaRadius:radius*0.1,numWaves:8,center:Point.mk(.25,.25),startAngle:0});
-  this.addMotionsForCell({cell:cells[0],paths:[path],numPhases,shapeConnector});
+  let center = Point.mk(.5,.5);
+  //let path0 = this.thePath = this.mkRectangularPath(Rectangle.mk(Point.mk(0,0),Point.mk(1,1)));
+  let path0 = this.thePath = this.mkWavyCircle({numPoints:30,radius:.25,center,deltaRadius:.05,numWaves:6});
+  let path1 = [...path0].reverse();
+  this.addMotionsForCell({cell:cells[0],paths:[path0,path1],numPhases,shapeConnector});
 
  // this.addMotionsForCell(cells[0],[path],100,this.shapeConnector);// put back
 /*
