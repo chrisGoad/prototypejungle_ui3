@@ -4,6 +4,7 @@ const fs = require('fs');
 
 const mtypes = {html:'text/html',js:'application/javascript',mjs:'application/javascript',json:'application/json','jpg':'image/jpeg',
                   css:'text/css',svg:'image/svg+xml',ico:'image/x-icon',gif:'image/gif'};
+let verbose = 0;
                   
 const requestListener = function (req, res) {
 	let iurl = req.url;
@@ -16,8 +17,8 @@ const requestListener = function (req, res) {
 	let fpath = (ipath.substring(0,1) === '/')?ipath.substring(1):ipath; 
 	//let fpath = (ipath.substring(0,5) === '/www/')?ipath.substring(1):'www'+ipath; 
 	let ctype = mtypes[ext];
-  console.log('');
-  console.log('PrototypeJungle ipath ',ipath,' fpath ',fpath,'method=',method,'ctype=',ctype);
+  if (verbose) console.log('');
+  if (verbose) console.log('PrototypeJungle ipath ',ipath,' fpath ',fpath,'method=',method,'ctype=',ctype);
 	let data;
   if (method === 'POST') {
 		ctype = 'image/jpg';
@@ -30,7 +31,7 @@ const requestListener = function (req, res) {
     req.on('end', () => {
 				let  rs = Buffer.concat(chunks,dln);
         res.end('ok');
-				console.log('writing ',dln,' bytes');
+				if (verbose) console.log('writing ',dln,' bytes');
 				fs.writeFileSync(fpath,rs);
 
     });
@@ -40,13 +41,13 @@ const requestListener = function (req, res) {
 	if (fs.existsSync(fpath)) {
     body	= fs.readFileSync(fpath);
 	} else {
-		console.log('missing');
+		if (verbose) console.log('missing');
 		missing = 1;
 		body = '';
 		ctype = 'text/plain';
 	}
   let ln = body.length;
-	console.log('reading',ln,'bytes');		
+	if (verbose) console.log('reading',ln,'bytes');		
 	res.writeHead(missing?404:200, {
     'Content-Length': ln,
 	  'Content-Type': ctype+'; charset=utf-8'});
