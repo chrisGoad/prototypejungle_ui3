@@ -259,6 +259,7 @@ item.mkPathMotion = function (mg,params) { //point to point
   //debugger;
   //let {motions,mshapes,stepsSoFar:ssf} = this;
   let shape = shapeP?shapeP.instantiate():null;
+  shape.pathNum = pathNum;
   if (shape) {
     mshapes.push(shape);
   }

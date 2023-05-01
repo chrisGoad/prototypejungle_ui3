@@ -150,7 +150,7 @@ item.mkSnakePath = function (params) {
 }
     
 item.mkCircle = function (params) {
-  let {radius:r,numPoints:np,center,startAngle:sai,endAngle:ea,clockWise:clkw} = params;
+  let {radius:r,numPoints:np,center,startAngle:sai} = params;//,endAngle:ea,clockWise:clkw} = params;
   //let da = (2*Math.PI)/(np+1);
  /* if (ea) {
     let deltaA

@@ -11,12 +11,12 @@ let wd = 200;
 let nr = 8;
 //
 nr =1;
-rs.setName('gridSpinner_15');
-let topParams = {width:wd,height:wd,numRows:nr,numCols:nr,numConnections:400,framePadding:.1*wd,stepsPerMove:10,numStepss:24,numSteps:200,center:Point.mk(0,0),radius:wd/4,
+rs.setName('gridSpinner_16');
+let topParams = {width:wd,height:wd,numRows:nr,numCols:nr,numConnections:400,framePadding:.1*wd,stepsPerMove:10,numStepss:24,numSteps:400,center:Point.mk(0,0),radius:wd/4,
                  cycles:1,frameStroke:'rgb(2,2,2)',frameStrokee:'white',frameStrokeWidth:1,saveAnimation:1,stepInterval:40,randomConnections:1,
            //      pauseAtt:[29,30,59,60],numConnections:100,numPhases:102,showThePath:1,showIntersections:1}
-                 pauseAtt:[29,30,59,60],numConnections:20,numPhases:102,showThePath:0,showIntersections:0,numSpokes:11}
-            //     pauseAtt:[29,30,59,60],numConnections:4,numPhases:10,showThePath:0,showIntersections:1,numSpokes:5}
+                 pauseAtt:[29,30,59,60],numConnections:40,numPhases:100,showThePath:0,showIntersections:0,numSpokes:11}
+            //     pauseAtt:[29,30,59,60],numConnections:4,numPhases:80,showThePath:0,showIntersections:1,numSpokes:5}
 Object.assign(rs,topParams);
 
 
@@ -52,14 +52,22 @@ rs.initProtos = function () {
 rs.connectIndices = function (params) {
   let {cell,pathIndex:pi,connectIndex:ci,numPhases:ln} = params;
   let {numSpokes:ns} = this;
+  let np = 4;
   debugger;
-  let e0si = (7*ci)%ln;
-  let e1pi = (pi+1)%ns;
-  //let e1si = (ci+Math.floor(Math.random()*20))%ln;
-  let e1si = (ci+Math.floor(Math.random()*10))%ln;
+  let e0si = Math.floor(Math.random()*ln);
+  let e1pi; 
+  if ((pi === 0)||(pi == 2)) {
+    e1pi = pi+1;
+    //e1pi = pi;
+  }
+  if ((pi === 1)||(pi == 3)) {
+    e1pi = pi-1;
+   // e1pi = pi;
+  }
+  let e1si =(e0si+5)%ln;
+  debugger;
   return {end0ShapeIndex:e0si,end1PathIndex:e1pi,end1ShapeIndex:e1si};
 }
-
 
 
 
@@ -68,9 +76,12 @@ rs.addMotions = function () {
     let {cells,numPhases,shapeConnector,numSpokes} = this;
   let radius = .25;
   let center = Point.mk(.5,.5);
-  //let path0 = this.thePath = this.mkRectangularPath(Rectangle.mk(Point.mk(0,0),Point.mk(1,1)));
-  let paths = this.mkSpokePaths({numSpokes,outerRadius:.4,center:Point.mk(.5,.5)});
- 
+  let path0 = this.mkCircle({radius:0.4,numPoints:10,center});
+  let path1 = this.mkCircle({radius:0.3,numPoints:10,center});
+  let path2 = this.mkCircle({radius:0.2,numPoints:3,center}).reverse();
+  let path3 = this.mkCircle({radius:0.1,numPoints:3,center}).reverse();
+
+  let paths= [path0,path1,path2,path3];
   this.addMotionsForCell({cell:cells[0],paths,numPhases,shapeConnector});
 
  // this.addMotionsForCell(cells[0],[path],100,this.shapeConnector);// put back
