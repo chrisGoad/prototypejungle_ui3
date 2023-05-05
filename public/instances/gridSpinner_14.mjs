@@ -12,8 +12,8 @@ let nr = 8;
 //
 nr =1;
 rs.setName('gridSpinner_14');
-let topParams = {width:wd,height:wd,numRows:nr,numCols:nr,numConnections:400,framePadding:.1*wd,stepsPerMove:10,numStepss:24,numSteps:400,center:Point.mk(0,0),radius:wd/4,
-                 cycles:1,frameStroke:'rgb(2,2,2)',frameStrokee:'white',frameStrokeWidth:1,saveAnimation:1,stepInterval:40,randomConnections:1,
+let topParams = {width:wd,height:wd,numRows:nr,numCols:nr,numConnections:400,framePadding:0*wd,stepsPerMove:10,numStepss:24,numSteps:400,center:Point.mk(0,0),radius:wd/4,
+                 cycles:1,frameStroke:'rgb(2,2,2)',frameStrokeee:'white',frameStrokeWidth:1,saveAnimation:1,stepInterval:40,randomConnections:1,
            //      pauseAtt:[29,30,59,60],numConnections:100,numPhases:102,showThePath:1,showIntersections:1}
                  pauseAtt:[29,30,59,60],numConnections:40,numPhases:102,showThePath:0,showIntersections:1}
 Object.assign(rs,topParams);
@@ -79,7 +79,7 @@ rs.addMotions = function () {
   let radius = .25;
   let center = Point.mk(.5,.5);
   //let path0 = this.thePath = this.mkRectangularPath(Rectangle.mk(Point.mk(0,0),Point.mk(1,1)));
-  let path0 = this.thePath = this.mkWavyCircle({numPoints:30,radius:.25,center,deltaRadius:.05,numWaves:6});
+  let path0 = this.thePath = this.mkWavyCircle({numPoints:30,radius:.4,center,deltaRadius:.05,numWaves:6});
   let path1 = [...path0].reverse();
   this.addMotionsForCell({cell:cells[0],paths:[path0,path1],numPhases,shapeConnector});
 
@@ -105,6 +105,21 @@ rs.showPaths= function () {
   this.showPath(thePath,100,connectorP);
   return 1;
 }
+
+/*
+rs.hideIntersectionn = function (p) {
+  if (isNaN(p.x)||isNaN(p.y)) {
+    //debugger;
+    return 1;
+  }
+  let ln = p.length();
+  let h = ln < 10;
+  if (h) {
+     //debugger;
+     return 1;
+  }
+}
+*/
   
 
   

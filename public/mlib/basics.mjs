@@ -597,7 +597,7 @@ item.genRandomPoint = function (onw) {
 item.callIfDefined = function (nm,a0) {
   let fn = this[nm];
   if (fn) {
-    fn.call(this,a0);
+    return fn.call(this,a0);
   }
 }
 

@@ -283,6 +283,25 @@ item.mkSpokePaths = function (params) {
   }
   return paths;
 }
+
+item.mkParallelPaths = function (params) {
+  let {numPaths:np,rectangle} = params;
+  let rect =  rectangle?rectangle:Rectangle.mk(Point.mk(0,0),Point.mk(1,1));
+  let {corner,extent} = rect;
+  let {x:cx,y:cy} = corner;
+  let {x:ex,y:ey} = extent;
+  let dx = ey/(np-1);
+  let paths = [];
+  let minV = cx;
+  let maxV = cx+ex;;
+  for (let i=0;i<np;i++) {
+    let cv = i*dx+minV;
+    let ip = Point.mk(minV,cv);
+    let ep = Point.mk(maxV,cv);
+    paths.push(i%2?[ip,ep]:[ep,ip]);
+  }
+  return paths;
+}
     
   
 }

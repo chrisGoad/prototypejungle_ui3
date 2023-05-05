@@ -2422,6 +2422,9 @@ const intersectRays = function (p0,v0,p1,v1) {
 
 LineSegment.onSeg = function(p) {
   let seg0 = this;
+  if (isNaN(p.x)||isNaN(p.y)) {
+    return 0;
+  }
   let {end0:e0,end1:e1} = seg0;
   let v0 = p.difference(e0);
   let v1 = e1.difference(p);

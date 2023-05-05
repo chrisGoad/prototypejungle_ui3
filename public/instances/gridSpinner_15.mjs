@@ -14,8 +14,8 @@ nr =1;
 rs.setName('gridSpinner_15');
 let topParams = {width:wd,height:wd,numRows:nr,numCols:nr,numConnections:400,framePadding:.1*wd,stepsPerMove:10,numStepss:24,numSteps:200,center:Point.mk(0,0),radius:wd/4,
                  cycles:1,frameStroke:'rgb(2,2,2)',frameStrokee:'white',frameStrokeWidth:1,saveAnimation:1,stepInterval:40,randomConnections:1,
-           //      pauseAtt:[29,30,59,60],numConnections:100,numPhases:102,showThePath:1,showIntersections:1}
-                 pauseAtt:[29,30,59,60],numConnections:20,numPhases:102,showThePath:0,showIntersections:0,numSpokes:11}
+           //      pauseAtt:[29,30,59,60],numConnections:100,numPhases:102,showThePath:1,showIntersections:1,rgbdot:{r:0,g:0,b:255},
+                 pauseAtt:[29,30,59,60],numConnections:20,numPhases:102,showThePath:0,showIntersections:0,numSpokes:11,rgbdot:{r:0,g:0,b:255},rgbcon:{r:255,g:255,b:255}}
             //     pauseAtt:[29,30,59,60],numConnections:4,numPhases:10,showThePath:0,showIntersections:1,numSpokes:5}
 Object.assign(rs,topParams);
 
@@ -25,7 +25,7 @@ rs.initProtos = function () {
   lineP['stroke-width'] = .4;
   lineP.stroke = 'cyan';
    let connectorP = this.connectorP = linePP.instantiate();
-  connectorP['stroke-width'] = .4;
+  connectorP['stroke-width'] = .2;
   connectorP.stroke = 'cyan';
   let gridPolygonP = this.gridPolygonP = polygonPP.instantiate();
   gridPolygonP['stroke-width'] = .4;
@@ -37,7 +37,7 @@ rs.initProtos = function () {
   iPolygonP['stroke-width'] = 0;
   iPolygonP.fill = 'green'; 
   let circleP = this.circleP = circlePP.instantiate();
-  circleP.dimension= 2;
+  circleP.dimension= 1;
   circleP.fill = 'blue';
   circleP['stroke-width'] = 0;
   let icircleP = this.icircleP = circlePP.instantiate();

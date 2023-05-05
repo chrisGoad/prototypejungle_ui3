@@ -384,12 +384,15 @@ item.connectShapes = function () {
   
   
 item.updateConnectors = function () {
-  let {connectors,connectorSegs:cnsegs,connectedShapes:cns,connectorIntersections:cints,icircleP,showIntersections} = this;
+  let {connectors,connectorSegs:cnsegs,connectedShapes:cns,connectorIntersections:cints,icircleP,showIntersections,rgbdot,rgbcon} = this;
   if (!cns) {
     return;
   }
   debugger;
- 
+  let rgbd = rgbdot?rgbdot:{r:255,g:255,b:255};
+  let rgbc = rgbcon?rgbcon:{r:255,g:255,b:255};
+  let {r:rd,g:gd,b:bd} = rgbd;
+  let {r:rc,g:gc,b:bc} = rgbc;
   let ln = cns.length;
   for (let i=0;i<ln;i++) {
     let connector = connectors[i];
@@ -418,12 +421,12 @@ item.updateConnectors = function () {
     }
     let minFade = Math.min(fadeLow,fadeHigh);
     console.log('apMax',apMax,'apMin',apMin,'fadeLow',fadeLow,'fadeHigh',fadeHigh);
-    let clrw = `rgba(255,255,255,${minFade})`;
-    let clrb = `rgba(0,0,255,${minFade})`;
-    connector.stroke = clrw;
-    c0.fill = clrb;
+    let clrdot = `rgba(${rd},${gd},${bd},${minFade})`;
+    let clrcon = `rgba(${rc},${gc},${bc},${minFade})`;
+    connector.stroke = clrcon;
+    c0.fill = clrdot;
     c0.update();
-    c1.fill = clrb;
+    c1.fill = clrdot;
     c1.update();
     connector.setEnds(tr0,tr1);
     connector.update();
@@ -437,18 +440,25 @@ item.updateConnectors = function () {
   let filteredSegs = cnsegs.filter((seg) => !(seg.doNotIntersect));
 
   let intscts = allSegmentIntersections(filteredSegs);
-  let lnscts = intscts.length;
+ /* intscts = intscts.filter((p) => {
+    let hideIt = this.callIfDefined("hideIntersection",p);
+    return !hideIt;
+  });*/
+  let lnscts = intscts.length 
   let lncints = cints.length;
+ 
+
   if (lnscts >= lncints) {
     debugger;
     for (let i=lncints;i<lnscts;i++) {
       
       let sct = intscts[i];
       let seg0 = sct.seg0;
-      let pishP = seg0.ishapeP;
+      let pishP = seg0.ishapeP;	
       let ishapeP = pishP?pishP:icircleP;
       let crc = ishapeP.instantiate();
       cints.push(crc);
+     
     }
   }
   for (let i=0;i<lnscts;i++) {
