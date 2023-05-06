@@ -428,7 +428,16 @@ item.updateConnectors = function () {
     c0.update();
     c1.fill = clrdot;
     c1.update();
-    connector.setEnds(tr0,tr1);
+    let rf=0;
+    const randomPoint = () => {
+      let x = rf * Math.random();
+      let y = rf * Math.random();
+      return Point.mk(x,y);
+    }
+      
+    let rtr0 = tr0.plus(randomPoint());
+    let rtr1 = tr1.plus(randomPoint());
+    connector.setEnds(rtr0,rtr1);
     connector.update();
     connSeg.setEnds(tr0,tr1);
   }
@@ -493,6 +502,8 @@ item.hideUnconnectedShapes = function () {
     }
   });
 }
+
+
 
     
 }

@@ -1,6 +1,41 @@
 
 let rs = function (item) {
 
+
+item.alongPath = function (path,fr) {
+  //debugger;
+  let ds2p0 = 0; // distance to begining of current segment (segment i);
+  let slns = this.segLengths(path);
+  let pln = slns.reduce((a,b) => a+b,0);
+  let ln = path.length;
+  let targetln = pln*fr;
+  for (let i=0;i<ln-1;i++) {
+    let sln = slns[i];
+    let ds2p1 = ds2p0+ sln;
+    if (ds2p1 >= targetln) { // our target point is in this segment
+       let p0 = path[i];
+       let p1 = path[i+1];
+       let lnis = targetln - ds2p0; // length in this segment
+       let csln = slns[i];
+       let sfr = lnis/csln;
+       let vec = p1.difference(p0);
+       let target = p0.plus(vec.times(sfr));
+       return target;
+    } 
+    ds2p0 = ds2p1;
+  }
+}
+       
+item.setPathLength = function (path,n) {
+  let rp = [];
+  for (let i=0;i<n;i++) {
+    let fr = i/(n-1);
+    let cp = this.alongPath(path,fr);
+    rp.push(cp);
+  }
+  return rp;
+}
+
 item.mkPath0 = function() {
   let d = 0.3;
   let p0 = Point.mk(0.5+d,0.5+d);
@@ -302,7 +337,21 @@ item.mkParallelPaths = function (params) {
   }
   return paths;
 }
-    
+
+item.interpolatePaths = function (path0,path1) {
+  let ln = Math.min(path0.length,path1.length);
+  let rp = [];
+  for (let i=0;i<ln;i++) {
+    let fr = i/ln;
+    let p0 = path0[i]
+    let p1 = path1[i]
+    let vec = p1.difference(p0);
+    let svec = vec.times(fr);
+    let ip = p0.plus(svec);
+    rp.push(ip);
+  }
+  return rp;
+}
   
 }
  
