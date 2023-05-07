@@ -396,12 +396,12 @@ item.updateConnectors = function () {
     }
     let fr0 = ssf/numSteps;
     let fr1 = 2*Math.min(fr0,1-fr0);
-    let fr = Math.pow(fr1,3);
+    let fr = Math.pow(fr1,1);
     let rtr0 = tr0.plus(roff0.times(fr));
     let rtr1 = tr1.plus(roff1.times(fr));
     connector.setEnds(rtr0,rtr1);
     connector.update();
-    connSeg.setEnds(tr0,tr1);
+    connSeg.setEnds(rtr0,rtr1);
   }
   if (!showIntersections) {
     return;

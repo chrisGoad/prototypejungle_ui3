@@ -13,9 +13,9 @@ let nr = 8;
 nr =1;
 rs.setName('gridSpinner_20');
 let topParams = {width:wd,height:wd,numRows:nr,numCols:nr,numConnections:400,framePadding:.1*wd,stepsPerMove:10,numStepss:24,numSteps:400,center:Point.mk(0,0),radius:wd/4,
-                 cycles:2,frameStroke:'rgb(2,2,2)',frameStrokee:'white',frameStrokeWidth:1,saveAnimation:1,stepInterval:40,randomConnections:1,
+                 cycles:4,frameStroke:'rgb(2,2,2)',frameStrokee:'white',frameStrokeWidth:1,saveAnimation:1,stepInterval:40,randomConnections:1,
            //      pauseAtt:[29,30,59,60],numConnections:100,numPhases:102,showThePath:1,showIntersections:1}
-                 pauseAtt:[29,30,59,60],numConnections:18,numPhases:100,showThePath:0,showIntersections:1,numSpokes:11,randomOffset:20}
+                 pauseAtt:[29,30,59,60],numConnections:80,numPhases:100,showThePath:0,showIntersections:0,numSpokes:11,randomOffset:0}
             //     pauseAtt:[29,30,59,60],numConnections:4,numPhases:80,showThePath:0,showIntersections:1,numSpokes:5}
 Object.assign(rs,topParams);
 
@@ -25,7 +25,7 @@ rs.initProtos = function () {
   lineP['stroke-width'] = .4;
   lineP.stroke = 'cyan';
    let connectorP = this.connectorP = linePP.instantiate();
-  connectorP['stroke-width'] = .4;
+  connectorP['stroke-width'] = .2;
   connectorP.stroke = 'cyan';
   let gridPolygonP = this.gridPolygonP = polygonPP.instantiate();
   gridPolygonP['stroke-width'] = .4;
@@ -68,19 +68,22 @@ rs.connectIndices = function (params) {
  // debugger;
   //let e0si = rseq[ncc%nc];//,Math.floor(Math.random()*ln);
   //let e0si = ci;//Math.floor(Math.random()*nc);
-  let e0si = ncc%2?ci:ci+50;
+  //let e0si = ncc%2?ci:ci+50;
+  let e0si = ci;
 
   this.numCisCalls = ncc+1;
   let e1pi; 
   if ((pi === 0)||(pi == 2)) {
     e1pi = pi+1;
     //e1pi = pi;
+  } else {
+    return;
   }
   if ((pi === 1)||(pi == 3)) {
     e1pi = pi-1;
    // e1pi = pi;
   }
-  let e1si =(e0si+6+Math.floor(Math.random()*0))%np;
+  let e1si =(e0si+3+Math.floor(Math.random()*5))%np;
   //debugger;
   console.log('e0si',e0si,'e1pi',e1pi,'e1si',e1si);
   return {end0ShapeIndex:e0si,end1PathIndex:e1pi,end1ShapeIndex:e1si};
@@ -91,40 +94,25 @@ rs.connectIndices = function (params) {
 rs.addMotions = function () {
   debugger;
     let {cells,numPhases,shapeConnector,numSpokes} = this;
-  let radius = .25;
-  let startAngle = 0;//.25*(2*Math.PI);
-  //let center = Point.mk(.5,.5);
-  let center = Point.mk(.5,.6);
+ 
   let numPoints = 20;
-  let path0 = this.mkCircle({radius:0.4,numPoints,center});
-  let path1 = this.mkCircle({radius:0.3,numPoints,center});
-  let path2 = this.setPathLength([Point.mk(.2,.3),Point.mk(.8,.3)],numPoints);
-  let path3 = this.setPathLength([Point.mk(.2,.1),Point.mk(.8,.1)],numPoints);
-  let ipath0 = this.interpolatePaths(path0,path2);
-  let ipath1 = this.interpolatePaths(path1,path3);
-  let fpath0 = path0.concat(ipath0,path2,path2);
-  //let fpath1 = path1.concat(ipath1.concat(path3))
-  let fpath1 = path1.concat(ipath1,path3,path3)
-  //let fpath1 = path0.concat(path3,ipath1,path3,path3)
-  this.thePath = fpath1;
-  //t paths= [path0,path1,path2,path3];
-  //let paths= [ipath0,ipath1];
-  let paths= [path0,path1];
+  const mkPaths =  (rect)=>{
+    let nc = rect.namedCorners();
+    let {UL,UR,LL,LR} = nc;
+    let  upath = this.setPathLength([UL,UR],numPoints);
+    let  lpath = this.setPathLength([LL,LR],numPoints);
+    return [upath,lpath];
+  }
+
+  let rwd = 0.9;
+  let rht = 0.1;
+  const mkRect = (y) => {
+    return Rectangle.mk(Point.mk(0.5*(1-rwd),y),Point.mk(rwd,rht));
+  }
+  let rect = mkRect(0.5);
+  let paths = mkPaths(rect);
   this.addMotionsForCell({cell:cells[0],paths,numPhases,shapeConnector});
 
- // this.addMotionsForCell(cells[0],[path],100,this.shapeConnector);// put back
-/*
-  let path = mkSpiral({turns:6,pointsPerTurn:18,iRadius,deltaRadius,center});
-  cells.forEach((cell) =>{
-    let {coords} = cell;
-    //debugger;
-    let {x,y} = coords;
-    let z = (x+y)%4;
-    let path=paths[x];
-    //let path=paths[z];
-    //debugger;
-    this.addMotionsForCell(cell,path,130,this.shapeConnector);// put back
-  });*/
 }
  
 rs.showPaths= function () {

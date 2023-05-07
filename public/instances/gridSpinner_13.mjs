@@ -23,7 +23,7 @@ rs.initProtos = function () {
   lineP['stroke-width'] = .4;
   lineP.stroke = 'cyan';
    let connectorP = this.connectorP = linePP.instantiate();
-  connectorP['stroke-width'] = .3;
+  connectorP['stroke-width'] = .33;
   connectorP.stroke = 'cyan';
   let gridPolygonP = this.gridPolygonP = polygonPP.instantiate();
   gridPolygonP['stroke-width'] = .4;

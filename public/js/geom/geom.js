@@ -1397,6 +1397,22 @@ Rectangle.corners = function () {
 }
 
 
+Rectangle.namedCorners = function () {
+  let rs = {};
+  let  {corner:c,extent:xt}  = this;
+  let {x:cx,y:cy} =c;
+  let {x:ex,y:ey} =xt;
+  return {
+    UL:Point.mk(cx,cy),
+    UR:Point.mk(cx+ex,cy),
+    LL:Point.mk(cx,cy+ey),
+    LR:Point.mk(cx+ex,cy+ey)
+  };
+}
+    
+
+
+
 Rectangle.labeledCorners = function () {
   let {x:cx,y:cy} = this.corner;
   let {x:ex,y:ey} = this.extent;

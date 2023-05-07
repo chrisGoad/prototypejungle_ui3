@@ -25,7 +25,7 @@ rs.initProtos = function () {
   lineP['stroke-width'] = .4;
   lineP.stroke = 'cyan';
    let connectorP = this.connectorP = linePP.instantiate();
-  connectorP['stroke-width'] = .4;
+  connectorP['stroke-width'] = .2;
   connectorP.stroke = 'cyan';
   let gridPolygonP = this.gridPolygonP = polygonPP.instantiate();
   gridPolygonP['stroke-width'] = .4;
@@ -92,24 +92,27 @@ rs.addMotions = function () {
   debugger;
     let {cells,numPhases,shapeConnector,numSpokes} = this;
   let radius = .25;
-  let startAngle = 0;//.25*(2*Math.PI);
-  //let center = Point.mk(.5,.5);
-  let center = Point.mk(.5,.6);
+  //let startAngle1 = 0;
+  let startAngle0 = -.12*(2*Math.PI);
+  let startAngle1 = .12*(2*Math.PI);
+  let center0 = Point.mk(.5,.5);
+  let top = .8;
+  let bot = 1-top;
+  let hws = 0.1
+  let center1 = Point.mk(.666,.5);
   let numPoints = 20;
-  let path0 = this.mkCircle({radius:0.4,numPoints,center});
-  let path1 = this.mkCircle({radius:0.3,numPoints,center});
-  let path2 = this.setPathLength([Point.mk(.2,.3),Point.mk(.8,.3)],numPoints);
-  let path3 = this.setPathLength([Point.mk(.2,.1),Point.mk(.8,.1)],numPoints);
-  let ipath0 = this.interpolatePaths(path0,path2);
-  let ipath1 = this.interpolatePaths(path1,path3);
-  let fpath0 = path0.concat(ipath0,path2,path2);
-  //let fpath1 = path1.concat(ipath1.concat(path3))
-  let fpath1 = path1.concat(ipath1,path3,path3)
-  //let fpath1 = path0.concat(path3,ipath1,path3,path3)
-  this.thePath = fpath1;
+  let path0 = this.mkCircle({radius:0.4,numPoints,center:center0,startAngle:startAngle0});
+  let path1 = this.mkCircle({radius:0.3,numPoints,center:center0,startAngle:startAngle0});//.reverse();
+ // let path2 = this.mkCircle({radius:0.4,numPoints,center:center1,startAngle:startAngle1}).reverse();
+ // let path3 = this.mkCircle({radius:0.3,numPoints,center:center1,startAngle:startAngle1});//.reverse();
+  let path2 = this.setPathLength([Point.mk(.5-hws,top),Point.mk(.5-hws,bot)],numPoints);
+  let path3 = this.setPathLength([Point.mk(.5+hws,top),Point.mk(.5+hws,bot)],numPoints);
+ 
+  this.thePath = path1;
   //t paths= [path0,path1,path2,path3];
   //let paths= [ipath0,ipath1];
   let paths= [path0,path1];
+ paths= [path0,path1,path2,path3];
   this.addMotionsForCell({cell:cells[0],paths,numPhases,shapeConnector});
 
  // this.addMotionsForCell(cells[0],[path],100,this.shapeConnector);// put back
