@@ -91,49 +91,9 @@ item.pathLength = function (path) {
 }
 
 
-item.alongPath = function (path,fr) {
-  //debugger;
-  let ds2p0 = 0; // distance to begining of current segment (segment i);
-  let slns = this.segLengths(path);
-  let pln = slns.reduce((a,b) => a+b,0);
-  let ln = path.length;
-  let targetln = pln*fr;
-  for (let i=0;i<ln-1;i++) {
-    let sln = slns[i];
-    let ds2p1 = ds2p0+ sln;
-    if (ds2p1 >= targetln) { // our target point is in this segment
-       let p0 = path[i];
-       let p1 = path[i+1];
-       let lnis = targetln - ds2p0; // length in this segment
-       let csln = slns[i];
-       let sfr = lnis/csln;
-       let vec = p1.difference(p0);
-       let target = p0.plus(vec.times(sfr));
-       return target;
-    } 
-    ds2p0 = ds2p1;
-  }
-}
-       
-item.showPathh = function (path,fc,lineP) {
-  let {pathLines,conne} = this;
-  if (!pathLines) {
-    pathLines = this.set('pathLines',arrayShape.mk());
-  }
-  let ln = path.length;
-  for (let i=0;i<(ln-1);i++) {
-    let e0 = path[i].times(fc);
-    let e1 = path[i+1].times(fc);
-    let line = connectorP.instantiate();
-    line.show();
-    line.setEnds(e0,e1);
-    pathLines.push(line);
-  }
-}
-
-   
+ 
     
-  item.execPathMotion=  function (mg,m,t,i) {
+item.execPathMotion=  function (mg,m,t,i) {
   let {startTime:st,duration:dur,cycles,paths} = mg;
   let {phase,shape,oPoly,lastCycle,pathNum} = m;
   let path = paths[pathNum];
@@ -384,7 +344,7 @@ item.connectShapes = function () {
   
   
 item.updateConnectors = function () {
-  let {connectors,connectorSegs:cnsegs,connectedShapes:cns,connectorIntersections:cints,icircleP,showIntersections,rgbdot,rgbcon} = this;
+  let {connectors,connectorSegs:cnsegs,connectedShapes:cns,connectorIntersections:cints,icircleP,showIntersections,rgbdot,rgbcon,stepsSoFar:ssf,numSteps} = this;
   if (!cns) {
     return;
   }
@@ -398,9 +358,9 @@ item.updateConnectors = function () {
     let connector = connectors[i];
     let connSeg = cnsegs[i];
     let connection = cns[i];
-    let c0 = connection[0];
-    let c1 = connection[1]
-    let path = connection[2];
+    let [c0,c1,path,roff0,roff1] = connection;
+    //let c1 = connection[1]
+    //let path = connection[2];
     connSeg.doNotIntersect = path.doNotIntersect;
     connSeg.ishapeP = path.ishapeP;
     let tr0 = c0.getTranslation();
@@ -434,9 +394,11 @@ item.updateConnectors = function () {
       let y = rf * Math.random();
       return Point.mk(x,y);
     }
-      
-    let rtr0 = tr0.plus(randomPoint());
-    let rtr1 = tr1.plus(randomPoint());
+    let fr0 = ssf/numSteps;
+    let fr1 = 2*Math.min(fr0,1-fr0);
+    let fr = Math.pow(fr1,3);
+    let rtr0 = tr0.plus(roff0.times(fr));
+    let rtr1 = tr1.plus(roff1.times(fr));
     connector.setEnds(rtr0,rtr1);
     connector.update();
     connSeg.setEnds(tr0,tr1);

@@ -39,7 +39,7 @@ rs.toQuad = function(p) {
 
 //rs.shapeConnectorC = function (mg,cell,numConnections,selj,selk) { //,connectJump) {
 rs.shapeConnectorC = function (params) { //,connectJump) {
-  let {connectedShapes:cns,numC} = this;
+  let {connectedShapes:cns,numC,randomOffset:rf} = this;
   let {motionGroup:mg,cell,numConnections:ncp,connectIndices:ci} = params;
   let {paths} = mg;
   debugger;
@@ -70,7 +70,21 @@ rs.shapeConnectorC = function (params) { //,connectJump) {
       if (!sh0) {
          debugger;
       }
-      cns.push([sh0,sh1,path]);
+      //let rf=40;
+      const randomPoint = () => {
+        let x,y;
+        if (rf) {
+          x = rf * Math.random();
+          y = rf * Math.random();
+        } else {
+          x=0;
+          y=0;
+        }
+        return Point.mk(x,y);
+      }
+      let randomOffset0 = randomPoint();
+      let randomOffset1 = randomPoint();
+      cns.push([sh0,sh1,path,randomOffset0,randomOffset1]);
     }
   }
 }

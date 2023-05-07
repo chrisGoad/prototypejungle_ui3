@@ -45,6 +45,8 @@ sections:
       [0,'gridSpinner_17','instances',1,'Grid Spinner 17',{likes:0,posted:0,category:'quad'}], 
       [0,'gridSpinner_18','instances',1,'Grid Spinner 18',{likes:0,posted:0,category:'quad'}], 
       [0,'gridSpinner_19','instances',1,'Grid Spinner 19',{likes:0,posted:0,category:'quad'}], 
+      [0,'gridSpinner_20','instances',1,'Grid Spinner 20',{likes:0,posted:0,category:'quad'}], 
+      [0,'gridSpinner_21','instances',1,'Grid Spinner 21',{likes:0,posted:0,category:'quad'}], 
 
 /*[0,'quad_9_3','instances',1,'Quad 9 3',{likes:0,posted:0,category0_:'quad'}], 
     [0,'quad_0_12','instances',1,'Quad 0 12',{likes:0,posted:0,category:'quad'}], 
