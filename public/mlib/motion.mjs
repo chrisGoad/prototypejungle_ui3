@@ -363,9 +363,7 @@ item.updateConnectors = function () {
     //let path = connection[2];
     connSeg.doNotIntersect = path.doNotIntersect;
     connSeg.ishapeP = path.ishapeP;
-    let tr0 = c0.getTranslation();
     let ap0 = c0.alongPath;
-    let tr1 = c1.getTranslation();
     let ap1 = c1.alongPath;
     let apMax = Math.max(ap0,ap1);
     let apMin = Math.min(ap0,ap1);
@@ -388,8 +386,16 @@ item.updateConnectors = function () {
     c0.update();
     c1.fill = clrdot;
     c1.update();
-    let rf=0;
-    const randomPoint = () => {
+    let positions;
+    if (this.placeConnector) {
+      positions = this.placeConnector(connection);
+    } else {
+       let tr0 = c0.getTranslation();
+       let tr1 = c1.getTranslation();
+       positions = [tr0,tr1];
+    }
+    let [pos0,pos1] = positions;
+  /*  const randomPoint = () => {
       let x = rf * Math.random();
       let y = rf * Math.random();
       return Point.mk(x,y);
@@ -398,10 +404,10 @@ item.updateConnectors = function () {
     let fr1 = 2*Math.min(fr0,1-fr0);
     let fr = Math.pow(fr1,1);
     let rtr0 = tr0.plus(roff0.times(fr));
-    let rtr1 = tr1.plus(roff1.times(fr));
-    connector.setEnds(rtr0,rtr1);
+    let rtr1 = tr1.plus(roff1.times(fr));*/
+    connector.setEnds(pos0,pos1);
     connector.update();
-    connSeg.setEnds(rtr0,rtr1);
+    connSeg.setEnds(pos0,pos1);
   }
   if (!showIntersections) {
     return;

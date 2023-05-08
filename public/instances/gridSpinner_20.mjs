@@ -111,20 +111,20 @@ rs.addMotions = function () {
   //let paths= [ipath0,ipath1];
   let paths= [path0,path1];
   this.addMotionsForCell({cell:cells[0],paths,numPhases,shapeConnector});
+}
 
- // this.addMotionsForCell(cells[0],[path],100,this.shapeConnector);// put back
-/*
-  let path = mkSpiral({turns:6,pointsPerTurn:18,iRadius,deltaRadius,center});
-  cells.forEach((cell) =>{
-    let {coords} = cell;
-    //debugger;
-    let {x,y} = coords;
-    let z = (x+y)%4;
-    let path=paths[x];
-    //let path=paths[z];
-    //debugger;
-    this.addMotionsForCell(cell,path,130,this.shapeConnector);// put back
-  });*/
+rs.placeConnector = function (connection) {
+  debugger;
+  let {stepsSoFar:ssf,numSteps} = this;
+  let [c0,c1,path,roff0,roff1] = connection;
+  let tr0 = c0.getTranslation();
+  let tr1 = c1.getTranslation();
+  let fr0 = ssf/numSteps;
+  let fr1 = 2*Math.min(fr0,1-fr0);
+  let fr = Math.pow(fr1,1);
+  let rtr0 = tr0.plus(roff0.times(fr));
+  let rtr1 = tr1.plus(roff1.times(fr));
+  return [rtr0,rtr1]
 }
  
 rs.showPaths= function () {
