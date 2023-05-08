@@ -340,6 +340,36 @@ item.connectShapes = function () {
   }
 }
 
+item.paintConnector = function (params) { //might be overriden
+  let {shape0:c0,shape1:c1,connector} = params;
+  let rgbd = {r:255,g:255,b:255};
+  let rgbc = {r:255,g:255,b:255};
+  let {r:rd,g:gd,b:bd} = rgbd;
+  let {r:rc,g:gc,b:bc} = rgbc;
+  let ap0 = c0.alongPath;
+  let ap1 = c1.alongPath;
+  let apMax = Math.max(ap0,ap1);
+  let apMin = Math.min(ap0,ap1);
+  let lowFade = .03;
+  let highFade = 1-lowFade;
+  let fadeLow=1;
+  let fadeHigh=1;
+  if (apMin < lowFade)  {
+    fadeLow = apMin/lowFade;
+  } 
+  if (apMax>highFade) {
+    fadeHigh = (1-apMax)/lowFade;
+  }
+  let minFade = Math.min(fadeLow,fadeHigh);
+  console.log('apMax',apMax,'apMin',apMin,'fadeLow',fadeLow,'fadeHigh',fadeHigh);
+  let clrdot = `rgba(${rd},${gd},${bd},${minFade})`;
+  let clrcon = `rgba(${rc},${gc},${bc},${minFade})`;
+  connector.stroke = clrcon;
+  c0.fill = clrdot;
+  c0.update();
+  c1.fill = clrdot;
+  c1.update();
+}
   
   
   
@@ -349,44 +379,19 @@ item.updateConnectors = function () {
     return;
   }
   debugger;
-  let rgbd = rgbdot?rgbdot:{r:255,g:255,b:255};
-  let rgbc = rgbcon?rgbcon:{r:255,g:255,b:255};
-  let {r:rd,g:gd,b:bd} = rgbd;
-  let {r:rc,g:gc,b:bc} = rgbc;
   let ln = cns.length;
   for (let i=0;i<ln;i++) {
     let connector = connectors[i];
     let connSeg = cnsegs[i];
     let connection = cns[i];
     let {shape0:c0,shape1:c1,path,randomOffset0:roff0,randomOffset1:roff1} = connection;
+    let params ={shape0:c0,shape1:c1,connector};
+    this.paintConnector(params);
     //let [c0,c1,path,roff0,roff1] = connection;
     //let c1 = connection[1]
     //let path = connection[2];
     connSeg.doNotIntersect = path.doNotIntersect;
     connSeg.ishapeP = path.ishapeP;
-    let ap0 = c0.alongPath;
-    let ap1 = c1.alongPath;
-    let apMax = Math.max(ap0,ap1);
-    let apMin = Math.min(ap0,ap1);
-    let lowFade = .03;
-    let highFade = 1-lowFade;
-    let fadeLow=1;
-    let fadeHigh=1;
-    if (apMin < lowFade)  {
-      fadeLow = apMin/lowFade;
-    } 
-    if (apMax>highFade) {
-      fadeHigh = (1-apMax)/lowFade;
-    }
-    let minFade = Math.min(fadeLow,fadeHigh);
-    console.log('apMax',apMax,'apMin',apMin,'fadeLow',fadeLow,'fadeHigh',fadeHigh);
-    let clrdot = `rgba(${rd},${gd},${bd},${minFade})`;
-    let clrcon = `rgba(${rc},${gc},${bc},${minFade})`;
-    connector.stroke = clrcon;
-    c0.fill = clrdot;
-    c0.update();
-    c1.fill = clrdot;
-    c1.update();
     let positions;
     if (this.placeConnector) {
       positions = this.placeConnector(connection);
@@ -396,16 +401,6 @@ item.updateConnectors = function () {
        positions = [tr0,tr1];
     }
     let [pos0,pos1] = positions;
-  /*  const randomPoint = () => {
-      let x = rf * Math.random();
-      let y = rf * Math.random();
-      return Point.mk(x,y);
-    }
-    let fr0 = ssf/numSteps;
-    let fr1 = 2*Math.min(fr0,1-fr0);
-    let fr = Math.pow(fr1,1);
-    let rtr0 = tr0.plus(roff0.times(fr));
-    let rtr1 = tr1.plus(roff1.times(fr));*/
     connector.setEnds(pos0,pos1);
     connector.update();
     connSeg.setEnds(pos0,pos1);
