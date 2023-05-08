@@ -11,11 +11,11 @@ let wd = 200;
 let nr = 8;
 //
 nr =1;
-rs.setName('gridSpinner_20');
+rs.setName('gridSpinner_23');
 let topParams = {width:wd,height:wd,numRows:nr,numCols:nr,numConnections:400,framePadding:.1*wd,stepsPerMove:10,numStepss:24,numSteps:400,center:Point.mk(0,0),radius:wd/4,
-                 cycles:4,frameStroke:'rgb(2,2,2)',frameStrokee:'white',frameStrokeWidth:1,saveAnimation:1,stepInterval:40,randomConnections:1,
+                 cycles:1,frameStroke:'rgb(2,2,2)',frameStrokee:'white',frameStrokeWidth:1,saveAnimation:1,stepInterval:40,randomConnections:1,
            //      pauseAtt:[29,30,59,60],numConnections:100,numPhases:102,showThePath:1,showIntersections:1}
-                 pauseAtt:[29,30,59,60],numConnections:80,numPhases:100,showThePath:0,showIntersections:0,numSpokes:11,randomOffset:0}
+                 pauseAtt:[29,30,59,60],numConnections:100,numPhases:100,showThePath:0,showIntersections:0,numSpokes:11,randomOffset:0}
             //     pauseAtt:[29,30,59,60],numConnections:4,numPhases:80,showThePath:0,showIntersections:1,numSpokes:5}
 Object.assign(rs,topParams);
 
@@ -73,7 +73,7 @@ rs.connectIndices = function (params) {
 
   this.numCisCalls = ncc+1;
   let e1pi; 
-  if ((pi === 0)||(pi == 2)) {
+  if (!(pi % 2)) {
     e1pi = pi+1;
     //e1pi = pi;
   } else {
@@ -83,7 +83,7 @@ rs.connectIndices = function (params) {
     e1pi = pi-1;
    // e1pi = pi;
   }
-  let e1si =(e0si+3+Math.floor(Math.random()*5))%np;
+  let e1si =(e0si+3+Math.floor(Math.random()*2))%np;
   //debugger;
   console.log('e0si',e0si,'e1pi',e1pi,'e1si',e1si);
   return {end0ShapeIndex:e0si,end1PathIndex:e1pi,end1ShapeIndex:e1si};
@@ -96,11 +96,13 @@ rs.addMotions = function () {
     let {cells,numPhases,shapeConnector,numSpokes} = this;
  
   let numPoints = 20;
-  const mkPaths =  (rect)=>{
+  const mk2Paths =  (rect,reverse)=>{
     let nc = rect.namedCorners();
     let {UL,UR,LL,LR} = nc;
-    let  upath = this.setPathLength([UL,UR],numPoints);
-    let  lpath = this.setPathLength([LL,LR],numPoints);
+    let  upathi = this.setPathLength([UL,UR],numPoints);
+    let  lpathi = this.setPathLength([LL,LR],numPoints);
+    let upath = reverse?upathi.reverse():upathi;
+    let lpath = reverse?lpathi.reverse():lpathi;
     return [upath,lpath];
   }
 
@@ -109,12 +111,48 @@ rs.addMotions = function () {
   const mkRect = (y) => {
     return Rectangle.mk(Point.mk(0.5*(1-rwd),y),Point.mk(rwd,rht));
   }
-  let rect = mkRect(0.5);
-  let paths = mkPaths(rect);
+  const mkPaths = (y,reverse) => {
+    let rect = mkRect(y);
+    let paths = mk2Paths(rect,reverse);
+    return paths;
+  }
+  let paths =[]
+  for (let i = 1;i<10;i++) {
+    paths = paths.concat(mkPaths(i*.1,i%2));
+  }
+    
   this.addMotionsForCell({cell:cells[0],paths,numPhases,shapeConnector});
 
 }
- 
+
+
+rs.placeConnector = function (connection) {
+  debugger;
+  let {stepsSoFar:ssf,numSteps} = this;
+  let {shape0:c0,shape1:c1,numPhases,path,randomOffset0:roff0,randomOffset1:roff1} = connection;
+  let tr0 = c0.getTranslation();
+  let tr1 = c1.getTranslation();
+  let ap0 = c0.alongPath;
+  let ap1 = c1.alongPath;
+  let fr0 = 2*Math.min(ap0,1-ap0);
+  let fr1 = Math.pow(fr0,5);
+  let rtr0 = tr0.plus(roff0.times(fr1));
+  let rtr1 = tr1.plus(roff1.times(fr1));
+  return [rtr0,rtr1]
+}
+
+rs.annotateConnection = function (cn) {
+  let {end0ShapeIndex:e0i,numPhases:np} = cn;
+  let rf = 40;
+  const randomPoint = () => {
+    let x = rf * (Math.random()-0.5);
+    let y = rf * (Math.random()-0.5);
+    return Point.mk(x,y);
+  }
+  cn.randomOffset0 = randomPoint();
+  cn.randomOffset1 = randomPoint();
+}
+  
 rs.showPaths= function () {
    debugger;
    let {connectorP,thePath} = this;

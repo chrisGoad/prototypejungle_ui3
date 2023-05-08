@@ -11,7 +11,7 @@ let wd = 200;
 let nr = 8;
 //
 nr =1;
-rs.setName('gridSpinner_20');
+rs.setName('gridSpinner_22');
 let topParams = {width:wd,height:wd,numRows:nr,numCols:nr,numConnections:400,framePadding:.1*wd,stepsPerMove:10,numStepss:24,numSteps:400,center:Point.mk(0,0),radius:wd/4,
                  cycles:2,frameStroke:'rgb(2,2,2)',frameStrokee:'white',frameStrokeWidth:1,saveAnimation:1,stepInterval:40,randomConnections:1,
            //      pauseAtt:[29,30,59,60],numConnections:100,numPhases:102,showThePath:1,showIntersections:1}
@@ -96,9 +96,10 @@ rs.addMotions = function () {
   let startAngle0 = -.12*(2*Math.PI);
   let startAngle1 = .12*(2*Math.PI);
   let center0 = Point.mk(.5,.5);
-  let top = .8;
+  let top = .75;
   let bot = 1-top;
-  let hws = 0.1
+  let hws = 0.1;
+ // hws = 0.2;
   let center1 = Point.mk(.666,.5);
   let numPoints = 20;
   let path0 = this.mkCircle({radius:0.4,numPoints,center:center0,startAngle:startAngle0});
@@ -115,19 +116,7 @@ rs.addMotions = function () {
  paths= [path0,path1,path2,path3];
   this.addMotionsForCell({cell:cells[0],paths,numPhases,shapeConnector});
 
- // this.addMotionsForCell(cells[0],[path],100,this.shapeConnector);// put back
-/*
-  let path = mkSpiral({turns:6,pointsPerTurn:18,iRadius,deltaRadius,center});
-  cells.forEach((cell) =>{
-    let {coords} = cell;
-    //debugger;
-    let {x,y} = coords;
-    let z = (x+y)%4;
-    let path=paths[x];
-    //let path=paths[z];
-    //debugger;
-    this.addMotionsForCell(cell,path,130,this.shapeConnector);// put back
-  });*/
+
 }
  
 rs.showPaths= function () {

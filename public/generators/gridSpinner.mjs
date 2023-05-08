@@ -56,21 +56,23 @@ rs.shapeConnectorC = function (params) { //,connectJump) {
     let numConnections = pnc?pnc:ncp
     for (let j=0;j<numConnections;j++) {
       let cparams = {cell,pathIndex:i,connectIndex:j,numPhases}
+      debugger;
       let cis =  ci.call(this,cparams); 
       if (!cis) {
         continue;
       }
+      let {end0ShapeIndex,end1PathIndex,end1ShapeIndex} = cis;
       //let s1i = selk.call(this,cell,s0is,ln);
      // let j = Math.floor(Math.random()*ln);
      // let k = Math.floor(Math.random()*ln);
-      let sh0 = shapes[cis.end0ShapeIndex];
-      let e1shapes = shapesPerPath[cis.end1PathIndex]; 
-      let sh1 = e1shapes[cis.end1ShapeIndex];
+      let sh0 = shapes[end0ShapeIndex];
+      let e1shapes = shapesPerPath[end1PathIndex]; 
+      let sh1 = e1shapes[end1ShapeIndex];
       //let sh1 = rc?shapes[k]:shapes[(j+connectJump)%ln];
       if (!sh0) {
          debugger;
       }
-      let connection = {shape0:sh0,shape1:sh1,path};
+      let connection = {shape0:sh0,shape1:sh1,path,connectIndex:j,end0ShapeIndex,end1PathIndex,end1ShapeIndex,numConnections,numPhases};
       if (this.annotateConnection) {
          this.annotateConnection(connection);
       }
