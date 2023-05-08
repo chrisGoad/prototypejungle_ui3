@@ -116,7 +116,7 @@ rs.addMotions = function () {
 rs.placeConnector = function (connection) {
   debugger;
   let {stepsSoFar:ssf,numSteps} = this;
-  let [c0,c1,path,roff0,roff1] = connection;
+  let {shape0:c0,shape1:c1,randomOffset0:roff0,randomOffset1:roff1} = connection;
   let tr0 = c0.getTranslation();
   let tr1 = c1.getTranslation();
   let fr0 = ssf/numSteps;
@@ -126,7 +126,18 @@ rs.placeConnector = function (connection) {
   let rtr1 = tr1.plus(roff1.times(fr));
   return [rtr0,rtr1]
 }
- 
+
+rs.annotateConnection = function (cn) {
+  let rf=40;
+  const randomPoint = () => {
+    let x = rf * Math.random();
+    let y = rf * Math.random();
+    return Point.mk(x,y);
+  }
+  cn.randomOffset0 = randomPoint();
+  cn.randomOffset1 = randomPoint();
+}
+
 rs.showPaths= function () {
    debugger;
    let {connectorP,thePath} = this;

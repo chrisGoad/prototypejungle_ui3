@@ -70,21 +70,13 @@ rs.shapeConnectorC = function (params) { //,connectJump) {
       if (!sh0) {
          debugger;
       }
-      //let rf=40;
-      const randomPoint = () => {
-        let x,y;
-        if (rf) {
-          x = rf * Math.random();
-          y = rf * Math.random();
-        } else {
-          x=0;
-          y=0;
-        }
-        return Point.mk(x,y);
+      let connection = {shape0:sh0,shape1:sh1,path};
+      if (this.annotateConnection) {
+         this.annotateConnection(connection);
       }
-      let randomOffset0 = randomPoint();
-      let randomOffset1 = randomPoint();
-      cns.push([sh0,sh1,path,randomOffset0,randomOffset1]);
+      cns.push(connection);
+      //cns.push({shape0:sh0,shape1:sh1,path,randomOffset0,randomOffset1});
+    //  cns.push(sh0,sh1,path,randomOffset0,randomOffset1]);
     }
   }
 }
