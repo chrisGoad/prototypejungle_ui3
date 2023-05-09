@@ -72,7 +72,7 @@ rs.shapeConnectorC = function (params) { //,connectJump) {
       if (!sh0) {
          debugger;
       }
-      let connection = {shape0:sh0,shape1:sh1,path,connectIndex:j,end0ShapeIndex,end1PathIndex,end1ShapeIndex,numConnections,numPhases};
+      let connection = {shape0:sh0,shape1:sh1,path,connectIndex:j,end0ShapeIndex,end1PathIndex,end1ShapeIndex,numConnections,numPhases,cell};
       if (this.annotateConnection) {
          this.annotateConnection(connection);
       }
@@ -94,7 +94,7 @@ rs.shapeConnector = function (mg,cell) {
 
 
 rs.addMotionsForCell = function (params) {
-  let {cell,paths,numPhases,shapeConnector}  = params;
+  let {cell,paths,numPhases,shapeConnector,backwards}  = params;
   let {deltaX,numSteps,circleP,iPolygonP,cycles} = this;
   let duration = numSteps;
  /* let ip = 1/numPhases;
@@ -107,7 +107,7 @@ rs.addMotionsForCell = function (params) {
   let shapeP=circleP;
   debugger;
  // this.mkPathMotionGroup({cell,phases,paths,cycles,duration,shapeP,oPoly:polygon,shapeConnector});
-  this.mkPathMotionGroup({cell,numPhases,paths,cycles,duration,shapeP,oPoly:polygon,shapeConnector});
+  this.mkPathMotionGroup({cell,numPhases,paths,cycles,duration,shapeP,oPoly:polygon,shapeConnector,backwards});
 }
 
  

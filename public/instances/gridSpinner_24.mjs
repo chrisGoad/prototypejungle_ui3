@@ -10,12 +10,12 @@ import {rs as polygonPP} from '/shape/polygon.mjs';
 let wd = 200;
 let nr = 8;
 //
-nr =1;
-rs.setName('gridSpinner_22');
+nr =2;
+rs.setName('gridSpinner_24');
 let topParams = {width:wd,height:wd,numRows:nr,numCols:nr,numConnections:400,framePadding:.0*wd,stepsPerMove:10,numStepss:24,numSteps:400,center:Point.mk(0,0),radius:wd/4,
-                 cycles:2,frameStrokeee:'white',frameStrokeWidth:1,saveAnimation:1,stepInterval:40,randomConnections:1,
+                 cycles:2,frameStrokee:'white',frameStrokeWidth:1,saveAnimation:1,stepInterval:40,randomConnections:1,
            //      pauseAtt:[29,30,59,60],numConnections:100,numPhases:102,showThePath:1,showIntersections:1}
-                 pauseAtt:[29,30,59,60],numConnections:18,numPhases:100,showThePath:0,showIntersections:1,numSpokes:11,randomOffset:20}
+                 pauseAtt:[29,30,59,60],numConnections:20,numPhases:21,showThePath:0,showIntersections:1,numSpokes:8,randomOffset:0}
             //     pauseAtt:[29,30,59,60],numConnections:4,numPhases:80,showThePath:0,showIntersections:1,numSpokes:5}
 Object.assign(rs,topParams);
 
@@ -25,7 +25,7 @@ rs.initProtos = function () {
   lineP['stroke-width'] = .4;
   lineP.stroke = 'cyan';
    let connectorP = this.connectorP = linePP.instantiate();
-  connectorP['stroke-width'] = .3;
+  connectorP['stroke-width'] = .2;
   connectorP.stroke = 'cyan';
   let gridPolygonP = this.gridPolygonP = polygonPP.instantiate();
   gridPolygonP['stroke-width'] = .4;
@@ -64,23 +64,16 @@ rs.numCisCalls = 0;
 
 rs.connectIndices = function (params) {
   let {cell,pathIndex:pi,connectIndex:ci} = params;
-  let {numCisCalls:ncc,rseq,numPhases:np,numConnections:nc} = this;
+  let {numCisCalls:ncc,rseq,numPhases:np,numConnections:nc,numSpokes:ns} = this;
  // debugger;
   //let e0si = rseq[ncc%nc];//,Math.floor(Math.random()*ln);
   //let e0si = ci;//Math.floor(Math.random()*nc);
-  let e0si = ncc%2?ci:ci+50;
+  //let e0si = ncc%2?ci:ci+50;
+  let e0si = ci;
 
   this.numCisCalls = ncc+1;
-  let e1pi; 
-  if ((pi === 0)||(pi == 2)) {
-    e1pi = pi+1;
-    //e1pi = pi;
-  }
-  if ((pi === 1)||(pi == 3)) {
-    e1pi = pi-1;
-   // e1pi = pi;
-  }
-  let e1si =(e0si+6+Math.floor(Math.random()*0))%np;
+  let e1pi= (pi+1)%ns; 
+  let e1si =(e0si+0+Math.floor(Math.random()*0))%np;
   //debugger;
   console.log('e0si',e0si,'e1pi',e1pi,'e1si',e1si);
   return {end0ShapeIndex:e0si,end1PathIndex:e1pi,end1ShapeIndex:e1si};
@@ -90,64 +83,57 @@ rs.connectIndices = function (params) {
 
 rs.addMotions = function () {
   debugger;
-    let {cells,numPhases,shapeConnector,numSpokes} = this;
-  let radius = .25;
-  //let startAngle1 = 0;
-  let startAngle0 = -.12*(2*Math.PI);
-  let startAngle1 = .12*(2*Math.PI);
-  let center0 = Point.mk(.5,.5);
-  let top = .6666;
-  let bot = 1-top;
-  let hws = 0.1;
- // hws = 0.2;
-  let center1 = Point.mk(.666,.5);
-  let numPoints = 20;
-  let path0 = this.mkCircle({radius:0.4,numPoints,center:center0,startAngle:startAngle0});
-  let path1 = this.mkCircle({radius:0.3,numPoints,center:center0,startAngle:startAngle0});//.reverse();
- // let path2 = this.mkCircle({radius:0.4,numPoints,center:center1,startAngle:startAngle1}).reverse();
- // let path3 = this.mkCircle({radius:0.3,numPoints,center:center1,startAngle:startAngle1});//.reverse();
-  let path2 = this.setPathLength([Point.mk(.5-hws,top),Point.mk(.5-hws,bot)],numPoints);
-  let path3 = this.setPathLength([Point.mk(.5+hws,top),Point.mk(.5+hws,bot)],numPoints);
- 
-  this.thePath = path1;
-  //t paths= [path0,path1,path2,path3];
-  //let paths= [ipath0,ipath1];
-  let paths= [path0,path1];
- paths= [path0,path1,path2,path3];
-  this.addMotionsForCell({cell:cells[0],paths,numPhases,shapeConnector});
+  let {cells,numPhases,shapeConnector,numSpokes} = this;
+
+  let spaths = this.mkSpokePaths({numSpokes,innerRadius:.05,outerRadius:.48,center:Point.mk(.5,.5)});
+  //let paths = this.reversePaths(spaths);
+  let paths = spaths;
+ // this.addMotionsForCell({cell:cells[0],paths,numPhases,shapeConnector});
+ cells.forEach((cell) =>{
+    let {coords} = cell;
+    debugger;
+    let {index} = cell;
+   /* if (index === 4) {
+      cell.numConnections = 10;
+    }
+    let {x,y} = coords;
+    let z = (x+y)%4;*/
+      this.addMotionsForCell({cell,paths,numPhases,shapeConnector,backwards:index%2});
+  });
 }
- 
- 
+
+
 rs.placeConnector = function (connection) {
   debugger;
   let {stepsSoFar:ssf,numSteps} = this;
-  let {shape0:c0,shape1:c1,randomOffset0:roff0,randomOffset1:roff1} = connection;
-  let pn0 = c0.pathNum;
-  let pn1 = c1.pathNum;
+  let {shape0:c0,shape1:c1,numPhases,path,randomOffset0:roff0,randomOffset1:roff1,cell} = connection;
+  let {index} = cell;
   let tr0 = c0.getTranslation();
   let tr1 = c1.getTranslation();
-  if (pn0>1) {
-    return [tr0,tr1];
-  }
-  let fr0 = ssf/numSteps;
-  let fr1 = 2*Math.min(fr0,1-fr0);
-  let fr = Math.pow(fr1,2);
-  let rtr0 = tr0.plus(roff0.times(fr));
-  let rtr1 = tr1.plus(roff1.times(fr));
+  let d = tr1.distance(tr0);
+  console.log('d',d);
+  let ap0 = c0.alongPath;
+  let ap1 = c1.alongPath;
+  //let fr0 = 2*Math.min(ap0,1-ap0);
+  let fr0 = index%2?ap0:1-ap0;
+  let fr1 = Math.pow(fr0,3);
+  let rtr0 = tr0.plus(roff0.times(fr1));
+  let rtr1 = tr1.plus(roff1.times(fr1));
   return [rtr0,rtr1]
 }
 
 rs.annotateConnection = function (cn) {
-  let rf=20;
+  let {end0ShapeIndex:e0i,numPhases:np} = cn;
+  let rf = 40;
   const randomPoint = () => {
-    let x = rf * Math.random();
-    let y = rf * Math.random();
+    let x = rf * (Math.random()-0.5);
+    let y = rf * (Math.random()-0.5);
     return Point.mk(x,y);
   }
   cn.randomOffset0 = randomPoint();
   cn.randomOffset1 = randomPoint();
 }
-
+  
 rs.showPaths= function () {
    debugger;
    let {connectorP,thePath} = this;

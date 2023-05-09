@@ -319,6 +319,10 @@ item.mkSpokePaths = function (params) {
   return paths;
 }
 
+item.reversePaths = function (paths) {
+  return paths.map((p) => p.reverse());
+}
+
 item.mkParallelPaths = function (params) {
   let {numPaths:np,rectangle} = params;
   let rect =  rectangle?rectangle:Rectangle.mk(Point.mk(0,0),Point.mk(1,1));

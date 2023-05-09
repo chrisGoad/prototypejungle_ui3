@@ -94,8 +94,9 @@ item.pathLength = function (path) {
  
     
 item.execPathMotion=  function (mg,m,t,i) {
-  let {startTime:st,duration:dur,cycles,paths} = mg;
+  let {startTime:st,duration:dur,cycles,paths,backwards} = mg;
   let {phase,shape,oPoly,lastCycle,pathNum} = m;
+  debugger;
   let path = paths[pathNum];
   if (path.numPhases) {
   //  debugger;
@@ -114,7 +115,7 @@ item.execPathMotion=  function (mg,m,t,i) {
   if (ef > 1) {
    // debugger;
   }
-  let fr = ef%1;
+  let fr = backwards?1-ef%1:ef%1;
   let cp = this.alongPath(path,fr);
   let rp = this.usq2qpoint(cp,oPoly.corners);
   m.lastCycle = cycleNum;
@@ -295,8 +296,9 @@ item.mkP2PmotionGroup = function (params) {
 item.mkPathMotionGroup = function (params) {
   let {stepsSoFar:ssf,motionGroups,mshapes} = this;
   //let {cell,duration,cycles,paths,phases,shapeP,oPoly,shapeConnector} = params;
-  let {cell,duration,cycles,paths,numPhases,shapeP,oPoly,shapeConnector} = params;
-  let mg = {kind:'Path',duration,cycles,numPhases,startTime:ssf,shapeP,paths,shapesPerPath:[],motionsPerPath:[]};
+  let {cell,duration,cycles,paths,numPhases,shapeP,oPoly,shapeConnector,backwards} = params;
+  debugger;
+  let mg = {kind:'Path',duration,cycles,numPhases,startTime:ssf,shapeP,paths,shapesPerPath:[],motionsPerPath:[],backwards};
   let pathsln = paths.length;
   let shapesPerPath = mg.shapesPerPath;
   let motionsPerPath = mg.motionsPerPath;
@@ -350,7 +352,8 @@ item.paintConnector = function (params) { //might be overriden
   let ap1 = c1.alongPath;
   let apMax = Math.max(ap0,ap1);
   let apMin = Math.min(ap0,ap1);
-  let lowFade = .03;
+ // let lowFade = .03;
+  let lowFade = .06;
   let highFade = 1-lowFade;
   let fadeLow=1;
   let fadeHigh=1;

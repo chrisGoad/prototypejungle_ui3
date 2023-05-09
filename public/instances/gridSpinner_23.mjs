@@ -12,10 +12,10 @@ let nr = 8;
 //
 nr =1;
 rs.setName('gridSpinner_23');
-let topParams = {width:wd,height:wd,numRows:nr,numCols:nr,numConnections:400,framePadding:.1*wd,stepsPerMove:10,numStepss:24,numSteps:400,center:Point.mk(0,0),radius:wd/4,
-                 cycles:1,frameStroke:'rgb(2,2,2)',frameStrokee:'white',frameStrokeWidth:1,saveAnimation:1,stepInterval:40,randomConnections:1,
+let topParams = {width:wd,height:wd,numRows:nr,numCols:nr,numConnections:400,framePadding:.2*wd,stepsPerMove:10,numStepss:24,numSteps:400,center:Point.mk(0,0),radius:wd/4,
+                 cycles:1,frameStroke:'white',frameStrokeWidth:1,saveAnimation:1,stepInterval:40,randomConnections:1,
            //      pauseAtt:[29,30,59,60],numConnections:100,numPhases:102,showThePath:1,showIntersections:1}
-                 pauseAtt:[29,30,59,60],numConnections:100,numPhases:100,showThePath:0,showIntersections:1,numSpokes:11,randomOffset:0}
+                 pauseAtt:[29,30,59,60],numConnections:100,numPhases:100,showThePath:0,showIntersections:0,numSpokes:11,randomOffset:0}
             //     pauseAtt:[29,30,59,60],numConnections:4,numPhases:80,showThePath:0,showIntersections:1,numSpokes:5}
 Object.assign(rs,topParams);
 
@@ -107,7 +107,7 @@ rs.addMotions = function () {
   }
 
   let rwd = 0.9;
-  let rht = 0.1;
+  let rht = 0.05;
   const mkRect = (y) => {
     return Rectangle.mk(Point.mk(0.5*(1-rwd),y),Point.mk(rwd,rht));
   }
@@ -138,6 +138,12 @@ rs.placeConnector = function (connection) {
   let fr1 = Math.pow(fr0,5);
   let rtr0 = tr0.plus(roff0.times(fr1));
   let rtr1 = tr1.plus(roff1.times(fr1));
+  let r0y = rtr0.y;
+  rtr0.y = Math.min(r0y,100);
+  rtr0.y = Math.max(r0y,-100);
+  let r1y = rtr1.y;
+  rtr1.y = Math.min(r1y,100);
+  rtr1.y = Math.max(r1y,-100);
   return [rtr0,rtr1]
 }
 
