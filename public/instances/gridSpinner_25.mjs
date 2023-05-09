@@ -103,7 +103,8 @@ rs.addMotions = function () {
 rs.placeConnector = function (connection) {
   debugger;
   let {stepsSoFar:ssf,numSteps} = this;
-  let {shape0:c0,shape1:c1,numPhases,path,randomOffset0:roff0,randomOffset1:roff1} = connection;
+  let {shape0:c0,shape1:c1,numPhases,path,randomOffset0:roff0,randomOffset1:roff1,cell} = connection;
+  let {index} = cell;
   let tr0 = c0.getTranslation();
   let tr1 = c1.getTranslation();
   let d = tr1.distance(tr0);

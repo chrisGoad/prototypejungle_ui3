@@ -12,8 +12,8 @@ let nr = 8;
 //
 nr =2;
 rs.setName('gridSpinner_24');
-let topParams = {width:wd,height:wd,numRows:nr,numCols:nr,numConnections:400,framePadding:.0*wd,stepsPerMove:10,numStepss:24,numSteps:400,center:Point.mk(0,0),radius:wd/4,
-                 cycles:2,frameStrokee:'white',frameStrokeWidth:1,saveAnimation:1,stepInterval:40,randomConnections:1,
+let topParams = {width:wd,height:wd,numRows:nr,numCols:nr,numConnections:400,framePadding:.15*wd,stepsPerMove:10,numStepss:24,numSteps:400,center:Point.mk(0,0),radius:wd/4,
+                 cycles:2,frameStroke:'white',frameStrokeWidth:1,saveAnimation:1,stepInterval:40,randomConnections:1,
            //      pauseAtt:[29,30,59,60],numConnections:100,numPhases:102,showThePath:1,showIntersections:1}
                  pauseAtt:[29,30,59,60],numConnections:20,numPhases:21,showThePath:0,showIntersections:1,numSpokes:8,randomOffset:0}
             //     pauseAtt:[29,30,59,60],numConnections:4,numPhases:80,showThePath:0,showIntersections:1,numSpokes:5}
@@ -93,12 +93,18 @@ rs.addMotions = function () {
     let {coords} = cell;
     debugger;
     let {index} = cell;
+    let backwards;
+    if (index===0) backwards = 0;
+    if (index===1) backwards = 1;
+    if (index===2) backwards = 0;
+    if (index===3) backwards = 1;
+
    /* if (index === 4) {
       cell.numConnections = 10;
     }
     let {x,y} = coords;
     let z = (x+y)%4;*/
-      this.addMotionsForCell({cell,paths,numPhases,shapeConnector,backwards:index%2});
+      this.addMotionsForCell({cell,paths,numPhases,shapeConnector,backwards});
   });
 }
 
@@ -115,10 +121,25 @@ rs.placeConnector = function (connection) {
   let ap0 = c0.alongPath;
   let ap1 = c1.alongPath;
   //let fr0 = 2*Math.min(ap0,1-ap0);
-  let fr0 = index%2?ap0:1-ap0;
+  let ech = (index===0) || (index ===1);
+  if (index===0) ech = 0;
+  if (index===1) ech = 1;
+  if (index===2) ech = 1;
+  if (index===3) ech = 0;
+  let fr0 = ech?ap0:1-ap0;
   let fr1 = Math.pow(fr0,3);
   let rtr0 = tr0.plus(roff0.times(fr1));
   let rtr1 = tr1.plus(roff1.times(fr1));
+  const placeInInterval = (v,lb,ub) => {
+    let v0 = Math.max(lb,v);
+    let v1 = Math.min(ub,v0);
+    return v1;
+  }
+  rtr0.x = placeInInterval(rtr0.x,-100,100);
+  rtr0.y = placeInInterval(rtr0.y,-100,100);
+  rtr1.x = placeInInterval(rtr1.x,-100,100);
+  rtr1.y = placeInInterval(rtr1.y,-100,100);
+  
   return [rtr0,rtr1]
 }
 
