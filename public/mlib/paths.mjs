@@ -305,12 +305,13 @@ item.showPath = function (path,fc,lineP) {
 }
 
 item.mkSpokePaths = function (params) {
-  let {numSpokes:ns,innerRadius:irdi,outerRadius:ord,center} = params;
+  let {numSpokes:ns,innerRadius:irdi,outerRadius:ord,center,startAngle:isa} = params;
+  let sa = isa?isa:0;
   let ird = irdi?irdi:0;
   let da = (2*Math.PI)/ns;
   let paths = [];
   for (let i=0;i<ns;i++) {
-    let ca = i*da;
+    let ca = sa + i*da;
     let vec = Point.mk(Math.cos(ca),Math.sin(ca));
     let ip = vec.times(ird).plus(center);
     let op = vec.times(ord).plus(center);

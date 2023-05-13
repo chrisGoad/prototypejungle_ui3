@@ -51,6 +51,7 @@ sections:
       [0,'gridSpinner_23','instances',1,'Grid Spinner 23',{likes:0,posted:0,category:'quad'}], 
       [0,'gridSpinner_24','instances',1,'Grid Spinner 24',{likes:0,posted:0,category:'quad'}], 
       [0,'gridSpinner_25','instances',1,'Grid Spinner 25',{likes:0,posted:0,category:'quad'}], 
+      [0,'gridSpinner_26','instances',1,'Grid Spinner 26',{likes:0,posted:0,category:'quad'}], 
 
 /*[0,'quad_9_3','instances',1,'Quad 9 3',{likes:0,posted:0,category0_:'quad'}], 
     [0,'quad_0_12','instances',1,'Quad 0 12',{likes:0,posted:0,category:'quad'}], 
@@ -108,7 +109,7 @@ sections:
   [0,'path_avoidance_2','generators',1,'Path Avoidance 2',{likes:0,posted:0,category:'quad'}], 
   [0,'path_avoidance_3','generators',1,'Path Avoidance 3',{likes:0,posted:0,category:'quad'}], 
   [0,'path_avoidance_4','generators',1,'Path Avoidance 4',{likes:0,posted:0,category:'quad'}], 
-  [0,'path_avoidance_5','generators',1,'Path Avoidance 5',{likes:0,posted:0,category:'quad'}], 
+  [0,'path_avoidance_5','generators',1,'Path Avoidance 5',{likes:0,posted:0,category:'anim'}], 
   [0,'path_avoidance_6','generators',1,'Path Avoidance 6',{likes:0,posted:0,category:'quad'}], 
   [0,'path_avoidance_6_0','instances',1,'Path Avoidance 6_0',{likes:0,posted:0,category:'quad'}], 
   [0,'reflected_path_0','generators',1,'Reflected path 0',{likes:0,posted:0,category:'quad'}], 

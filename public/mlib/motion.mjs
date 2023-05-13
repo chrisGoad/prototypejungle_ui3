@@ -110,7 +110,7 @@ item.execPathMotion=  function (mg,m,t,i) {
     return;
   }
   let ef = hf+phase;
-  console.log('phase',phase,'ef',ef);
+  //console.log('phase',phase,'ef',ef);
 
   if (ef > 1) {
    // debugger;
@@ -364,7 +364,7 @@ item.paintConnector = function (params) { //might be overriden
     fadeHigh = (1-apMax)/lowFade;
   }
   let minFade = Math.min(fadeLow,fadeHigh);
-  console.log('apMax',apMax,'apMin',apMin,'fadeLow',fadeLow,'fadeHigh',fadeHigh);
+ // console.log('apMax',apMax,'apMin',apMin,'fadeLow',fadeLow,'fadeHigh',fadeHigh);
   let clrdot = `rgba(${rd},${gd},${bd},${minFade})`;
   let clrcon = `rgba(${rc},${gc},${bc},${minFade})`;
   connector.stroke = clrcon;

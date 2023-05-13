@@ -141,7 +141,8 @@ rs.initialize = function() {
 rs.updateState = function () {
   let {stepsSoFar:ssf} =this;
 //  debugger;
-  this.execMotionGroups(ssf);
+  this.execMotionGroups(ssf);			
+  this.callIfDefined("afterUpdateState");
 } 
 
 
