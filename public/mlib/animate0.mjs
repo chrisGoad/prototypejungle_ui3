@@ -17,6 +17,7 @@ item.stepInterval = 40;
 item.pauseAt = [];
 
 item.oneStep = function (one) {
+  debugger;
   if (this.paused) {
     return;
   }

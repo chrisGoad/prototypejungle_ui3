@@ -14,8 +14,8 @@ nr =1;
 rs.setName('gridSpinner_16');
 let topParams = {width:wd,height:wd,numRows:nr,numCols:nr,numConnectionss:400,framePadding:.1*wd,stepsPerMove:10,numStepss:24,numSteps:400,center:Point.mk(0,0),radius:wd/4,
                  cycles:1,frameStroke:'rgb(2,2,2)',frameStrokee:'white',frameStrokeWidth:1,saveAnimation:1,stepInterval:40,randomConnections:1,
-                pauseAtt:[29,30,59,60],numConnections:40,numPhases:100,showThePath:0,showIntersections:0,numSpokes:11}
-               //  pauseAtt:[29,30,59,60],numConnections:2,numPhases:4,showThePath:0,showIntersections:0,numSpokes:1}
+               //  pauseAtt:[29,30,59,60],numConnections:40,numPhases:100,showThePath:0,showIntersections:0,numSpokes:11}
+                 pauseAtt:[29,30,59,60],numConnections:2,numPhases:4,showThePath:0,showIntersections:0,numSpokes:1}
 Object.assign(rs,topParams);
 
 
@@ -59,11 +59,11 @@ rs.connectIndices = function (params) {
   let e1pi; 
   if ((pi === 0)||(pi == 2)) {
     e1pi = pi+1;
-    //e1pi = pi;
+    e1pi = pi;
   }
   if ((pi === 1)||(pi == 3)) {
     e1pi = pi-1;
-   // e1pi = pi;
+    e1pi = pi;
   }
   let e1si =(e0si+5)%ln;
   debugger;
@@ -83,7 +83,8 @@ rs.addMotions = function () {
   let path2 = this.mkCircle({radius:0.2,numPoints:3,center,startAngle}).reverse();
   let path3 = this.mkCircle({radius:0.1,numPoints:3,center,startAngle}).reverse();
 
-  let paths= [path0,path1,path2,path3];
+ // let paths= [path0,path1,path2,path3];
+  let paths= [path0,path1];
   this.addMotionsForCell({cell:cells[0],paths,numPhases,shapeConnector});
 
  // this.addMotionsForCell(cells[0],[path],100,this.shapeConnector);// put back

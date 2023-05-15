@@ -96,7 +96,7 @@ item.pathLength = function (path) {
 item.execPathMotion=  function (mg,m,t,i) {
   let {startTime:st,duration:dur,cycles,paths,backwards} = mg;
   let {phase,shape,oPoly,lastCycle,pathNum} = m;
-  debugger;
+ debugger;
   let path = paths[pathNum];
   if (path.numPhases) {
   //  debugger;
@@ -214,6 +214,7 @@ item.mkPathMotion = function (mg,params) { //point to point
   if (pathNum === 4) {
   //  debugger;
   }
+  debugger;
   let path=paths[pathNum];
   let pshapeP = path.shapeP;
   let shapeP = pshapeP?pshapeP:shP;
@@ -357,6 +358,7 @@ item.paintConnector = function (params) { //might be overriden
   let highFade = 1-lowFade;
   let fadeLow=1;
   let fadeHigh=1;
+ // debugger;
   if (apMin < lowFade)  {
     fadeLow = apMin/lowFade;
   } 
@@ -381,7 +383,7 @@ item.updateConnectors = function () {
   if (!cns) {
     return;
   }
-  debugger;
+//  debugger;
   let ln = cns.length;
   for (let i=0;i<ln;i++) {
     let connector = connectors[i];
