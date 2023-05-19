@@ -117,7 +117,9 @@ item.execPathMotion=  function (mg,m,t,i) {
   }
   let fr = backwards?1-ef%1:ef%1;
   let cp = this.alongPath(path,fr);
-  let rp = this.usq2qpoint(cp,oPoly.corners);
+  let tr =path.transform;
+  let tp = tr?tr.apply(cp):cp;
+  let rp = this.usq2qpoint(tp,oPoly.corners);
   m.lastCycle = cycleNum;
   if (shape) {
     shape.alongPath = fr;

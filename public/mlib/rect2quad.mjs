@@ -26,6 +26,7 @@ item.usq2qpoint = function (pos,corners) { // unit square to quad coords
  // let minX = -0.5*wd;
  // let minY = -0.5*ht;
   let [LL,UL,UR,LR] = corners;
+ // let [LL,LR,UR,UL] = corners;
  // let frx = (x-minX)/wd;
  // let fry = (y-minY)/ht;
   //let bp = this.alongSeg(LL,LR,frx);
@@ -33,7 +34,8 @@ item.usq2qpoint = function (pos,corners) { // unit square to quad coords
   //let tp = this.alongSeg(UL,UR,frx);
   let tp = this.alongSeg(UL,UR,x);
   //let p = this.alongSeg(bp,tp,fry);
-  let p = this.alongSeg(bp,tp,y);
+ // let p = this.alongSeg(bp,tp,y);
+  let p = this.alongSeg(bp,tp,1-y);
   return p;
 }
   

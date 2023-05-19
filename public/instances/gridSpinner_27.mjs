@@ -24,8 +24,7 @@ rs.initialize = function () {
 
 rs.updateState = function () {
   debugger;
-    let {stepsSoFar:ssf} =this;
-
+  let {stepsSoFar:ssf} =this;
   this.spinner.stepsSoFar = ssf;
   this.spinner.updateState();
 } 
