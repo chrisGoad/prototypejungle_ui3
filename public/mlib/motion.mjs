@@ -96,7 +96,7 @@ item.pathLength = function (path) {
 item.execPathMotion=  function (mg,m,t,i) {
   let {startTime:st,duration:dur,cycles,paths,backwards} = mg;
   let {phase,shape,oPoly,lastCycle,pathNum} = m;
- debugger;
+ //debugger;
   let path = paths[pathNum];
   if (path.numPhases) {
   //  debugger;

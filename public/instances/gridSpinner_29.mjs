@@ -15,10 +15,11 @@ rs.setName('gridSpinner_29');
 let topParams = {width:wd,height:wd,numRows:nr,numCols:nr,numConnections:400,framePadding:.1*wd,stepsPerMove:10,numStepss:24,numSteps:400,center:Point.mk(0,0),radius:wd/4,
                  cycles:1,frameStroke:'rgb(2,2,2)',frameStrokee:'white',frameStrokeWidth:1,saveAnimation:1,stepInterval:40,randomConnections:1,
            //      pauseAtt:[29,30,59,60],numConnections:100,numPhases:102,showThePath:1,showIntersections:1}
-                 pauseAtt:[29,30,59,60],numConnections:18,numPhases:18/*100*/,showThePath:0,showIntersections:0,numSpokes:11}
+                 pauseAtt:[29,30,59,60],numConnections:18,numPhases:18/*100*/,showThePath:0,showIntersections:0,numSpokess:11,newCoords:1}
             //     pauseAtt:[29,30,59,60],numConnections:4,numPhases:80,showThePath:0,showIntersections:1,numSpokes:5}
 Object.assign(rs,topParams);
 
+rs.currentRotation = 0
 
 rs.initProtos = function () {
   let lineP = this.lineP = linePP.instantiate();
@@ -85,15 +86,22 @@ rs.addMotions = function () {
   let startAngle = 0*(2*Math.PI);
   let stopAngle = .5*(2*Math.PI);
   //let center = Point.mk(.5,.5);
-  let center = Point.mk(.5,.5);
+  //let center = Point.mk(.5,.5);
+  let center = Point.mk(0,0);
   let numPoints = 6;
+  let twoPI = this.twoPI = 2*Math.PI;
   let path0 = this.mkCircle({radius:0.4,numPoints,center,startAngle,stopAngle});
-  let path1 = this.mkCircle({radius:0.4,numPoints,center,startAngle:.5*(2*Math.PI),stopAngle:2*Math.PI});
+  let path1 = this.mkCircle({radius:0.4,numPoints,center,startAngle:.5*twoPI,stopAngle:twoPI});
+  let path2 = this.mkCircle({radius:0.18,numPoints,center,startAngle:0*twoPI,stopAngle:.5*twoPI});
+  let path3 = this.mkCircle({radius:0.18,numPoints,center,startAngle:.5*twoPI,stopAngle:twoPI});
+  let path4 = this.mkCircle({radius:0.1,numPoints,center,startAngle:0*twoPI,stopAngle:.5*twoPI});
+  let path5 = this.mkCircle({radius:0.1,numPoints,center,startAngle:.5*twoPI,stopAngle:twoPI});
   
+  path0.transform = mkRotation(.25*twoPI);
   this.thePath = path0;
   //t paths= [path0,path1,path2,path3];
   //let paths= [ipath0,ipath1];
-  let paths= [path0,path1];
+  let paths= this.paths = [path0,path1,path2,path3,path4,path5];
   this.addMotionsForCell({cell:cells[0],paths,numPhases,shapeConnector});
 
  // this.addMotionsForCell(cells[0],[path],100,this.shapeConnector);// put back
@@ -110,6 +118,16 @@ rs.addMotions = function () {
     this.addMotionsForCell(cell,path,130,this.shapeConnector);// put back
   });*/
 }
+
+rs.afterUpdateState = function () {
+  debugger;
+  let {paths,stepsSoFar:ssf,twoPI} = this;
+  let rt = mkRotation(0.002*ssf*twoPI);
+  paths.forEach((path) => {
+    path.transform = rt;
+  });
+}
+   
  
 rs.showPaths= function () {
    debugger;

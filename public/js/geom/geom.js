@@ -2519,5 +2519,5 @@ LineSegment.firstIntersection = function (segs) {
 }
     
     
-export {rotationMatrix,movetoInGlobalCoords,toOwnCoords,toPoint,angleToDirection,Point,Line,Rectangle,Polygon,Transform,Ray,degreesToRadians,
+export {rotationMatrix,movetoInGlobalCoords,rotate,mkRotation,toOwnCoords,toPoint,angleToDirection,Point,Line,Rectangle,Polygon,Transform,Ray,degreesToRadians,
         LineSegment,Circle,Arc,boundsForRectangles,rp_time,pointArrayToLineSegments,geometriesIntersect,moveBy,oneDf,allSegmentIntersections};

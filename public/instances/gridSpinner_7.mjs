@@ -14,7 +14,8 @@ nr =1;
 rs.setName('gridSpinner_7');
 let topParams = {width:wd,height:wd,numRows:nr,numCols:nr,framePadding:.1*wd,stepsPerMove:10,numStepss:24,numSteps:200,center:Point.mk(0,0),radius:wd/4,
                  cycles:1,frameStroke:'rgb(2,2,2)',frameStrokee:'white',frameStrokeWidth:1,saveAnimation:1,stepInterval:40,randomConnections:1,
-                 pauseAtt:[29,30,59,60],numConnections:35,numPhases:50,showThePath:0}
+            //     pauseAtt:[29,30,59,60],numConnections:35,numPhases:50,showThePath:1}
+                 pauseAtt:[29,30,59,60],numConnections:35,numPhases:100,showThePath:0}
 Object.assign(rs,topParams);
 
 
@@ -52,6 +53,7 @@ rs.connectIndices = function (params) {
   let e0si = ci;
   let e1pi = pi;
   let e1si = (ci+6)%ln;
+  e1si = (ci+36)%ln;
   return {end0ShapeIndex:e0si,end1PathIndex:e1pi,end1ShapeIndex:e1si};
 
 }
@@ -70,10 +72,11 @@ rs.shapeConnectorrr = function (mg,cell) {
 rs.mkMyPath = function () {
   let radius = 0.25;
   let np = 18;
-  //np = 3;
+ // np = 5;
   let centers = [Point.mk(.25,0.25),Point.mk(0.75,0.25),Point.mk(0.5,0.75)];
   let startAngles = [-0.5*Math.PI,0.5*Math.PI,0.5*Math.PI];
-  let path = this.threeCircles({radius,numPoints:np,centers,startAngles}); 
+  debugger;
+  let path = this.threeCircles({radius,numPoints:np,centers,startAngles}).reverse(); 
  return path;
 } 
 rs.addMotions = function () {

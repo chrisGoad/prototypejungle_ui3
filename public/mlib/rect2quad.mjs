@@ -20,22 +20,27 @@ Object.assign(rs,topParams);
    return p;
 }
 
+item.newCoords  = 0;// unit square centered on origin for newCoords, on [.5,.5] for oldCoords
+
 item.usq2qpoint = function (pos,corners) { // unit square to quad coords
-  //let {width:wd,height:ht} = this;
   let {x,y} = pos;
- // let minX = -0.5*wd;
- // let minY = -0.5*ht;
   let [LL,UL,UR,LR] = corners;
- // let [LL,LR,UR,UL] = corners;
- // let frx = (x-minX)/wd;
- // let fry = (y-minY)/ht;
-  //let bp = this.alongSeg(LL,LR,frx);
-  let bp = this.alongSeg(LL,LR,x);
-  //let tp = this.alongSeg(UL,UR,frx);
-  let tp = this.alongSeg(UL,UR,x);
+  let frx,fry;
+  let {newCoords:nc} = this;
+  if (nc) {
+    let minX = -0.5;
+    let minY = -0.5;
+    frx = (x-minX);
+    fry = (y-minY);
+  } else {
+    frx = x;
+    fry = y;
+  }
+  let bp = this.alongSeg(LL,LR,frx);
+  let tp = this.alongSeg(UL,UR,frx);
+  let p = this.alongSeg(tp,bp,fry);
   //let p = this.alongSeg(bp,tp,fry);
- // let p = this.alongSeg(bp,tp,y);
-  let p = this.alongSeg(bp,tp,1-y);
+  //let p = this.alongSeg(bp,tp,1-y);
   return p;
 }
   
