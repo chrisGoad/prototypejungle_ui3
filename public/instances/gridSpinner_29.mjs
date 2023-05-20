@@ -12,10 +12,10 @@ let nr = 8;
 //
 nr =1;
 rs.setName('gridSpinner_29');
-let topParams = {width:wd,height:wd,numRows:nr,numCols:nr,numConnections:400,framePadding:.1*wd,stepsPerMove:10,numStepss:24,numSteps:400,center:Point.mk(0,0),radius:wd/4,
+let topParams = {width:wd,height:wd,numRows:nr,numCols:nr,numConnections:400,framePadding:.1*wd,stepsPerMove:10,numStepss:24,numSteps:200,center:Point.mk(0,0),radius:wd/4,
                  cycles:1,frameStroke:'rgb(2,2,2)',frameStrokee:'white',frameStrokeWidth:1,saveAnimation:1,stepInterval:40,randomConnections:1,
            //      pauseAtt:[29,30,59,60],numConnections:100,numPhases:102,showThePath:1,showIntersections:1}
-                 pauseAtt:[29,30,59,60],numConnections:18,numPhases:18/*100*/,showThePath:0,showIntersections:0,numSpokess:11,newCoords:1}
+                 pauseAtt:[29,30,59,60],numConnections:18,numPhases:18/*100*/,showThePath:0,showIntersections:0,chopOffBeggining:0,chopOffEnd:0,newCoords:1}
             //     pauseAtt:[29,30,59,60],numConnections:4,numPhases:80,showThePath:0,showIntersections:1,numSpokes:5}
 Object.assign(rs,topParams);
 
@@ -97,7 +97,7 @@ rs.addMotions = function () {
   let path4 = this.mkCircle({radius:0.1,numPoints,center,startAngle:0*twoPI,stopAngle:.5*twoPI});
   let path5 = this.mkCircle({radius:0.1,numPoints,center,startAngle:.5*twoPI,stopAngle:twoPI});
   
-  path0.transform = mkRotation(.25*twoPI);
+  //path0.transform = mkRotation(.25*twoPI);
   this.thePath = path0;
   //t paths= [path0,path1,path2,path3];
   //let paths= [ipath0,ipath1];
@@ -121,11 +121,15 @@ rs.addMotions = function () {
 
 rs.afterUpdateState = function () {
   debugger;
-  let {paths,stepsSoFar:ssf,twoPI} = this;
-  let rt = mkRotation(0.002*ssf*twoPI);
-  paths.forEach((path) => {
-    path.transform = rt;
-  });
+  let {paths,stepsSoFar:ssf,twoPI,numSteps} = this;
+  let a = 1*(ssf/(numSteps+1))*twoPI;
+  let rt = mkRotation(a);
+  let mrt = mkRotation(-a);
+  let ln = paths.length;
+  for (let i=0;i<ln;i++) {
+    let path = paths[i];
+    path.transform = i%2?mrt:rt;
+  };
 }
    
  
