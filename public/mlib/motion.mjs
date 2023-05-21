@@ -346,7 +346,8 @@ item.connectShapes = function () {
 }
 
 item.paintConnector = function (params) { //might be overriden
-  let {shape0:c0,shape1:c1,connector} = params;
+  let {shape0:c0,shape1:c1,connector,lowFade} = params;
+  debugger;
   let rgbd = {r:255,g:255,b:255};
   let rgbc = {r:255,g:255,b:255};
   let {r:rd,g:gd,b:bd} = rgbd;
@@ -356,7 +357,8 @@ item.paintConnector = function (params) { //might be overriden
   let apMax = Math.max(ap0,ap1);
   let apMin = Math.min(ap0,ap1);
  // let lowFade = .03;
-  let lowFade = .06;
+ // let lowFade = .06;
+  //let lowFade = 0;
   let highFade = 1-lowFade;
   let fadeLow=1;
   let fadeHigh=1;
@@ -391,8 +393,8 @@ item.updateConnectors = function () {
     let connector = connectors[i];
     let connSeg = cnsegs[i];
     let connection = cns[i];
-    let {shape0:c0,shape1:c1,path,randomOffset0:roff0,randomOffset1:roff1} = connection;
-    let params ={shape0:c0,shape1:c1,connector};
+    let {shape0:c0,shape1:c1,path,randomOffset0:roff0,randomOffset1:roff1,lowFade} = connection;
+    let params ={shape0:c0,shape1:c1,connector,lowFade};
     this.paintConnector(params);
     //let [c0,c1,path,roff0,roff1] = connection;
     //let c1 = connection[1]

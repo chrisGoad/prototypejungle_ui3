@@ -12,10 +12,10 @@ let nr = 8;
 //
 nr =1;
 rs.setName('gridSpinner_30');
-let topParams = {width:wd,height:wd,numRows:nr,numCols:nr,numConnections:400,framePadding:.1*wd,stepsPerMove:10,numStepss:24,numSteps:100,center:Point.mk(0,0),radius:wd/4,
-                 cycles:1,frameStroke:'rgb(2,2,2)',frameStrokee:'white',frameStrokeWidth:1,saveAnimation:1,stepInterval:40,randomConnections:1,
+let topParams = {width:wd,height:wd,numRows:nr,numCols:nr,numConnections:400,framePadding:.1*wd,stepsPerMove:10,numStepss:24,numSteps:300,center:Point.mk(0,0),radius:wd/4,
+                 cycles:1,frameStroke:'rgb(2,2,2)',frameStrokee:'white',frameStrokeWidth:1,saveAnimation:1,stepInterval:40,randomConnections:1,lowFade:0,
            //      pauseAtt:[29,30,59,60],numConnections:100,numPhases:102,showThePath:1,showIntersections:1}
-                 pauseAtt:[29,30,59,60],numConnections:90,numPhases:100/*100*/,showThePath:0,showIntersections:0,chopOffBeginning:2,chopOffEnd:0,newCoords:1}
+                 pauseAtt:[29,30,59,60],numConnections:60,numPhases:60/*100*/,showThePath:0,showIntersections:0,chopOffBeginning:2,chopOffEnd:0,newCoords:1}
             //     pauseAtt:[29,30,59,60],numConnections:4,numPhases:80,showThePath:0,showIntersections:1,numSpokes:5}
 Object.assign(rs,topParams);
 
@@ -61,25 +61,22 @@ rs.mkRandomSeq = function () {
 rs.rseq = rs.mkRandomSeq();
 
 rs.numCisCalls = 0;
-
+rs.piMap = [1,-1,3,-1,5,-1,7,-1];
 rs.connectIndices = function (params) {
+  //debugger;
   let {cell,pathIndex:pi,connectIndex:ci} = params;
-  let {numCisCalls:ncc,rseq,numPhases:np,numConnections:nc} = this;
+  let {numCisCalls:ncc,rseq,numPhases:np,numConnections:nc,piMap} = this;
   let e0si = ci;
   this.numCisCalls = ncc+1;
-  let e1pi;
-  if (pi===0) {
-    e1pi = 1;
-  } else  if (pi===2) {
-    e1pi = 3;
-  } else {
+  let e1pi = piMap[pi];
+  if (e1pi<0) {
+    //debugger;
     return;
   }
-  //let e1pi =(pi+1)%2;
  
-  let e1si =(e0si+6+Math.floor(Math.random()*0))%np;
+  let e1si =(e0si+16+Math.floor(Math.random()*0))%np;
   //debugger;
-  console.log('e0si',e0si,'e1pi',e1pi,'e1si',e1si);
+  console.log('pi',pi,'e0si',e0si,'e1pi',e1pi,'e1si',e1si);
   if (e1si===6) {
     debugger;
   }
@@ -103,42 +100,37 @@ rs.addMotions = function () {
   let path1 = this.mkCircle({radius:0.18,numPoints,center});
   let path2 = this.mkCircle({radius:0.4,numPoints,center});
   let path3 = this.mkCircle({radius:0.18,numPoints,center});
- 
-  
+  let path4 = this.mkCircle({radius:0.4,numPoints,center});
+  let path5 = this.mkCircle({radius:0.18,numPoints,center});
+  let path6 = this.mkCircle({radius:0.4,numPoints,center});
+  let path7 = this.mkCircle({radius:0.18,numPoints,center});
   //path1.transform = Transform.mk(Point.mk(.25,.25));
   this.thePath = path0;
   //t paths= [path0,path1,path2,path3];
   //let paths= [ipath0,ipath1];
-  let paths= this.paths = [path0,path1,path2,path3];
+  let paths= this.paths = [path0,path1,path2,path3,path4,path5,path6,path7];
   this.addMotionsForCell({cell:cells[0],paths,numPhases,shapeConnector});
 
- // this.addMotionsForCell(cells[0],[path],100,this.shapeConnector);// put back
-/*
-  let path = mkSpiral({turns:6,pointsPerTurn:18,iRadius,deltaRadius,center});
-  cells.forEach((cell) =>{
-    let {coords} = cell;
-    //debugger;
-    let {x,y} = coords;
-    let z = (x+y)%4;
-    let path=paths[x];
-    //let path=paths[z];
-    //debugger;
-    this.addMotionsForCell(cell,path,130,this.shapeConnector);// put back
-  });*/
 }
 
 rs.cPath0 = [Point.mk(-.25,-.25),Point.mk(.25,.25),Point.mk(-.25,-.25)];
 rs.cPath1 = [Point.mk(-.25,.25),Point.mk(.25,-.25),Point.mk(-.25,.25)];
+rs.cPath2 = [Point.mk(.25,.25),Point.mk(-.25,-.25),Point.mk(.25,.25)];
+rs.cPath3 = [Point.mk(.25,-.25),Point.mk(-.25,.25),Point.mk(.25,-.25)];
 rs.afterUpdateState = function () {
   debugger;
-  let {paths,stepsSoFar:ssf,twoPI,numSteps,cPath0,cPath1} = this;
+  let {paths,stepsSoFar:ssf,twoPI,numSteps,cPath0,cPath1,cPath2,cPath3} = this;
   let fr = (ssf/(numSteps-0));
-  let p0 = this.alongPath(cPath0,fr);
-  let tr0 = Transform.mk(p0);
-  paths[1].transform = tr0;
-   let p1 = this.alongPath(cPath1,fr);
-  let tr1 = Transform.mk(p1);
-  paths[3].transform = tr1;
+  const setTransform = (targetPath,path,fr) => {
+    let p = this.alongPath(path,fr);
+    let tr = Transform.mk(p);
+    targetPath.transform = tr;
+  }
+  setTransform(paths[1],cPath0,fr);
+  setTransform(paths[3],cPath1,fr);
+  setTransform(paths[5],cPath2,fr);
+  setTransform(paths[7],cPath3,fr);
+ 
 }
    
  

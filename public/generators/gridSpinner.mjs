@@ -39,7 +39,11 @@ rs.toQuad = function(p) {
 
 //rs.shapeConnectorC = function (mg,cell,numConnections,selj,selk) { //,connectJump) {
 rs.shapeConnectorC = function (params) { //,connectJump) {
-  let {connectedShapes:cns,numC,randomOffset:rf} = this;
+  let {connectedShapes:cns,numC,randomOffset:rf,lowFade} = this;
+  if (typeof lowFade !== 'number') {
+    debugger;
+    lowFade = .06;
+  }
   let {motionGroup:mg,cell,numConnections:ncp,connectIndices:ci} = params;
   let {paths} = mg;
   debugger;
@@ -67,12 +71,15 @@ rs.shapeConnectorC = function (params) { //,connectJump) {
      // let k = Math.floor(Math.random()*ln);
       let sh0 = shapes[end0ShapeIndex];
       let e1shapes = shapesPerPath[end1PathIndex]; 
+      if (!e1shapes) {
+        debugger;
+      }
       let sh1 = e1shapes[end1ShapeIndex];
       //let sh1 = rc?shapes[k]:shapes[(j+connectJump)%ln];
       if (!sh0) {
          debugger;
       }
-      let connection = {shape0:sh0,shape1:sh1,path,connectIndex:j,end0ShapeIndex,end1PathIndex,end1ShapeIndex,numConnections,numPhases,cell};
+      let connection = {shape0:sh0,shape1:sh1,path,connectIndex:j,end0ShapeIndex,end1PathIndex,end1ShapeIndex,numConnections,numPhases,cell,lowFade};
       if (this.annotateConnection) {
          this.annotateConnection(connection);
       }
