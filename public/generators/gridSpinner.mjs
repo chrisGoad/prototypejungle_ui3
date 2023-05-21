@@ -56,7 +56,7 @@ rs.shapeConnectorC = function (params) { //,connectJump) {
     let numConnections = pnc?pnc:ncp
     for (let j=0;j<numConnections;j++) {
       let cparams = {cell,pathIndex:i,connectIndex:j,numPhases}
-      debugger;
+   //   debugger;
       let cis =  ci.call(this,cparams); 
       if (!cis) {
         continue;

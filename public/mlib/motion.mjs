@@ -216,7 +216,7 @@ item.mkPathMotion = function (mg,params) { //point to point
   if (pathNum === 4) {
   //  debugger;
   }
-  debugger;
+  //debugger;
   let path=paths[pathNum];
   let pshapeP = path.shapeP;
   let shapeP = pshapeP?pshapeP:shP;
