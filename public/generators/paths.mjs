@@ -106,7 +106,7 @@ rs.addMotionsForCell = function (params) {
 rs.initialize = function() { 
   debugger;
   this.initProtos();
-  let {corners,polygonP,showThePath} =this;
+  let {corners,polygonP,showThePaths} =this;
   this.addFrame();
  
  // this.initGrid();
@@ -115,7 +115,7 @@ rs.initialize = function() {
 
   this.set('mshapes',arrayShape.mk());
   this.addMotions();
-  if (showThePath) {
+  if (showThePaths) {
     this.showPaths();
     return;
   }
@@ -137,6 +137,15 @@ rs.updateState = function () {
 
 
     
+rs.showPaths= function () {
+   debugger;
+   let {connectorP,thePaths,scaling} = this;
+  //return 0;
+  thePaths.forEach( (path) => {
+    this.showPath(path,scaling,connectorP);
+  });
+  return 1;
+}
 
   
 export {rs};
