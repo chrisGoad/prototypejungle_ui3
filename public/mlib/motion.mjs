@@ -116,7 +116,7 @@ item.execPathMotion=  function (mg,m,t,i) {
   if (ef > 1) {
    // debugger;
   }
-  debugger;
+  //debugger;
   let fr = backwards?1-ef%1:ef%1;
   let cp = this.alongPath(path,fr);
   let tr =path.transform;
@@ -341,6 +341,7 @@ item.connectShapes = function () {
   let ln = cns.length;
   for (let i=0;i<ln;i++) {
      let line = connectorP.instantiate();
+     line.index  = i;
      connectors.push(line);
      let seg = LineSegment.mk(Point.mk(0,0),Point.mk(0,1));
      connectorSegs.push(seg)
@@ -350,8 +351,13 @@ item.connectShapes = function () {
 item.paintConnector = function (params) { //might be overriden
   let {shape0:c0,shape1:c1,connector,lowFade} = params;
   debugger;
+  let rgbc;
+  if (this.computeRgb) {
+    rgbc =this.computeRgb(params);
+  } else {
+    rgbc = {r:255,g:255,b:255};
+  }
   let rgbd = {r:255,g:255,b:255};
-  let rgbc = {r:255,g:255,b:255};
   let {r:rd,g:gd,b:bd} = rgbd;
   let {r:rc,g:gc,b:bc} = rgbc;
   let ap0 = c0.alongPath;

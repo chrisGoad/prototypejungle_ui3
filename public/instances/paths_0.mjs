@@ -146,7 +146,27 @@ rs.afterUpdateState = function () {
   setTransform(paths[7],cPath3,fr);
  
 }
-   
+rs.computeRgb = function (params) {
+  let cn = params.connector;
+  let i = cn.index;
+  let rgb;
+  let im = i%3;
+  let mc = 250;
+  let oc = 150;
+  if (im === 0) {
+    rgb = {r:oc,g:mc,b:oc}
+  } else if (im ===1) {
+    rgb = {r:oc,g:oc,b:mc};
+  } else if (im===2) {
+    rgb = {r:mc,g:oc,b:oc};
+  }
+
+  return rgb;
+}
+  
+
+  
+
  
 rs.showPaths= function () {
    debugger;
