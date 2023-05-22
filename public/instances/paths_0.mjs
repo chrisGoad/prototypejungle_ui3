@@ -1,7 +1,7 @@
 
 
 debugger;
-import {rs as generatorP} from '/generators/gridSpinner.mjs';
+import {rs as generatorP} from '/generators/paths.mjs';
 let rs = generatorP.instantiate();
 import {rs as linePP} from '/shape/line.mjs';
 import {rs as circlePP} from '/shape/circle.mjs';
@@ -11,9 +11,9 @@ let wd = 200;
 let nr = 8;
 //
 nr =1;
-rs.setName('gridSpinner_30');
+rs.setName('paths_0');
 let topParams = {width:wd,height:wd,numRows:nr,numCols:nr,numConnections:400,framePadding:.1*wd,stepsPerMove:10,numStepss:24,numSteps:300,center:Point.mk(0,0),radius:wd/4,
-                 cycles:1,frameStroke:'rgb(2,2,2)',frameStrokee:'white',frameStrokeWidth:1,saveAnimation:1,stepInterval:40,randomConnections:1,lowFade:0,
+                 cycles:1,frameStroke:'rgb(2,2,2)',frameStrokee:'white',frameStrokeWidth:1,saveAnimation:1,stepInterval:40,randomConnections:1,lowFade:0,scaling:wd,
            //      pauseAtt:[29,30,59,60],numConnections:100,numPhases:102,showThePath:1,showIntersections:1}
                  pauseAtt:[29,30,59,60],numConnections:60,numPhases:60/*100*/,showThePath:0,showIntersections:0,chopOffBeginning:2,chopOffEnd:0,newCoords:1}
             //     pauseAtt:[29,30,59,60],numConnections:4,numPhases:80,showThePath:0,showIntersections:1,numSpokes:5}
@@ -87,6 +87,8 @@ rs.connectIndices = function (params) {
 
 rs.addMotions = function () {
   debugger;
+    let {numSteps,circleP,cycles} = this;
+
     let {cells,numPhases,shapeConnector,numSpokes} = this;
   let radius = .25;
   let startAngle = 0*(2*Math.PI);
@@ -109,7 +111,11 @@ rs.addMotions = function () {
   //t paths= [path0,path1,path2,path3];
   //let paths= [ipath0,ipath1];
   let paths= this.paths = [path0,path1,path2,path3,path4,path5,path6,path7];
-  this.addMotionsForCell({cell:cells[0],paths,numPhases,shapeConnector});
+  debugger;
+  let params = {numPhases,paths,cycles,shapeP:circleP,shapeConnector,duration:numSteps};
+  this.mkPathMotionGroup(params);
+
+ // this.addMotionsForCell({cell:cells[0],paths,numPhases,shapeConnector});
 
 }
 

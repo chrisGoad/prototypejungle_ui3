@@ -94,6 +94,7 @@ item.pathLength = function (path) {
  
     
 item.execPathMotion=  function (mg,m,t,i) {
+  let {scaling} = this;
   let {startTime:st,duration:dur,cycles,paths,backwards} = mg;
   let {phase,shape,oPoly,lastCycle,pathNum} = m;
  //debugger;
@@ -115,11 +116,12 @@ item.execPathMotion=  function (mg,m,t,i) {
   if (ef > 1) {
    // debugger;
   }
+  debugger;
   let fr = backwards?1-ef%1:ef%1;
   let cp = this.alongPath(path,fr);
   let tr =path.transform;
   let tp = tr?tr.apply(cp):cp;
-  let rp = this.usq2qpoint(tp,oPoly.corners);
+  let rp = scaling?tp.times(scaling):this.usq2qpoint(tp,oPoly.corners);
   m.lastCycle = cycleNum;
   if (shape) {
     shape.alongPath = fr;

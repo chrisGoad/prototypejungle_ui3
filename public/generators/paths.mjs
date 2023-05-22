@@ -27,7 +27,7 @@ let topParams = {width:wd,height:wd,framePadding:.1*wd,numSteps:200,
                  cycles:1,frameStroke:'rgb(2,2,2)',frameStrokee:'white',frameStrokeWidth:1,saveAnimation:1,stepInterval:40,pauseAtt:[29,30,59,60]}
 Object.assign(rs,topParams);
 
-c
+
 
 rs.shapeConnectorC = function (params) { //,connectJump) {
   let {connectedShapes:cns,numC,randomOffset:rf,lowFade} = this;
@@ -68,7 +68,7 @@ rs.shapeConnectorC = function (params) { //,connectJump) {
       if (!sh0) {
          debugger;
       }
-      let connection = {shape0:sh0,shape1:sh1,path,connectIndex:j,end0ShapeIndex,end1PathIndex,end1ShapeIndex,numConnections,numPhases,cell,lowFade};
+      let connection = {shape0:sh0,shape1:sh1,path,connectIndex:j,end0ShapeIndex,end1PathIndex,end1ShapeIndex,numConnections,numPhases,lowFade};
       if (this.annotateConnection) {
          this.annotateConnection(connection);
       }
@@ -92,11 +92,6 @@ rs.addMotionsForCell = function (params) {
   let {cell,paths,numPhases,shapeConnector,backwards}  = params;
   let {deltaX,numSteps,circleP,iPolygonP,cycles} = this;
   let duration = numSteps;
- /* let ip = 1/numPhases;
-  let phases =[];
-  for (let i=0;i<numPhases;i++) {
-    phases.push(i*ip);
-  }*/
   let {polygon,coords} = cell;
   let {x,y} = coords;
   let shapeP=circleP;
@@ -114,7 +109,7 @@ rs.initialize = function() {
   let {corners,polygonP,showThePath} =this;
   this.addFrame();
  
-  this.initGrid();
+ // this.initGrid();
   this.motionGroups = [];
   this.connectedShapes = [];
 
