@@ -153,7 +153,44 @@ item.mkRectangularPath = function (rect) {
   return [LL,UL,UR,LR,LL];
 }
 
+item.pathScaleX = function (path,scale) {
+  let np = path.map((p) => {
+    return Point.mk(p.x*scale,p.y);
+  });
+  return np;
+}
+  
+item.pathScaleY = function (path,scale) {
+  let np = path.map((p) => {
+    return Point.mk(p.x,p.y*scale);
+  });
+  return np;
+}
 
+item.transformPath= function (path,trnf) {
+  let np = path.map((p) => {
+    return trnf.apply(p);
+  });
+  return np;
+}
+  
+    
+item.mkSinPath =function (params) {
+debugger;
+  let {numPoints:np} = params;
+  let incy = (Math.PI)/(np-1);
+  let incx = 1/(np-1);
+  let a = [];
+  for (let i=0;i<np;i++) {
+    let x =  i*incx;
+    let y =Math.sin(i*incy);
+    let p = Point.mk(x,y);
+    a.push(p);
+  }
+  return a;
+}
+  
+   
 item.mkSnakePath = function (params) {
   let {rectangle,numPoints:np,numTurns:nt} = params;
   let rect =  rectangle?rectangle:Rectangle.mk(Point.mk(0,0),Point.mk(1,1));

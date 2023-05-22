@@ -137,7 +137,7 @@ rs.afterUpdateState = function () {
   let fr = (ssf/(numSteps-0));
   const setTransform = (targetPath,path,fr) => {
     let p = this.alongPath(path,fr);
-    let tr = Transform.mk(p);
+    let tr = Transform.mk({translation:p});
     targetPath.transform = tr;
   }
   setTransform(paths[1],cPath0,fr);

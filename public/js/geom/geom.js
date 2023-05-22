@@ -290,22 +290,15 @@ Transform.mk = function (o,scale,rotation) {
     return rs;
   }
   if (Point.isPrototypeOf(o)) {
-    rs.set('translation',o.copy());
-    if (typeof scale === 'number') {
-      rs.scale = scale;
-    } else if  (Point.isPrototypeOf(scale)) {
-      rs.set('scale',scale.copy());
-    }
-    if (typeof rotation === 'number') {
-      rs.rotation = rotation;
-    }
-    return rs;
+    otranslation = o;
+    oscale = scale;
+    orotation = rotation;
+  } else if (typeof o === 'object') {
+    oscale = o.scale;
+    otranslation = o.translation;
+    orotation = o.rotation;
   }
-  otranslation = o.translation;
-  if (otranslation) {
-    rs.set('translation',otranslation.copy());
-  }
-  oscale = o.scale;
+  rs.set('translation',otranslation.copy());
   if (typeof oscale === "number") {
     rs.scale = oscale;
   } else if  (Point.isPrototypeOf(oscale)) {
@@ -2519,5 +2512,5 @@ LineSegment.firstIntersection = function (segs) {
 }
     
     
-export {rotationMatrix,movetoInGlobalCoords,rotate,mkRotation,toOwnCoords,toPoint,angleToDirection,Point,Line,Rectangle,Polygon,Transform,Ray,degreesToRadians,
+export {rotationMatrix,movetoInGlobalCoords,rotate,mkRotation,mkTranslation,toOwnCoords,toPoint,angleToDirection,Point,Line,Rectangle,Polygon,Transform,Ray,degreesToRadians,
         LineSegment,Circle,Arc,boundsForRectangles,rp_time,pointArrayToLineSegments,geometriesIntersect,moveBy,oneDf,allSegmentIntersections};
