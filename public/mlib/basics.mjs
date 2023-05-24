@@ -421,6 +421,10 @@ item.computeExponentials = function (args) {
   }
 }
 
+item.randomIntLessThan = function (n) {
+  return Math.floor(Math.random()*n);
+}
+
 item.randomBetween = function (lh) {
   let {low,high} = lh;
   let d = high-low;

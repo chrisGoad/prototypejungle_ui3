@@ -42,8 +42,10 @@ rs.initProtos = function () {
   circleP.fill = 'blue';
   circleP['stroke-width'] = 0;
   let icircleP = this.icircleP = circlePP.instantiate();
-  icircleP.dimension= 1;
+  icircleP.dimension= 0.5;
   icircleP.fill = 'red';
+  icircleP.fill = 'white';
+  icircleP.fill = 'black';
   icircleP['stroke-width'] = 0;
   
 }
@@ -153,6 +155,7 @@ rs.computeRgb = function (params) {
   let im = i%3;
   let mc = 250;
   let oc = 150;
+  oc = 250;
   if (im === 0) {
     rgb = {r:oc,g:mc,b:oc}
   } else if (im ===1) {

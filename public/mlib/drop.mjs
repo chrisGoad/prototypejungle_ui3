@@ -180,6 +180,7 @@ rs.generateDrops = function (params) {
       continue;
     } 
     if (mustIntersect) {
+       debugger;
        let doesIntersect = geometriesIntersect(tgs,mustIntersect);
        if (!doesIntersect) {
          continue;
