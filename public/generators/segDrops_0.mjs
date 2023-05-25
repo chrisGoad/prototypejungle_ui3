@@ -4,7 +4,7 @@ import {rs as basicP} from '/generators/basics.mjs';
 let rs = basicP.instantiate();
 
 addDropMethods(rs);
-
+debugger;
 let wd = 200;
 rs.setName('segDrops_0');
 let topParams = {width:wd,height:wd,framePadding:.1*wd,numSteps:200,
@@ -14,6 +14,7 @@ Object.assign(rs,topParams);
 
 rs.initialize = function () {
   let {maxTargets} = this;
+  debugger;
   this.initDrop();
   let targets = this.targets;
   for (let i=0;i<maxTargets;i++) {
@@ -22,3 +23,5 @@ rs.initialize = function () {
   }
   this.dropLoop();
 }
+
+export {rs};

@@ -39,8 +39,8 @@ rs.dropCandidate = function (idx) {
   let e1i = idx - e0i * maxTargets;
   let ln = targets.length;
   tried[idx] = 1; // this will be tried
-  let e0 = target[e0i];
-  let e1 = target[e1i];
+  let e0 = targets[e0i];
+  let e1 = targets[e1i];
   let seg = LineSegment.mk(e0,e1);
   return seg;
 }
@@ -68,11 +68,11 @@ rs.tryDrop = function () {
   if (uln === 0) {
     return 'nothingUntried';
   }
-  let di = randomIntLessThan(uln);  
+  let di = this.randomIntLessThan(uln);  
   let dc = this.dropCandidate(di);
   if (dc) {
     let dln = drops.length;
-    for (let i=0;i<ln;i++) {
+    for (let i=0;i<dln;i++) {
       let dseg = drops[i];
       let p = dc.intersect(dseg);
       if (p) {
