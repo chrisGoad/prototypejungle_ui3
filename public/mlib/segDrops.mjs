@@ -2,34 +2,6 @@
 
 const rs = function (rs) {
 
-let defaults = {dropTries:5,maxLoops:Infinity};
-
-Object.assign(rs,defaults);
-      
-rs.collides0 = function (point1,radius1,point2,radius2) {
-  let p1x = point1.x;
-  let p1y = point1.y;
-  let p2x = point2.x;
-  let p2y = point2.y;
-  let minDist =  radius1 + radius2 ;
-  //console.log('minDist',minDist,'xd',p2x-p1x,'yd',p2y-p1y,'d',d);
-  if (Math.abs(p2x - p1x) >=  minDist) {return false;}
-  if (Math.abs(p2y - p1y) >= minDist) {return false;}
-  let d= point1.distance(point2);
-  return minDist >= d;
-}
-
-
-rs.collides = function (npoint,nradius,drops) {
-  let n = drops.length;
-  for (let i=0;i<n;i++) {
-    let {point,radius} = drops[i];
-    if (this.collides0(npoint,nradius,point,radius)) {
-      return true;
-    }
-  }
-  return false
-}
 
 rs.genRandomPoint = function (rect) {
   if (rect) {
@@ -58,99 +30,106 @@ rs.via3d = function (p) {
 /* 
 drops is the set of LineSegments dropped so far
 targets is the set of pointstwo of which are joined by a new drop.
-tried is an array of arrays [firstTriedIndex,secondTriedIndex0,secondTriedIndex1...secondTriedIndexN] pairs of indicices in targets  which have been already tried
+tried is an array where tried[e0i*maxTargets+e1i]===1 if the segment with ends targets[e0i], targets[iei] as been tried
 */
 
-rs.dropCandidate = function () {
-  let {targets,tried} = this;
+rs.dropCandidate = function (idx) {
+  let {targets,maxTargets,tried} = this;
+  let e0i = Math.floor(idx/maxTargets);
+  let e1i = idx - e0i * maxTargets;
   let ln = targets.length;
-  let ie0i = randomIntLessThan(ln);
-  let ie1i = randomIntLessThan(ln);
-  if (ie0i === ie1i) {
-    return;
-  }
-  let lt = ie0i < ie1il;
-  let e0i = lt?ie0i:ie1i;
-  let e1i = lt?ie1i:ie0i;
-  let triedln = tried.length;
-  let tr0;
-  for (i=0;i<triedln;i++) {
-    let tr=tried[i];
-    if (e0i === tr[0]) {
-      tr0 = tr;
-      let trln = tr.length;
-      for (let j=1;j<trln;j++) {
-        if (e1i === tr[1]) {
-          return;
-        }
-      }
+  tried[idx] = 1; // this will be tried
+  let e0 = target[e0i];
+  let e1 = target[e1i];
+  let seg = LineSegment.mk(e0,e1);
+  return seg;
+}
+ 
+
+rs.updateUntried = function () {
+  let {targets,maxTargets,untried} = this;
+  let ln = untried.length;
+  let nut = [];
+  for (let i=0;i<ln;i++) {
+    let ut = untried[i];
+    let tr = tried[ut];
+    if (tr===0) {
+      nut.push(ut);
     }
   }
-  // found a candidate
-  if (tr0) {
-    tr0.push(e0i);
-  } else {
-    tried.push([e0i,e1i];
-  }
-  return [e0i,e1i];
+  this.untried = ut;
 }
+        
+        
 
 rs.tryDrop = function () {
-  let {targets,tried) 
-  
-   
-  
-  
-  
-  
-  
+  let {drops,maxTargets,untried} = this;
+  let uln = untried.length;
+  if (uln === 0) {
+    return 'nothingUntried';
+  }
+  let di = randomIntLessThan(uln);  
+  let dc = this.dropCandidate(di);
+  if (dc) {
+    let dln = drops.length;
+    for (let i=0;i<ln;i++) {
+      let dseg = drops[i];
+      let p = dc.intersect(dseg);
+      if (p) {
+       return 'intersected';
+      }
+    }
+    drops.push(dc);
+    return 'newDrop';
+  }
+  return 'noCandidate'
+}
 
-  
-rs.generateSegDrops = function () {
-  let props = ['drops','targets','maxLoops','maxDrops','dropTries','scale'];
-  /*let params = {};
-  debugger;
-  //core.transferProperties(params,this,props);
-  //core.transferProperties(params,iparams,props);
-  Object.assign(params,iparams);
-  this.dropParams = params;
-  let {radius=10,maxLoops=Infinity,maxDrops=Infinity,dropTries,scale=1} = this;
-  let cnt =0;
-  let tries = 0;
-  let drops = [];
-  debugger;
-  while ((cnt < maxLoops) && (drops.length < maxDrops)) {
-    cnt++;
-    let pnt = this.genRandomPoint();
-    let drop = this.generateCircleDrop(pnt);
-    if (!drop) {
-      continue;
-    } 
-    let radius = drop.radius;
-    let cl = this.collides(pnt,radius,drops);
-    if (cl) {
-      tries++;
-      if (tries >= dropTries) {
-        //console.log('dropTries',dropTries,'exceeded');
-        return drops;
-      }
-    } else {
-      drop.point = pnt;
-      if (!drop.dimension) {
-        drop.scale = scale;
-      }
-      drops.push(drop);
-      tries = 0;
+rs.dropLoop = function () {
+  let {maxFindUntried,maxCheckIntersect} = this;
+  let fut = 0;
+  let fint = 0;
+  while (1) {
+    let drop = this.tryDrop();
+    if (drop === 'newDrop') {
+      fut=0;
+      fint=0;
+    } else if (drop === 'noCandidate') {
+      fut++;
+    } else if (drop === 'intersected') {
+      fint++;
+    }
+    if (drop === 'nothingUntried') {
+      return drop;
+    }
+    if (fut>=maxFindUntried) {
+      this.updateUntried();
+      fut = 0;
+    } else if (fint >= maxCheckIntersect) {
+      return 'tooManyIntersectChecks';
     }
   }
-  return drops;
 }
 
-rs.generateDrop = function (p) {
-  return {radius:this.dropParams.radius};
-}
+rs.initDrop = function () {
+  let {maxTargets} = this;
+  let tried = this.tried = [];
+  let untried = this.untried = [];
+  let tln = maxTargets*maxTargets;
+  for (let i=0;i<tln;i++) {
+    tried.push(0);
+    untried.push(1);
+  }
+  this.targets = [];
+  this.drops = [];
+}  
 
-rs.installCircleDrops = function (drops,dropP) {
+
+        
+        
+      
+  
+rs.installDrops = function (drops,dropP) {
   let shapes = this.set('shapes',arrayShape.mk());
   let ln  = drops.length;
   for (let i=0;i<ln;i++) {
