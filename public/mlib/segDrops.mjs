@@ -149,7 +149,7 @@ rs.initDrop = function () {
       tried.push(1);
     }
   }
-  this.targets = [];
+  //this.targets = [];
   this.drops = [];
 }  
 
