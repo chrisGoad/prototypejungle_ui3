@@ -4,21 +4,8 @@ module.exports = {
 sections: 
 
 [  
-/* Puzzle: Which three of the quadrants are the same, and which is different? Before you saw the differences in what sense did you "see" the quadrants?"*/
-// [0,'web_drift','generators',1,'Drift Web',{likes:0,posted:0,category:'drop'}], 
- //[0,'quad_drop','generators',1,'Quad Drop',{likes:0,posted:0,category:'quad',version:2}], 
- /*[0,'quad_4','generators',1,'Quad 4',{likes:0,posted:0,category:'quad',version:2}], 
- [0,'part2_0_8','instances',1,'Part 2 0 8',{likes:0,posted:0,category:'quad',version:2}], 
- [0,'quad_6','generators',1,'Quad 6',{likes:0,posted:0,category:'quad',version:2}], 
- [0,'quad_7','generators',1,'Quad 7',{likes:0,posted:0,category:'quad'}], 
- [0,'quad_9','generators',1,'Quad 9',{likes:0,posted:0,category:'quad'}], 
-    [0,'quad_0_9','instances',1,'Quad 0 9',{likes:0,posted:0,category:'quad'}], 
-[0,'quad_9_0','instances',1,'Quad 9 0',{likes:0,posted:0,category:'quad'}], 
-  [0,'quad_0_10','instances',1,'Quad 0 10',{likes:0,posted:0,category:'quad'}], 
- // [0,'quad_9_1','instances',1,'Quad 9 1',{likes:0,posted:0,category:'quad'}], 
- [0,'quad_9_2','instances',1,'Quad 9 2',{likes:0,posted:0,category:'quad'}], */
- //  [0,'quad_0_11','instances',1,'Quad 0 11',{likes:0,posted:0,category:'quad'}], 
- //  [0,'part_0_7','instances',1,'Part 0 7',{likes:0,posted:0,category:'quad'}], 
+      [0,'segDrops_0','generators',1,'segDrops 0',{likes:0,posted:0,category:'quad'}], 
+
    [0,'part2_0_7','instances',1,'Part2 0 7',{likes:0,posted:0,category:'quad'}], 
    [0,'part2_0_49d','instances',1,'Part2 0 49 d',{likes:0,posted:0,category:'quad'}], 
   // [0,'part2_0_49e','instances',1,'Part2 0 49 e',{likes:0,posted:0,category:'quad'}], 
