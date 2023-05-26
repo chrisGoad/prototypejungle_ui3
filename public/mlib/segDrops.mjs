@@ -58,14 +58,20 @@ rs.dropCandidate = function (idx) {
   tried[idx] = 1; // this will be tried
   let e0 = targets[e0i];
   let e1 = targets[e1i];
-  let seg = this.shortenSeg(LineSegment.mk(e0,e1),0.01);
-  return seg;
+  let seg = LineSegment.mk(e0,e1);
+  if (this.segFilter) {
+    if (!this.segFilter(seg)) {
+      return;
+    }
+  }
+  let sseg = this.shortenSeg(seg,0.01);
+  return sseg;
 }
  
 
 rs.updateUntried = function () {
   let {targets,maxTargets,untried,tried} = this;
-  let ln = untried.length;
+  let ln = tried.length;
   let nut = [];
   for (let i=0;i<ln;i++) {
     let tr = tried[i];
