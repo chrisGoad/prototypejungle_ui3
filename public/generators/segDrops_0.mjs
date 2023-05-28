@@ -10,7 +10,7 @@ let wd = 200;
 let nr = 20;
 rs.setName('segDrops_0');
 let topParams = {width:wd,height:wd,framePadding:.1*wd,numSteps:200,numRows:nr,numCols:nr,
-                 cycles:1,frameStroke:'rgb(2,2,2)',frameStrokee:'white',frameStrokeWidth:1,maxFindUntried:10,maxCheckIntersect:10000,minLength:3,maxLength:2000,
+                 cycles:1,frameStroke:'rgb(2,2,2)',frameStrokee:'white',frameStrokeWidth:1,maxFindUntried:10,maxCheckIntersect:10000,minLength:40,maxLength:2000,
                  maxTargets:500}
 Object.assign(rs,topParams);
 

@@ -48,6 +48,8 @@ sections:
       [0,'paths_2','instances',1,'paths 2',{likes:0,posted:0,category:'quad'}], 
       [0,'paths_3','instances',1,'paths 3',{likes:0,posted:0,category:'quad'}], 
       [0,'paths_4','instances',1,'paths 4',{likes:0,posted:0,category:'quad'}], 
+      [0,'paths_5','instances',1,'paths 5',{likes:0,posted:0,category:'quad'}], 
+      [0,'paths_6','instances',1,'paths 6',{likes:0,posted:0,category:'quad'}], 
       [0,'segDrops_0','generators',1,'segDrops 0',{likes:0,posted:0,category:'quad'}], 
 
 /*[0,'quad_9_3','instances',1,'Quad 9 3',{likes:0,posted:0,category0_:'quad'}], 

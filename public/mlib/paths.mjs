@@ -167,12 +167,60 @@ item.pathScaleY = function (path,scale) {
   return np;
 }
 
+
 item.transformPath= function (path,trnf) {
+  debugger;
   let np = path.map((p) => {
+    debugger;
     return trnf.apply(p);
   });
   return np;
 }
+
+
+
+item.transformPaths = function (paths,trnf) {
+  let np = paths.map((p) => {
+    return this.transformPath(p,trnf);
+  });
+  return np;
+}
+
+item.copyPathTo = function (dst,src) {
+  let ln = src.length;
+  for (let i=0;i<ln;i++) {
+    dst[i] = src[i];
+  }
+}
+
+item.copyPathsTo = function (dst,src) {
+  let ln = src.length;
+  for (let i=0;i<ln;i++) {
+    this.copyPathTo(dst[i],src[i]);
+  }
+}
+
+
+item.copyPath = function (src) {
+  let ln = src.length;
+  let dst = [];
+  for (let i=0;i<ln;i++) {
+    dst.push(src[i]);
+  }
+  return dst;
+}
+
+
+
+item.copyPaths = function (src) {
+  let ln = src.length;
+  let dst = [];
+  for (let i=0;i<ln;i++) {
+    dst.push(this.copyPath(src[i]));
+  }
+  return dst;
+}
+
   
     
 item.mkSinPath =function (params) {
@@ -221,7 +269,7 @@ item.mkSnakePath = function (params) {
   return path;
 }
     
-item.mkCircle = function (params) {
+item.mkCirclePath = function (params) {
   let {radius:r,numPoints:np,center,startAngle:sai,stopAngle:fai} = params;//,endAngle:ea,clockWise:clkw} = params;
   //let da = (2*Math.PI)/(np+1);
  /* if (ea) {

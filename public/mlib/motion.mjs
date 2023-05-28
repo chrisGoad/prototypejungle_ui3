@@ -350,7 +350,7 @@ item.connectShapes = function () {
 
 item.paintConnector = function (params) { //might be overriden
   let {shape0:c0,shape1:c1,connector,lowFade} = params;
-  debugger;
+  //debugger;
   let rgbc;
   if (this.computeRgb) {
     rgbc =this.computeRgb(params);

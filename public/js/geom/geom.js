@@ -298,7 +298,9 @@ Transform.mk = function (o,scale,rotation) {
     otranslation = o.translation;
     orotation = o.rotation;
   }
-  rs.set('translation',otranslation.copy());
+  if (otranslation) {
+    rs.set('translation',otranslation.copy());
+  }
   if (typeof oscale === "number") {
     rs.scale = oscale;
   } else if  (Point.isPrototypeOf(oscale)) {
@@ -413,7 +415,14 @@ Transform.inverse =  function () {
 Point.applyTransform = function (tr) {
  // order: rotation,scaling  translation
  let trns = tr.translation;
- let tx = trns.x,ty = trns.y;
+ let tx,ty;
+ if (trns) {
+   tx = trns.x;
+   ty = trns.y;
+ } else {
+   tx=0;
+   ty=0;
+ }
  let sc = tr.scale;
  let scx,scy,rt,x,y,s,c,rx,ry,fx,fy;
  if (sc === undefined) {
