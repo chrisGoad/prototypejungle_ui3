@@ -200,6 +200,13 @@ c:\ffmpeg\bin\ffmpeg  -framerate 20 -i animations/gridSpinner_25_f%03d.jpg -s 50
 c:\ffmpeg\bin\ffmpeg  -framerate 20 -i animations/gridSpinner_26_f%03d.jpg -s 500x500  export/gridSpinner_26.gif
 c:\ffmpeg\bin\ffmpeg  -framerate 20 -i animations/gridSpinner_29_f%03d.jpg -s 500x500  export/gridSpinner_29.gif
 c:\ffmpeg\bin\ffmpeg  -framerate 15 -i animations/gridSpinner_30_f%03d.jpg -s 500x500  export/gridSpinner_30.gif
+c:\ffmpeg\bin\ffmpeg  -framerate 15 -i animations/gridSpinner_30_f%03d.jpg -s 500x500  export/gridSpinner_30.mp4
+c:\ffmpeg\bin\ffmpeg  -framerate 20 -i animations/paths_3_f%03d.jpg -s 500x500  export/paths_3.gif
+c:\ffmpeg\bin\ffmpeg  -framerate 15 -i animations/paths_0_f%03d.jpg -s 500x500  export/paths_0.mp4
+c:\ffmpeg\bin\ffmpeg  -framerate 15 -i animations/paths_5_f%03d.jpg -s 500x500  export/paths_5.mp4
+c:\ffmpeg\bin\ffmpeg  -framerate 15 -i animations/paths_7_f%03d.jpg -s 500x500  export/paths_7.mp4
+c:\ffmpeg\bin\ffmpeg  -framerate 15 -i animations/paths_7_f%03d.jpg -s 500x500  export/paths_7.gif
+c:\ffmpeg\bin\ffmpeg  -framerate 15 -i animations/paths_8_f%03d.jpg -s 500x500  export/paths_8.gif
 
 
 rm animations/spatter0_7*
