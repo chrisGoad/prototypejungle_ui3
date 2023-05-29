@@ -7,7 +7,7 @@ let rs = basicP.instantiate();
 addDropMethods(rs);
 debugger;
 let wd = 200;
-let nr = 20;
+let nr = 4;
 rs.setName('segDrops_0');
 let topParams = {width:wd,height:wd,framePadding:.1*wd,numSteps:200,numRows:nr,numCols:nr,
                  cycles:1,frameStroke:'rgb(2,2,2)',frameStrokee:'white',frameStrokeWidth:1,maxFindUntried:10,maxCheckIntersect:10000,minLength:40,maxLength:2000,
