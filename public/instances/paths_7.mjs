@@ -7,14 +7,15 @@ import {rs as linePP} from '/shape/line.mjs';
 import {rs as circlePP} from '/shape/circle.mjs';
 import {rs as polygonPP} from '/shape/polygon.mjs';
 
-let wd = 600;
+let wd = 630;
+//wd =220;
 let nr = 8;
 //
 nr =3;
 rs.setName('paths_7');
 let topParams = {width:wd,height:wd,numRows:nr,numCols:nr,numConnections:400,framePadding:.1*wd,stepsPerMove:10,numStepss:24,numSteps:200,
                  numCircles:6,innerRadius:20,radiusFactor:1.7,
-                 cycles:1,frameStroke:'rgb(2,2,2)',frameStrokee:'white',frameStrokeWidth:1,saveAnimation:1,stepInterval:40,randomConnections:1,lowFade:0,scaling:1,
+                 cycles:1,frameStrokee:'rgb(2,2,2)',frameStroker:'white',frameStrokeWidth:1,saveAnimation:1,stepInterval:40,randomConnections:1,lowFade:0,scaling:1,
                  pauseAtt:[29,30,59,60],numConnections:60,numPhases:60/*100*/,showThePaths:0,showIntersections:0,chopOffBeginning:2,chopOffEnd:0,newCoords:1}
 Object.assign(rs,topParams);
 
@@ -124,10 +125,13 @@ rs.afterUpdateState = function () {
   let boff=8;
   //let ln = circles.length;
   let cr = irad;
+  let rads = [9,9.7,10.9,12.13,50,56];
   for (let i=0;i<nc;i++) {
     let phase = (2*Math.PI)*(i/nc);
     let pha = a+phase;
-    let roffset = Point.mk(Math.cos(pha),Math.sin(pha)).times(boff+rfac*cr);
+    let rad = boff+rfac*cr;
+    rad = rads[i];
+    let roffset = Point.mk(Math.cos(pha),Math.sin(pha)).times(rad);
 
     let crc = circles[i];
     crc.moveto(roffset);

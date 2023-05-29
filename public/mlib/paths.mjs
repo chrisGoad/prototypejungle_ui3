@@ -169,9 +169,7 @@ item.pathScaleY = function (path,scale) {
 
 
 item.transformPath= function (path,trnf) {
-  debugger;
   let np = path.map((p) => {
-    debugger;
     return trnf.apply(p);
   });
   return np;
