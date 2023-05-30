@@ -30,6 +30,7 @@ Object.assign(rs,topParams);
 
 rs.initialize = function () {
   debugger;
+  let cube = Cube.mk(20);
   let {eye0,eye1,hoff} = this;
   this.addFrame();
   this.eye0.initialize();

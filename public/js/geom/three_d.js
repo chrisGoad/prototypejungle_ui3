@@ -350,6 +350,15 @@ Affine3d.apply = function (p) {
 	return Point3d.mk(rx,ry,rz);
 }
 
+
+Transform.applyTo3dPoints = function (pnts) {
+  let rs = [];
+  pnts.forEach((p) => {
+    rs.push(this.apply(p));
+  });
+  return rs;
+}
+
 Affine3d.row = function (n) {
 	let rs = [];
 	let st = n;
@@ -534,8 +543,20 @@ Plane.intersect = function (line) {
 geomr.set("Cube",core.ObjectNode.mk()).__namedType();
 let Cube = geomr.Cube;
 
+const buildCubeSides = function () {
+  let smz = ['v000','v010','v011','v001'];
+  let sz = ['v100','v110','v111','v101'];
+  let smy = ['v000','v100','v101','v001'];
+  let sy = ['v010','v110','v111','v011'];
+  let smx = ['v000','v010','v110','v100'];
+  let sx = ['v101','v011','v111','v101'];
+  return {smx,sx,smy,sy,smz,sz};
+}
+
+const cubeSides = buildCubeSides();
 
 Cube.mk = function (dim) {
+  debugger;
   let rs = Object.create(Cube);
 	rs.dimension  = dim;
 	let v = 0.5*dim;
@@ -545,9 +566,31 @@ Cube.mk = function (dim) {
 	let pmy = Plane.mk(Point3d.mk(0,-v,0),Point3d.mk(0,-1,0));
 	let pz = Plane.mk(Point3d.mk(0,0,v),Point3d.mk(0,0,1));
 	let pmz = Plane.mk(Point3d.mk(0,0,-v),Point3d.mk(0,0,-1));
-  rs.sides = [px,pmx,py,pmy,pz,pmz]
+  let v000 = Point3d.mk(-v,-v,-v);
+  let v001 = Point3d.mk(-v,-v,v);
+  let v010 = Point3d.mk(-v,v,-v);
+  let v011 = Point3d.mk(-v,v,v);
+  let v100 = Point3d.mk(v,-v,-v);
+  let v101 = Point3d.mk(v,-v,v);
+  let v110 = Point3d.mk(v,v,-v);
+  let v111 = Point3d.mk(v,v,v);
+  rs.vertices = {v000,v001,v010,v011,v100,v101,v110,v111};
+  rs.sides = cubeSides;
+  rs.planes = [px,pmx,py,pmy,pz,pmz]
   return rs;
 }
+
+Cube.applyTransform = function (tr) {
+ let rs = Object.create(Cube);
+	rs.dimension  = this.dim;  
+  rs.vertices =tr.applyTo3dPoints(this.vertices);
+  /*
+  rs.planes = // not yet
+  */
+  rs.cubeSides = cubeSides;
+  return rs;
+}
+   
 
 Cube.within = function (p) {
 	let dim = this.dimension;
