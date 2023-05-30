@@ -23,7 +23,7 @@ let nr = 8;
 //
 nr =3;
 rs.setName('paths_8');
-let topParams = {width:wd,height:ht,framePadding:.1*wd,numSteps:800,
+let topParams = {width:wd,height:ht,framePadding:.1*wd,numSteps:200,
                  frameStrokee:'rgb(2,2,2)',frameStrokee:'white',frameStrokeWidth:1,saveAnimation:1,stepInterval:40,scaling:1,
                 }
 Object.assign(rs,topParams);
@@ -48,8 +48,8 @@ rs.initProtos = function () {
 }
 rs.updateState = function () {
    debugger;
-   this.eye0.oneStep();
-   this.eye1.oneStep();
+   this.eye0.oneStep(1);
+   this.eye1.oneStep(1);
    //this.eye0.updateState();
    //this.eye1.updateState();
 }

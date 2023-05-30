@@ -5,6 +5,7 @@ sections:
 
 [  
       [0,'segDrops_0','generators',1,'segDrops 0',{likes:0,posted:0,category:'quad'}], 
+[0,'grid_sphere','generators',1,'grid sphere',{likes:0,posted:0,category:'grid'}],
 
    [0,'part2_0_7','instances',1,'Part2 0 7',{likes:0,posted:0,category:'quad'}], 
    [0,'part2_0_49d','instances',1,'Part2 0 49 d',{likes:0,posted:0,category:'quad'}], 

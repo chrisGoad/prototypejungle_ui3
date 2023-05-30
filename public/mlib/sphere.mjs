@@ -18,6 +18,7 @@ rs.genSegmentss = function (p) {
 //rs.toPoint3d = function (p) {
 rs.genPoint3d = function (p) {
 	let {sphereCenter,sphereDiameter} = this;
+  debugger;
 	if (!p.to3d) {
 	  debugger;
 	}
