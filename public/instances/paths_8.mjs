@@ -24,7 +24,7 @@ let nr = 8;
 nr =3;
 rs.setName('paths_8');
 let topParams = {width:wd,height:ht,framePadding:.1*wd,numSteps:200,
-                 frameStrokee:'rgb(2,2,2)',frameStrokee:'white',frameStrokeWidth:1,saveAnimation:1,stepInterval:40,scaling:1,
+                 frameStrokee:'rgb(2,2,2)',frameStrokee:'white',frameStrokeWidth:1,saveAnimation:1,chopOffBeginning:2,stepInterval:40,scaling:1,
                 }
 Object.assign(rs,topParams);
 

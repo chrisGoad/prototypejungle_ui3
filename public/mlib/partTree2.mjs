@@ -1,9 +1,8 @@
-// a part tree node has the form {polygn,P0:quadNode,UR:quadNode,LL:quadNode,QLR
+// a part tree node has the form {polygon,P0:quadNode,UR:quadNode,LL:quadNode,QLR
 const rs =function (rs) {
 
 
 rs.levelOf = function (prt) {
- // debugger;
   let {where} = prt;
   return where.length;
 }
@@ -86,7 +85,6 @@ rs.extendTriOneLevel = function (prt) {
       p1corners = [v0,n0,n3];
      p2corners = [n0,v1,n1];
       p3corners = [n2,n1,v2];
-     // p1corners = [];
     }
   }
   p0pgon = Polygon.mk(p0corners);
@@ -102,9 +100,7 @@ rs.extendTriOneLevel = function (prt) {
  
 
 rs.extendQuadOneLevel = function (prt) {
-  // debugger;
    let {polygon:pgon,where,root} = prt;
-   //console.log('where',where);
    let {corners} = pgon;
    let sp = this.partSplitParams(prt);
    prt . splitParams =  sp;
@@ -136,7 +132,6 @@ rs.extendQuadOneLevel = function (prt) {
    let ip0 = ips[0];
    let ip1 = ips[1];
    const addPart = (pn,vn,pgon,stop) => {
-    //S debugger;
      if (pgon && pgon.corners) {
        let nprt = {polygon:pgon,where:[...where,[pn,vn]],root,parent:prt,stop};
        prt[pn]= nprt;
@@ -174,7 +169,6 @@ rs.extendQuadOneLevel = function (prt) {
    let side3 = pc3?Math.floor(pc3):null;
    let side4 = pc4?Math.floor(pc4):null;
    let side5 = pc5?Math.floor(pc5):null;
-  // debugger;
    if (case2) {
      if ((side0 === 0) && (side1 === 2)) {
        p0corners = [v0,n0,n1,v3];
@@ -185,11 +179,9 @@ rs.extendQuadOneLevel = function (prt) {
   }  else if (case3) {
      if ((side0 === 0) && (side1 === 1) && (side2 === 2) && (side3 === 3)) {
        p0corners = [n0,n1,n2,n3];
-      // p1corners = [v0,n0,n3];
        p1corners = [n3,v0,n0];
        p2corners = [n0,v1,n1];
        p3corners = [n1,v2,n2];
-     //  p4corners = [n3,n2,v3];
        p4corners = [n2,v3,n3];
      } else {
         core.error('bad case3 for quad');
@@ -207,9 +199,7 @@ rs.extendQuadOneLevel = function (prt) {
         core.error('bad case4 for quad');
      }
    } else if (case5) {
-     // debugger;
       if ((side0 === 0) && (side1 === 1) && (side2 === 2) && (side3 === 3)) {
-        //debugger;
         if ([fr0,fr1].includes(undefined)) {
          core.error('case 5 undefined parameters');
         }
@@ -225,9 +215,7 @@ rs.extendQuadOneLevel = function (prt) {
         core.error('bad case5 for quad');
     } 
   }  else if (case10) {
-     // debugger;
       if ((side0 === 0) && (side1 === 1) && (side2 === 2) && (side3 === 3)) {
-        //debugger;
         if ([ip0,ip1].includes(undefined)) {
          core.error('case 10 undefined parameters');
         }
@@ -249,7 +237,6 @@ rs.extendQuadOneLevel = function (prt) {
     } 
   }   else if (case6) {
     if ((side0 === 0) && (side1 === 1) && (side2 === 2) && (side3 === 3)) {
-      //debugger;
        if ([fr0,fr1].includes(undefined)) {
          core.error('case 6 undefined parameters');
        }
@@ -265,7 +252,6 @@ rs.extendQuadOneLevel = function (prt) {
      }
    } else if (case7) {
      if ((side0 === 0) && (side1 === 1)&& (side3 === 3))  {
-    // debugger;
        let n2 = pgon.pc2point(2+(1-pc0)+vertexNum);
        let cseg = LineSegment.mk(n0,n2);
        let fr0 =pc1-1; 
@@ -280,19 +266,18 @@ rs.extendQuadOneLevel = function (prt) {
         core.error('bad case7 for quad');
      } 
    } else if (case8) {
-       if ((side0 === 0) && (side1 === 1)&& (side2 === 2))  {
-    // debugger;
-       let n3 = pgon.pc2point(3+(1-(pc1-1))+vertexNum);
-       let cseg = LineSegment.mk(n1,n3);
-       let fr0 =1-pc0; 
-       let fr1 = (pc2-2);
-       let c0 = cseg.along(fr0);
-       let c1 = cseg.along(fr1);
-       p0corners = [v0,n0,c0,n3];
-       p1corners = [n0,v1,n1,c0];
-       p2corners = [c1,n1,v2,n2];
-       p3corners = [n3,c1,n2,v3];
-     } else {
+      if ((side0 === 0) && (side1 === 1)&& (side2 === 2))  {
+        let n3 = pgon.pc2point(3+(1-(pc1-1))+vertexNum);
+        let cseg = LineSegment.mk(n1,n3);
+        let fr0 =1-pc0; 
+        let fr1 = (pc2-2);
+        let c0 = cseg.along(fr0);
+        let c1 = cseg.along(fr1);
+        p0corners = [v0,n0,c0,n3];
+        p1corners = [n0,v1,n1,c0];
+        p2corners = [c1,n1,v2,n2];
+        p3corners = [n3,c1,n2,v3];
+      } else {
         core.error('bad case8 for quad');
      }
   } else if (case9) {
@@ -310,19 +295,15 @@ rs.extendQuadOneLevel = function (prt) {
   }  else if (case11) {
      if ((side0 === 0) && (side1 === 1) && (side2 === 2)) {
        p0corners = [v0,n0,n2,v3];
-      // p1corners = [v0,n0,n3];
        p1corners = [n0,n1,n2];
        p2corners = [n0,v1,n1];
        p3corners = [n1,v2,n2];
-     //  p4corners = [n3,n2,v3];
      } else {
         core.error('bad case11 for quad');
      }
   }  else if (case12) {
      if ((side0 === 0) && (side1 === 1) && (side2 === 2)) {
-   //  debugger;
        p0corners = [n0,n3,n2];
-      // p1corners = [v0,n0,n3];
        p1corners = [n0,n1,n2];
        p2corners = [n0,v0,n3];
        p3corners = [n0,v1,n1];
@@ -332,7 +313,6 @@ rs.extendQuadOneLevel = function (prt) {
         core.error('bad case12 for quad');
      }
   } else if (case13) {
-    //debugger;
     let cnt = pgon.center();
     let diag0 = LineSegment.mk(v0,cnt);
     let diag1 = LineSegment.mk(v1,cnt);
@@ -370,25 +350,15 @@ rs.extendQuadOneLevel = function (prt) {
 }
    
 rs.extendPartOneLevel = function (prt,sep) {
-  // debugger;
    if (!prt) {
      return;
    }
- /*  if (prt.P0) { // already extended 
-     let ext = this.extendPartOneLevel(prt.P0,sep);
-     this.extendPartOneLevel(prt.P1,sep);
-     this.extendPartOneLevel(prt.P2,sep);
-     this.extendPartOneLevel(prt.P3,sep);
-     this.extendPartOneLevel(prt.P4,sep);
-     return ext;
-   }*/
    if (sep && sep.stop) {
      console.log('stop');
      return;
    }
    let {polygon:pgon,stop} = prt;
    if (stop) {
-     //debugger;
      return 0;
    }
    let {corners} = pgon;
@@ -424,9 +394,7 @@ rs.extendPartNLevels = function (prt,iparams) {
      prt.root = prt;
      params = prt.params = iparams;
    }
-      let lv =  this.levelOf(prt);
-   //   console.log('extendPartNLevels',lv,'where=',where);
-  // let lv =  where.length;
+   let lv =  this.levelOf(prt);
    let {levels} = params;
    if (lv >= levels) {
      prt.stopped = 1;
@@ -439,31 +407,25 @@ rs.extendPartNLevels = function (prt,iparams) {
       let cell = this.cellOf(pnt);
       rvs = this.randomValuesAtCell(randomGridsForShapes,cell.x,cell.y);
     }
-  /* let split = this.splitHere(prt,rvs);
-   if (!split) {
-     return;
-   }*/
    if (this.extendPartOneLevel(prt)) {
-     this.extendPartNLevels(prt.P0);//,i+1);
-     this.extendPartNLevels(prt.P1);//,i+1);
-     this.extendPartNLevels(prt.P2);//,i+1);
-     this.extendPartNLevels(prt.P3);//,i+1);
-     this.extendPartNLevels(prt.P4);//,i+1);
-     this.extendPartNLevels(prt.P5);//,i+1);
+     this.extendPartNLevels(prt.P0);
+     this.extendPartNLevels(prt.P1);
+     this.extendPartNLevels(prt.P2);
+     this.extendPartNLevels(prt.P3);
+     this.extendPartNLevels(prt.P4);
+     this.extendPartNLevels(prt.P5);
   }
  }
  
  
  rs.displayPart = function (prt,emitLineSegs) {
    let {shapes,lineSegs} = this;
-   //debugger;
    if (!prt) {
      return;
    }
    if (emitLineSegs && (!lineSegs)) {
     this.lineSegs = [];
    }
-  // let lev = prt.where.length;
    let lev = this.levelOf(prt);
    if (lev > -1) {
      this.displayCell(prt,emitLineSegs);
@@ -486,18 +448,13 @@ rs.partVisible = function (prt) {
   if (!visibles) {
     return 1;
   }
- // let lv = prt.where.length;
   let lv = this.levelOf(prt);
- /* if (lv >= 6) {
-  //  debugger;
-  }*/
   return visibles[lv];
 }
 
 rs.partMangle = function (prt) {
   let {mangles,mangle} = this.partParams;
   if (mangles) {
-    //let lv =  prt.where.length;
     let lv =  this.levelOf(prt);
     return mangles[lv];
   } else if (mangle) {
@@ -506,16 +463,10 @@ rs.partMangle = function (prt) {
 }
 
 rs.partStrokeWidth = function (prt) {
-  //debugger;
   let {strokeWidths} = this.partParams;
-  //debugger;
   let lv,sw;
   if (strokeWidths) {
-    //lv =  prt.where.length;
     lv =  this.levelOf(prt);
-    if (lv > 2) {
-     // debugger;
-    }
     sw =strokeWidths[lv];
   //  console.log('lv',lv,'sw',sw);
     return sw;
@@ -525,7 +476,6 @@ rs.partStrokeWidth = function (prt) {
 
 rs.partStroke = function (prt) {
   let {stroke} = this.partParams;
-  //debugger;
   return stroke;
 }
 
@@ -581,7 +531,6 @@ rs.whereString = function (where) {
 
 
 const allWheres = function (frmlev,tolev,np) {
-  //debugger;
   let aw = [];
   if (frmlev === 0) {
     aw.push(['top',[]]);
@@ -594,9 +543,8 @@ const allWheres = function (frmlev,tolev,np) {
        aws.forEach((w) => {
          aw.push([cpne+w[0],[i].concat(w[1])]);
        });
-    }// else {
-      aw.push([cpn,i]);
-    //}
+    }
+    aw.push([cpn,i]);
   }
   return aw;
 }
@@ -630,15 +578,10 @@ rs.displayCell = function (prt,toSegs) {
    }
   //console.log(' display ',displayCnt,this.whereName(where));
   this.displayCnt = displayCnt+1;
- // debugger;
-  if (0 && (displayCnt>400)) {
-    return;
-  }
   let mng = this.partMangle(prt);
   let mangled;
   let geom = pgon;
   let shps;
- // let strokew = this.partStrokeWidth(prt);//strokeWidths[lnw];
   let stroke = this.partStroke(prt);
   let fill = this.partFill?this.partFill(prt):undefined;
   let fillScale = this.partFillScale(prt);
@@ -690,7 +633,6 @@ rs.displayCell = function (prt,toSegs) {
   }
   
   if (circleScale) {
-   // debugger;
     let c = geom.center();
     let r;
     if (rect) {
@@ -709,14 +651,12 @@ rs.displayCell = function (prt,toSegs) {
 }
 
 rs.stepPartParams = function (params) {
- // debugger;
   let {randomize,partParams:qdp,whichToStep,range:v,stepper} = params;
   if (randomize) {
     let rs = this.randomizeFrom({ornt:['h','v'],fr0:v,fr1:v,fr2:v,fr3:v,fr4:v,fr5:v});
     return rs;
   }
   let ln = whichToStep.length;
- // let qdp = {ornt};
   stepper.step(0);
   console.log(JSON.stringify(this.ar));
   for (let i=0;i<ln;i++) {
@@ -729,7 +669,6 @@ rs.stepPartParams = function (params) {
       qdp[frnm] = 0.01*av;
      };
   }
- // return qdp;
  }
  
  
@@ -765,17 +704,13 @@ rs.quad2part = function (params) {
   let p1p = {Case:2,ornt:oornt,fr0:efr4,fr1:efr5};
   let tp = {Case:2,ornt:ornt,fr0:efr0,fr1:efr1};
   let rs = {TOP:tp,P0:p0p,P1:p1p}
-  //debugger;
   return rs;
 }
 
 // for illustrations of the partitions (eg instances/part_0_D_0.mjc)
 rs.displayPc = function (n,ijog) {  //display periphery coordinate
- // debugger;
    let jog = ijog?ijog:Point.mk(0,0);
-
   let topP = this.shapes[0].fromGeom;
-  //let pc = rs.partParams.splitParams['pc'+n];
   let pc = this.partParams.splitParams.pcs[n];
   let fpc = Math.floor(pc);
   let ps = topP.pc2point(pc);
@@ -794,7 +729,6 @@ rs.displayPc = function (n,ijog) {  //display periphery coordinate
     disp = Point.mk(0,sdisp);
    }
    this.addT('pc',n,ps.plus(disp).plus(jog));
- // this.addT('pc',n,ps.plus(disp));
 }
 
 rs.displayTitle = function (nm) {
@@ -807,7 +741,6 @@ rs.displayTitle = function (nm) {
 
 
 rs.stepPartParams = function (params) {
- // debugger;
   let {randomize,partParams:qdp,whichPcsToStep:wPcs,whichFrsToStep:wFrs,range:v,stepper} = params;
   if (randomize) {
     let rs = this.randomizeFrom({ornt:['h','v'],fr0:v,fr1:v,fr2:v,fr3:v,fr4:v,fr5:v});
@@ -827,7 +760,6 @@ rs.stepPartParams = function (params) {
       pcs[idx] = 0.01*av;
      };
   }
- // return qdp;
  }
 
 rs.alreadyInitialized = 0;
@@ -835,15 +767,10 @@ rs.initialize = function () {
   let {width:wd,height:ht,partParams,dropParams} = this;
   let hwd = 0.5*wd;
   let hht = 0.5*ht;
-  //let {emitLineSegs,polygonal} = partParams;
   let {emitLineSegs,rectangular} = partParams;
-//  polygonal = 1;
   this.addFrame();
   this.initProtos();
   this.callIfDefined('adjustProtos');
- // if (!this.strokeWidths) {
-  //  this.strokeWidths = this.computeExponentials(partParams.levels,0.1,0.9);
-  //}
   let pgon;
   if (rectangular) {
     let p0 = Point.mk(-hwd,hht);
@@ -864,7 +791,6 @@ rs.initialize = function () {
   if (partParams.emitLineSegs) {
     this.generateDrops(dropParams);
   }
-  //debugger;
   let ized = this.alreadyInitialized;
   this.alreadyInitialized = 1;
   if (!ized) {
