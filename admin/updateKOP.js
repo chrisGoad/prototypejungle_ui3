@@ -37,7 +37,7 @@ xferFiles('public',['dropPages.js','dropTitles.js','dropImages.html','draw.html'
  xferFiles('public/doc',['index.html','prototypetree.html','shapes.html','basics.html','method_modules.html','grid.html',
                          'boundedRandomGrids.html','lines.html','drop.html','docSupport.js','prototypeDiagram1_withText.svg',
                          'example1.mjs','grid_example2.mjs']);
-  xferFiles('public/mlib',['grid.mjs','drop.mjs']);
+  xferFiles('public/mlib',['grid.mjs','drop.mjs','lines.mjs','basics.mjs','boundedRandomGrids.mjs']);
                         
 
 //xferFiles('public',['gPages.js','gTitles.js','gLocals.js','page.html','pageSupport.js']);

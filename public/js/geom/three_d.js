@@ -211,7 +211,7 @@ Camera.projectPoint3d = function (ip,transform) {
 	if (ip === undefined) {
 		debugger; //keep
 	}
-	let p = transform?transform.apply(ip):ip;
+	let p = transform?transform.applyToPoint(ip):ip;
 	let v = fp.difference(p);
 	let t,rs;
 	if (axis === 'x') {
@@ -253,14 +253,14 @@ Camera.projectShape3d = function (shp,itrans) {
 		trans = strans;
 	}
 	let hideIt = this.hideIt;
-	if (trans) {
+	if (0 && trans) {
 	  let xfx = trans.apply(Point3d.mk(1,0,0));
 	  let xfy = trans.apply(Point3d.mk(0,1,0));
 	  let xfz = trans.apply(Point3d.mk(0,0,1));
 	  hideIt = hideIt || (xfz.z <= 0);
 	}
 	if (hideIt) {
-	//debugger;
+    return;
 	}
 	let parts = shp.parts;
 	let rs = core.ArrayNode.mk();
@@ -312,6 +312,7 @@ Affine3d.mkFromCols = function (ic1,ic2,ic3,ic4) {
 		c3 = ic3;
 		c4 = ic4;
 	} else {
+    debugger;
 		c1 = ic1[0];
 		c2 = ic1[1];
 		c3 = ic1[2];
@@ -324,7 +325,17 @@ Affine3d.mkFromCols = function (ic1,ic2,ic3,ic4) {
 	return rs;
 }
 
-Affine3d.apply = function (p) {
+Affine3d.rotationOf = function () {
+  [a00,a01,a02,a03,a10,a11,a12,a13,a20,a21,a22,a23,a30,a31,a32,a33] = this;
+  let c0 = [a00,a01,a02,0];
+  let c1 = [a10,a11,a12,0];
+  let c2 = [a20,a21,a22,0];
+  let c3 = [0,0,0,1];
+  let rt = Affine3d.mkFromCols(c0,c1,c2,c3);
+  return rt;
+}
+
+Affine3d.applyToPoint = function (p) {
 	//debugger;
 	let {x,y,z} = p;
 	let [a11,a21,a31,a41,a12,a22,a32,a42,a13,a23,a33,a43,a14,a24,a34,a44] = this;
@@ -354,7 +365,7 @@ Affine3d.apply = function (p) {
 Transform.applyTo3dPoints = function (pnts) {
   let rs = [];
   pnts.forEach((p) => {
-    rs.push(this.apply(p));
+    rs.push(this.applyToPoint(p));
   });
   return rs;
 }
@@ -503,6 +514,15 @@ Plane.mk = function (point,normal) {
   return rs;
 }
 
+Affine3d.applyToPlane = function (pl) {
+   let {point,normal} = this;
+   let rt = this.toRotation();
+   let npoint = this.applyToPoint(point);
+   let nnormal = rt.applyToPoint(normal);
+   let npl = Plane.mk(npoint,nnormal);
+   return npl;
+}
+
 Plane.toEquation = function () {
 	let {point,normal} = this;
 	let {x:a,y:b,z:c} = normal;
@@ -539,8 +559,8 @@ Plane.intersect = function (line) {
 	return rs;
 }
 
-
-geomr.set("Cube",core.ObjectNode.mk()).__namedType();
+//geomr.set("Cube",core.ObjectNode.mk()).__namedType();
+geomr.set("Cube",Object.create(Shape3d)).__namedType();
 let Cube = geomr.Cube;
 
 const buildCubeSides = function () {
@@ -580,13 +600,45 @@ Cube.mk = function (dim) {
   return rs;
 }
 
+
+Cube.sidePath = function (sideName) {
+  let sides = this.sides();
+  let side = sides[sideName]
+  [v0n,v1n,v2n,v3n] = side;
+  let vs = [];
+  vs.push(vertices[v0n]);
+  vs.push(vertices[v1n]);
+  vs.push(vertices[v2n]);
+  vs.push(vertices[v3n]);
+  return vs;
+}
+Cube.sideSegments = function (sideName) {
+  let vs = this.sidePath(sideName);
+  let sides = this.sides();
+  let seg0 = LineSegment.mk(vs[0],vs[1]);
+  let seg1 = LineSegment.mk(vs[1],vs[2]);
+  let seg2 = LineSegment.mk(vs[2],vs[3]);
+  let seg3 = LineSegment.mk(vs[3],vs[0]);
+  return [seg0,seg1,seg2,seg3];
+}
+
+
+   
+      
+
 Cube.applyTransform = function (tr) {
  let rs = Object.create(Cube);
 	rs.dimension  = this.dim;  
   rs.vertices =tr.applyTo3dPoints(this.vertices);
-  /*
-  rs.planes = // not yet
-  */
+  let {planes} = this;
+  let pnames = Object.getOwnPropertyNames(planes);
+  let nplanes = {};
+  pnames.forEach((prop) => {
+    let pl = planes[prop];
+    let npl = pl.applyTransform(tr);
+    nplanes[prop] = npl;
+  });
+  rs.planes = nplanes;
   rs.cubeSides = cubeSides;
   return rs;
 }
@@ -620,5 +672,5 @@ Cube.intersect = function (line) {
 	
 	
 
-export {Point3d,Camera,Affine3d,Segment3d,Shape3d,Plane,Line3d,Cube	};
+export {Point3d,Camera,Affine3d,Segment3d,Shape3d,Plane,Line3d,Cube};
 

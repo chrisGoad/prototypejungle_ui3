@@ -4,6 +4,7 @@ module.exports = {
 sections: 
 
 [  
+      [0,'cubes_0','generators',1,'cubes 0',{likes:0,posted:0,category:'quad'}], 
       [0,'segDrops_0','generators',1,'segDrops 0',{likes:0,posted:0,category:'quad'}], 
 [0,'grid_sphere','generators',1,'grid sphere',{likes:0,posted:0,category:'grid'}],
 
