@@ -374,6 +374,19 @@ item.inRandomOrder = function (n) {
   return rs;
 }
 
+item.allCells  = function () {
+  let {numRows,numCols} = this;
+  let cells = [];
+  for (let i = 0;i < numCols; i++) {
+    for (let j = 0;j <  numRows; j++) {
+      let cell = {x:i,y:j};
+      cells.push(cell);
+    }
+  }
+  return cells;
+}
+      
+       
 item.computeCellsByOrdinal = function () {
   let {numRows,numCols} = this;
   let cellsByOrdinal = {};
@@ -476,6 +489,7 @@ item.addShapes = function () {
   if (this.timeStep === undefined) {
      this.timeStep = 0;
   }
+  let theCells = this.theCells = [];
   this.updating = !!ishapes
   let shapes;
   if (ishapes) {
@@ -496,11 +510,13 @@ item.addShapes = function () {
     let y = idx % nr;
     let cnt = this.centerPnt(x,y);
     let cell = {x,y,index:idx};
+    theCells.push(cell);
     let rvs = (this.randomValuesAtCell)?this.randomValuesAtCell(randomGridsForShapes,x,y):{};
     let  shp;
     if (this.shapeGenerator) {
       shp = this.shapeGenerator(rvs,cell,cnt,idx);
       if (shp) {
+        cell.shape = shp;
         shapes.push(shp);
         if (shp.update) {
           shp.update();
