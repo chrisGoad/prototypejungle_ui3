@@ -14,8 +14,8 @@ addAnimationMethods(rs);
 let nr = 16;
 let wd=100;
 
-let topParams = {width:wd,height:wd,numRows:nr,numCols:nr,pointJiggle:0,framePadding:0.15*wd,
-     numSteps:300,stepInterval:50,saveAnimation:1};
+let topParams = {width:wd,height:wd,numRows:nr,numCols:nr,pointJiggle:0,framePadding:0.15*wd,frameStrokee:'white',
+     numSteps:400,stepInterval:50,saveAnimation:1};
 Object.assign(rs,topParams);
 
 
@@ -137,13 +137,15 @@ rs.updateState = function () {
   debugger;
   //let cells = this.allCells();
   let fr = ssf/numSteps;
-  let fr0 =3*fr;
-  let fr1 = 3*(fr-1/3);
-  let fr2 = 3*(fr-2/3);
+  let fr0 =4*fr;
+  let fr1 = 4*(fr-1/4);
+  let fr2 = 4*(fr-2/4);
+  let fr3 = 4*(fr-3/4);
   let stroke;
-  let phase0 = (fr < 1/3);
-  let phase1 = !phase0 && (fr < 2/3);
-  let phase2 = !(phase0 || phase1);
+  let phase0 = (fr < 1/4);
+  let phase1 = !phase0 && (fr < 2/4);
+  let phase2 = !phase0 && !phase1 && (fr < 3/4);
+  let phase3 = !(phase0 || phase1 || phase2);
   if (phase0) {
     let gb= Math.floor(255*fr0);
     stroke = `rgb(${gb},${gb},${255-gb})`;
@@ -151,11 +153,16 @@ rs.updateState = function () {
     let gb= Math.floor(255*fr1);
     //stroke = `rgb(${255-gb},${255-gb},255)`;
     stroke = `rgb(0,0,${255-gb})`;
-  } else {
+  } else if (phase2)  {
     this.reorientSegs();
     let gb= Math.floor(255*fr2);
     stroke = `rgb(0,0,${gb})`;
+  } else { 
+    let gb= Math.floor(255*fr3);
+    stroke = `rgb(${255-gb},${255-gb},${gb})`;
   }
+
+     
   theCells.forEach ( (cell)=> {
     let shape = cell.shape;
     let diag = this.determineDiagonal(cell).onDiag;
@@ -169,6 +176,10 @@ rs.updateState = function () {
       shape.update();
     }
     if (phase2 && (!diag)) {
+       shape.stroke = stroke;
+       shape.update();
+    }
+    if (phase3 && (diag)) {
        shape.stroke = stroke;
        shape.update();
     }
