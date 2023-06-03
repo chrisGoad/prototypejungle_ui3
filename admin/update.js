@@ -3,7 +3,7 @@
 
 
 var fs = require('fs');
-
+console.log('new update');
 
 var boilerplate0 = 
 `<!DOCTYPE html>
@@ -11,7 +11,7 @@ var boilerplate0 =
 <head>
 <meta charset="UTF-8">
 <meta name="description" content="Diagramming basedd on an open repository of prototype structures.">
-<title>PrototypeJungle</title>
+<title>Kingdom of Pattern</title>
 <link rel="stylesheet" type="text/css"  href="style.css"/>
 <link rel="stylesheet" type="text/css"  href="spectrum.css"/>
 <link rel="icon" href="/images/favicon.ico" />
@@ -24,7 +24,7 @@ var boilerplate1 =
 <head>
 <meta charset="UTF-8">
 <meta name="description" content="Image Generation via Prototype Trees">
-<title>PrototypeJungle</title>
+<title>Kingdom of Pattern</title>
 <link rel="stylesheet" type="text/css"  href="style.css"/>
 <link rel="stylesheet" type="text/css"  href="spectrum.css"/>
 <link rel="icon" href="/favicon.ico" />
@@ -36,9 +36,8 @@ var boilerplate1 =
 <div class="topGrid">
 <div></div>
 <div ><span id ="prevSpan" class="button"> &lt;</span></div>
-<div><span class="textVar"><a style="color:black" href="../index.html">PrototypeJungle</a></span></div>
+<div><span class="textVar"><a style="color:black" href="index.html">Kingdom of Pattern</a></span></div>
 <div></div>
-<div><span style="padding-top:0px"> <img  src="logo.svg" width="30" height="30" /></span></div>
 <div><span id="nextSpan" class="button"> &gt; </span></div>
 </div>
 <hr/>
@@ -75,7 +74,7 @@ var boilerplateIndex =
 <head>
 <meta charset="UTF-8">
 <meta name="description" content="Image Generation via Prototype Trees">
-<title>PrototypeJungle</title>
+<title>Kingdom of Pattern</title>
 <link rel="stylesheet" type="text/css"  href="style.css"/>
 <link rel="stylesheet" type="text/css"  href="spectrum.css"/>
 <link rel="icon" href="/favicon.ico" />
@@ -169,9 +168,9 @@ var fs = require('fs');
       }
       let fpath = ipath + '/' + fln;
       var scripts = '';
-      if (dir === 'admin') {
+      //if (dir === 'admin') {
         console.log('transfering file ',fpath);
-      }
+      //}
       var vl = fs.readFileSync(fpath).toString();
        // console.log('vl',vl);
         let  ovl = endsIn(fln,'.html')?insertBoilerplate(vl,scripts,''):vl;
@@ -203,6 +202,9 @@ xferDirs(['public/js/core','public/js/dom','public/js/geom','public/js/draw']);
 xferDirs(['public/fxhash/drop_circles_14','public/fxhash/drop_circles_14/generators','public/fxhash/drop_circles_14/mlib','public/fxhash/drop_circles_14/shape']);
 xferDirs(['public/fxhash/test','public/fxhash/test/generators','public/fxhash/test/mlib','public/fxhash/test/shape']);
 xferDirs(['public/fxhash/part2_0_30','public/fxhash/part2_0_30/generators','public/fxhash/part2_0_30/mlib','public/fxhash/part2_0_30/shape']);*/
+console.log('PT!!');
+xferFiles('public/doc',["prototypetree.html","geometry.html"])
+
 return;
 //xferDir(0,'public','');
  //xferDir('top','','server');
