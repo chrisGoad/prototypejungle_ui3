@@ -56,6 +56,19 @@ rs.computeAnglesByCell = function () {
   }
   return abc;
 }
+
+rs.adjustAngles = function (angles,delta) {
+  let nangs = [];
+  let ln = angles.length;
+  for (let i=0;i<ln;i++) {
+    let a = angles[i];
+    let na = a+delta;
+    nangs.push(na);
+  }
+  return nangs;
+}
+
+
    
 
 rs.determineDiagonal = function (cell) {
@@ -111,8 +124,9 @@ rs.shapeGenerator = function (rvs,cell) {
 rs.initialize = function () {
   this.addFrame();
   this.initProtos();
-  this.angles0= this.computeAnglesByCell();
-  this.angles1 = this.computeAnglesByCell();
+  let angles0 = this.angles0= this.computeAnglesByCell();
+  //this.angles1 = this.computeAnglesByCell();
+  this.angles1 = this.adjustAngles(angles0,(Math.PI)/2);
   this.generateGrid();
 }
 
@@ -124,7 +138,7 @@ rs.reorientSegs = function () {
       let diag = this.determineDiagonal(cell).onDiag; 
       if (!diag) {
         let dir = this.angleByCell(cell,angles1);
-        let hvec = Point.mk(Math.cos(dir),Math.sin(dir)).times(2);
+        let hvec = Point.mk(Math.cos(dir),Math.sin(dir)).times(2.5);
         shape.setEnds(hvec.times(-1),hvec);   
         shape.update();
       }
@@ -155,11 +169,14 @@ rs.updateState = function () {
     stroke = `rgb(0,0,${255-gb})`;
   } else if (phase2)  {
     this.reorientSegs();
-    let gb= Math.floor(255*fr2);
+    //let gb= Math.floor(255*fr2);
+    let gb= Math.floor(220*fr2);
     stroke = `rgb(0,0,${gb})`;
+    //stroke = `rgb(20,20,${gb})`;
   } else { 
-    let gb= Math.floor(255*fr3);
-    stroke = `rgb(${255-gb},${255-gb},${gb})`;
+    let gb0= Math.floor(255*fr3);
+    let gb1= Math.floor(220*fr3);
+    stroke = `rgb(${255-gb0},${255-gb0},${gb1})`;
   }
 
      
