@@ -36,7 +36,7 @@ var boilerplate1 =
 <div class="topGrid">
 <div></div>
 <div ><span id ="prevSpan" class="button"> &lt;</span></div>
-<div><span class="textVar"><a style="color:black" href="index.html">Kingdom of Pattern</a></span></div>
+<div><span class="textVar"><a style="color:black" href="/index.html">Kingdom of Pattern</a></span></div>
 <div></div>
 <div><span id="nextSpan" class="button"> &gt; </span></div>
 </div>
@@ -193,7 +193,9 @@ var fs = require('fs');
 //xferDir(0,'www','doc');
 xferDir('admin');
 //xferDir('server');
-xferFiles('public',['quads.html','draw.html','index.html','topdefs.js','style.css','spectrum.css','page.html','setAtKOP.js','reallySetAtKOP.js','pageSupport.js','logo.svg']);
+xferFiles('public',['index.html','quads.html','draw.html','index.html','topdefs.js','style.css','spectrum.css',
+  'page.html','setAtKOP.js','reallySetAtKOP.js','pageSupport.js','logo.svg','animImages.html','gridImages.html','dropImages.html','partitionImages.html',
+   'webImages.html']);
 xferFiles('admin',['genGrids.js','gridSections.js','imageOrder.js']);
 xferDirs(['public/generators','public/instances','public/shape','public/mlib','public/json','public/doc','public/server','public/admin']);
 //xferDirs(['js/core','js/dom','js/geom','js/draw']);

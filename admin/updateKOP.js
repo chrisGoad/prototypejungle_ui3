@@ -22,7 +22,7 @@ const xferFiles = function (dir,files) {
   files.forEach( (file) => xferFile(dir,file));
 }
 
-xferFile('public','galleries.html','index.html');
+xferFile('public','galleries.html');
 xferFile('public','reallySetAtKOP.js','setAtKOP.js');
 //xferFile('public','galleries.html','index.html');
 //xferFile('public','images.html','index.html');
@@ -39,7 +39,8 @@ xferFiles('public',['dropPages.js','dropTitles.js','dropImages.html','draw.html'
                          'example1.mjs','grid_example2.mjs']);
   xferFiles('public/mlib',['grid.mjs','drop.mjs','lines.mjs','basics.mjs','boundedRandomGrids.mjs','partTree2.mjs']);
   xferFiles('public/generators',['grid_distortion_field.mjs']);
-                        
+              xferFile('public','index.html');
+          
 
 //xferFiles('public',['gPages.js','gTitles.js','gLocals.js','page.html','pageSupport.js']);
 
