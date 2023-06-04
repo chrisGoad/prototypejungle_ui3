@@ -35,9 +35,10 @@ xferFiles('public',['dropPages.js','dropTitles.js','dropImages.html','draw.html'
                      'page.html','pageSupport.js']);
  xferFiles('public/doc',['kop_drop.html','generators.html','kop_partition.html','kop_grid.html','kop_web.html','kop_lines.html','kop_general.html','style.css']);
  xferFiles('public/doc',['index.html','prototypetree.html','geometry.html','shapes.html','basics.html','method_modules.html','grid.html',
-                         'boundedRandomGrids.html','lines.html','drop.html','docSupport.js','prototypeDiagram1_withText.svg',
+                         'boundedRandomGrids.html','lines.html','drop.html','partition.html','docSupport.js','prototypeDiagram1_withText.svg',
                          'example1.mjs','grid_example2.mjs']);
-  xferFiles('public/mlib',['grid.mjs','drop.mjs','lines.mjs','basics.mjs','boundedRandomGrids.mjs']);
+  xferFiles('public/mlib',['grid.mjs','drop.mjs','lines.mjs','basics.mjs','boundedRandomGrids.mjs','partTree2.mjs']);
+  xferFiles('public/generators',['grid_distortion_field.mjs']);
                         
 
 //xferFiles('public',['gPages.js','gTitles.js','gLocals.js','page.html','pageSupport.js']);

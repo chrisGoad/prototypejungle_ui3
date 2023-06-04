@@ -2,6 +2,8 @@
 
 <p class="title">Prototype Trees</p>
 
+<p>The core data structure in Kingdom of Pattern is the prototype tree.</p>
+
 <p>In current practice, the prototype mechanism in JavaScript only supports the instantiation of components at a single level. If <span class="textVar">x</span> is a component which we wish to instantiate via prototypical inheritance, our first option is to invoke 
 <span class="textVar">y=<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/create">Object.create</a>(x)</span>. The newly created object <span class="textVar">y</span> only inherits from its prototype, <span class="textVar">x</span>, at the top level. All other structure is shared. So, if <span class="textVar">x</span> has any depth of structure, we have created something that is radically entangled with its prototype, and in this sense does not fulfill the purpose of instantiation: creation of a new copy of the component which inherits its functionality, but can be altered freely to suit its role. The second prototype-spawning option, <span class="textVar"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/new">new</a></span>, has the same problem - it only operates at a single level.</p>
 <p>By a "prototype tree" I mean a structure that is a tree from the standpoint of the  
