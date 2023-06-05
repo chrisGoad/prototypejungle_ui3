@@ -1,29 +1,4 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="description" content="Image Generation via Prototype Trees">
-<title>PrototypeJungle</title>
-<link rel="stylesheet" type="text/css"  href="style.css"/>
-<link rel="stylesheet" type="text/css"  href="spectrum.css"/>
-<link rel="icon" href="/favicon.ico" />
-
-</head>
-<body style="background-color:white;font-size:14pt"> 
-<script src = "docSupport.js"></script>
-
-<div class="topGrid">
-<div></div>
-<div ><span id ="prevSpan" class="button"> &lt;</span></div>
-<div><span class="textVar"><a style="color:black" href="../index.html">PrototypeJungle</a></span></div>
-<div></div>
-<div><span style="padding-top:0px"> <img  src="logo.svg" width="30" height="30" /></span></div>
-<div><span id="nextSpan" class="button"> &gt; </span></div>
-</div>
-<hr/>
-<div class="theGrid">
-<div></div>
-<div>
+{{boilerplate1}}
 
 <div class="title">Instantiation of Prototype Trees</div>
    <p class="indent"><a href="#definition">1. Definition</a></p>
@@ -97,7 +72,7 @@ otherwise they would be, in a sense, lost.</p>
 <p>Here is a simple example. <span class="textVar">iii</span> is the initial tree.
 </p>
 <!--<img src="https://firebasestorage.googleapis.com/v0/b/project-5150272850535855811.appspot.com/o/twitter%3A14822695%2FforDocs%2FinstantiateDiagram1.svg?alt=media" style="border:none" width="200" height="140"/> -->
-<img src="tree_1.jpg" style="border:none" width="100"/>
+<img src="instantiateDiagram1.jpg" style="border:none" width="100"/>
 
 <p>Then after,</p>
 <pre style="padding-left:20px;font-size:10pt;font-weight:bold" class="code">
@@ -105,7 +80,7 @@ jjj = iii.instantiate();
 jjj.a.y = 4;
 </pre>
 <p>we have: </p> 
- <img src="tree_3.svg" style="border:none" width="300"/>
+ <img src="instantiateDiagram2.jpg" style="border:none" width="300"/>
  <!--
 <img style="border:none" width="250" src="https://firebasestorage.googleapis.com/v0/b/project-5150272850535855811.appspot.com/o/twitter%3A14822695%2FforDocs%2FinstantiateDiagram2.svg?alt=media"/>-->
 
@@ -116,7 +91,7 @@ since <span class="textVar">jjj.b</span> inherits from <span class="textVar">jjj
 Note that <span class="textVar">jjj.b.z</span> has been copied from <span class="textVar">iii.b.z</span>, by the last-mentioned
 <a href="#lastStep">step</a> of the algorithm mentioned above.</p>
 
-<p><a href="https://github.com/chrisGoad/prototypejungle/blob/main/js/core/instantiate.js">Here</a> is the implementation.</p>
+<p><a href="/doc/instantiate.js">Here</a> is the implementation.</p>
  
 
 <div class="section" id="ammendment">3. An Ammendment</div>
@@ -149,7 +124,7 @@ ArrayNode.mk = function () {return Object.create(pj.ArrayNode)}
 <span class="textVar">ObjectNode</span> and
 <span class="textVar">ArrayNode</span> without polluting the basic JavaScript name spaces <span class="textVar">Object.prototype</span> and
 <span class="textVar">Array.prototype</span>. Such pollution would affect all JavaScript objects and arrays, not just the ones used in the
-PrototypeJungle implementation.
+KingdomOfPattern implementation.
 </p>
 <!--
 <p id="externals">

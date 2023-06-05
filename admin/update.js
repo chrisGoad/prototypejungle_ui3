@@ -130,13 +130,19 @@ const endsIn = function (string,p) {
     console.log('read',ffl);
      var scripts = '';
      let spath = (dir==='')?ffl:dir+'/'+ffl;
+     let isHtml = endsIn(ffl,'.html');
     let ipath = '../../prototypejungle_ui3/'+spath;
-    var vl = fs.readFileSync(ipath).toString();
-    console.log('read',ipath);
-    let  ovl = endsIn(ffl,'.html')?insertBoilerplate(vl,scripts,''):vl;
-
-    console.log('writing',ffl);
+    if (isHtml) {
+      var vl = fs.readFileSync(ipath).toString();
+      console.log('read',ipath);
+     let  ovl = insertBoilerplate(vl,scripts,'');
+     console.log('writing',ffl);
      fs.writeFileSync(spath,ovl);
+    } else {
+      console.log('copying ',ipath,' to ',spath);
+      fs.copyFileSync(ipath, spath);
+    }
+
   }
   
   
@@ -205,7 +211,7 @@ xferDirs(['public/fxhash/drop_circles_14','public/fxhash/drop_circles_14/generat
 xferDirs(['public/fxhash/test','public/fxhash/test/generators','public/fxhash/test/mlib','public/fxhash/test/shape']);
 xferDirs(['public/fxhash/part2_0_30','public/fxhash/part2_0_30/generators','public/fxhash/part2_0_30/mlib','public/fxhash/part2_0_30/shape']);*/
 console.log('PT!!');
-xferFiles('public/doc',["prototypetree.html","geometry.html"])
+xferFiles('public/doc',["prototypetree.html","geometry.html",'instantiateDiagram1.jpg','instantiateDiagram2.jpg',"instantiation.html"]);
 
 return;
 //xferDir(0,'public','');
