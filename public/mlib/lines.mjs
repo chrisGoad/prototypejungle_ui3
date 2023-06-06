@@ -1,4 +1,3 @@
-// this is documented in https://prototypejungle.net/doc/lines.html
 
 const rs = function (item) {
 

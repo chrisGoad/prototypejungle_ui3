@@ -1,4 +1,3 @@
-// documented in https://prototypejungle.net/doc/dropCircles.html
 
 const rs = function (rs) {
 

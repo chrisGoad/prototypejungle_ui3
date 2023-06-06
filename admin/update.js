@@ -12,9 +12,9 @@ var boilerplate0 =
 <meta charset="UTF-8">
 <meta name="description" content="Diagramming basedd on an open repository of prototype structures.">
 <title>Kingdom of Pattern</title>
-<link rel="stylesheet" type="text/css"  href="style.css"/>
-<link rel="stylesheet" type="text/css"  href="spectrum.css"/>
-<link rel="icon" href="/images/favicon.ico" />
+<link rel="stylesheet" type="text/css"  href="style.css">
+<link rel="stylesheet" type="text/css"  href="spectrum.css">
+<link rel="icon" href="/images/favicon.ico" >
 </head>
 <body style="background-color:white;font-size:14pt"> <!-- from 12 6/8/19 -->
 `;
@@ -25,9 +25,9 @@ var boilerplate1 =
 <meta charset="UTF-8">
 <meta name="description" content="Image Generation via Prototype Trees">
 <title>Kingdom of Pattern</title>
-<link rel="stylesheet" type="text/css"  href="style.css"/>
-<link rel="stylesheet" type="text/css"  href="spectrum.css"/>
-<link rel="icon" href="/favicon.ico" />
+<link rel="stylesheet" type="text/css"  href="style.css">
+<link rel="stylesheet" type="text/css"  href="spectrum.css">
+<link rel="icon" href="/favicon.ico" >
 
 </head>
 <body style="background-color:white;font-size:14pt"> 
@@ -40,7 +40,7 @@ var boilerplate1 =
 <div></div>
 <div><span id="nextSpan" class="button"> &gt; </span></div>
 </div>
-<hr/>
+<hr>
 <div class="theGrid">
 <div></div>
 <div>`
@@ -211,7 +211,8 @@ xferDirs(['public/fxhash/drop_circles_14','public/fxhash/drop_circles_14/generat
 xferDirs(['public/fxhash/test','public/fxhash/test/generators','public/fxhash/test/mlib','public/fxhash/test/shape']);
 xferDirs(['public/fxhash/part2_0_30','public/fxhash/part2_0_30/generators','public/fxhash/part2_0_30/mlib','public/fxhash/part2_0_30/shape']);*/
 console.log('PT!!');
-xferFiles('public/doc',["prototypetree.html","geometry.html",'instantiateDiagram1.jpg','instantiateDiagram2.jpg',"instantiation.html"]);
+xferFiles('public/doc',["prototypetree.html","geometry.html",'instantiateDiagram1.jpg','instantiateDiagram2.jpg',"instantiation.html",
+                        "example1.jpg"]);
 
 return;
 //xferDir(0,'public','');

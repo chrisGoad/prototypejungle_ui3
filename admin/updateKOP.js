@@ -55,7 +55,7 @@ xferFiles('public',['dropPages.js','dropTitles.js','dropImages.html','draw.html'
  xferFiles('public/doc',['index.html','prototypetree.html','geometry.html','shapes.html','basics.html','method_modules.html','grid.html',
                          'boundedRandomGrids.html','lines.html','drop.html','partition.html','docSupport.js','prototypeDiagram1_withText.svg',
                          'example1.mjs','grid_example2.mjs','instantiation.html','instantiate.js','crossTree.svg',
-                         'instantiateDiagram1.jpg','instantiateDiagram2.jpg']);
+                         'instantiateDiagram1.jpg','instantiateDiagram2.jpg',"example1.jpg"]);
   xferFiles('public/mlib',['grid.mjs','drop.mjs','lines.mjs','basics.mjs','boundedRandomGrids.mjs','partTree2.mjs']);
   xferFiles('public/generators',['grid_distortion_field.mjs']);
               xferFile('public','index.html');

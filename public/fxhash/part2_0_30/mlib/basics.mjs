@@ -1,16 +1,5 @@
-// documented in https://prototypejungle.net/doc/basics.html
-/*
-let circlePP = core.vars.circlePP;
-let rectPP = core.vars.rectPP;
-let textPP = core.vars.textPP;
-*/
-//import {rs as circlePP} from '../shape/circle.mjs';
-//import {rs as rectPP} from '../shape/rectangle.mjs';
-//import {rs as shadedRectPP} from '../shape/shadedRectangle.mjs';
-//import {rs as textPP} from '../shape/textOneLine.mjs';
-debugger;
+
 const rs = function (item,mods) {
-debugger;
 let Circle = mods.circleGeom;
 let LineSegment = mods.lineSegmentGeom;
 let Polygon = mods.polygonGeom;

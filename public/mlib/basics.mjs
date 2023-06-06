@@ -1,4 +1,3 @@
-// documented in https://prototypejungle.net/doc/basics.html
 
 import {rs as circlePP} from '/shape/circle.mjs';
 import {rs as linePP} from '/shape/line.mjs';

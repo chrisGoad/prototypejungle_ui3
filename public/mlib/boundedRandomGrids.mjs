@@ -1,4 +1,3 @@
-// documented in https://prototypejungle.net/doc/boundedRandomGrids.html
 
 const rs = function (item) {	
 

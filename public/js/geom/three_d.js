@@ -563,15 +563,49 @@ Plane.intersect = function (line) {
 geomr.set("Cube",Object.create(Shape3d)).__namedType();
 let Cube = geomr.Cube;
 
-const buildCubeSides = function () {
-  let smz = ['v000','v010','v011','v001'];
-  let sz = ['v100','v110','v111','v101'];
-  let smy = ['v000','v100','v101','v001'];
-  let sy = ['v010','v110','v111','v011'];
-  let smx = ['v000','v010','v110','v100'];
-  let sx = ['v101','v011','v111','v101'];
-  return {smx,sx,smy,sy,smz,sz};
+const buildCubeRelations = function () {
+  //face vertices
+  let faceVertices;
+  let edgeVertices;
+  {
+    let fmz= ['v000','v010','v110','v100'];
+    let fpz= ['v001','v011','v111','v101'];
+    let fmy = ['v000','v001','v101','v100'];
+    let fpy = ['v010','v011','v111','v110'];
+    let fmx = ['v000','v010','v011','v100'];
+    let fpx = ['v100','v110','v111','v101'];
+    faceVertices = {fmz,fpz,fmy,fpy,fmx,fpx};
+  }
+  {
+    let fmz= ['e0v0','ev10','e1v0','ev00'];
+    let fpz= ['e0v1','ev11','e1v1','ev01'];
+
+    let fmy= ['e00v','ev01','e10v','ev00'];
+    let fpy= ['e01v','ev11','e11v','ev10'];
+
+    let fmx= ['e00v','e0v1','e01v','e0v0'];
+    let fpx= ['e10v','e1v1','e11v','e1v0'];
+    faceEdges = {fmz,fpz,fmy,fpy,fmx,fpx};
+  }
+  let ev00 =['v000','v100'];
+  let e0v0 =['v000','v010'];
+  let ev10 =['v010','v110'];
+  let e1v0 =['v110','v100'];
+ 
+  let ev01 =['v001','v101'];
+  let e0v1 =['v001','v011'];
+  let ev11 =['v011','v111'];
+  let e1v1 =['v111','v101'];
+  
+  let e00v =['v000','v001'];
+  let e01v =['v010','v011'];
+  let e11v =['v110','v111'];
+  let e10v =['v100','v101'];
+  edgeVertices = {ev00,e0v0,ev10,e1v0,ev01,e0v1,ev11,e1v1,e00v,e01v,e11v,e10v};
+  return {faceVertices,faceEdges,edgeVertices}
 }
+
+
 
 const cubeSides = buildCubeSides();
 
@@ -595,7 +629,7 @@ Cube.mk = function (dim) {
   let v110 = Point3d.mk(v,v,-v);
   let v111 = Point3d.mk(v,v,v);
   rs.vertices = {v000,v001,v010,v011,v100,v101,v110,v111};
-  rs.sides = cubeSides;
+  rs.relations = cubeRelations;
   rs.planes = [px,pmx,py,pmy,pz,pmz]
   return rs;
 }

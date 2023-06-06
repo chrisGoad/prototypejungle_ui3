@@ -1,4 +1,3 @@
- // documented in https://prototypejungle.net/doc/grid.html
  
 const rs = function (item) {
 let defaultTopParams = {numRows:10,numCols:10,width:100,height:100,pointJiggle:0,includeLetters:0,letterWidth:4,letterHeight:4,fractionInked:0.4};
