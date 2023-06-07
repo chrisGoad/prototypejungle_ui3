@@ -560,7 +560,10 @@ Plane.intersect = function (line) {
 }
 
 //geomr.set("Cube",core.ObjectNode.mk()).__namedType();
-geomr.set("Cube",Object.create(Shape3d)).__namedType();
+geomr.set("Polyhedron",Object.create(Shape3d)).__namedType();
+let Polyhedron = geomr.Polyhedron;
+
+geomr.set("Cube",Object.create(Polyhedron)).__namedType();
 let Cube = geomr.Cube;
 
 const buildCubeRelations = function () {
@@ -635,7 +638,7 @@ Cube.mk = function (dim) {
 }
 
 
-Cube.facePath = function (faceName) {
+Polyhedron.facePath = function (faceName) {
   let faceVs = this.relations.faceVertices;
   let faceV = faceVs[faceName]
   let vs = faceV.map((v) => {
@@ -643,7 +646,7 @@ Cube.facePath = function (faceName) {
   });
   return vs;
 }
-Cube.faceEdges = function (faceName) {
+Polyhedron.faceEdges = function (faceName) {
   let faceEs = this.relations.faceEdges;
   let faceE = faceEs[faceName]
   return faceE;
@@ -652,9 +655,9 @@ Cube.faceEdges = function (faceName) {
 
    
       
-
-Cube.applyTransform = function (tr) {
- let rs = Object.create(Cube);
+// needs work
+Polyhedron.applyTransform = function (tr) {
+ let rs = Object.create(Polyhedron);
 	rs.dimension  = this.dim;  
   rs.vertices =tr.applyTo3dPoints(this.vertices);
   let {planes} = this;
@@ -670,7 +673,6 @@ Cube.applyTransform = function (tr) {
   return rs;
 }
    
-
 Cube.within = function (p) {
 	let dim = this.dimension;
 	let v = 0.500001 * dim;
