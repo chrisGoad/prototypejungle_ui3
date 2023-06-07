@@ -564,28 +564,28 @@ geomr.set("Cube",Object.create(Shape3d)).__namedType();
 let Cube = geomr.Cube;
 
 const buildCubeRelations = function () {
-  //face vertices
+  debugger;
   let faceVertices;
-  let edgeVertices;
+  let faceEdges;
   {
-    let fmz= ['v000','v010','v110','v100'];
-    let fpz= ['v001','v011','v111','v101'];
-    let fmy = ['v000','v001','v101','v100'];
-    let fpy = ['v010','v011','v111','v110'];
-    let fmx = ['v000','v010','v011','v100'];
-    let fpx = ['v100','v110','v111','v101'];
-    faceVertices = {fmz,fpz,fmy,fpy,fmx,fpx};
+    let mz= ['v000','v010','v110','v100'];
+    let pz= ['v001','v011','v111','v101'];
+    let my = ['v000','v001','v101','v100'];
+    let py = ['v010','v011','v111','v110'];
+    let mx = ['v000','v010','v011','v100'];
+    let px = ['v100','v110','v111','v101'];
+    faceVertices = {mz,pz,my,py,mx,px};
   }
   {
-    let fmz= ['e0v0','ev10','e1v0','ev00'];
-    let fpz= ['e0v1','ev11','e1v1','ev01'];
+    let mz= ['e0v0','ev10','e1v0','ev00'];
+    let pz= ['e0v1','ev11','e1v1','ev01'];
 
-    let fmy= ['e00v','ev01','e10v','ev00'];
-    let fpy= ['e01v','ev11','e11v','ev10'];
+    let my= ['e00v','ev01','e10v','ev00'];
+    let py= ['e01v','ev11','e11v','ev10'];
 
-    let fmx= ['e00v','e0v1','e01v','e0v0'];
-    let fpx= ['e10v','e1v1','e11v','e1v0'];
-    faceEdges = {fmz,fpz,fmy,fpy,fmx,fpx};
+    let mx= ['e00v','e0v1','e01v','e0v0'];
+    let px= ['e10v','e1v1','e11v','e1v0'];
+    faceEdges = {mz,pz,my,py,mx,px};
   }
   let ev00 =['v000','v100'];
   let e0v0 =['v000','v010'];
@@ -601,13 +601,13 @@ const buildCubeRelations = function () {
   let e01v =['v010','v011'];
   let e11v =['v110','v111'];
   let e10v =['v100','v101'];
-  edgeVertices = {ev00,e0v0,ev10,e1v0,ev01,e0v1,ev11,e1v1,e00v,e01v,e11v,e10v};
+  let edgeVertices = {ev00,e0v0,ev10,e1v0,ev01,e0v1,ev11,e1v1,e00v,e01v,e11v,e10v};
   return {faceVertices,faceEdges,edgeVertices}
 }
 
 
 
-const cubeSides = buildCubeSides();
+const cubeRelations = buildCubeRelations();
 
 Cube.mk = function (dim) {
   debugger;
@@ -615,11 +615,11 @@ Cube.mk = function (dim) {
 	rs.dimension  = dim;
 	let v = 0.5*dim;
 	let px = Plane.mk(Point3d.mk(v,0,0),Point3d.mk(1,0,0));
-	let pmx = Plane.mk(Point3d.mk(-v,0,0),Point3d.mk(-1,0,0));
+	let mx = Plane.mk(Point3d.mk(-v,0,0),Point3d.mk(-1,0,0));
 	let py = Plane.mk(Point3d.mk(0,v,0),Point3d.mk(0,1,0));
-	let pmy = Plane.mk(Point3d.mk(0,-v,0),Point3d.mk(0,-1,0));
+	let my = Plane.mk(Point3d.mk(0,-v,0),Point3d.mk(0,-1,0));
 	let pz = Plane.mk(Point3d.mk(0,0,v),Point3d.mk(0,0,1));
-	let pmz = Plane.mk(Point3d.mk(0,0,-v),Point3d.mk(0,0,-1));
+	let mz = Plane.mk(Point3d.mk(0,0,-v),Point3d.mk(0,0,-1));
   let v000 = Point3d.mk(-v,-v,-v);
   let v001 = Point3d.mk(-v,-v,v);
   let v010 = Point3d.mk(-v,v,-v);
@@ -630,30 +630,23 @@ Cube.mk = function (dim) {
   let v111 = Point3d.mk(v,v,v);
   rs.vertices = {v000,v001,v010,v011,v100,v101,v110,v111};
   rs.relations = cubeRelations;
-  rs.planes = [px,pmx,py,pmy,pz,pmz]
+  rs.planes = {px,mx,py,my,pz,mz}
   return rs;
 }
 
 
-Cube.sidePath = function (sideName) {
-  let sides = this.sides();
-  let side = sides[sideName]
-  [v0n,v1n,v2n,v3n] = side;
-  let vs = [];
-  vs.push(vertices[v0n]);
-  vs.push(vertices[v1n]);
-  vs.push(vertices[v2n]);
-  vs.push(vertices[v3n]);
+Cube.facePath = function (faceName) {
+  let faceVs = this.relations.faceVertices;
+  let faceV = faceVs[faceName]
+  let vs = faceV.map((v) => {
+    vertices[v];
+  });
   return vs;
 }
-Cube.sideSegments = function (sideName) {
-  let vs = this.sidePath(sideName);
-  let sides = this.sides();
-  let seg0 = LineSegment.mk(vs[0],vs[1]);
-  let seg1 = LineSegment.mk(vs[1],vs[2]);
-  let seg2 = LineSegment.mk(vs[2],vs[3]);
-  let seg3 = LineSegment.mk(vs[3],vs[0]);
-  return [seg0,seg1,seg2,seg3];
+Cube.faceEdges = function (faceName) {
+  let faceEs = this.relations.faceEdges;
+  let faceE = faceEs[faceName]
+  return faceE;
 }
 
 
