@@ -204,14 +204,14 @@ Camera.mk = function (focalPoint,focalLength,scaling,axis) {
 	rs.axis = axis;
   return rs;
 }
-
+/*
 Camera.projectPoint3d = function (ip,transform) {
 	let {focalPoint:fp,focalLength:fl,scaling:s,axis} = this;
 	let upsideDown = 0;
 	if (ip === undefined) {
 		debugger; //keep
 	}
-	let p = transform?transform.applyToPoint(ip):ip;
+  let p = transform?ip.applyTransform(transform):ip;
 	let v = fp.difference(p);
 	let t,rs;
 	if (axis === 'x') {
@@ -222,7 +222,6 @@ Camera.projectPoint3d = function (ip,transform) {
 		rs = Point.mk(s*t*v.x,s*t*v.y);
 		}
 	if (ip.hideMe) {
-		//console.log('point hide me');
 		rs.hideMe = 1;
 	}
 //	console.log('project ',ip.x,ip.y,ip.z,' rs ',rs.x,rs.y);
@@ -237,7 +236,41 @@ Camera.projectSegment3d = function (sg,transform) {
 	rs.origin = sg;
 	return rs;
 }
+*/
+Point3d.project = function (camera,transform) {
+ // return camera.projectPoint3d(this,transform) 
+ let {focalPoint:fp,focalLength:fl,scaling:s,axis} = camera;
+  let ip = this;
+	let upsideDown = 0;
+	if (ip === undefined) {
+		debugger; //keep
+	}
+  let p = transform?ip.applyTransform(transform):ip;
+	let v = fp.difference(p);
+	let t,rs;
+	if (axis === 'x') {
+		t = fl/(v.x);
+	  rs = Point.mk(s*t*v.y,s*t*v.z);
+	} else if (axis === 'z') {
+		t = (upsideDown?1:-1)*fl/(v.z);
+		rs = Point.mk(s*t*v.x,s*t*v.y);
+		}
+	if (ip.hideMe) {
+		rs.hideMe = 1;
+	}
+//	console.log('project ',ip.x,ip.y,ip.z,' rs ',rs.x,rs.y);
+	rs.origin = p;
+	return rs;
+ 
+}  
 
+Segment3d.project = function (camera,transform) {
+  let e0 = this.end0.project(camera,transform);
+  let e1 = this.end1.project(camera,transform);
+	let rs = LineSegment.mk(e0,e1);
+	rs.origin = sg;
+	return rs;
+}
 
 
 Camera.projectShape3d = function (shp,itrans) {
@@ -280,6 +313,53 @@ Camera.projectShape3d = function (shp,itrans) {
 	return rs;
 }
 
+
+Camera.projectCollection = function (elements,transform) {
+  if (Array.isArray(elements)) {
+    let rs = [];
+    rs = elements.map((e) => {
+      this.project(e,transform);
+    });
+    return rs;
+  } else {
+    let rs = {};
+    let props = Object.getOwnPropertyNames(pnts);
+    props.forEach((prop) => {
+      let e = pnts[prop];
+      rs[prop] = this.project(e,transform);
+    });
+    return rs;
+  }
+}
+
+Shape3d.project = function (camera,itrans) {
+	let strans = shp.transform;
+	let trans;
+	if (itrans) {
+		if (strans) {
+			trans = itrans.times(strans);
+		} else {
+			trans = strans;
+		}
+	} else {
+		trans = strans;
+	}
+	let hideIt = this.hideIt;
+	if (0 && trans) {
+	  let xfx = trans.apply(Point3d.mk(1,0,0));
+	  let xfy = trans.apply(Point3d.mk(0,1,0));
+	  let xfz = trans.apply(Point3d.mk(0,0,1));
+	  hideIt = hideIt || (xfz.z <= 0);
+	}
+	if (hideIt) {
+    return;
+	}
+	let parts = shp.parts;
+  let rs = camera.projectCollection(parts,transform);
+	return rs;
+}
+
+/*
 Camera.project = function (shp,trans) {
 	let proto = Object.getPrototypeOf(shp);
 	if (proto === Point3d) {
@@ -292,7 +372,11 @@ Camera.project = function (shp,trans) {
 		return this.projectShape3d(shp,trans);
 	}
 }
-	
+	*/
+  
+Camera.project = function (o3d,trans) {
+  return o3d.project(this,trans);
+}
 
 
 geomr.set("Affine3d",core.ArrayNode.mk());
@@ -362,6 +446,7 @@ Affine3d.applyToPoint = function (p) {
 }
 
 Point3d.applyTransform = function (tr) {
+  debugger;
   return tr.applyToPoint(this);
 }
 
@@ -670,13 +755,11 @@ Polyhedron.faceEdges = function (faceName) {
 
    
       
-// needs work
 Polyhedron.applyTransform = function (tr) {
   let rs = Object.create(Polyhedron);
   let {planes,vertices} = this
-	//rs.dimension  = this.dim;  
-  rs.vertices =tr.applyTo3dPoints(vertices);
-  rs.planes =tr.applyTo3dPoints(planes);
+  rs.vertices =tr.applyToCollection(vertices);
+  rs.planes =tr.applyToCollection(planes);
   rs.relations = relations;
   return rs;
 }
