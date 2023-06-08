@@ -361,13 +361,27 @@ Affine3d.applyToPoint = function (p) {
 	return Point3d.mk(rx,ry,rz);
 }
 
+Point3d.applyTransform = function (tr) {
+  return tr.applyToPoint(this);
+}
 
-Transform.applyTo3dPoints = function (pnts) {
-  let rs = [];
-  pnts.forEach((p) => {
-    rs.push(this.applyToPoint(p));
-  });
-  return rs;
+
+Transform.applyToCollection = function (pnts) {
+  if (Array.isArray(pnts)) {
+    let rs = [];
+    pnts.forEach((p) => {
+      rs.push(p.applyTransForm(this));
+    });
+    return rs;
+  } else {
+    let rs = {};
+    let props = Object.getOwnPropertyNames(pnts);
+    props.forEach((prop) => {
+      let v = pnts[prop];
+      rs[prop] = p.applyTransForm(this);
+    });
+    return rs;
+  }
 }
 
 Affine3d.row = function (n) {
@@ -514,14 +528,15 @@ Plane.mk = function (point,normal) {
   return rs;
 }
 
-Affine3d.applyToPlane = function (pl) {
+Plane.applyTransform = function (tr) {
    let {point,normal} = this;
-   let rt = this.toRotation();
-   let npoint = this.applyToPoint(point);
-   let nnormal = rt.applyToPoint(normal);
+   let rt = tr.toRotation();
+   let npoint = point.applyTransform(tr);
+   let nnormal = normal.applyTransform(rt);
    let npl = Plane.mk(npoint,nnormal);
    return npl;
 }
+
 
 Plane.toEquation = function () {
 	let {point,normal} = this;
@@ -657,19 +672,12 @@ Polyhedron.faceEdges = function (faceName) {
       
 // needs work
 Polyhedron.applyTransform = function (tr) {
- let rs = Object.create(Polyhedron);
-	rs.dimension  = this.dim;  
-  rs.vertices =tr.applyTo3dPoints(this.vertices);
-  let {planes} = this;
-  let pnames = Object.getOwnPropertyNames(planes);
-  let nplanes = {};
-  pnames.forEach((prop) => {
-    let pl = planes[prop];
-    let npl = pl.applyTransform(tr);
-    nplanes[prop] = npl;
-  });
-  rs.planes = nplanes;
-  rs.cubeSides = cubeSides;
+  let rs = Object.create(Polyhedron);
+  let {planes,vertices} = this
+	//rs.dimension  = this.dim;  
+  rs.vertices =tr.applyTo3dPoints(vertices);
+  rs.planes =tr.applyTo3dPoints(planes);
+  rs.relations = relations;
   return rs;
 }
    
@@ -701,5 +709,5 @@ Cube.intersect = function (line) {
 	
 	
 
-export {Point3d,Camera,Affine3d,Segment3d,Shape3d,Plane,Line3d,Cube};
+export {Point3d,Camera,Affine3d,Segment3d,Shape3d,Plane,Line3d,Cube,Polyhedron};
 
