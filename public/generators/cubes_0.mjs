@@ -25,13 +25,25 @@ let topParams = {width:wd,height:wd,framePadding:.1*wd,numSteps:200,
                 }
 Object.assign(rs,topParams);
 
+rs.showSegs = function (sgs) {
+  sgs.forEach((sg) => {
+    let line = this.lineP.instantiate();
+    line.setEnds(sg.end0,sg.end1)
+    this.lines.push(line);
+  });
+}
+    
 rs.initialize = function () {
   debugger;
   let cube = Cube.mk(20);
   this.addFrame();
+  let lines = 	this.set('lines',arrayShape.mk());
  let {focalPoint,focalLength,cameraScaling} = this;
  this.initProtos();
- this.camera = geom.Camera.mk(focalPoint,focalLength,cameraScaling,'z');
+ let camera = this.camera = geom.Camera.mk(focalPoint,focalLength,cameraScaling,'z');
+ let prjc = cube.project(camera);
+ this.showSegs(prjc);
+ debugger;
 }
 
 rs.initProtos = function () {

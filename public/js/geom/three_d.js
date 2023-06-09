@@ -204,39 +204,7 @@ Camera.mk = function (focalPoint,focalLength,scaling,axis) {
 	rs.axis = axis;
   return rs;
 }
-/*
-Camera.projectPoint3d = function (ip,transform) {
-	let {focalPoint:fp,focalLength:fl,scaling:s,axis} = this;
-	let upsideDown = 0;
-	if (ip === undefined) {
-		debugger; //keep
-	}
-  let p = transform?ip.applyTransform(transform):ip;
-	let v = fp.difference(p);
-	let t,rs;
-	if (axis === 'x') {
-		t = fl/(v.x);
-	  rs = Point.mk(s*t*v.y,s*t*v.z);
-	} else if (axis === 'z') {
-		t = (upsideDown?1:-1)*fl/(v.z);
-		rs = Point.mk(s*t*v.x,s*t*v.y);
-		}
-	if (ip.hideMe) {
-		rs.hideMe = 1;
-	}
-//	console.log('project ',ip.x,ip.y,ip.z,' rs ',rs.x,rs.y);
-	rs.origin = p;
-	return rs;
-}
 
-Camera.projectSegment3d = function (sg,transform) {
-  let e0 = this.projectPoint3d(sg.end0,transform);
-  let e1 = this.projectPoint3d(sg.end1,transform);
-	let rs = LineSegment.mk(e0,e1);
-	rs.origin = sg;
-	return rs;
-}
-*/
 Point3d.project = function (camera,transform) {
  // return camera.projectPoint3d(this,transform) 
  let {focalPoint:fp,focalLength:fl,scaling:s,axis} = camera;
@@ -268,11 +236,11 @@ Segment3d.project = function (camera,transform) {
   let e0 = this.end0.project(camera,transform);
   let e1 = this.end1.project(camera,transform);
 	let rs = LineSegment.mk(e0,e1);
-	rs.origin = sg;
+	rs.origin = this;
 	return rs;
 }
 
-
+/*
 Camera.projectShape3d = function (shp,itrans) {
 	let strans = shp.transform;
 	let trans;
@@ -313,7 +281,7 @@ Camera.projectShape3d = function (shp,itrans) {
 	return rs;
 }
 
-
+*/
 Camera.projectCollection = function (elements,transform) {
   if (Array.isArray(elements)) {
     let rs = [];
@@ -423,22 +391,6 @@ Affine3d.applyToPoint = function (p) {
 	//debugger;
 	let {x,y,z} = p;
 	let [a11,a21,a31,a41,a12,a22,a32,a42,a13,a23,a33,a43,a14,a24,a34,a44] = this;
-/*	let a11 = this[0];
-	let a21 = this[1];
-	let a31 = this[2];
-	let a41 = this[3];
-	let a12 = this[4];
-	let a22 = this[5];
-	let a32 = this[6];
-	let a42 = this[7];	
-	let a13 = this[8];
-	let a23 = this[9];
-	let a33 = this[10];
-	let a43 = this[11];
-	let a14 = this[12];
-	let a24 = this[13];
-	let a34 = this[14];
-	let a44 = this[15];*/
 	let rx = a11*x + a12*y + a13*z + a14;
 	let ry = a21*x + a22*y + a23*z + a24;
 	let rz = a31*x + a32*y + a33*z + a34;
@@ -659,6 +611,14 @@ Plane.intersect = function (line) {
 	return rs;
 }
 
+const toArray = function (ject) {
+  let props = Object.getOwnPropertyNames(ject);
+  let rs = props.map((p)=>{
+    let v = ject[p];
+    return v;
+  });
+  return rs;
+}
 //geomr.set("Cube",core.ObjectNode.mk()).__namedType();
 geomr.set("Polyhedron",Object.create(Shape3d)).__namedType();
 let Polyhedron = geomr.Polyhedron;
@@ -708,7 +668,32 @@ const buildCubeRelations = function () {
   return {faceVertices,faceEdges,edgeVertices}
 }
 
+Polyhedron.project = function (camera,transform) {
+  debugger;
+  let tp = transform?this.applyTransform(transform):this;
+  let rel = this.relations;
+  let feo = rel.faceEdges;
+  let ev = rel.edgeVertices;
+  let fea = toArray(feo);
+  let vs = this.vertices;
+  let sgs  =[];
+  fea.forEach((es) => {
+    es.forEach((e) => {
+      let vnms = ev[e];
+      let e0 = vs[vnms[0]];
+      let e1 = vs[vnms[1]];
+      let sg = Segment3d.mk(e0,e1);
+      sgs.push(sg);
+    });
+  });
+  let rs = sgs.map((sg) => {
+    let sg2d = sg.project(camera,transform);
+    return sg2d;
+  });
+  return rs;
+}
 
+  
 
 const cubeRelations = buildCubeRelations();
 
