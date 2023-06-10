@@ -97,7 +97,7 @@ item.execPathMotion=  function (mg,m,t,i) {
   let {scaling} = this;
   let {startTime:st,duration:dur,cycles,paths,backwards} = mg;
   let {phase,shape,oPoly,lastCycle,pathNum} = m;
- //debugger;
+// debugger;
   let path = paths[pathNum];
   if (path.numPhases) {
   //  debugger;
@@ -120,8 +120,11 @@ item.execPathMotion=  function (mg,m,t,i) {
   let fr = backwards?1-ef%1:ef%1;
   let cp = this.alongPath(path,fr);
   let tr =path.transform;
-  let tp = tr?tr.apply(cp):cp;
+  //let tp = tr?tr.apply(cp):cp;
+  let tp = tr?tr.cp.applyTransform(tr):cp;
   let rp = scaling?tp.times(scaling):this.usq2qpoint(tp,oPoly.corners);
+  m.currentPosition = rp;
+  m.alongPath = fr;
   m.lastCycle = cycleNum;
   if (shape) {
     shape.alongPath = fr;
@@ -334,11 +337,11 @@ item.mkPathMotionGroup = function (params) {
 }
 
 item.connectShapes = function () {
-  let {connectorP,connectedShapes:cns} = this;
+  let {connectorP,connectedMotions:cnm} = this;
   let connectors = this.set('connectors',arrayShape.mk());
   let connectorSegs = this.set('connectorSegs',arrayShape.mk());
   let connectorIntersections = this.set('connectorIntersections',arrayShape.mk());
-  let ln = cns.length;
+  let ln = cnm.length;
   for (let i=0;i<ln;i++) {
      let line = connectorP.instantiate();
      line.index  = i;
@@ -349,7 +352,8 @@ item.connectShapes = function () {
 }
 
 item.paintConnector = function (params) { //might be overriden
-  let {shape0:c0,shape1:c1,connector,lowFade} = params;
+  //let {motion0:m0,motion1:m1,shape0:c0,shape1:c1,connector,lowFade} = params;
+  let {motion0:m0,motion1:m1,connector,lowFade} = params;
   //debugger;
   let rgbc;
   if (this.computeRgb) {
@@ -360,8 +364,9 @@ item.paintConnector = function (params) { //might be overriden
   let rgbd = {r:255,g:255,b:255};
   let {r:rd,g:gd,b:bd} = rgbd;
   let {r:rc,g:gc,b:bc} = rgbc;
-  let ap0 = c0.alongPath;
-  let ap1 = c1.alongPath;
+  //let ap0 = c0.alongPath;
+  let ap0 = m0.alongPath;
+  let ap1 = m1.alongPath;
   let apMax = Math.max(ap0,ap1);
   let apMin = Math.min(ap0,ap1);
  // let lowFade = .03;
@@ -382,27 +387,33 @@ item.paintConnector = function (params) { //might be overriden
   let clrdot = `rgba(${rd},${gd},${bd},${minFade})`;
   let clrcon = `rgba(${rc},${gc},${bc},${minFade})`;
   connector.stroke = clrcon;
-  c0.fill = clrdot;
+  /*c0.fill = clrdot;
   c0.update();
   c1.fill = clrdot;
-  c1.update();
+  c1.update();*/
 }
   
   
   
 item.updateConnectors = function () {
-  let {connectors,connectorSegs:cnsegs,connectedShapes:cns,connectorIntersections:cints,icircleP,showIntersections,rgbdot,rgbcon,stepsSoFar:ssf,numSteps} = this;
-  if (!cns) {
+ // let {connectors,connectorSegs:cnsegs,connectedShapes:cns,DconnectedMotions:cnm,connectorIntersections:cints,icircleP,showIntersections,rgbdot,rgbcon,stepsSoFar:ssf,numSteps} = this;
+  let {connectors,connectorSegs:cnsegs,connectedMotions:cnm,connectorIntersections:cints,icircleP,showIntersections,rgbdot,rgbcon,stepsSoFar:ssf,numSteps} = this;
+  if (!cnm) {
     return;
   }
 //  debugger;
-  let ln = cns.length;
+  debugger;
+  let ln = cnm.length;
   for (let i=0;i<ln;i++) {
     let connector = connectors[i];
     let connSeg = cnsegs[i];
-    let connection = cns[i];
-    let {shape0:c0,shape1:c1,path,randomOffset0:roff0,randomOffset1:roff1,lowFade} = connection;
-    let params ={shape0:c0,shape1:c1,connector,lowFade};
+   // let connection = cns[i];
+    let mconnection = cnm[i];
+    //let {shape0:c0,shape1:c1} = connection;//,path,randomOffset0:roff0,randomOffset1:roff1,lowFade} = connection;
+    let {motion0:m0,motion1:m1,path,randomOffset0:roff0,randomOffset1:roff1,lowFade} = mconnection;
+    //let params ={shape0:c0,shape1:c1,motion0:m0,motion1:m1,connector,lowFade};
+    let params ={motion0:m0,motion1:m1,connector,lowFade};
+  //  debugger;
     this.paintConnector(params);
     //let [c0,c1,path,roff0,roff1] = connection;
     //let c1 = connection[1]
@@ -413,8 +424,10 @@ item.updateConnectors = function () {
     if (this.placeConnector) {
       positions = this.placeConnector(connection);
     } else {
-       let tr0 = c0.getTranslation();
-       let tr1 = c1.getTranslation();
+      //et tr0 = c0.getTranslation();
+       //let tr1 = c1.getTranslation();
+       let tr0 = m0.currentPosition;//1.getTranslation();
+       let tr1 = m1.currentPosition;//1.getTranslation();
        positions = [tr0,tr1];
     }
     let [pos0,pos1] = positions;
@@ -465,11 +478,15 @@ item.updateConnectors = function () {
 }
     
 item.hideUnconnectedShapes = function () {
-  let {mshapes,connectedShapes} = this;
+  let {mshapes,connectedMotions} = this;
+  debugger;
+  //return;
   let allCns = [];
-  connectedShapes.forEach( (cs) => {
-    let c0 = cs[0];
-    let c1 = cs[1];
+  //connectedShapes.forEach( (cs) => {
+  connectedMotions.forEach( (cm) => {
+    let c0 = cm.motion0.shape;
+    let c1 = cm.motion1.shape;
+  //let c1 = cs[1];
     if (allCns.indexOf(c0) === -1) {
       allCns.push(c0);
     }

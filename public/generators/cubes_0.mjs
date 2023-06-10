@@ -7,8 +7,10 @@ import {rs as basicP} from '/generators/basics.mjs';
 let rs = basicP.instantiate();
 import {rs as addAnimationMethods} from '/mlib/animate0.mjs';
 addAnimationMethods(rs);
-
-
+import {rs as addMotionMethods} from '/mlib/motion.mjs';
+addMotionMethods(rs);
+import {rs as addPathsMethods} from '/mlib/paths.mjs';
+addPathsMethods(rs);
 
 let ht = 630;
 let wd=200;
@@ -40,6 +42,12 @@ rs.initialize = function () {
   debugger;
   let {a2r} = this;
   let cube = Cube.mk(10);
+  let p0 =Point3d.mk(0,0,0);
+  let p1 =Point3d.mk(0,0,10);
+  let p2 =Point3d.mk(0,10,10);
+  let p3 =Point3d.mk(0,10,0);
+  let path = [p0,p1,p2,p3];
+  let sgl = this.segLengths(path);
   let rt = Affine3d.mkRotation('z',30*a2r);
   let rcube = cube.applyTransform(rt);
   this.addFrame();

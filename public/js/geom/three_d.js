@@ -702,12 +702,16 @@ Polyhedron.project = function (camera,transform) {
       return;
     }
   //fea.forEach((es) => {
+    let edges = [];
     es.forEach((e) => {
-      let vnms = ev[e];
-      let e0 = vs[vnms[0]];
-      let e1 = vs[vnms[1]];
-      let sg = Segment3d.mk(e0,e1);
-      sgs.push(sg);
+      if (edges.indexOf(e)===-1) {  
+        let vnms = ev[e];
+        let e0 = vs[vnms[0]];
+        let e1 = vs[vnms[1]];
+        let sg = Segment3d.mk(e0,e1);
+        sgs.push(sg);
+        edges.push(e);
+      }
     });
   });
   let rs = sgs.map((sg) => {

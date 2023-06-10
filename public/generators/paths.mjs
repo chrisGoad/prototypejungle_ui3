@@ -30,7 +30,8 @@ Object.assign(rs,topParams);
 
 
 rs.shapeConnectorC = function (params) { //,connectJump) {
-  let {connectedShapes:cns,numC,randomOffset:rf,lowFade} = this;
+  //let {connectedShapes:cns,connectedMotions:cnm,randomOffset:rf,lowFade} = this;
+  let {connectedMotions:cnm,randomOffset:rf,lowFade} = this;
   if (typeof lowFade !== 'number') {
     debugger;
     lowFade = .06;
@@ -39,10 +40,12 @@ rs.shapeConnectorC = function (params) { //,connectJump) {
   let {paths} = mg;
   debugger;
   let shapesPerPath = mg.shapesPerPath;
+  let motionsPerPath = mg.motionsPerPath;
   let pln = shapesPerPath.length;
   let numPhasesG = mg.numPhases;
   for (let i = 0;i<pln;i++) {
     let shapes = shapesPerPath[i];
+    let motions = motionsPerPath[i];
     let ln = shapes.length;
     let path = paths[i];
     let pnc = path.numConnections;
@@ -59,20 +62,25 @@ rs.shapeConnectorC = function (params) { //,connectJump) {
       let {end0ShapeIndex,end1PathIndex,end1ShapeIndex} = cis;
     
       let sh0 = shapes[end0ShapeIndex];
+      let m0 = motions[end0ShapeIndex];
       let e1shapes = shapesPerPath[end1PathIndex]; 
+      let e1motions = motionsPerPath[end1PathIndex]; 
       if (!e1shapes) {
         debugger;
       }
       let sh1 = e1shapes[end1ShapeIndex];
+      let m1 = e1motions[end1ShapeIndex];
       //let sh1 = rc?shapes[k]:shapes[(j+connectJump)%ln];
       if (!sh0) {
          debugger;
       }
-      let connection = {shape0:sh0,shape1:sh1,path,connectIndex:j,end0ShapeIndex,end1PathIndex,end1ShapeIndex,numConnections,numPhases,lowFade};
+     // let connection = {shape0:sh0,shape1:sh1,path,connectIndex:j,end0ShapeIndex,end1PathIndex,end1ShapeIndex,numConnections,numPhases,lowFade};
+      let mconnection = {shape0:sh0,shape1:sh1,motion0:m0,motion1:m1,path,connectIndex:j,end0ShapeIndex,end1PathIndex,end1ShapeIndex,numConnections,numPhases,lowFade};
       if (this.annotateConnection) {
          this.annotateConnection(connection);
       }
-      cns.push(connection);
+      //cns.push(connection);
+      cnm.push(mconnection);
       //cns.push({shape0:sh0,shape1:sh1,path,randomOffset0,randomOffset1});
     //  cns.push(sh0,sh1,path,randomOffset0,randomOffset1]);
     }
@@ -111,7 +119,8 @@ rs.initialize = function() {
  
  // this.initGrid();
   this.motionGroups = [];
-  this.connectedShapes = [];
+ // this.connectedShapes = [];
+  this.connectedMotions = [];
 
   this.set('mshapes',arrayShape.mk());
   this.addMotions();
