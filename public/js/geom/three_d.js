@@ -197,6 +197,7 @@ let Camera = geomr.Camera;
 
 // simple: axis is "x" "y" or "z"
 Camera.mk = function (focalPoint,focalLength,scaling,axis) {
+  debugger;
   let rs = Object.create(Camera);
 	rs.focalPoint = focalPoint;
 	rs.focalLength = focalLength;
@@ -378,7 +379,7 @@ Affine3d.mkFromCols = function (ic1,ic2,ic3,ic4) {
 }
 
 Affine3d.rotationOf = function () {
-  [a00,a01,a02,a03,a10,a11,a12,a13,a20,a21,a22,a23,a30,a31,a32,a33] = this;
+  let [a00,a01,a02,a03,a10,a11,a12,a13,a20,a21,a22,a23,a30,a31,a32,a33] = this;
   let c0 = [a00,a01,a02,0];
   let c1 = [a10,a11,a12,0];
   let c2 = [a20,a21,a22,0];
@@ -398,12 +399,13 @@ Affine3d.applyToPoint = function (p) {
 }
 
 Point3d.applyTransform = function (tr) {
-  debugger;
+  //debugger;
   return tr.applyToPoint(this);
 }
 
 
-Transform.applyToCollection = function (pnts) {
+Affine3d.applyToCollection = function (pnts) {
+  debugger;
   if (Array.isArray(pnts)) {
     let rs = [];
     pnts.forEach((p) => {
@@ -414,8 +416,8 @@ Transform.applyToCollection = function (pnts) {
     let rs = {};
     let props = Object.getOwnPropertyNames(pnts);
     props.forEach((prop) => {
-      let v = pnts[prop];
-      rs[prop] = p.applyTransForm(this);
+      let p = pnts[prop];
+      rs[prop] = p.applyTransform(this);
     });
     return rs;
   }
@@ -566,8 +568,9 @@ Plane.mk = function (point,normal) {
 }
 
 Plane.applyTransform = function (tr) {
+  debugger;
    let {point,normal} = this;
-   let rt = tr.toRotation();
+   let rt = tr.rotationOf();
    let npoint = point.applyTransform(tr);
    let nnormal = normal.applyTransform(rt);
    let npl = Plane.mk(npoint,nnormal);
@@ -742,7 +745,7 @@ Polyhedron.faceEdges = function (faceName) {
       
 Polyhedron.applyTransform = function (tr) {
   let rs = Object.create(Polyhedron);
-  let {planes,vertices} = this
+  let {planes,vertices,relations} = this
   rs.vertices =tr.applyToCollection(vertices);
   rs.planes =tr.applyToCollection(planes);
   rs.relations = relations;
