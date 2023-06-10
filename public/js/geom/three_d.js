@@ -203,6 +203,17 @@ Camera.mk = function (focalPoint,focalLength,scaling,axis) {
 	rs.focalLength = focalLength;
 	rs.scaling = scaling;
 	rs.axis = axis;
+  let av;
+  if (axis === 'x') {
+    av = Point3d.mk(-1,0,0);
+  }
+  if (axis === 'y') {
+    av = Point3d.mk(0,-1,0);
+  }
+  if (axis === 'z') {
+    av = Point3d.mk(0,0,-1);
+  }
+  rs.axisVector = av;
   return rs;
 }
 
@@ -675,12 +686,22 @@ Polyhedron.project = function (camera,transform) {
   debugger;
   let tp = transform?this.applyTransform(transform):this;
   let rel = this.relations;
+  let av = camera.axisVector;
   let feo = rel.faceEdges;
   let ev = rel.edgeVertices;
-  let fea = toArray(feo);
+ //let fea = toArray(feo);
   let vs = this.vertices;
+  let planes  = this.planes;
   let sgs  =[];
-  fea.forEach((es) => {
+  let faceNames = Object.getOwnPropertyNames(feo);
+  faceNames.forEach( (fn) => {
+    let es = feo[fn];
+    let plane = planes[fn];
+    let pn = plane.normal;
+    if (pn.dotp(av)<0) {
+      return;
+    }
+  //fea.forEach((es) => {
     es.forEach((e) => {
       let vnms = ev[e];
       let e0 = vs[vnms[0]];
