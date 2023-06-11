@@ -449,6 +449,14 @@ item.transformPath = function (path,transform) {
   });
   return tp;
 }
+
+
+item.transformPaths = function (paths,transform) {
+  let tp = paths.map( (p) => {
+    return this.transformPath(p,transform);
+  });
+  return tp;
+}
   
   
 }
