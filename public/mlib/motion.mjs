@@ -430,7 +430,16 @@ item.updateConnectors = function () {
        let tr1 = m1.currentPosition;//1.getTranslation();
        positions = [tr0,tr1];
     }
-    let [pos0,pos1] = positions;
+    let [ipos0,ipos1] = positions;
+    let {camera} = this;
+    let pos0,pos1;
+    if (camera) {
+      pos0 = ipos0.project(camera);
+      pos1 = ipos1.project(camera);
+    } else {
+      pos0 = ipos0;
+      pos1 = ipos1;
+    }
     connector.setEnds(pos0,pos1);
     connector.update();
     connSeg.setEnds(pos0,pos1);
