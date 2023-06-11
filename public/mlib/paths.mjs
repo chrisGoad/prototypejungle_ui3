@@ -442,6 +442,14 @@ item.interpolatePaths = function (path0,path1) {
   }
   return rp;
 }
+
+item.transformPath = function (path,transform) {
+  let tp = path.map( (p) => {
+    return p.applyTransform(transform);
+  });
+  return tp;
+}
+  
   
 }
  

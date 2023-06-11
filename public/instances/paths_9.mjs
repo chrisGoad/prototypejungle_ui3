@@ -58,7 +58,7 @@ rs.connectIndices = function (params) {
   let e0si = ci;
   //let e1pi = (pi+1)%2;
   let e1pi = pi;
-  let e1si =(e0si+3)%np;
+  let e1si =(e0si+16)%np;
   //debugger;
   console.log('pi',pi,'e0si',e0si,'e1pi',e1pi,'e1si',e1si);
   return {end0ShapeIndex:e0si,end1PathIndex:e1pi,end1ShapeIndex:e1si};
@@ -78,7 +78,11 @@ rs.addMotions = function () {
   let p2 =Point3d.mk(0,d,d);
   let p3 =Point3d.mk(0,d,0);
   let path0 = [p0,p1,p2,p3,p0];
-  let paths= this.thePaths =this.paths = [path0];
+  let a2r = (Math.PI)/180;  
+  let rt = Affine3d.mkRotation('z',30*a2r);
+  let path1 = this.transformPath(path0,rt);
+
+  let paths= this.thePaths =this.paths = [path1];
   debugger;
   let params = {numPhases,paths,cycles,shapeP:circleP,shapeConnector,duration:numSteps};
   this.mkPathMotionGroup(params);
