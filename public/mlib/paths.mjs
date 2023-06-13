@@ -95,9 +95,9 @@ item.mkRandomPathD = function (params) {
   let fp = freePath?freePath:.15*Math.min(ex,ey); // free path
   let path = [];
   let ai = (2*Math.PI)/nd;
-  debugger;
+  //debugger;
   const nextCandidate = (p) => {
-     debugger;
+    // debugger;
     let dn = Math.floor(Math.random()*nd);
     let a = dn*ai;
     let vec = Point.mk(Math.cos(a),Math.sin(a));
@@ -222,7 +222,7 @@ item.copyPaths = function (src) {
   
     
 item.mkSinPath =function (params) {
-debugger;
+//debugger;
   let {numPoints:np} = params;
   let incy = (Math.PI)/(np-1);
   let incx = 1/(np-1);
@@ -359,28 +359,50 @@ item.mkSpiral = function(params) {
 }
 
        
-item.showPath = function (path,fc,lineP) {
-  let {pathLines,circleP,pathCircles} = this;
+item.showPath = function (path,lineP,ifc) {
+ let fc = ifc?ifc:1;
+  let {pathLines,circleP,pathCircles,camera} = this;
+  let firstTime = 0;
   if (!pathLines) {
     pathLines = this.set('pathLines',arrayShape.mk());
     pathCircles = this.set('pathCircles',arrayShape.mk());
+  }
+  let idx = path.index;
+  let lines = pathLines[idx];
+  if (!lines) {
+    lines = arrayShape.mk();
+    pathLines.push(lines);
+    firstTime = 1;
   }
   let ln = path.length;
   for (let i=0;i<(ln-1);i++) {
     let e0 = path[i].times(fc);
     let e1 = path[i+1].times(fc);
-    let line = lineP.instantiate();
-    line.show();
-    line.setEnds(e0,e1);
-    pathLines.push(line);
+    let pe0 = camera?e0.project(camera):e0;
+    let pe1 = camera?e1.project(camera):e1;
+    let line;
+    if (firstTime) {
+      line = lineP.instantiate();
+      lines.push(line);      
+    } else {
+      line = lines[i];
+    }
+    line.setEnds(pe0,pe1);
+    line.update();
   }
+  return;
   const addCircle = (n,fill) => {
-    let p = path[n];
+    let pn = path[n];
+    if (!pn) {
+      return;
+    }
+    let p =pn.times(fc);
+    let pp = camera?p.project(camera):p;
     let crc = circleP.instantiate();
     crc.fill = fill;
     crc.dimension = 10;
     pathCircles.push(crc);
-    crc.moveto(p.times(fc));
+    crc.moveto(pp);
   // crc.update();
   }
   addCircle(0,'red');
@@ -388,6 +410,18 @@ item.showPath = function (path,fc,lineP) {
   addCircle(2,'green');
   addCircle(3,'blue');
 }
+
+item.showPaths= function () {
+   //debugger;
+   let {connectorP,paths,scaling} = this;
+  //return 0;
+  paths.forEach( (path) => {
+    this.showPath(path,connectorP,scaling);
+  });
+  return 1;
+}
+
+
 
 item.mkSpokePaths = function (params) {
   let {numSpokes:ns,innerRadius:irdi,outerRadius:ord,center,startAngle:isa} = params;
@@ -443,6 +477,35 @@ item.interpolatePaths = function (path0,path1) {
   return rp;
 }
 
+item.mkHelicalStairCase = function (params) {
+  let {dh,dv,numLevels} =params;
+  //debugger;
+  let hdh = 0.5*dh;
+  let pnts = [[-hdh,-hdh],[-hdh,hdh],[hdh,hdh],[hdh,-hdh]];
+  let sp = 0;
+  let clevel = -(numLevels-1)/2;
+  let cz = clevel*dv;
+  let rs =[];
+  const to3d =  (p) => Point3d.mk(p[0],p[1],cz);
+  const addPoint = () => {
+    let p2d = pnts[sp];
+    let p3d = to3d(p2d);
+    rs.push(p3d);
+    sp = (sp+1)%4;
+  }
+  const addLevel = () => {
+    for (let i=0;i<4;i++) {
+      addPoint();
+    }
+  }
+  for (let  i=0;i<numLevels;i++) {
+    addLevel();
+    clevel++;
+    cz=clevel*dv;
+  }
+  return rs;
+}
+ 
 item.transformPath = function (path,transform) {
   let tp = path.map( (p) => {
     return p.applyTransform(transform);
@@ -457,8 +520,49 @@ item.transformPaths = function (paths,transform) {
   });
   return tp;
 }
+
+
+item.transformPathInPlace = function (path,transform) {
+  debugger;
+  path.forEach( (p) => {
+    let np = p.applyTransform(transform);
+    p.copyto(np);
+  });
+  return path;
+}
+
+
+item.transformPathsInPlace= function (paths,transform) {
+  paths.forEach( (p) => {
+    this.transformPathInPlace(p,transform);
+  });
+  return paths;
+}
+
+item.projectPath = function (path) {
+  let {camera} = this;
+  let tp = path.map( (p) => {
+    return p.project(camera);
+  });
+  return tp;
+}
+
+
+item.projectPaths = function (paths) {
+  let tp = paths.map( (p) => {
+    return this.projectPath(p);
+  });
+  return tp;
+}
   
-  
+item.setPaths = function (paths) {
+  let ln = paths.length;
+  for (let i=0;i<ln;i++) {
+    let p = paths[i]
+    p.index = i;
+  }
+  this.paths = paths;
+}  
 }
  
 

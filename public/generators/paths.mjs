@@ -117,16 +117,19 @@ rs.initialize = function() {
   let {corners,polygonP,showThePaths} =this;
   this.addFrame();
  
- // this.initGrid();
+ //  .initGrid();
   this.motionGroups = [];
  // this.connectedShapes = [];
   this.connectedMotions = [];
-
+  let {focalPoint,focalLength,cameraScaling,cameraAxis} = this;
+  if (focalPoint) {
+    this.camera = geom.Camera.mk(focalPoint,focalLength,cameraScaling,cameraAxis);
+  }
   this.set('mshapes',arrayShape.mk());
   this.addMotions();
   if (showThePaths) {
     this.showPaths();
-    return;
+    //return;
   }
   this.connectShapes();
   this.hideUnconnectedShapes();
@@ -139,23 +142,23 @@ rs.initialize = function() {
 
 rs.updateState = function () {
   let {stepsSoFar:ssf} =this;
-//  debugger;
+  debugger;
   this.execMotionGroups(ssf);			
   this.callIfDefined("afterUpdateState");
 } 
 
 
-    
+    /*
 rs.showPaths= function () {
    debugger;
-   let {connectorP,thePaths,scaling} = this;
+   let {connectorP,paths,scaling} = this;
   //return 0;
   thePaths.forEach( (path) => {
-    this.showPath(path,scaling,connectorP);
+    this.showPath(path,connectorP,scaling);
   });
   return 1;
 }
-
+*/
   
 export {rs};
 

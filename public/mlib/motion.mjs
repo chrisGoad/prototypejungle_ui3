@@ -94,7 +94,7 @@ item.pathLength = function (path) {
  
     
 item.execPathMotion=  function (mg,m,t,i) {
-  let {scaling} = this;
+  let {scaling,camera} = this;
   let {startTime:st,duration:dur,cycles,paths,backwards} = mg;
   let {phase,shape,oPoly,lastCycle,pathNum} = m;
 // debugger;
@@ -123,12 +123,13 @@ item.execPathMotion=  function (mg,m,t,i) {
   //let tp = tr?tr.apply(cp):cp;
   let tp = tr?tr.cp.applyTransform(tr):cp;
   let rp = scaling?tp.times(scaling):this.usq2qpoint(tp,oPoly.corners);
+  let p2d = camera?rp.project(camera):rp;
   m.currentPosition = rp;
   m.alongPath = fr;
   m.lastCycle = cycleNum;
   if (shape) {
     shape.alongPath = fr;
-    shape.moveto(rp);
+    shape.moveto(p2d);
   }
 }
 
@@ -170,6 +171,7 @@ item.execMotion = function (mg,m,t,i) {
 
 item.execMotionGroup = function (mg,t) {
   let {motionsPerPath,polygon,paths} = mg;
+  debugger;
   let positions = mg.positions = [];
   let pathsln = paths.length;
   for (let i=0;i<pathsln;i++) {
@@ -199,6 +201,7 @@ item.execMotionGroups = function (t) {
 
 
 item.mkP2Pmotion = function (mg,params) { //point to point
+  debugger;
   let {motions,shapeP} = mg;
   let {mshapes} = this;
   let {p0,p1,phase,oPoly} = params;
@@ -216,7 +219,7 @@ item.mkP2Pmotion = function (mg,params) { //point to point
 item.mkPathMotion = function (mg,params) { //point to point
   let {shapeP:shP} = mg;
   let {paths} = mg;
-  let {mshapes} = this;
+  let {mshapes,showEnds} = this;
   let {phase,oPoly,motions,shapes,pathNum} = params;
   if (pathNum === 4) {
   //  debugger;
@@ -225,11 +228,11 @@ item.mkPathMotion = function (mg,params) { //point to point
   let path=paths[pathNum];
   let pshapeP = path.shapeP;
   let shapeP = pshapeP?pshapeP:shP;
-  //debugger;
+  debugger;
   //let {motions,mshapes,stepsSoFar:ssf} = this;
   let shape = shapeP?shapeP.instantiate():null;
   shape.pathNum = pathNum;
-  if (shape) {
+  if (shape && showEnds) {
     mshapes.push(shape);
   }
   let m= {shape,phase,oPoly,pathNum};

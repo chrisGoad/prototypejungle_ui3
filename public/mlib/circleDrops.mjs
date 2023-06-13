@@ -2,10 +2,10 @@
 
 const rs = function (rs) {
 
-let defaults = {dropTries:5,maxLoops:Infinity};
+let defaults = {dropTries:5,maxLoops:100};//Infinity};
 
 Object.assign(rs,defaults);
-      
+/*      
 rs.collides0 = function (point1,radius1,point2,radius2) {
   let p1x = point1.x;
   let p1y = point1.y;
@@ -18,7 +18,25 @@ rs.collides0 = function (point1,radius1,point2,radius2) {
   let d= point1.distance(point2);
   return minDist >= d;
 }
+*/
 
+rs.collides0 = function (point1,radius1,point2,radius2) {
+  let p1x = point1.x;
+  let p1y = point1.y;
+  let z = point1.z;
+  let p1z = z?z:0;
+  let p2x = point2.x;
+  let p2y = point2.y;
+  z = point1.z;
+  let p2z = z?z:0;
+
+  let minDist =  radius1 + radius2 ;
+  //console.log('minDist',minDist,'xd',p2x-p1x,'yd',p2y-p1y,'d',d);
+  if (Math.abs(p2x - p1x) >=  minDist) {return false;}
+  if (Math.abs(p2y - p1y) >= minDist) {return false;}
+  let d= point1.distance(point2);
+  return minDist >= d;
+}
 
 rs.collides = function (npoint,nradius,drops) {
   let n = drops.length;
@@ -46,6 +64,38 @@ rs.genRandomPoint = function (rect) {
   return Point.mk(rx,ry);
 }
 
+
+
+rs.genRandomLatitude = function () {
+  while (1) {
+    let rlat = (Math.random()-0.5)*(Math.PI/2);
+    let rcos = Math.cos(rlat);
+    if (Math.random() < rcos) {
+      return rlat;
+    }
+  }
+}
+
+rs.genRandomLongitude = function () {
+    return (Math.random()-0.5)*(Math.PI);
+}
+
+rs.genRandomValue = function (lb,ub) {
+  let delta = ub-lb;
+  return lb + Math.random()*delta;
+}
+
+rs.genRandomSpherePoint = function (lb,ub) {
+  let lat = this.genRandomLatitude();
+  let long = this.genRandomLongitude();
+  let radius = this.genRandomValue(lb,ub);
+  let z = Math.cos(lat);
+  let x = Math.cos(long);
+  let y = Math.sin(long);
+  return Point3d.mk(x,y,z).times(radius);
+}
+  
+
 rs.via3d = function (p) {
   if (this.genPoint3d) {
     let p3d = this.genPoint3d(p);
@@ -56,27 +106,29 @@ rs.via3d = function (p) {
 }
   
 rs.generateCircleDrops = function (iparams) {
-  let props = ['radius','maxLoops','maxDrops','dropTries','maxDrops','scale'];
+  let props = ['radius','maxLoops','maxDrops','dropTries','maxDrops','scale','innerRadius','outerRadius'];
   let params = {};
   debugger;
   //core.transferProperties(params,this,props);
   //core.transferProperties(params,iparams,props);
   Object.assign(params,iparams);
   this.dropParams = params;
-  let {radius=10,maxLoops=Infinity,maxDrops=Infinity,dropTries,scale=1} = params;
+  let {camera} = this;
+
+  let {radius=10,maxLoops=Infinity,maxDrops=Infinity,dropTries,scale=1,innerRadius,outerRadius} = params;
   let cnt =0;
   let tries = 0;
   let drops = [];
   debugger;
   while ((cnt < maxLoops) && (drops.length < maxDrops)) {
     cnt++;
-    let pnt = this.genRandomPoint();
+     let pnt = camera?this.genRandomSpherePoint(innerRadius,outerRadius):this.genRandomPoint();
     let drop = this.generateCircleDrop(pnt);
     if (!drop) {
       continue;
     } 
-    let radius = drop.radius;
-    let cl = this.collides(pnt,radius,drops);
+    let collideRadius = drop.collideRadius;
+    let cl = this.collides(pnt,collideRadius,drops);
     if (cl) {
       tries++;
       if (tries >= dropTries) {
@@ -110,6 +162,7 @@ rs.installCircleDrops = function (drops,dropP) {
       crc.fill = fill;
     }
     shapes.push(crc);
+    crc.update();
     if (crc.initialize) {
       crc.initialize();
     }

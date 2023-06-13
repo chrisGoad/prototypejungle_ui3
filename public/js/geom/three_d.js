@@ -26,6 +26,15 @@ Point3d.copy = function () {
   return Point3d.mk(this.x,this.y,this.z);
 };
 
+
+  
+Point.copyto = function (src) {
+  this.x = src.x;
+  this.y = src.y;
+  this.z = src.z;
+  return this; 
+}
+
 Point3d.difference = function (q) {
   let p = this;
   return Point3d.mk(p.x - q.x,p.y - q.y,p.z - q.z);
@@ -197,7 +206,7 @@ let Camera = geomr.Camera;
 
 // simple: axis is "x" "y" or "z"
 Camera.mk = function (focalPoint,focalLength,scaling,axis) {
-  debugger;
+  //debugger;
   let rs = Object.create(Camera);
 	rs.focalPoint = focalPoint;
 	rs.focalLength = focalLength;
@@ -416,7 +425,7 @@ Point3d.applyTransform = function (tr) {
 
 
 Affine3d.applyToCollection = function (pnts) {
-  debugger;
+ // debugger;
   if (Array.isArray(pnts)) {
     let rs = [];
     pnts.forEach((p) => {
@@ -579,7 +588,7 @@ Plane.mk = function (point,normal) {
 }
 
 Plane.applyTransform = function (tr) {
-  debugger;
+ // debugger;
    let {point,normal} = this;
    let rt = tr.rotationOf();
    let npoint = point.applyTransform(tr);
@@ -641,7 +650,7 @@ geomr.set("Cube",Object.create(Polyhedron)).__namedType();
 let Cube = geomr.Cube;
 
 const buildCubeRelations = function () {
-  debugger;
+ // debugger;
   let faceVertices;
   let faceEdges;
   {
@@ -683,7 +692,7 @@ const buildCubeRelations = function () {
 }
 
 Polyhedron.project = function (camera,transform) {
-  debugger;
+  //debugger;
   let tp = transform?this.applyTransform(transform):this;
   let rel = this.relations;
   let av = camera.axisVector;
@@ -726,7 +735,7 @@ Polyhedron.project = function (camera,transform) {
 const cubeRelations = buildCubeRelations();
 
 Cube.mk = function (dim) {
-  debugger;
+  //debugger;
   let rs = Object.create(Cube);
 	rs.dimension  = dim;
 	let v = 0.5*dim;
