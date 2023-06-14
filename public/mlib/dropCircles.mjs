@@ -62,7 +62,7 @@ rs.genRandomLatitude = function () {
 }
 
 rs.genRandomLongitude = function () {
-    return (Math.random()-0.5)*(Math.PI);
+    return (Math.random()-0.5)*2*(Math.PI);
 }
 
 rs.genRandomValue = function (lb,ub) {

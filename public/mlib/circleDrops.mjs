@@ -65,19 +65,31 @@ rs.genRandomPoint = function (rect) {
 }
 
 
+rs.r2a = 180/( Math.PI);
 
 rs.genRandomLatitude = function () {
+  let {r2a} = this;
   while (1) {
-    let rlat = (Math.random()-0.5)*(Math.PI/2);
-    let rcos = Math.cos(rlat);
-    if (Math.random() < rcos) {
+    let rlat = (Math.random()-0.5)*(Math.PI);
+    let alat = r2a*rlat;
+    let blat = alat>80;
+    let rcos = Math.abs(Math.cos(rlat));
+    if (0 && blat) {
+      console.log('try rlat',alat);
+      console.log('rcos',rcos);
+    }
+    if (0 || (Math.random() < rcos)) {
+      if (blat) {
+        console.log('rcos',rcos);
+        console.log('RETURN rlat',alat);
+      }
       return rlat;
     }
   }
 }
 
 rs.genRandomLongitude = function () {
-    return (Math.random()-0.5)*(Math.PI);
+    return (Math.random()-0.5)*2*(Math.PI);
 }
 
 rs.genRandomValue = function (lb,ub) {
@@ -86,13 +98,19 @@ rs.genRandomValue = function (lb,ub) {
 }
 
 rs.genRandomSpherePoint = function (lb,ub) {
+  let {r2a} = this;
   let lat = this.genRandomLatitude();
   let long = this.genRandomLongitude();
   let radius = this.genRandomValue(lb,ub);
-  let z = Math.cos(lat);
-  let x = Math.cos(long);
-  let y = Math.sin(long);
-  return Point3d.mk(x,y,z).times(radius);
+  let z = Math.sin(lat);
+  let cs = Math.cos(lat);
+  let x = cs* Math.cos(long);
+  let y = cs*Math.sin(long);
+  let upoint = Point3d.mk(x,y,z);
+  let ln =upoint.length();
+  console.log('lat',r2a*lat,'cs',cs,'long',r2a*long,'ln',ln);
+  return upoint.times(radius);
+  
 }
   
 
@@ -124,6 +142,7 @@ rs.generateCircleDrops = function (iparams) {
     cnt++;
      let pnt = camera?this.genRandomSpherePoint(innerRadius,outerRadius):this.genRandomPoint();
     let drop = this.generateCircleDrop(pnt);
+    console.log('pnt ln', pnt.length());
     if (!drop) {
       continue;
     } 
@@ -136,7 +155,8 @@ rs.generateCircleDrops = function (iparams) {
         return drops;
       }
     } else {
-      drop.point = pnt;
+      console.log('pnt ',pnt);
+      drop.point = camera?pnt.project(camera):pnt;
       if (!drop.dimension) {
         drop.scale = scale;
       }

@@ -19,7 +19,7 @@ let topParams = {width:wd,height:wd,framePadding:.1*wd,stepsPerMove:10,numStepss
 
 Object.assign(rs,topParams);
 
-rs.dropParams = {dropTries:150,innerRadius:10,outerRadius:30,collideRadius:10,circleRadius:.1,maxLoops:1000,maxDrops:1000};
+rs.dropParams = {dropTries:150,innerRadius:25,outerRadius:30,collideRadius:10,circleRadius:.1,maxLoops:1000,maxDrops:1000};
 
 rs.initProtos = function () {
   let circleP = this.circleP = circlePP.instantiate();
