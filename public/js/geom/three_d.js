@@ -146,6 +146,10 @@ Point.to3d = function () {
 	return rs;
 }
 
+
+geomr.set("Array3d",core.ObjectNode.mk()).__namedType();
+let Array3d = geomr.Array3d;
+
 geomr.set("Segment3d",core.ObjectNode.mk()).__namedType();
 
 
@@ -424,6 +428,14 @@ Point3d.applyTransform = function (tr) {
 }
 
 
+Point3d.applyTransformInPlace = function (tr) {
+  //debugger;
+  let np = tr.applyToPoint(this);
+  p.copyto(np);
+  return np;
+}
+
+
 Affine3d.applyToCollection = function (pnts) {
  // debugger;
   if (Array.isArray(pnts)) {
@@ -440,6 +452,24 @@ Affine3d.applyToCollection = function (pnts) {
       rs[prop] = p.applyTransform(this);
     });
     return rs;
+  }
+}
+
+
+Affine3d.applyToCollectionInPlace = function (pnts) {
+ // debugger;
+  if (Array.isArray(pnts)) {
+    pnts.forEach((p) => {
+      p.applyTransFormInPlace(this));
+    });
+    return pnts;
+  } else {
+    let props = Object.getOwnPropertyNames(pnts);
+    props.forEach((prop) => {
+      let p = pnts[prop];
+       p.applyTransformInPlace(this);
+    });
+    return pnts;
   }
 }
 

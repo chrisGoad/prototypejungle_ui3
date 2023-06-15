@@ -41,8 +41,8 @@ rs.collides0 = function (point1,radius1,point2,radius2) {
 rs.collides = function (npoint,nradius,drops) {
   let n = drops.length;
   for (let i=0;i<n;i++) {
-    let {point,radius} = drops[i];
-    if (this.collides0(npoint,nradius,point,radius)) {
+    let {point,collideRadius} = drops[i];
+    if (this.collides0(npoint,nradius,point,collideRadius)) {
       return true;
     }
   }

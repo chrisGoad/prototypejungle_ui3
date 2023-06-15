@@ -35,14 +35,22 @@ rs.generateCircleDrop= function (p) {
 rs.initialize = function () {
   debugger;
   this.initProtos();
-  let {circleP,dropParams} = this;
+  let {circleP,dropParams,numSteps} = this;
   this.addFrame();
   let {focalPoint,focalLength,cameraScaling,cameraAxis} = this;
   let camera = this.camera = geom.Camera.mk(focalPoint,focalLength,cameraScaling,cameraAxis);
   let drops =  this.generateCircleDrops(dropParams);
   this.installCircleDrops(drops,circleP);
+  this.stepRotation = Affine3d.mkRotation('z',(2*Math.PI/(numSteps+1)));//.times(Affine3d.mkRotation('x',1*a2r));
+
 }
 
+
+rs.afterUpdateState = function  () {
+  let {shapes,stepRotation:sr} = this;
+  sr.applyToCollectionInPlace(shapes);
+  this.transformPathsInPlace(paths,srt);
+}
 export {rs};
 
 
