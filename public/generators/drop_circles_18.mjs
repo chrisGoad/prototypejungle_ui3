@@ -5,13 +5,13 @@ import {rs as addDropMethods} from '/mlib/circleDrops.mjs';
 let rs = basicP.instantiate();
 addDropMethods(rs);
 
-rs.setName('drop_circles_3');
+rs.setName('drop_circles_18');
 let ht= 1000;
 let topParams = {width:ht,height:ht,framePadding:0.1*ht}
 Object.assign(rs,topParams);
 
 //rs.dropParams = {dropTries:150,scale:0.5,radius:50}
-rs.dropParams = {dropTries:100000,collideRadiuss:50,circleRadius:.1,maxLoops:1000,maxDrops:1000000};
+rs.dropParams = {dropTries:100000,collideRadiuss:50,circleRadius:.1,maxLoops:100000,maxDrops:1000000};
 
 rs.initProtos = function () {
   let circleP = this.circleP = circlePP.instantiate();
@@ -36,6 +36,7 @@ rs.generateCircleDrop= function (p) {
   rd = radius_of(orn);
   rd = Math.max(4,rd);
   //return {collideRadius:2*rd,dimension:rd};
+  //return {collideRadius:10,dimension:20};
   return {collideRadius:rd,dimension:rd};
 
 }

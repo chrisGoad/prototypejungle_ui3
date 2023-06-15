@@ -124,7 +124,7 @@ rs.via3d = function (p) {
 }
   
 rs.generateCircleDrops = function (iparams) {
-  let props = ['radius','maxLoops','maxDrops','dropTries','maxDrops','scale','innerRadius','outerRadius'];
+  let props = ['radius','maxLoops','dropTries','maxDrops','scale','innerRadius','outerRadius'];
   let params = {};
   debugger;
   //core.transferProperties(params,this,props);
