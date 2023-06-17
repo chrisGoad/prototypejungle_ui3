@@ -209,6 +209,7 @@ c:\ffmpeg\bin\ffmpeg  -framerate 15 -i animations/paths_7_f%03d.jpg -s 500x500  
 c:\ffmpeg\bin\ffmpeg  -framerate 15 -i animations/paths_7_f%03d.jpg -s 500x500  export/paths_7.gif
 c:\ffmpeg\bin\ffmpeg  -framerate 15 -i animations/paths_8_f%03d.jpg -s 1000x500  export/paths_8.gif
 c:\ffmpeg\bin\ffmpeg  -framerate 15 -i animations/paths_8_f%03d.jpg -s 1000x500  export/paths_8.mp4
+c:\ffmpeg\bin\ffmpeg  -framerate 15 -i animations/drop_circles_19_f%03d.jpg -s 500x500  export/drop_circles_19.gif
 c:\ffmpeg\bin\ffmpeg  -framerate 15 -i animations/paths_10_f%03d.jpg -s 500x500  export/paths_10.gif
 c:\ffmpeg\bin\ffmpeg  -framerate 15 -i animations/emergence_f%03d.jpg -s 500x500  export/emergence.mp4
 c:\ffmpeg\bin\ffmpeg  -framerate 15 -i animations/emergence_f%03d.jpg -s 500x500  export/emergence.gif

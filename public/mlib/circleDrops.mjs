@@ -136,7 +136,7 @@ rs.generateCircleDrops = function (iparams) {
   let {radius=10,maxLoops=Infinity,maxDrops=Infinity,dropTries,scale=1,innerRadius,outerRadius} = params;
   let cnt =0;
   let tries = 0;
-  let drops = [];
+  let drops = this.drops = [];
   debugger;
   while ((cnt < maxLoops) && (drops.length < maxDrops)) {
     cnt++;
@@ -188,22 +188,35 @@ rs.installCircleDrops = function (drops,dropP) {
    }
   let ln  = drops.length;
   for (let i=0;i<ln;i++) {
-    let {point,radius,fill,dimension,scale} = drops[i];
+  let drop = drops[i];
+    let {point,radius,fill,dimension,scale} = drop;
     let crc=inPlace?shapes[i]:dropP.instantiate();
     crc.setDimension(dimension?dimension:2*scale*radius);
     if (fill) {
       crc.fill = fill;
     }
-    shapes.push(crc);
+    if (!inPlace) {
+      shapes.push(crc);
+    }
     crc.update();
     if (crc.initialize) {
       crc.initialize();
     }
     let pnt2d = camera?point.project(camera):point;
-
-    crc.moveto(pnt2d);
+    drop.projection = pnt2d;
+    drop.shape = crc;
+  //  crc.moveto(pnt2d);
    }
 }
+
+rs.placeDrops = function () {
+  let {drops} = this;
+  drops.forEach( (drop) => {
+    let {projection,shape} = drop;
+    shape.moveto(projection);
+  });
+}
+    
 }
 
 
