@@ -431,7 +431,7 @@ Point3d.applyTransform = function (tr) {
 Point3d.applyTransformInPlace = function (tr) {
   //debugger;
   let np = tr.applyToPoint(this);
-  p.copyto(np);
+  this.copyto(np);
   return np;
 }
 
@@ -460,7 +460,7 @@ Affine3d.applyToCollectionInPlace = function (pnts) {
  // debugger;
   if (Array.isArray(pnts)) {
     pnts.forEach((p) => {
-      p.applyTransFormInPlace(this));
+      p.applyTransformInPlace(this);
     });
     return pnts;
   } else {

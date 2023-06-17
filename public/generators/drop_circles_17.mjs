@@ -1,9 +1,11 @@
 debugger;
 import {rs as circlePP} from '/shape/circle.mjs';
 import {rs as basicP} from '/generators/basics.mjs';
+import {rs as addAnimationMethods} from '/mlib/animate0.mjs';
 import {rs as addDropMethods} from '/mlib/circleDrops.mjs';
 
 let rs = basicP.instantiate();
+addAnimationMethods(rs);
 addDropMethods(rs);
 
 rs.setName('drop_circles_17');
@@ -19,7 +21,7 @@ let topParams = {width:wd,height:wd,framePadding:.1*wd,stepsPerMove:10,numStepss
 
 Object.assign(rs,topParams);
 
-rs.dropParams = {dropTries:150,innerRadius:25,outerRadius:30,collideRadius:10,circleRadius:.1,maxLoops:1000,maxDrops:1000};
+rs.dropParams = {dropTries:150,innerRadius:0,outerRadius:30,collideRadius:2,circleRadius:.1,maxLoops:1000,maxDrops:1000};
 
 rs.initProtos = function () {
   let circleP = this.circleP = circlePP.instantiate();
@@ -39,17 +41,20 @@ rs.initialize = function () {
   this.addFrame();
   let {focalPoint,focalLength,cameraScaling,cameraAxis} = this;
   let camera = this.camera = geom.Camera.mk(focalPoint,focalLength,cameraScaling,cameraAxis);
-  let drops =  this.generateCircleDrops(dropParams);
+  let drops =  this.drops = this.generateCircleDrops(dropParams);
   this.installCircleDrops(drops,circleP);
   this.stepRotation = Affine3d.mkRotation('z',(2*Math.PI/(numSteps+1)));//.times(Affine3d.mkRotation('x',1*a2r));
 
 }
 
 
-rs.afterUpdateState = function  () {
-  let {shapes,stepRotation:sr} = this;
-  sr.applyToCollectionInPlace(shapes);
-  this.transformPathsInPlace(paths,srt);
+rs.updateState = function  () {
+  debugger;
+  let {drops,stepRotation:sr} = this;
+  this.applyTransformInPlaceToDrops(sr,drops);
+  this.installCircleDrops(drops);
+ // sr.applyToCollectionInPlace(shapes);
+ // this.transformPathsInPlace(paths,srt);
 }
 export {rs};
 

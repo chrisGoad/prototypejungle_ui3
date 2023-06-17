@@ -156,7 +156,8 @@ rs.generateCircleDrops = function (iparams) {
       }
     } else {
       console.log('pnt ',pnt);
-      drop.point = camera?pnt.project(camera):pnt;
+      drop.point = pnt;;
+      //drop.point = camera?pnt.project(camera):pnt;
       if (!drop.dimension) {
         drop.scale = scale;
       }
@@ -171,12 +172,24 @@ rs.generateDrop = function (p) {
   return {radius:this.dropParams.radius};
 }
 
+rs.applyTransformInPlaceToDrops = function (tr,drops) {
+  drops.forEach((drop) => {
+    let p = drop.point;
+    p.applyTransformInPlace(tr);
+  });
+}
+
 rs.installCircleDrops = function (drops,dropP) {
-  let shapes = this.set('shapes',arrayShape.mk());
+  let {shapes,camera} = this;
+  debugger;
+  let inPlace = !!shapes;
+  if (!inPlace) {
+    shapes = this.set('shapes',arrayShape.mk());
+   }
   let ln  = drops.length;
   for (let i=0;i<ln;i++) {
     let {point,radius,fill,dimension,scale} = drops[i];
-    let crc = dropP.instantiate();
+    let crc=inPlace?shapes[i]:dropP.instantiate();
     crc.setDimension(dimension?dimension:2*scale*radius);
     if (fill) {
       crc.fill = fill;
@@ -186,7 +199,9 @@ rs.installCircleDrops = function (drops,dropP) {
     if (crc.initialize) {
       crc.initialize();
     }
-    crc.moveto(point);
+    let pnt2d = camera?point.project(camera):point;
+
+    crc.moveto(pnt2d);
    }
 }
 }
