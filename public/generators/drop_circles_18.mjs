@@ -17,6 +17,7 @@ rs.initProtos = function () {
   let circleP = this.circleP = circlePP.instantiate();
   circleP.fill = 'white';
   circleP['stroke-width'] = 0;
+  this.dropP = circleP;
 }
 
 rs.generateCircleDrop= function (p) {

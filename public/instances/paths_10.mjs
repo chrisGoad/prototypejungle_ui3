@@ -29,7 +29,7 @@ rs.initProtos = function () {
   lineP['stroke-width'] = .4;
   lineP.stroke = 'cyan';
    let connectorP = this.connectorP = linePP.instantiate();
-  connectorP['stroke-width'] = .4;
+  connectorP['stroke-width'] = .2;
   connectorP.stroke = 'cyan';
   let gridPolygonP = this.gridPolygonP = polygonPP.instantiate();
   gridPolygonP['stroke-width'] = .4;
@@ -41,7 +41,7 @@ rs.initProtos = function () {
   iPolygonP['stroke-width'] = 0;
   iPolygonP.fill = 'green'; 
   let circleP = this.circleP = circlePP.instantiate();
-  circleP.dimension= 2;
+  circleP.dimension= 1;
   circleP.fill = 'blue';
   circleP['stroke-width'] = 0;
   let icircleP = this.icircleP = circlePP.instantiate();

@@ -9,7 +9,7 @@ let rs = basicP.instantiate();
 addAnimationMethods(rs);
 addDropMethods(rs);
 
-rs.setName('drop_circles_19');
+rs.setName('drop_circles_20');
 let wd=60;
 let topParams = {width:wd,height:wd,frameStroke:'white',frameStrokeWidth:0.1,framePadding:.1*wd,stepsPerMove:10,numStepss:24,numSteps:300, 
   focalPoint:Point3d.mk(100,0,0),
@@ -17,6 +17,7 @@ let topParams = {width:wd,height:wd,frameStroke:'white',frameStrokeWidth:0.1,fra
   cameraScaling:1,
   cameraAxis:'x',
   saveAnimation:1,
+  cubeDim:0.5*wd,
   includeLines:1
   };
   
@@ -35,21 +36,39 @@ rs.initProtos = function () {
   lineP.stroke = 'white';
   lineP['stroke-width'] = .1;
 }
-
-rs.generateCircleDrop= function (p) {
-  let {motionRadius} = this;
-  let {circleRadius,collideRadius} = this.dropParams;
-  return {collideRadius,dimension:2*circleRadius,motionRadius};
+rs.genCubeDrops = function (dim) {
+  let {circleRadius,motionRadius} = this.dropParams;
+  let hdim = 0.5*dim;
+  let drops = [];
+  const addDrop = (p) => {
+    let drop = {motionRadius,dimension:2*circleRadius,point:p};
+    drops.push(drop);
+  }
+  
+  const addFace = (zv,reverse)=> {
+    let LL = Point3d.mk(-hdim,-hdim,zv);
+    let UL = Point3d.mk(-hdim,hdim,zv);
+    let UR = Point3d.mk(hdim,hdim,zv);
+    let LR = Point3d.mk(hdim,-hdim,zv);
+    let fc = reverse?[LR,UR,UL,LL]:[LL,UL,UR,LR];
+    fc.forEach((p) => {
+     addDrop(p);
+    });
+  }
+  addFace(-hdim,1);
+  addFace(hdim,0);
+  return drops;
 }
-
+    
+     
 rs.initialize = function () {
   debugger;
   this.initProtos();
-  let {circleP,dropParams,numSteps} = this;
+  let {circleP,dropParams,numSteps,cubeDim} = this;
   this.addFrame();
   let {focalPoint,focalLength,cameraScaling,cameraAxis} = this;
   let camera = this.camera = geom.Camera.mk(focalPoint,focalLength,cameraScaling,cameraAxis);
-  let drops =  this.drops = this.generateCircleDrops(dropParams);
+  let drops =  this.drops = this.genCubeDrops(cubeDim);
   this.installCircleDrops(drops,circleP);
   this.set('copies',arrayShape.mk());
   this.stepRotation = Affine3d.mkRotation('z',(2*Math.PI/(numSteps+1)));//.times(Affine3d.mkRotation('x',1*a2r));

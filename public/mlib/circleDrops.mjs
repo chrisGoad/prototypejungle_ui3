@@ -179,24 +179,38 @@ rs.applyTransformInPlaceToDrops = function (tr,drops) {
   });
 }
 
-rs.installCircleDrops = function (drops,dropP) {
-  let {shapes,camera} = this;
+rs.installCircleDrops = function (drops) {
+  let {shapes,camera,lines,dropP,includeLines,lineP,segs} = this;
   debugger;
   let inPlace = !!shapes;
   if (!inPlace) {
     shapes = this.set('shapes',arrayShape.mk());
+    lines = this.set('lines',arrayShape.mk());
    }
   let ln  = drops.length;
   for (let i=0;i<ln;i++) {
   let drop = drops[i];
     let {point,radius,fill,dimension,scale} = drop;
     let crc=inPlace?shapes[i]:dropP.instantiate();
+    let line;
+    if (includeLines && !segs) {
+      line=inPlace?lines[i]:lineP.instantiate();
+    }
     crc.setDimension(dimension?dimension:2*scale*radius);
     if (fill) {
       crc.fill = fill;
     }
     if (!inPlace) {
       shapes.push(crc);
+      if (includeLines && !segs) {
+        lines.push(line);
+      }
+    }
+    if (segs && !inPlace) {
+      let sln = segs.length;
+      for (leti=0;i<sln;i++) {
+        lines.push(lineP.instantiate());
+      }
     }
     crc.update();
     if (crc.initialize) {
@@ -205,7 +219,7 @@ rs.installCircleDrops = function (drops,dropP) {
     let pnt2d = camera?point.project(camera):point;
     drop.projection = pnt2d;
     drop.shape = crc;
-  //  crc.moveto(pnt2d);
+    crc.moveto(pnt2d);
    }
 }
 
@@ -216,6 +230,51 @@ rs.placeDrops = function () {
     shape.moveto(projection);
   });
 }
+
+
+rs.placeLines = function () {
+  let {drops,lines,segs} = this;
+  let dln = drops.length;
+  const updateLine =  (i) => {
+    let line = lines[i];
+    let e0i,e1i;
+    if (segs) {
+      let seg = segs[i];
+      e0i = seg[0];
+      e1i = seg[1];
+    } else {
+      e0i = i;
+      e1i = (i+1)%dln;
+    }
+    let e0 = drops[e0i].pnt2d;    
+    let e1 = drops[e1i].pnt2d;
+    line.setEnds(e0,e1);
+    line.update();
+  }
+    
+  if (segs) {
+    let ln = segs.length;
+    for(let i=0;i<ln;i++) {
+      updateLine(i);
+    }
+  } else {
+    for(let i=0;i<dln;i++) {
+      updateLine(i);
+    }
+  }
+  /*
+  let ln = drops.length;
+  for (let i=0;i<ln;i++) {
+    let drop0 = drops[i];
+    let drop1 = drops[(i+1)%ln];
+    let e0 = drop0.pnt2d;
+    let e1 = drop1.pnt2d;
+    let line = lines[i];
+    line.setEnds(e0,e1);
+    line.update();
+  }*/
+}
+    
     
 }
 
