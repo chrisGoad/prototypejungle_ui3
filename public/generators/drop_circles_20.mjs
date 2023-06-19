@@ -4,14 +4,16 @@ import {rs as linePP} from '/shape/line.mjs';
 import {rs as basicP} from '/generators/basics.mjs';
 import {rs as addAnimationMethods} from '/mlib/animate0.mjs';
 import {rs as addDropMethods} from '/mlib/circleDrops.mjs';
+import {rs as addPlaceDropMethods} from '/mlib/placeDrops.mjs';
 
 let rs = basicP.instantiate();
 addAnimationMethods(rs);
-addDropMethods(rs);
+//addDropMethods(rs);
+addPlaceDropMethods(rs);
 
 rs.setName('drop_circles_20');
 let wd=60;
-let topParams = {width:wd,height:wd,frameStroke:'white',frameStrokeWidth:0.1,framePadding:.1*wd,stepsPerMove:10,numStepss:24,numSteps:300, 
+let topParams = {width:wd,height:wd,frameStrokee:'white',frameStrokeWidth:0.1,framePadding:.1*wd,stepsPerMove:10,numStepss:24,numSteps:300, 
   focalPoint:Point3d.mk(100,0,0),
   focalLength:100,
   cameraScaling:1,
@@ -25,7 +27,7 @@ let topParams = {width:wd,height:wd,frameStroke:'white',frameStrokeWidth:0.1,fra
 
 Object.assign(rs,topParams);
 
-rs.dropParams = {dropTries:150,innerRadius:0,outerRadius:30,collideRadius:2,circleRadius:.1,maxLoops:1000,maxDrops:5,motionRadius:5,motionCycles:4};
+rs.dropParams = {dropTries:150,innerRadius:0,outerRadius:30,collideRadius:2,circleRadius:.1,maxLoops:1000,maxDrops:5,motionRadius:10,motionCycles:4};
 
 rs.initProtos = function () {
   let circleP = this.circleP = circlePP.instantiate();
@@ -38,6 +40,7 @@ rs.initProtos = function () {
 }
 rs.genCubeDrops = function (dim) {
   let {circleRadius,motionRadius} = this.dropParams;
+  let segs = this.segs = [];
   let hdim = 0.5*dim;
   let drops = [];
   const addDrop = (p) => {
@@ -46,6 +49,7 @@ rs.genCubeDrops = function (dim) {
   }
   
   const addFace = (zv,reverse)=> {
+    let sp = segs.length;
     let LL = Point3d.mk(-hdim,-hdim,zv);
     let UL = Point3d.mk(-hdim,hdim,zv);
     let UR = Point3d.mk(hdim,hdim,zv);
@@ -54,9 +58,11 @@ rs.genCubeDrops = function (dim) {
     fc.forEach((p) => {
      addDrop(p);
     });
+    segs.push([sp,sp+1],[sp+1,sp+2],[sp+2,sp+3],[sp+3,sp]);
   }
-  addFace(-hdim,1);
+  addFace(-hdim,0);
   addFace(hdim,0);
+  segs.push([0,4],[1,5],[2,6],[3,7]);
   return drops;
 }
     

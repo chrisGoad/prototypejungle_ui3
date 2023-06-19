@@ -178,7 +178,7 @@ rs.applyTransformInPlaceToDrops = function (tr,drops) {
     p.applyTransformInPlace(tr);
   });
 }
-
+/*
 rs.installCircleDrops = function (drops) {
   let {shapes,camera,lines,dropP,includeLines,lineP,segs} = this;
   debugger;
@@ -206,12 +206,7 @@ rs.installCircleDrops = function (drops) {
         lines.push(line);
       }
     }
-    if (segs && !inPlace) {
-      let sln = segs.length;
-      for (leti=0;i<sln;i++) {
-        lines.push(lineP.instantiate());
-      }
-    }
+  
     crc.update();
     if (crc.initialize) {
       crc.initialize();
@@ -221,6 +216,12 @@ rs.installCircleDrops = function (drops) {
     drop.shape = crc;
     crc.moveto(pnt2d);
    }
+  if (segs && (!inPlace)) {
+    let sln = segs.length;
+    for (let i=0;i<sln;i++) {
+      lines.push(lineP.instantiate());
+    }
+  }
 }
 
 rs.placeDrops = function () {
@@ -262,19 +263,9 @@ rs.placeLines = function () {
       updateLine(i);
     }
   }
-  /*
-  let ln = drops.length;
-  for (let i=0;i<ln;i++) {
-    let drop0 = drops[i];
-    let drop1 = drops[(i+1)%ln];
-    let e0 = drop0.pnt2d;
-    let e1 = drop1.pnt2d;
-    let line = lines[i];
-    line.setEnds(e0,e1);
-    line.update();
-  }*/
+
 }
-    
+*/    
     
 }
 

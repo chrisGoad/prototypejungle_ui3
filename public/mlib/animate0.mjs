@@ -26,6 +26,12 @@ item.oneStep = function (one) {
   
        //console.log('ns',ns,'tns',this.numSteps);
   if  (this.stepsSoFar >= (this.numSteps-this.chopOffEnd)) {
+    if (this.escapesFrame) {
+      console.log('FRAME ESCAPED!');
+    } else {
+      console.log('FRAME WAS NOT ESCAPED!');
+    }
+ 
     return;
   }
   if (ns&&this.saveAnimation&&(ns>this.chopOffBeginning)) { // for some reason, the first frame is corrupted 

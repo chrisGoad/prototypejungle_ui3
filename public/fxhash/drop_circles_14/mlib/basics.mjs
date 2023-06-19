@@ -117,6 +117,10 @@ item.addFrame = function (params) {
     height = height + frp;
   }
   let rect =  this.addRectangle({width,height,fill:frf,stroke:frs,strokeWidth:fswd,position:pos});
+  let hwd = 0.5*width;
+  let hht = 0.5*height;
+  let rectangle = Rectangle.mk(Point.mk(-hwd,-hht),Point.mk(width,height));
+  this.frameRectangle = rectangle;
   return rect;
 }
 

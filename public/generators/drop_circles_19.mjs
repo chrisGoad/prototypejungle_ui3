@@ -4,10 +4,12 @@ import {rs as linePP} from '/shape/line.mjs';
 import {rs as basicP} from '/generators/basics.mjs';
 import {rs as addAnimationMethods} from '/mlib/animate0.mjs';
 import {rs as addDropMethods} from '/mlib/circleDrops.mjs';
+import {rs as addPlaceDropMethods} from '/mlib/placeDrops.mjs';
 
 let rs = basicP.instantiate();
 addAnimationMethods(rs);
 addDropMethods(rs);
+addPlaceDropMethods(rs);
 
 rs.setName('drop_circles_19');
 let wd=60;
@@ -24,7 +26,7 @@ let topParams = {width:wd,height:wd,frameStroke:'white',frameStrokeWidth:0.1,fra
 
 Object.assign(rs,topParams);
 
-rs.dropParams = {dropTries:150,innerRadius:0,outerRadius:30,collideRadius:2,circleRadius:.1,maxLoops:1000,maxDrops:5,motionRadius:5,motionCycles:4};
+rs.dropParams = {dropTries:150,innerRadius:29,outerRadius:30,collideRadius:2,circleRadius:.1,maxLoops:1000,maxDrops:6,motionRadius:1,motionCycles:4};
 
 rs.initProtos = function () {
   let circleP = this.circleP = circlePP.instantiate();

@@ -3,10 +3,12 @@ import {rs as circlePP} from '/shape/circle.mjs';
 import {rs as basicP} from '/generators/basics.mjs';
 import {rs as addAnimationMethods} from '/mlib/animate0.mjs';
 import {rs as addDropMethods} from '/mlib/circleDrops.mjs';
+import {rs as addPlaceDropMethods} from '/mlib/placeDrops.mjs';
 
 let rs = basicP.instantiate();
 addAnimationMethods(rs);
 addDropMethods(rs);
+addPlaceDropMethods(rs);
 
 rs.setName('drop_circles_17');
 let wd=80;

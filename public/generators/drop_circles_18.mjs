@@ -1,9 +1,11 @@
 import {rs as circlePP} from '/shape/circle.mjs';
 import {rs as basicP} from '/generators/basics.mjs';
 import {rs as addDropMethods} from '/mlib/circleDrops.mjs';
+import {rs as addPlaceDropMethods} from '/mlib/placeDrops.mjs';
 
 let rs = basicP.instantiate();
 addDropMethods(rs);
+addPlaceDropMethods(rs);
 
 rs.setName('drop_circles_18');
 let ht= 1000;
