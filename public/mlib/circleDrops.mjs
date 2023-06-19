@@ -171,13 +171,6 @@ rs.generateCircleDrops = function (iparams) {
 rs.generateDrop = function (p) {
   return {radius:this.dropParams.radius};
 }
-
-rs.applyTransformInPlaceToDrops = function (tr,drops) {
-  drops.forEach((drop) => {
-    let p = drop.point;
-    p.applyTransformInPlace(tr);
-  });
-}
 /*
 rs.installCircleDrops = function (drops) {
   let {shapes,camera,lines,dropP,includeLines,lineP,segs} = this;
@@ -266,6 +259,12 @@ rs.placeLines = function () {
 
 }
 */    
+
+rs.dropsToPath = function (drops) { 
+  let path = drops.map((drop) => drop.point);
+  return path;
+}
+    
     
 }
 

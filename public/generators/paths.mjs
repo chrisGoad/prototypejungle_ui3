@@ -28,9 +28,8 @@ let topParams = {width:wd,height:wd,framePadding:.1*wd,numSteps:200,
 Object.assign(rs,topParams);
 
 
-
+/*
 rs.shapeConnectorC = function (params) { //,connectJump) {
-  //let {connectedShapes:cns,connectedMotions:cnm,randomOffset:rf,lowFade} = this;
   let {connectedMotions:cnm,randomOffset:rf,lowFade} = this;
   if (typeof lowFade !== 'number') {
     debugger;
@@ -70,22 +69,18 @@ rs.shapeConnectorC = function (params) { //,connectJump) {
       }
       let sh1 = e1shapes[end1ShapeIndex];
       let m1 = e1motions[end1ShapeIndex];
-      //let sh1 = rc?shapes[k]:shapes[(j+connectJump)%ln];
       if (!sh0) {
          debugger;
       }
-     // let connection = {shape0:sh0,shape1:sh1,path,connectIndex:j,end0ShapeIndex,end1PathIndex,end1ShapeIndex,numConnections,numPhases,lowFade};
       let mconnection = {shape0:sh0,shape1:sh1,motion0:m0,motion1:m1,path,connectIndex:j,end0ShapeIndex,end1PathIndex,end1ShapeIndex,numConnections,numPhases,lowFade};
       if (this.annotateConnection) {
          this.annotateConnection(connection);
       }
-      //cns.push(connection);
       cnm.push(mconnection);
-      //cns.push({shape0:sh0,shape1:sh1,path,randomOffset0,randomOffset1});
-    //  cns.push(sh0,sh1,path,randomOffset0,randomOffset1]);
     }
   }
 }
+*/
 
 
 rs.shapeConnector = function (mg) {

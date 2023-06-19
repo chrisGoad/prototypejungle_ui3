@@ -4,6 +4,7 @@ module.exports = {
 sections: 
 
 [  
+      [0,'drop_circles_21','generators',1,'Circles 21',{likes:0,posted:0,category:'drop'}], 
       [0,'drop_circles_20','generators',1,'Circles 20',{likes:0,posted:0,category:'drop'}], 
       [0,'drop_circles_19','generators',1,'Circles 19',{likes:0,posted:0,category:'drop'}], 
       [0,'drop_circles_18','generators',1,'Circles 18',{likes:0,posted:0,category:'drop'}], 

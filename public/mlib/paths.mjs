@@ -563,9 +563,62 @@ item.setPaths = function (paths) {
   }
   this.paths = paths;
 }  
-}
- 
 
+
+item.shapeConnectorC = function (params) { //,connectJump) {
+  let {connectedMotions:cnm,randomOffset:rf,lowFade} = this;
+  if (typeof lowFade !== 'number') {
+    debugger;
+    lowFade = .06;
+  }
+  let {motionGroup:mg,numConnections:ncp,connectIndices:ci} = params;
+  let {paths} = mg;
+  debugger;
+  let shapesPerPath = mg.shapesPerPath;
+  let motionsPerPath = mg.motionsPerPath;
+  let pln = shapesPerPath.length;
+  let numPhasesG = mg.numPhases;
+  for (let i = 0;i<pln;i++) {
+    let shapes = shapesPerPath[i];
+    let motions = motionsPerPath[i];
+    let ln = shapes.length;
+    let path = paths[i];
+    let pnc = path.numConnections;
+    let pnp = path.numPhases;
+    let numPhases = pnp?pnp:numPhasesG;
+    let numConnections = pnc?pnc:ncp
+    for (let j=0;j<numConnections;j++) {
+      let cparams = {pathIndex:i,connectIndex:j,numPhases}
+   //   debugger;
+      let cis =  ci.call(this,cparams); 
+      if (!cis) {
+        continue;
+      }
+      let {end0ShapeIndex,end1PathIndex,end1ShapeIndex} = cis;
+    
+      let sh0 = shapes[end0ShapeIndex];
+      let m0 = motions[end0ShapeIndex];
+      let e1shapes = shapesPerPath[end1PathIndex]; 
+      let e1motions = motionsPerPath[end1PathIndex]; 
+      if (!e1shapes) {
+        debugger;
+      }
+      let sh1 = e1shapes[end1ShapeIndex];
+      let m1 = e1motions[end1ShapeIndex];
+      if (!sh0) {
+         debugger;
+      }
+      let mconnection = {shape0:sh0,shape1:sh1,motion0:m0,motion1:m1,path,connectIndex:j,end0ShapeIndex,end1PathIndex,end1ShapeIndex,numConnections,numPhases,lowFade};
+      if (this.annotateConnection) {
+         this.annotateConnection(connection);
+      }
+      cnm.push(mconnection);
+    }
+  }
+}
+
+ 
+}
   
 export {rs};
 
