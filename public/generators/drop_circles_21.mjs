@@ -24,6 +24,9 @@ let topParams = {width:wd,height:wd,frameStroke:'white',frameStrokeWidth:0.1,fra
   cameraAxis:'x',
   saveAnimation:1,
   includeLines:1,
+  showThePaths:0,
+  scaling:1,
+  cycles:1,
   numConnections:60,numPhases:60/*100*/,showThePaths:1,showIntersections:0,chopOffBeginning:2,chopOffEnd:0,newCoords:1
   };
   
@@ -84,16 +87,19 @@ rs.addMotions = function () {
 rs.initialize = function () {
   debugger;
   this.initProtos();
-  let {circleP,dropParams,numSteps} = this;
+  let {circleP,dropParams,numSteps,showThePaths} = this;
   this.addFrame();
   let {focalPoint,focalLength,cameraScaling,cameraAxis} = this;
   let camera = this.camera = geom.Camera.mk(focalPoint,focalLength,cameraScaling,cameraAxis);
   let drops =  this.drops = this.generateCircleDrops(dropParams);
-  let path = this.path = this.dropsToPath(drops);
+  //let path = this.path = this.dropsToPath(drops);
+  let paths = this.paths = [this.dropsToPath(drops)];
   this.installCircleDrops(drops,circleP);
   this.set('copies',arrayShape.mk());
   this.stepRotation = Affine3d.mkRotation('z',(2*Math.PI/(numSteps+1)));//.times(Affine3d.mkRotation('x',1*a2r));
-   this.set('mshapes',arrayShape.mk());
+  this.set('mshapes',arrayShape.mk());
+  this.motionGroups = [];
+  this.connectedMotions = [];
   this.addMotions();
   if (showThePaths) {
     this.showPaths();

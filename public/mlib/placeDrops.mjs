@@ -36,7 +36,6 @@ item.installCircleDrops = function (drops) {
     }
     let pnt2d = camera?point.project(camera):point;
     if (frrect) {
-      debugger;
       if ((!efrm) && (!frrect.containsPoint(pnt2d))) {
          this.escapesFrame = true;
       }

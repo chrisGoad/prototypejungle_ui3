@@ -116,7 +116,7 @@ item.execPathMotion=  function (mg,m,t,i) {
   if (ef > 1) {
    // debugger;
   }
-  //debugger;
+  debugger;
   let fr = backwards?1-ef%1:ef%1;
   let cp = this.alongPath(path,fr);
   let tr =path.transform;
@@ -228,7 +228,6 @@ item.mkPathMotion = function (mg,params) { //point to point
   let path=paths[pathNum];
   let pshapeP = path.shapeP;
   let shapeP = pshapeP?pshapeP:shP;
-  debugger;
   //let {motions,mshapes,stepsSoFar:ssf} = this;
   let shape = shapeP?shapeP.instantiate():null;
   shape.pathNum = pathNum;
