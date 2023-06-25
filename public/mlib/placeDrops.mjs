@@ -2,9 +2,10 @@
 const rs = function (item) {
 
 
-item.installCircleDrops = function (drops) {
-  let {shapes,camera,lines,dropP,includeLines,lineP,segs,frameRectangle:frrect,escapesFrame:efrm} = this;
+item.installCircleDrops = function (graph3d) {
+  let {shapes,camera,lines,dropP,includeLines,lineP,frameRectangle:frrect,escapesFrame:efrm} = this;
   debugger;
+  let {drops,segs} = graph3d;
   let inPlace = !!shapes;
   if (!inPlace) {
     shapes = this.set('shapes',arrayShape.mk());
@@ -52,8 +53,8 @@ item.installCircleDrops = function (drops) {
   }
 }
 
-item.placeDrops = function () {
-  let {drops} = this;
+item.placeDrops = function (graph3d) {
+  let {drops} = graph3d;
   drops.forEach( (drop) => {
     let {projection,shape} = drop;
     shape.moveto(projection);
@@ -61,13 +62,14 @@ item.placeDrops = function () {
 }
 
 
-item.placeLines = function () {
-  let {drops,lines,segs} = this;
+item.placeLines = function (graph3d) {
+  let {lines} = this;
+  let {drops,segs} = graph3d;
   let dln = drops.length;
   const updateLine =  (i) => {
     let line = lines[i];
     let e0i,e1i;
-    if (segs) {
+    if (1 || segs) {
       let seg = segs[i];
       e0i = seg[0];
       e1i = seg[1];
@@ -81,7 +83,7 @@ item.placeLines = function () {
     line.update();
   }
     
-  if (segs) {
+  if (1 || segs) {
     let ln = segs.length;
     for(let i=0;i<ln;i++) {
       updateLine(i);

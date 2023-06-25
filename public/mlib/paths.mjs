@@ -523,7 +523,7 @@ item.transformPaths = function (paths,transform) {
 
 
 item.transformPathInPlace = function (path,transform) {
-  debugger;
+  //debugger;
   path.forEach( (p) => {
     let np = p.applyTransform(transform);
     p.copyto(np);
@@ -618,6 +618,11 @@ item.shapeConnectorC = function (params) { //,connectJump) {
 }
 
  
+item.shapeConnector = function (mg) {
+  let {connectIndices,numConnections:ncg} = this;
+  let numConnections = ncg;
+  this.shapeConnectorC({motionGroup:mg,numConnections,connectIndices});
+}
 }
   
 export {rs};

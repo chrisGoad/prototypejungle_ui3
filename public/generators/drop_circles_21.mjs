@@ -27,6 +27,7 @@ let topParams = {width:wd,height:wd,frameStroke:'white',frameStrokeWidth:0.1,fra
   showThePaths:0,
   scaling:1,
   cycles:1,
+  showEnds:0,
   numConnections:60,numPhases:60/*100*/,showThePaths:1,showIntersections:0,chopOffBeginning:2,chopOffEnd:0,newCoords:1
   };
   
@@ -61,8 +62,8 @@ rs.connectIndices = function (params) {
   let {cell,pathIndex:pi,connectIndex:ci} = params;
   let {numPhases:np,numConnections:nc,piMap} = this;
   let e0si = ci;
-  let e1pi = (pi+1)%4;
-//  let e1pi = pi;
+//  let e1pi = (pi+1)%4;
+  let e1pi = pi;
   let e1si =(e0si+16)%np;
   //debugger;
   console.log('pi',pi,'e0si',e0si,'e1pi',e1pi,'e1si',e1si);
@@ -72,6 +73,8 @@ rs.connectIndices = function (params) {
 
 rs.addMotions = function () {
   debugger;
+     // let {cells,numPhases,shapeConnector,numSpokes} = this;
+
     let {numSteps,circleP,cycles} = this;
     let {numPhases,shapeConnector,numSpokes} = this;
   //this.thePaths = this.paths=rpaths;
