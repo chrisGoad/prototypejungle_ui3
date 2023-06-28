@@ -63,7 +63,7 @@ rs.genCubeDrops = function (dim) {
   addFace(-hdim,0);
   addFace(hdim,0);
   segs.push([0,4],[1,5],[2,6],[3,7]);
-  return drops;
+  return {drops,segs};
 }
     
      
@@ -74,15 +74,17 @@ rs.initialize = function () {
   this.addFrame();
   let {focalPoint,focalLength,cameraScaling,cameraAxis} = this;
   let camera = this.camera = geom.Camera.mk(focalPoint,focalLength,cameraScaling,cameraAxis);
-  let drops =  this.drops = this.genCubeDrops(cubeDim);
-  this.installCircleDrops(drops,circleP);
+  let graph3d =  this.graph3d = this.genCubeDrops(cubeDim);
+  this.installCircleDrops(graph3d,circleP);
   this.set('copies',arrayShape.mk());
   this.stepRotation = Affine3d.mkRotation('z',(2*Math.PI/(numSteps+1)));//.times(Affine3d.mkRotation('x',1*a2r));
 
 }
 
 rs.placeDrops = function () {
-  let {stepsSoFar:ssf,numSteps,drops,shapes,dropParams,copies,dropP} = this;
+  debugger
+  let {stepsSoFar:ssf,numSteps,graph3d,shapes,dropParams,copies,dropP} = this;
+  let drops = graph3d.drops;
   let fr = ssf/numSteps;
   let {motionRadius,motionCycles:mc} = dropParams;
   //let vec = Point3d.mk(0,Math.cos(angle),Math.sin(angle));
@@ -113,11 +115,11 @@ rs.placeDrops = function () {
 
 rs.updateState = function  () {
   debugger;
-  let {drops,stepRotation:sr} = this;
-  this.applyTransformInPlaceToDrops(sr,drops);
-  this.installCircleDrops(drops);
+  let {graph3d,stepRotation:sr} = this;
+  this.applyTransformInPlaceToDrops(sr,graph3d.drops);
+  this.installCircleDrops(graph3d);
    this.placeDrops();
-   this.placeLines();
+   this.placeLines(graph3d);
    //this.set('copies',arrayShape.mk());
  // sr.applyToCollectionInPlace(shapes);
  // this.transformPathsInPlace(paths,srt);

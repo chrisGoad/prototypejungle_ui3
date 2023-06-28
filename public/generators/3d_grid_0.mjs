@@ -3,7 +3,7 @@ import {rs as circlePP} from '/shape/circle.mjs';
 import {rs as linePP} from '/shape/line.mjs';
 import {rs as basicP} from '/generators/basics.mjs';
 import {rs as addAnimationMethods} from '/mlib/animate0.mjs';
-import {rs as addDropMethods} from '/mlib/circleDrops.mjs';
+//import {rs as addDropMethods} from '/mlib/circleDrops.mjs';
 import {rs as addPlaceDropMethods} from '/mlib/placeDrops.mjs';
 
 let rs = basicP.instantiate();
@@ -13,45 +13,55 @@ addPlaceDropMethods(rs);
 
 rs.setName('3d_grid_0');
 let wd=60;
-let topParams = {width:wd,height:wd,frameStrokee:'white',frameStrokeWidth:0.1,framePadding:.1*wd,stepsPerMove:10,numStepss:24,numSteps:300, 
+let topParams = {width:wd,height:wd,frameStrokee:'white',frameStrokeWidth:0.1,framePadding:.1*wd,stepsPerMove:10,numStepss:24,numSteps:900, 
   focalPoint:Point3d.mk(100,0,0),
   focalLength:100,
   cameraScaling:1,
   cameraAxis:'x',
   saveAnimation:1,
   cubeDim:0.5*wd,
-  includeLines:1
+  includeLines:1,
+  gridDim:7,
+  gridWid:0.5*wd
   };
   
 
 
 Object.assign(rs,topParams);
 
-rs.dropParams = {gridDim:3,gridWid:100,dropTries:150,innerRadius:0,outerRadius:30,collideRadius:2,circleRadius:.1,maxLoops:1000,maxDrops:5,motionRadius:10,motionCycles:4};
+rs.dropParams = {dropTries:150,innerRadius:0,outerRadius:30,collideRadius:2,circleRadius:.2,maxLoops:1000,maxDrops:5,motionRadius:.5,motionCycles:4};
 
 rs.initProtos = function () {
   let circleP = this.circleP = circlePP.instantiate();
+  circleP.dimension = 10;
   circleP.fill = 'white';
   circleP['stroke-width'] = 0;
   this.dropP = circleP;
    let lineP = this.lineP = linePP.instantiate();
   lineP.stroke = 'white';
-  lineP['stroke-width'] = .1;
+  lineP['stroke-width'] = .03;
 }
 
 
-rs.genGridPoints = function () {
+rs.genGrid = function () {
   let {gridWid:gw,gridDim:gd} = this;
   let gdsq = gd*gd;
   let gp = [];
   let hgw = 0.5*gw;
-  let delta = gw/gd-1);
+  let delta = gw/(gd-1);
   let idx = 0;
+  let {circleRadius,motionRadius} = this.dropParams;
+  let segs = [];
+  let drops = [];
+  const addDrop = (p) => {
+    let drop = {motionRadius,dimension:2*circleRadius,point:p};
+    drops.push(drop);
+  }
   for (let i=0;i<gd;i++) {
     for (let j=0;j<gd;j++) {
       for (let k=0;k<gd;k++) {
         let p = Point3d.mk(k*delta-hgw,j*delta-hgw,i*delta-hgw);
-        
+        addDrop(p);
         let segx,segy,segz;
         if (k<(gd-1)) {
           let segz = [idx,idx+1];
@@ -72,14 +82,13 @@ rs.genGridPoints = function () {
       }
     }
   }
-  return {points:gp,segments:segs};
+  return {drops,segs};
  }
- 
-rs.genCubeDrops = function (dim) {
-  let {circleRadius,motionRadius} = this.dropParams;
-  let segs = this.segs = [];
-  let hdim = 0.5*dim;
+ rs.genCube = function (dim) {
   let drops = [];
+  let {circleRadius,motionRadius} = this.dropParams;
+  let segs = [];
+  let hdim = 0.5*dim;
   const addDrop = (p) => {
     let drop = {motionRadius,dimension:2*circleRadius,point:p};
     drops.push(drop);
@@ -100,7 +109,7 @@ rs.genCubeDrops = function (dim) {
   addFace(-hdim,0);
   addFace(hdim,0);
   segs.push([0,4],[1,5],[2,6],[3,7]);
-  return drops;
+  return {drops,segs};
 }
     
      
@@ -111,15 +120,17 @@ rs.initialize = function () {
   this.addFrame();
   let {focalPoint,focalLength,cameraScaling,cameraAxis} = this;
   let camera = this.camera = geom.Camera.mk(focalPoint,focalLength,cameraScaling,cameraAxis);
-  let drops =  this.drops = this.genCubeDrops(cubeDim);
-  this.installCircleDrops(drops,circleP);
-  this.set('copies',arrayShape.mk());
-  this.stepRotation = Affine3d.mkRotation('z',(2*Math.PI/(numSteps+1)));//.times(Affine3d.mkRotation('x',1*a2r));
+  let cube = this.graph3d = this.genGrid();
+  this.installCircleDrops(cube);
+ // this.set('copies',arrayShape.mk());
+  let oneR =(2*Math.PI/(numSteps+1));
+  this.stepRotation = Affine3d.mkRotation('z',2*oneR).times(Affine3d.mkRotation('x',oneR));
 
 }
 
-rs.placeDrops = function () {
-  let {stepsSoFar:ssf,numSteps,drops,shapes,dropParams,copies,dropP} = this;
+rs.placeDrops = function (graph3d) {
+  let {stepsSoFar:ssf,numSteps,shapes,dropParams,copiess,dropP} = this;
+  let {drops} = graph3d;
   let fr = ssf/numSteps;
   let {motionRadius,motionCycles:mc} = dropParams;
   //let vec = Point3d.mk(0,Math.cos(angle),Math.sin(angle));
@@ -128,20 +139,12 @@ rs.placeDrops = function () {
   let angle = Math.PI*2*fr*mc;
   drops.forEach( (drop) => {
     let {projection,shape,vec,delta,point,radius,fill,dimension,scale} = drop;
-    /*let crc=dropP.instantiate();
-    crc.setDimension(dimension?dimension:2*scale*radius);
-    if (fill) {
-      crc.fill = fill;
-    }*/
     if (!delta) {
       delta = drop.delta = Math.random()*Math.PI;
     };
     let na = angle+delta;
     vec = Point3d.mk(0,Math.cos(na),Math.sin(na)).times(motionRadius);
     let np  = projection.plus(vec);
-    /*copies.push(crc);
-    crc.moveto(np);
-    crc.update();*/
     shape.moveto(np);
     drop.pnt2d=np;
     idx++;
@@ -150,17 +153,19 @@ rs.placeDrops = function () {
 
 rs.updateState = function  () {
   debugger;
-  let {drops,stepRotation:sr} = this;
+  let {graph3d,stepRotation:sr} = this;
+  let {drops} = graph3d;
   this.applyTransformInPlaceToDrops(sr,drops);
-  this.installCircleDrops(drops);
-   this.placeDrops();
-   this.placeLines();
+  this.installCircleDrops(graph3d);
+   this.placeDrops(graph3d);
+   this.placeLines(graph3d);
    //this.set('copies',arrayShape.mk());
  // sr.applyToCollectionInPlace(shapes);
  // this.transformPathsInPlace(paths,srt);
 }
 
 export {rs};
+
 
 
 

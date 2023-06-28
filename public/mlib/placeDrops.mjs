@@ -14,8 +14,14 @@ item.installCircleDrops = function (graph3d) {
   let ln  = drops.length;
   for (let i=0;i<ln;i++) {
   let drop = drops[i];
-    let {point,radius,fill,dimension,scale} = drop;
-    let crc=inPlace?shapes[i]:dropP.instantiate();
+    let {point,radius,dimension} = drop;//,fill} = drop;
+    let crc,fill;
+    if (inPlace) {
+      crc = shapes[i];
+    } else {
+      crc = dropP.instantiate();
+     fill = i%2?'red':'blue'
+    }
     let line;
     if (includeLines && !segs) {
       line=inPlace?lines[i]:lineP.instantiate();
