@@ -96,7 +96,7 @@ rs.initialize = function () {
     pnts2d.push(null);
   });
   let ln = segs.length;
-  for (let i=0;i<ln;i++( {
+S  for (let i=0;i<ln;i++) {
      lines.push(lineP.instantiate());
   }
  // this.set('copies',arrayShape.mk());

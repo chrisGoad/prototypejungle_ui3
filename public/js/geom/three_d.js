@@ -389,7 +389,7 @@ Affine3d.mkFromCols = function (ic1,ic2,ic3,ic4) {
 		c3 = ic3;
 		c4 = ic4;
 	} else {
-    debugger;
+   // debugger;
 		c1 = ic1[0];
 		c2 = ic1[1];
 		c3 = ic1[2];
@@ -679,29 +679,31 @@ let Polyhedron = geomr.Polyhedron;
 geomr.set("Cube",Object.create(Polyhedron)).__namedType();
 let Cube = geomr.Cube;
 
-const buildCubeRelations = function () {
+const buildCubeRelations = function (wireframe) {
  // debugger;
   let faceVertices;
   let faceEdges;
-  {
-    let mz= ['v000','v010','v110','v100'];
-    let pz= ['v001','v011','v111','v101'];
-    let my = ['v000','v001','v101','v100'];
-    let py = ['v010','v011','v111','v110'];
-    let mx = ['v000','v010','v011','v100'];
-    let px = ['v100','v110','v111','v101'];
-    faceVertices = {mz,pz,my,py,mx,px};
-  }
-  {
-    let mz= ['e0v0','ev10','e1v0','ev00'];
-    let pz= ['e0v1','ev11','e1v1','ev01'];
+  if (!wireframe) {
+    {
+      let mz= ['v000','v010','v110','v100'];
+      let pz= ['v001','v011','v111','v101'];
+      let my = ['v000','v001','v101','v100'];
+      let py = ['v010','v011','v111','v110'];
+      let mx = ['v000','v010','v011','v100'];
+      let px = ['v100','v110','v111','v101'];
+      faceVertices = {mz,pz,my,py,mx,px};
+    }
+    {
+      let mz= ['e0v0','ev10','e1v0','ev00'];
+      let pz= ['e0v1','ev11','e1v1','ev01'];
 
-    let my= ['e00v','ev01','e10v','ev00'];
-    let py= ['e01v','ev11','e11v','ev10'];
+      let my= ['e00v','ev01','e10v','ev00'];
+      let py= ['e01v','ev11','e11v','ev10'];
 
-    let mx= ['e00v','e0v1','e01v','e0v0'];
-    let px= ['e10v','e1v1','e11v','e1v0'];
-    faceEdges = {mz,pz,my,py,mx,px};
+      let mx= ['e00v','e0v1','e01v','e0v0'];
+      let px= ['e10v','e1v1','e11v','e1v0'];
+      faceEdges = {mz,pz,my,py,mx,px};
+    }
   }
   let ev00 =['v000','v100'];
   let e0v0 =['v000','v010'];
@@ -718,13 +720,23 @@ const buildCubeRelations = function () {
   let e11v =['v110','v111'];
   let e10v =['v100','v101'];
   let edgeVertices = {ev00,e0v0,ev10,e1v0,ev01,e0v1,ev11,e1v1,e00v,e01v,e11v,e10v};
-  return {faceVertices,faceEdges,edgeVertices}
+  if (wireframe) {
+    return {edgeVertices};
+  } else {
+    return    {faceVertices,faceEdges,edgeVertices};
+  }
 }
 
+Polyhedron.numEdges = function () {
+  let ev = this.relations.edgeVertices;
+  let enms = Object.getOwnPropertyNames(ev);
+  let ne = enms.length;
+  return ne;
+}
 Polyhedron.project = function (camera,transform) {
   //debugger;
   let tp = transform?this.applyTransform(transform):this;
-  let rel = this.relations;
+  let {wireframe:wf,relations:rel} = this;
   let av = camera.axisVector;
   let feo = rel.faceEdges;
   let ev = rel.edgeVertices;
@@ -732,27 +744,47 @@ Polyhedron.project = function (camera,transform) {
   let vs = this.vertices;
   let planes  = this.planes;
   let sgs  =[];
-  let faceNames = Object.getOwnPropertyNames(feo);
-  faceNames.forEach( (fn) => {
-    let es = feo[fn];
-    let plane = planes[fn];
-    let pn = plane.normal;
-    if (pn.dotp(av)<0) {
-      return;
+  let faceNames = feo?Object.getOwnPropertyNames(feo):undefined;
+  let edgeNames = Object.getOwnPropertyNames(ev);
+  let edges = [];
+  const addEdge = (en) => {
+    if (edges.indexOf(en)===-1) {  
+      let vnms = ev[en];
+      let e0 = vs[vnms[0]];
+      let e1 = vs[vnms[1]];
+      let sg = Segment3d.mk(e0,e1);
+      sgs.push(sg);
+      edges.push(en);
     }
-  //fea.forEach((es) => {
-    let edges = [];
-    es.forEach((e) => {
-      if (edges.indexOf(e)===-1) {  
-        let vnms = ev[e];
-        let e0 = vs[vnms[0]];
-        let e1 = vs[vnms[1]];
-        let sg = Segment3d.mk(e0,e1);
-        sgs.push(sg);
-        edges.push(e);
-      }
+  };
+  if (wf) {
+    edgeNames.forEach((en) => {
+      //let e = ev[en];
+      addEdge(en);
     });
-  });
+  } else {
+    
+    faceNames.forEach( (fn) => {
+      let es = feo[fn];
+      let plane = planes[fn];
+      let pn = plane.normal;
+      if (pn.dotp(av)<0) {
+        return;
+      }
+    //fea.forEach((es) => {
+      es.forEach((e) => {
+        addEdge(e);
+      });
+     /*   if (edges.indexOf(e)===-1) {  
+          let vnms = ev[e];
+          let e0 = vs[vnms[0]];
+          let e1 = vs[vnms[1]];
+          let sg = Segment3d.mk(e0,e1);
+          sgs.push(sg);
+          edges.push(e);
+        }*/
+    });
+  }
   let rs = sgs.map((sg) => {
     let sg2d = sg.project(camera,transform);
     return sg2d;
@@ -763,18 +795,23 @@ Polyhedron.project = function (camera,transform) {
   
 
 const cubeRelations = buildCubeRelations();
+const wfCubeRelations = buildCubeRelations(1);
 
-Cube.mk = function (dim) {
+Cube.mk = function (dim,wireframe) {
   //debugger;
   let rs = Object.create(Cube);
 	rs.dimension  = dim;
 	let v = 0.5*dim;
-	let px = Plane.mk(Point3d.mk(v,0,0),Point3d.mk(1,0,0));
-	let mx = Plane.mk(Point3d.mk(-v,0,0),Point3d.mk(-1,0,0));
-	let py = Plane.mk(Point3d.mk(0,v,0),Point3d.mk(0,1,0));
-	let my = Plane.mk(Point3d.mk(0,-v,0),Point3d.mk(0,-1,0));
-	let pz = Plane.mk(Point3d.mk(0,0,v),Point3d.mk(0,0,1));
-	let mz = Plane.mk(Point3d.mk(0,0,-v),Point3d.mk(0,0,-1));
+  rs.wireframe = wireframe;
+  if (!wireframe) {
+	  let px = Plane.mk(Point3d.mk(v,0,0),Point3d.mk(1,0,0));
+	  let mx = Plane.mk(Point3d.mk(-v,0,0),Point3d.mk(-1,0,0));
+    let py = Plane.mk(Point3d.mk(0,v,0),Point3d.mk(0,1,0));
+    let my = Plane.mk(Point3d.mk(0,-v,0),Point3d.mk(0,-1,0));
+    let pz = Plane.mk(Point3d.mk(0,0,v),Point3d.mk(0,0,1));
+    let mz = Plane.mk(Point3d.mk(0,0,-v),Point3d.mk(0,0,-1));
+    rs.planes = {px,mx,py,my,pz,mz}
+  }
   let v000 = Point3d.mk(-v,-v,-v);
   let v001 = Point3d.mk(-v,-v,v);
   let v010 = Point3d.mk(-v,v,-v);
@@ -784,8 +821,7 @@ Cube.mk = function (dim) {
   let v110 = Point3d.mk(v,v,-v);
   let v111 = Point3d.mk(v,v,v);
   rs.vertices = {v000,v001,v010,v011,v100,v101,v110,v111};
-  rs.relations = cubeRelations;
-  rs.planes = {px,mx,py,my,pz,mz}
+  rs.relations = wireframe?wfCubeRelations:cubeRelations;
   return rs;
 }
 
@@ -811,7 +847,9 @@ Polyhedron.applyTransform = function (tr) {
   let rs = Object.create(Polyhedron);
   let {planes,vertices,relations} = this
   rs.vertices =tr.applyToCollection(vertices);
-  rs.planes =tr.applyToCollection(planes);
+  if (planes) {
+    rs.planes =tr.applyToCollection(planes);
+  }
   rs.relations = relations;
   return rs;
 }
