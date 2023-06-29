@@ -727,31 +727,43 @@ const buildCubeRelations = function (wireframe) {
   }
 }
 
-Polyhedron.numEdges = function () {
+Polyhedron.computeNumEdges = function () {
   let ev = this.relations.edgeVertices;
   let enms = Object.getOwnPropertyNames(ev);
   let ne = enms.length;
   return ne;
 }
+
 Polyhedron.project = function (camera,transform) {
   //debugger;
-  let tp = transform?this.applyTransform(transform):this;
-  let {wireframe:wf,relations:rel} = this;
+  //let tp = transform?this.applyTransform(transform):this;
+  let {wireframe:wf,relations:rel,lines,lineP} = this;
+  if (lines.length===0) {
+    let ne = this.numEdges;
+    for (let i=0;i<ne;i++) {
+      let line = lineP.instantiate();
+      lines.push(line);
+    }
+  }
+
   let av = camera.axisVector;
   let feo = rel.faceEdges;
   let ev = rel.edgeVertices;
  //let fea = toArray(feo);
   let vs = this.vertices;
+  let tvs = transform.applyToCollection(vs);
+  
   let planes  = this.planes;
   let sgs  =[];
   let faceNames = feo?Object.getOwnPropertyNames(feo):undefined;
   let edgeNames = Object.getOwnPropertyNames(ev);
+  let ne = edgeNames.length;
   let edges = [];
   const addEdge = (en) => {
     if (edges.indexOf(en)===-1) {  
       let vnms = ev[en];
-      let e0 = vs[vnms[0]];
-      let e1 = vs[vnms[1]];
+      let e0 = tvs[vnms[0]];
+      let e1 = tvs[vnms[1]];
       let sg = Segment3d.mk(e0,e1);
       sgs.push(sg);
       edges.push(en);
@@ -785,11 +797,13 @@ Polyhedron.project = function (camera,transform) {
         }*/
     });
   }
-  let rs = sgs.map((sg) => {
+  for (let i=0;i<ne;i++) {
+    let sg = sgs[i];
+    let line = lines[i];
     let sg2d = sg.project(camera,transform);
-    return sg2d;
-  });
-  return rs;
+    line.setEnds(sg2d.end0,sg2d.end1);
+    line.update();
+  };
 }
 
   
@@ -822,6 +836,7 @@ Cube.mk = function (dim,wireframe) {
   let v111 = Point3d.mk(v,v,v);
   rs.vertices = {v000,v001,v010,v011,v100,v101,v110,v111};
   rs.relations = wireframe?wfCubeRelations:cubeRelations;
+  rs.numEdges = rs.computeNumEdges();
   return rs;
 }
 

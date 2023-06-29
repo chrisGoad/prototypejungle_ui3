@@ -75,9 +75,12 @@ rs.initialize = function () {
   let {focalPoint,focalLength,cameraScaling,cameraAxis} = this;
   let camera = this.camera = geom.Camera.mk(focalPoint,focalLength,cameraScaling,cameraAxis);
   //let cube = this.graph3d = this.genCube(cubeDim);
-  let cube = this.cube= Cube.mk(cubeDim,1);
-  //this.installCircleDrops(cube);
-  let lines = this.set('lines',arrayShape.mk());
+  //let cube = this.set('cube',Cube.mk(cubeDim,1));
+  let cube = this.cube = Cube.mk(cubeDim,1);
+  cube.lineP = lineP;
+  let cubeLines = this.set('cubeLines',arrayShape.mk());
+  cube.lines = cubeLines;
+ /* //this.installCircleDrops(cube);
   //let ev = cube.relations.edgeVertices;
   //let enms = Object.getOwnPropertyNames(ev);
   //let ne = enms.length;
@@ -85,7 +88,7 @@ rs.initialize = function () {
   for (let i=0;i<ne;i++) {
     let line = lineP.instantiate();
     lines.push(line);
-  }
+  }*/
   let sr =this.stepRotation = Affine3d.mkRotation('z',(2*Math.PI/(numSteps+1)));//.times(Affine3d.mkRotation('x',1*a2r));
   cube.transform = Affine3d.identity ();
 
@@ -120,6 +123,7 @@ rs.updateState = function  () {
   let ntr =tr.times(sr);
   cube.transform = ntr;
   let segs = cube.project(camera,ntr);
+  return;
   let ns =segs.length;
   for (let i=0;i<ns;i++) {
     let sg = segs[i];
