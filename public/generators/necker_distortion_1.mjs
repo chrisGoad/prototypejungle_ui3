@@ -74,8 +74,6 @@ rs.initialize = function () {
   this.addFrame();
   let {focalPoint,focalLength,cameraScaling,cameraAxis} = this;
   let camera = this.camera = geom.Camera.mk(focalPoint,focalLength,cameraScaling,cameraAxis);
-  //let cube = this.graph3d = this.genCube(cubeDim);
-  //let cube = this.set('cube',Cube.mk(cubeDim,1));
   let cube = this.cube = Cube.mk(cubeDim,1);
   cube.lineP = lineP;
   let cubeLines = this.set('cubeLines',arrayShape.mk());
@@ -84,68 +82,19 @@ rs.initialize = function () {
   let tr = Affine3d.identity ();
   let container = this.container = Shape3d.mk(tr);
   container.set('cube',cube);
- /* //this.installCircleDrops(cube);
-  //let ev = cube.relations.edgeVertices;
-  //let enms = Object.getOwnPropertyNames(ev);
-  //let ne = enms.length;
-  let ne = cube.numEdges();
-  for (let i=0;i<ne;i++) {
-    let line = lineP.instantiate();
-    lines.push(line);
-  }*/
   let sr =this.stepRotation = Affine3d.mkRotation('z',(2*Math.PI/(numSteps+1)));//.times(Affine3d.mkRotation('x',1*a2r));
   cube.transform = Affine3d.identity ();
 
 }
-rs.placeDrops = function (graph3d) {
-  let {stepsSoFar:ssf,numSteps,shapes,dropParams,copiess,dropP} = this;
-  let {drops} = graph3d;
-  let fr = ssf/numSteps;
-  let {motionRadius,motionCycles:mc} = dropParams;
-  //let vec = Point3d.mk(0,Math.cos(angle),Math.sin(angle));
-   debugger;
-  let idx = 0;
-  let angle = Math.PI*2*fr*mc;
-  drops.forEach( (drop) => {
-    let {projection,shape,vec,delta,point,radius,fill,dimension,scale} = drop;
-    if (!delta) {
-      delta = drop.delta = Math.random()*Math.PI;
-    };
-    let na = angle+delta;
-    vec = Point3d.mk(0,Math.cos(na),Math.sin(na)).times(motionRadius);
-    let np  = projection.plus(vec);
-    shape.moveto(np);
-    drop.pnt2d=np;
-    idx++;
-  });
-}
+
 
 rs.updateState = function  () {
   debugger;
-  let {cube,stepRotation:sr,camera,lines,container} = this;
-  //let tr = cube.transform;
+  let {cube,camera,stepRotation:sr,container} = this;
   let cntr = container.transform;
   let ntr =cntr.times(sr);
   container.transform = ntr;
-  //let gtr = ntr.times(tr);
-  let gtr = cube.toGlobalCoords();
-  let segs = cube.project(camera,gtr);
-  return;
-  let ns =segs.length;
-  for (let i=0;i<ns;i++) {
-    let sg = segs[i];
-    let line = lines[i];
-    line.setEnds(sg.end0,sg.end1);
-    line.update();
-  }
-  return;
-  this.applyTransformInPlaceToDrops(sr,drops);
-  this.installCircleDrops(graph3d);
-   this.placeDrops(graph3d);
-   this.placeLines(graph3d);
-   //this.set('copies',arrayShape.mk());
- // sr.applyToCollectionInPlace(shapes);
- // this.transformPathsInPlace(paths,srt);
+  cube.project(camera);
 }
 
 export {rs};

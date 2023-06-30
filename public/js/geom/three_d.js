@@ -747,9 +747,10 @@ Polyhedron.computeNumEdges = function () {
   return ne;
 }
 
-Polyhedron.project = function (camera,transform) {
+//Polyhedron.project = function (camera,transform) {
+Polyhedron.project = function (camera) {
   //debugger;
-  //let tp = transform?this.applyTransform(transform):this;
+  let transform = this.toGlobalCoords();
   let {wireframe:wf,relations:rel,lines,lineP} = this;
   if (lines.length===0) {
     let ne = this.numEdges;
@@ -758,14 +759,11 @@ Polyhedron.project = function (camera,transform) {
       lines.push(line);
     }
   }
-
   let av = camera.axisVector;
   let feo = rel.faceEdges;
   let ev = rel.edgeVertices;
- //let fea = toArray(feo);
   let vs = this.vertices;
   let tvs = transform.applyToCollection(vs);
-  
   let planes  = this.planes;
   let sgs  =[];
   let faceNames = feo?Object.getOwnPropertyNames(feo):undefined;
@@ -784,7 +782,6 @@ Polyhedron.project = function (camera,transform) {
   };
   if (wf) {
     edgeNames.forEach((en) => {
-      //let e = ev[en];
       addEdge(en);
     });
   } else {
@@ -796,18 +793,9 @@ Polyhedron.project = function (camera,transform) {
       if (pn.dotp(av)<0) {
         return;
       }
-    //fea.forEach((es) => {
       es.forEach((e) => {
         addEdge(e);
       });
-     /*   if (edges.indexOf(e)===-1) {  
-          let vnms = ev[e];
-          let e0 = vs[vnms[0]];
-          let e1 = vs[vnms[1]];
-          let sg = Segment3d.mk(e0,e1);
-          sgs.push(sg);
-          edges.push(e);
-        }*/
     });
   }
   for (let i=0;i<ne;i++) {
