@@ -189,17 +189,30 @@ geomr.set("Shape3d",core.ObjectNode.mk()).__namedType();
 
 let Shape3d = geomr.Shape3d;
 
-Shape3d.mk = function (parts,transform) {
+Shape3d.mk = function (transform) {
 	let rs = Object.create(Shape3d);
-	if (transform) {
-		rs.set('transform',transform);
-	}
-	let rparts = core.ArrayNode.mk();
+	rs.set('transform',transform);
+	/*}
+  rs.parts = rparts;
+	//let rparts = core.ArrayNode.mk();
 	parts.forEach((part) => rparts.push(part));
-	rs.set('parts',rparts);
+	rs.set('parts',rparts);*/
 	return rs;
 }
 
+Shape3d.toGlobalCoords = function () {
+  let tr = this.transform;
+  let pr = this.__parent;
+  let rtr;
+  if (Shape3d.isPrototypeOf(pr)) {
+    let prtr = pr.toGlobalCoords();
+    rtr = prtr.times(tr);
+  } else {
+    rtr = tr;
+  }
+  return rtr;
+}
+    
 
 
 

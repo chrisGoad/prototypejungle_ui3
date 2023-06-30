@@ -80,6 +80,10 @@ rs.initialize = function () {
   cube.lineP = lineP;
   let cubeLines = this.set('cubeLines',arrayShape.mk());
   cube.lines = cubeLines;
+  //let tr = Affine3d.mkTranslation(Point3d.mk(20,0,0));
+  let tr = Affine3d.identity ();
+  let container = this.container = Shape3d.mk(tr);
+  container.set('cube',cube);
  /* //this.installCircleDrops(cube);
   //let ev = cube.relations.edgeVertices;
   //let enms = Object.getOwnPropertyNames(ev);
@@ -118,11 +122,14 @@ rs.placeDrops = function (graph3d) {
 
 rs.updateState = function  () {
   debugger;
-  let {cube,stepRotation:sr,camera,lines} = this;
-  let tr = cube.transform;
-  let ntr =tr.times(sr);
-  cube.transform = ntr;
-  let segs = cube.project(camera,ntr);
+  let {cube,stepRotation:sr,camera,lines,container} = this;
+  //let tr = cube.transform;
+  let cntr = container.transform;
+  let ntr =cntr.times(sr);
+  container.transform = ntr;
+  //let gtr = ntr.times(tr);
+  let gtr = cube.toGlobalCoords();
+  let segs = cube.project(camera,gtr);
   return;
   let ns =segs.length;
   for (let i=0;i<ns;i++) {
