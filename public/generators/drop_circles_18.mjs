@@ -49,7 +49,7 @@ rs.initialize = function () {
   let {circleP,dropParams} = this;
   this.addFrame();
   let drops =  this.generateCircleDrops(dropParams);
-  this.installCircleDrops(drops,circleP);
+  this.installCircleDrops({drops});//,circleP);
 }
 
 export {rs};

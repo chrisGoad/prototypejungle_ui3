@@ -7,6 +7,7 @@ sections:
       [0,'3d_grid_1','generators',1,'3d grid 1',{likes:0,posted:0,category:'drop'}], 
       [0,'3d_grid_0','generators',1,'3d grid 0',{likes:0,posted:0,category:'drop'}], 
       [0,'necker_distortion_1','generators',1,'Necker Distortion 1',{likes:0,posted:0,category:'drop'}], 
+      [0,'necker_distortion_2','generators',1,'Necker Distortion 2',{likes:0,posted:0,category:'drop'}], 
       [0,'necker_distortion','generators',1,'Necker Distortion',{likes:0,posted:0,category:'drop'}], 
       [0,'drop_circles_21','generators',1,'Circles 21',{likes:0,posted:0,category:'drop'}], 
       [0,'drop_circles_20','generators',1,'Circles 20',{likes:0,posted:0,category:'drop'}], 
