@@ -755,18 +755,13 @@ Polyhedron.computeNumEdges = function () {
 Polyhedron.project = function (camera) {
   //debugger;
   let transform = this.toGlobalCoords();
-  let {wireframe:wf,relations:rel,lines,lineP} = this;
-  if (lines.length===0) {
-    let ne = this.numEdges;
-    for (let i=0;i<ne;i++) {
-      let line = lineP.instantiate();
-      lines.push(line);
-    }
-  }
+  let {wireframe:wf,relations:rel,lines,vertexShapes,lineP,vertexP} = this;
   let av = camera.axisVector;
   let feo = rel.faceEdges;
   let ev = rel.edgeVertices;
   let vs = this.vertices;
+  let vps = Object.getOwnPropertyNames(vs);
+  let npnts = vps.length;
   let tvs = transform.applyToCollection(vs);
   let planes  = this.planes;
   let sgs  =[];
@@ -774,6 +769,19 @@ Polyhedron.project = function (camera) {
   let edgeNames = Object.getOwnPropertyNames(ev);
   let ne = edgeNames.length;
   let edges = [];
+  if (lines.length===0) {
+    for (let i=0;i<ne;i++) {
+      let line = lineP.instantiate();
+      lines.push(line);
+    }
+  }
+  if (vertexP && (vertexShapes.length ===0)) {
+    for (let i=0;i<npnts;i++) {
+      let vertexShape = vertexP.instantiate();
+      vertexShapes.push(vertexShape);
+    }
+  }
+  
   const addEdge = (en) => {
     if (edges.indexOf(en)===-1) {  
       let vnms = ev[en];
@@ -809,6 +817,15 @@ Polyhedron.project = function (camera) {
     line.setEnds(sg2d.end0,sg2d.end1);
     line.update();
   };
+  if (vertexP) {
+    for (let i=0;i<npnts;i++) {
+      let vname = vps[i];
+      let vrtx = vs[vname];
+      let vertexShape= vertexShapes[i];
+      let vrtx2d = vrtx.project(camera,transform);
+      vertexShape.moveto(vrtx2d);
+    }
+  }
 }
 
   

@@ -33,8 +33,8 @@ rs.dropParams = {dropTries:150,innerRadius:0,outerRadius:30,collideRadius:2,circ
 
 rs.initProtos = function () {
   let circleP = this.circleP = circlePP.instantiate();
-  circleP.dimension = 10;
-  circleP.fill = 'white';
+  circleP.dimension = .4;
+  circleP.fill = 'red';
   circleP['stroke-width'] = 0;
   this.dropP = circleP;
    let lineP = this.lineP = linePP.instantiate();
@@ -110,8 +110,11 @@ rs.initialize = function () {
   let camera = this.camera = geom.Camera.mk(focalPoint,focalLength,cameraScaling,cameraAxis);
   let grid= this.grid = this.genGrid();
   grid.lineP = lineP;
+  grid.vertexP = circleP;
   let gridLines = this.set('gridLines',arrayShape.mk());
   grid.lines = gridLines;
+  let gridVertices= this.set('gridVertices',arrayShape.mk());
+  grid.vertexShapes = gridVertices;
   //this.installCircleDrops(cube);
  // this.set('copies',arrayShape.mk());
    let tr = Affine3d.identity ();
