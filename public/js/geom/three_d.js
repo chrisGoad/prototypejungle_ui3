@@ -271,8 +271,12 @@ Point3d.project = function (camera,transform) {
 }  
 
 Segment3d.project = function (camera,transform) {
-  let e0 = this.end0.project(camera,transform);
-  let e1 = this.end1.project(camera,transform);
+  let {end0,end1} = this;
+  if ((!end0)||(!end1)) {
+    debugger;
+  }
+  let e0 = end0.project(camera,transform);
+  let e1 = end1.project(camera,transform);
 	let rs = LineSegment.mk(e0,e1);
 	rs.origin = this;
 	return rs;

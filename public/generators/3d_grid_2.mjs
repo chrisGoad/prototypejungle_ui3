@@ -11,7 +11,7 @@ addAnimationMethods(rs);
 //addDropMethods(rs);
 addPlaceDropMethods(rs);
 
-rs.setName('3d_grid_0');
+rs.setName('3d_grid_2');
 let wd=60;
 let topParams = {width:wd,height:wd,frameStrokee:'white',frameStrokeWidth:0.1,framePadding:.1*wd,stepsPerMove:10,numStepss:24,numSteps:900, 
   focalPoint:Point3d.mk(100,0,0),
@@ -45,11 +45,11 @@ rs.initProtos = function () {
 
 rs.genGrid = function () {
   let {gridWid:gw,gridDim:gd} = this;
+    let ph = Object.create(Polyhedron);
   let gdsq = gd*gd;
   let gp = [];
   let hgw = 0.5*gw;
   let delta = gw/(gd-1);
-  let idx = 0;
   //let {circleRadius,motionRadius} = this.dropParams;
   let edges = {};
   let vertices = {};
@@ -68,7 +68,7 @@ rs.genGrid = function () {
         vertices[vname] = p;
         let edgex,edgey,edgez;
         if (k<(gd-1)) {
-          let edgez = [vname,'v'_'+(idx+1)];
+          let edgez = [vname,'v_'+(idx+1)];
           let ename = 'e_'+eidx;
           edges[ename] = edgez;
           eidx++;
@@ -81,7 +81,7 @@ rs.genGrid = function () {
 
         }
         if (i<(gd-1)) {
-          let edgex = [idx,idx+gdsq];
+          let edgex = [vname,'v_'+(idx+gdsq)];
           let ename = 'e_'+eidx;
           edges[ename] = edgex;
           eidx++;
@@ -92,7 +92,11 @@ rs.genGrid = function () {
       }
     }
   }
-  return {edgeVertices:edges};
+   ph.vertices = vertices;
+  ph.relations ={edgeVertices:edges}; 
+  ph.numEdges = ph.computeNumEdges();
+  ph.wireframe = 1;
+  return ph;
  }
 
     
@@ -100,42 +104,37 @@ rs.genGrid = function () {
 rs.initialize = function () {
   debugger;
   this.initProtos();
-  let {circleP,dropParams,numSteps,cubeDim} = this;
+  let {circleP,lineP,numSteps} = this;
   this.addFrame();
   let {focalPoint,focalLength,cameraScaling,cameraAxis} = this;
   let camera = this.camera = geom.Camera.mk(focalPoint,focalLength,cameraScaling,cameraAxis);
   let grid= this.grid = this.genGrid();
-  this.installCircleDrops(cube);
+  grid.lineP = lineP;
+  let gridLines = this.set('gridLines',arrayShape.mk());
+  grid.lines = gridLines;
+  //this.installCircleDrops(cube);
  // this.set('copies',arrayShape.mk());
+   let tr = Affine3d.identity ();
+
+  let container = this.container = Shape3d.mk(tr);
+  container.set('grid',grid);
+    grid.transform = Affine3d.identity ();
+
   let oneR =(2*Math.PI/(numSteps+1));
   this.stepRotation = Affine3d.mkRotation('z',2*oneR).times(Affine3d.mkRotation('x',oneR));
 
 }
 
-rs.placeDrops = function (graph3d) {
-  let {stepsSoFar:ssf,numSteps,shapes,dropParams,copiess,dropP} = this;
-  let {drops} = graph3d;
-  let fr = ssf/numSteps;
-  let {motionRadius,motionCycles:mc} = dropParams;
-  //let vec = Point3d.mk(0,Math.cos(angle),Math.sin(angle));
-   debugger;
-  let idx = 0;
-  let angle = Math.PI*2*fr*mc;
-  drops.forEach( (drop) => {
-    let {projection,shape,vec,delta,point,radius,fill,dimension,scale} = drop;
-    if (!delta) {
-      delta = drop.delta = Math.random()*Math.PI;
-    };
-    let na = angle+delta;
-    vec = Point3d.mk(0,Math.cos(na),Math.sin(na)).times(motionRadius);
-    let np  = projection.plus(vec);
-    shape.moveto(np);
-    drop.pnt2d=np;
-    idx++;
-  });
+rs.updateState = function  () {
+  debugger;
+  let {grid,camera,stepRotation:sr,container} = this;
+  let cntr = container.transform;
+  let ntr =cntr.times(sr);
+  container.transform = ntr;
+  grid.project(camera);
 }
 
-rs.updateState = function  () {
+rs.updateStateee = function  () {
   debugger;
   let {graph3d,stepRotation:sr} = this;
   let {drops} = graph3d;
