@@ -21,7 +21,7 @@ let topParams = {width:wd,height:wd,frameStrokee:'white',frameStrokeWidth:0.1,fr
   saveAnimation:1,
   cubeDim:0.5*wd,
   includeLines:1,
-  gridDim:8,
+  gridDim:10,
   gridWid:0.5*wd
   };
   
@@ -62,34 +62,25 @@ rs.genGrid = function () {
   let eidx =0;
   for (let i=0;i<gd;i++) { // z
     for (let j=0;j<gd;j++) { //y
-      for (let k=0;k<gd;k++) { //x
-        let p = Point3d.mk(k*delta-hgw,j*delta-hgw,i*delta-hgw);
-        let vname = 'v_'+idx;
-        vertices[vname] = p;
-        let edgex,edgey,edgez;
-        if (k<(gd-1)) {
-          let edgez = [vname,'v_'+(idx+1)];
-          let ename = 'e_'+eidx;
-          edges[ename] = edgez;
-          eidx++;
-        }
-        if (j<(gd-1)) {
-          let edgey = [vname,'v_'+(idx+gd)];
-          let ename = 'e_'+eidx;
-          edges[ename] = edgey;
-          eidx++;
-
-        }
-        if (i<(gd-1)) {
-          let edgex = [vname,'v_'+(idx+gdsq)];
-          let ename = 'e_'+eidx;
-          edges[ename] = edgex;
-          eidx++;
-
-        }
-        gp.push(p);
-        idx++;
+      let p = Point3d.mk(j*delta-hgw,i*delta-hgw,0);
+      let vname = 'v_'+idx;
+      vertices[vname] = p;
+      let edgex,edgey;
+      if (j<(gd-1)) {
+        let edgey = [vname,'v_'+(idx+1)];
+        let ename = 'e_'+eidx;
+        edges[ename] = edgey;
+        eidx++;
       }
+      if (i<(gd-1)) {
+        let edgex = [vname,'v_'+(idx+gd)];
+        let ename = 'e_'+eidx;
+        edges[ename] = edgex;
+        eidx++;
+
+      }
+      gp.push(p);
+      idx++;
     }
   }
    ph.vertices = vertices;
@@ -108,20 +99,39 @@ rs.initialize = function () {
   this.addFrame();
   let {focalPoint,focalLength,cameraScaling,cameraAxis} = this;
   let camera = this.camera = geom.Camera.mk(focalPoint,focalLength,cameraScaling,cameraAxis);
-  let grid= this.grid = this.genGrid();
-  grid.lineP = lineP;
-  grid.vertexP = circleP;
-  let gridLines = this.set('gridLines',arrayShape.mk());
-  grid.lines = gridLines;
-  let gridVertices= this.set('gridVertices',arrayShape.mk());
-  grid.vertexShapes = gridVertices;
-  //this.installCircleDrops(cube);
- // this.set('copies',arrayShape.mk());
-   let tr = Affine3d.identity ();
+  let itr = Affine3d.identity ();
+  let container = this.container = Shape3d.mk(itr);
+  const mkAGrid = (pln) => {
+    let grid = this['grid'+pln] = this.genGrid();
+    grid.lineP = lineP;
+    grid.vertexP = circleP;
+    let gridLines = this.set('grid'+pln+'Lines',arrayShape.mk());
+    grid.lines = gridLines;
+    let gridVertices= this.set('grid'+pln+'vertices',arrayShape.mk());
+    grid.vertexShapes = gridVertices;
+    container.set('grid'+pln,grid);
+    this.ttr =   Affine3d.mkRotation('y',po2);
 
-  let container = this.container = Shape3d.mk(tr);
-  container.set('grid',grid);
-    grid.transform = Affine3d.identity ();
+    return grid; 
+  }
+  let po2 = Math.PI/2;
+  
+  let gridxy = mkAGrid('xy');
+  gridxy.transform = itr;
+
+  let gridyz = mkAGrid('yz');
+  gridyz.transform = Affine3d.mkRotation('x',po2);
+  
+  let gridxz = mkAGrid('xz');
+  gridxz.transform = Affine3d.mkRotation('y',po2);
+/*
+  debugger;
+  let ttr = this.ttr =   Affine3d.mkRotation('x',po2);
+  let px = Point3d.mk(1,0,0);
+  let py = Point3d.mk(0,1,0);
+  let tpx = px.applyTransform(ttr);
+  let tpy = py.applyTransform(ttr);
+*/
 
   let oneR =(2*Math.PI/(numSteps+1));
   this.stepRotation = Affine3d.mkRotation('z',2*oneR).times(Affine3d.mkRotation('x',oneR));
@@ -130,11 +140,13 @@ rs.initialize = function () {
 
 rs.updateState = function  () {
   debugger;
-  let {grid,camera,stepRotation:sr,container} = this;
+  let {gridxy,gridyz,gridxz,camera,stepRotation:sr,container,ttr} = this;
   let cntr = container.transform;
   let ntr =cntr.times(sr);
-  container.transform = ntr;
-  grid.project(camera);
+  container.transform = ntr;//Affine3d.identity ();
+  gridxy.project(camera);
+  gridyz.project(camera);
+  gridxz.project(camera);
 }
 
 export {rs};

@@ -26,7 +26,7 @@ Point3d.copy = function () {
   return Point3d.mk(this.x,this.y,this.z);
 };
 
-
+/*
   
 Point.copyto = function (src) {
   this.x = src.x;
@@ -34,7 +34,7 @@ Point.copyto = function (src) {
   this.z = src.z;
   return this; 
 }
-
+*/
 Point3d.difference = function (q) {
   let p = this;
   return Point3d.mk(p.x - q.x,p.y - q.y,p.z - q.z);
@@ -813,17 +813,20 @@ Polyhedron.project = function (camera) {
   for (let i=0;i<ne;i++) {
     let sg = sgs[i];
     let line = lines[i];
-    let sg2d = sg.project(camera,transform);
+    let sg2d = sg.project(camera);
+    //let sg2d = sg.project(camera,transform);
     line.setEnds(sg2d.end0,sg2d.end1);
     line.update();
   };
   if (vertexP) {
     for (let i=0;i<npnts;i++) {
       let vname = vps[i];
-      let vrtx = vs[vname];
+      let vrtx = tvs[vname];
       let vertexShape= vertexShapes[i];
-      let vrtx2d = vrtx.project(camera,transform);
+      //let vrtx2d = vrtx.project(camera,transform);
+      let vrtx2d = vrtx.project(camera);
       vertexShape.moveto(vrtx2d);
+      vertexShape.update();
     }
   }
 }
