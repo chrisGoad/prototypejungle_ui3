@@ -13,13 +13,14 @@ addPlaceDropMethods(rs);
 
 rs.setName('3d_grid_2');
 let wd=60;
-let topParams = {width:wd,height:wd,frameStrokee:'white',frameStrokeWidth:0.1,framePadding:.1*wd,stepsPerMove:10,numStepss:24,numSteps:900, 
+let topParams = {width:wd,height:wd,frameStrokee:'white',frameStrokeWidth:0.1,framePadding:.1*wd,stepsPerMove:10,numStepss:24,numSteps:300, 
   focalPoint:Point3d.mk(100,0,0),
   focalLength:100,
   cameraScaling:1,
   cameraAxis:'x',
   saveAnimation:1,
   cubeDim:0.5*wd,
+  planeTranslation:0.5*wd,
   includeLines:1,
   gridDim:10,
   gridWid:0.5*wd
@@ -135,15 +136,22 @@ rs.initialize = function () {
 
   let oneR =(2*Math.PI/(numSteps+1));
   this.stepRotation = Affine3d.mkRotation('z',2*oneR).times(Affine3d.mkRotation('x',oneR));
-
+  this.trPerStep = this.planeTranslation/numSteps;
+  this.trStart = -0.5*this.planeTranslation;
 }
 
 rs.updateState = function  () {
   debugger;
-  let {gridxy,gridyz,gridxz,camera,stepRotation:sr,container,ttr} = this;
+  let {gridxy,gridyz,gridxz,camera,stepRotation:sr,container,ttr,stepsSoFar:ssf,trPerStep,trStart} = this;
   let cntr = container.transform;
   let ntr =cntr.times(sr);
+  let translation = trStart + ssf *trPerStep;
   container.transform = ntr;//Affine3d.identity ();
+  gridxy.transform = Affine3d.mkTranslation(Point3d.mk(0,0,translation));
+  let po2 = Math.PI/2;
+  gridyz.transform = Affine3d.mkRotation('x',po2).times(Affine3d.mkTranslation(Point3d.mk(translation,0,0)));
+  gridxz.transform = Affine3d.mkRotation('y',po2).times(Affine3d.mkTranslation(Point3d.mk(0,translation,0)));
+
   gridxy.project(camera);
   gridyz.project(camera);
   gridxz.project(camera);
