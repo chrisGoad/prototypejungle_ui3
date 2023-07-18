@@ -13,7 +13,7 @@ addPlaceDropMethods(rs);
 
 rs.setName('cubes_1');
 let wd=60;
-let topParams = {width:wd,height:wd,frameStrokee:'white',frameStrokeWidth:0.1,framePadding:.1*wd,stepsPerMove:10,numStepss:24,numSteps:900, 
+let topParams = {width:wd,height:wd,frameStrokee:'white',frameStrokeWidth:0.1,framePadding:.1*wd,stepsPerMove:10,numStepss:24,numSteps:300, numCubes:30,
   focalPoint:Point3d.mk(100,0,0),
   focalLength:100,
   cameraScaling:1,
@@ -29,24 +29,22 @@ let topParams = {width:wd,height:wd,frameStrokee:'white',frameStrokeWidth:0.1,fr
 
 Object.assign(rs,topParams);
 
-//rs.dropParams = {dropTries:150,innerRadius:0,outerRadius:30,collideRadius:2,circleRadius:.2,maxLoops:1000,maxDrops:5,motionRadius:.5,motionCycles:4};
 
 rs.initProtos = function () {
   let circleP = this.circleP = circlePP.instantiate();
-  circleP.dimension = .4;
+  circleP.dimension = 0.5;
   circleP.fill = 'red';
   circleP['stroke-width'] = 0;
   this.dropP = circleP;
    let lineP = this.lineP = linePP.instantiate();
   lineP.stroke = 'white';
-  lineP['stroke-width'] = .303;
+  lineP['stroke-width'] = .1;
 }
 
 
 rs.genCube = function (dim) {
   let hdim  = 0.5*dim;
   let ph = Object.create(Polyhedron);
-  //let {circleRadius,motionRadius} = this.dropParams;
   let edges = {};
   let vertices = {};
   let idx=0;
@@ -78,7 +76,6 @@ rs.genCube = function (dim) {
           eidx++;
 
         }
-   //     gp.push(p);
         idx++;
       }
     }
@@ -90,29 +87,64 @@ rs.genCube = function (dim) {
   return ph;
  }
 
-    
+
+
+rs.setCubeDim = function (cube,dim) {
+  let hdim  = 0.5*dim;
+  let edges = cube.relations.edgeVertices;
+  let vertices = cube.vertices;
+  let idx=0;
+  let eidx =0;
+  for (let i=0;i<2;i++) { // z
+    for (let j=0;j<2;j++) { //y
+      for (let k=0;k<2;k++) { //x
+        //let p = Point3d.mk(k*dim-hdim,j*dim-hdim,i*dim-hdim);
+        let vname = 'v_'+idx;
+        let p = vertices[vname];
+        p.x = k*dim-hdim;
+        p.y = j*dim-hdim;
+        p.z = i*dim-hdim;
+        idx++;
+      }
+    }
+  }
+}
+
+rs.addCube = function (n) {
+  let {container,circleP,lineP} = this;
+   let cube = this.genCube(50);
+  cube.lineP = lineP;
+  cube.vertexP = circleP;
+  let cubeLines = this.set('cubeLines_'+n,arrayShape.mk());
+  cube.lines = cubeLines;
+  let cubeVertices= this.set('cubeVertices__'+n,arrayShape.mk());
+  cube.vertexShapes = cubeVertices;
+      cube.transform = Affine3d.identity ();
+  container.set('cube_'+n,cube);
+}
      
 rs.initialize = function () {
   debugger;
   this.initProtos();
-  let {circleP,lineP,numSteps} = this;
+  let {circleP,lineP,numSteps,numCubes} = this;
   this.addFrame();
   let {focalPoint,focalLength,cameraScaling,cameraAxis} = this;
   let camera = this.camera = geom.Camera.mk(focalPoint,focalLength,cameraScaling,cameraAxis);
-  let cube = this.genCube(50);
+  /*let cube = this.genCube(50);
   cube.lineP = lineP;
   cube.vertexP = circleP;
   let cubeLines = this.set('cubeLines',arrayShape.mk());
   cube.lines = cubeLines;
   let cubeVertices= this.set('cubeVertices',arrayShape.mk());
-  cube.vertexShapes = cubeVertices;
+  cube.vertexShapes = cubeVertices;*/
   //this.installCircleDrops(cube);
  // this.set('copies',arrayShape.mk());
    let tr = Affine3d.identity ();
-
   let container = this.container = Shape3d.mk(tr);
-  container.set('cube',cube);
-    cube.transform = Affine3d.identity ();
+  for (let i=0;i<numCubes;i++) {
+    this.addCube(i);
+  }
+  
 
   let oneR =(2*Math.PI/(numSteps+1));
   this.stepRotation = Affine3d.mkRotation('z',2*oneR).times(Affine3d.mkRotation('x',oneR));
@@ -120,13 +152,52 @@ rs.initialize = function () {
 }
 
 rs.updateState = function  () {
-  debugger;
-  let {camera,stepRotation:sr,container} = this;
-  let {cube} = container;
+  let {camera,stepRotation:sr,container,numSteps,stepsSoFar:ssf,numCubes} = this;
+  let firstStage= Math.floor(numSteps/3);
+  let lastStage = Math.floor((2*numSteps)/3);
+//  let {cube_0:cube} = container;
+ // let fr = ssf/numSteps;
+  let intv = 0.33333333 *numSteps/numCubes;
   let cntr = container.transform;
   let ntr =cntr.times(sr);
   container.transform = ntr;
-  cube.project(camera);
+  if (ssf < firstStage) {
+    for (let i=0;i<numCubes;i++) {
+      let cube = container['cube_'+i];
+      let strt = Math.floor(intv*i);
+      if (ssf<strt) {
+        this.setCubeDim(cube,0); 
+      } else {
+        let fr = (ssf-strt)/firstStage;
+        this.setCubeDim(cube,fr*50);
+      }
+      cube.project(camera);
+    }
+  return;
+  }
+  if (ssf < lastStage) {
+    for (let i=0;i<numCubes;i++) {
+      let cube = container['cube_'+i];
+      cube.project(camera);
+    }
+    return;
+  }
+  for (let i=0;i<numCubes;i++) {
+    debugger;
+    let cube = container['cube_'+i];
+    let rstrt = Math.floor(intv*(numCubes-i));
+    let strt = lastStage+rstrt;
+    if (ssf>strt) {
+      this.setCubeDim(cube,0); 
+    } else {
+      debugger;
+      let fr = (ssf-(lastStage-intv*i))/firstStage;
+      debugger;
+     this.setCubeDim(cube,(1-fr)*50);
+    }
+    cube.project(camera);
+  }
+
 }
 
 export {rs};
