@@ -4,16 +4,16 @@ import {rs as linePP} from '/shape/line.mjs';
 import {rs as basicP} from '/generators/basics.mjs';
 import {rs as addAnimationMethods} from '/mlib/animate0.mjs';
 //import {rs as addDropMethods} from '/mlib/circleDrops.mjs';
-import {rs as addPlaceDropMethods} from '/mlib/placeDrops.mjs';
+//import {rs as addPlaceDropMethods} from '/mlib/placeDrops.mjs';
 
 let rs = basicP.instantiate();
 addAnimationMethods(rs);
 //addDropMethods(rs);
-addPlaceDropMethods(rs);
+//addPlaceDropMethods(rs);
 
 rs.setName('cubes_1');
 let wd=60;
-let topParams = {width:wd,height:wd,frameStrokee:'white',frameStrokeWidth:0.1,framePadding:.1*wd,stepsPerMove:10,numStepss:24,numSteps:300, numCubes:30,
+let topParams = {width:wd,height:wd,frameStrokee:'white',frameStrokeWidth:0.1,framePadding:.6*wd,stepsPerMove:10,numStepss:24,numSteps:300, numCubes:15,
   focalPoint:Point3d.mk(100,0,0),
   focalLength:100,
   cameraScaling:1,
@@ -38,7 +38,7 @@ rs.initProtos = function () {
   this.dropP = circleP;
    let lineP = this.lineP = linePP.instantiate();
   lineP.stroke = 'white';
-  lineP['stroke-width'] = .1;
+  lineP['stroke-width'] = .2;
 }
 
 

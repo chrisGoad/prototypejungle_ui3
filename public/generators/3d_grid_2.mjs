@@ -13,7 +13,7 @@ addPlaceDropMethods(rs);
 
 rs.setName('3d_grid_2');
 let wd=60;
-let topParams = {width:wd,height:wd,frameStrokee:'white',frameStrokeWidth:0.1,framePadding:.1*wd,stepsPerMove:10,numStepss:24,numSteps:900, 
+let topParams = {width:wd,height:wd,frameStrokee:'white',frameStrokeWidth:0.1,framePadding:.1*wd,stepsPerMove:10,numStepss:24,numSteps:300, 
   focalPoint:Point3d.mk(100,0,0),
   focalLength:100,
   cameraScaling:1,
