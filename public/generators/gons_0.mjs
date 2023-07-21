@@ -46,18 +46,55 @@ rs.initProtos = function () {
   gonP['stroke-width'] = .2;
 }
 
-rs.genLine = function (extent,d) {
+rs.genLine = function (extent,d,ornt) {
 debugger;
   let {x,y} = extent;
   let hx = 0.5 * x;
   let theta = Math.atan(hx/d);
   let r = hx/Math.sin(theta);
   let b = r - d;
-  let e0 = Point.mk(0,hx-d);
-  let e1 = Point.mk(0,r+hx-d);
+  let e0,e1;
+  if (ornt === 'down') {
+    e0 = Point.mk(0,hx-d);
+    e1 = Point.mk(0,r+hx-d);
+  } else if (ornt === 'right') {
+    e0 = Point.mk(hx-d,0);
+    e1 = Point.mk(r+hx-d,0);
+  } else if (ornt === 'up') {
+    e0 = Point.mk(0,d-hx);
+    e1 = Point.mk(0,d-hx-r);
+  } else if (ornt === 'left') {
+    e0 = Point.mk(d-hx,0);
+    e1 = Point.mk(d-hx-r,0);
+  }
   let line = this.lineP.instantiate();
   this.set('vline',line);
   line.setEnds(e0,e1);
+  const addLine = (nm,theta,r) => {
+    let dtheta;
+    if (ornt === 'right') {
+      dtheta = -Math.PI/2;
+    }
+    if (ornt === 'down') {
+      dtheta = 0;
+    }
+    if (ornt === 'up') {
+      dtheta = Math.PI;
+    }
+    if (ornt === 'left') {
+      dtheta = Math.PI/2;
+    }
+    let cs = Math.cos(theta+dtheta);
+    let sn = Math.sin(theta+dtheta);
+    let e2 = Point.mk(r*cs,r*sn);
+    let line = this.lineP.instantiate();
+    this.set(nm,line);
+    line.setEnds(e0,e2);
+  }
+  addLine('line2',theta,r);
+  addLine('line3',Math.PI-theta,r);
+ 
+  return {center:e0,radius:r,theta};
 }
   
 rs.genRectGon = function (extent,nsegs,d) {
@@ -101,7 +138,7 @@ rs.initialize = function () {
   let gray = 100;
   let delta =50;
   addGon('gon',Point.mk(0,0),{r:gray,g:gray,b:gray});
-  this.genLine(Point.mk(dim,dim),20);
+  this.genLine(Point.mk(dim,dim),20,'left');
   return;
   addGon('gonUL',Point.mk(-disp,-disp),{r:gray,g:gray,b:gray});
   addGon('gonUR',Point.mk(disp,-disp),{r:gray+delta,g:gray,b:gray});
