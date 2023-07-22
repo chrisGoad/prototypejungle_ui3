@@ -33,7 +33,7 @@ Object.assign(rs,topParams);
 
 rs.initProtos = function () {
   let circleP = this.circleP = circlePP.instantiate();
-  circleP.dimension = 0.5;
+  circleP.dimension = 2;
   circleP.fill = 'red';
   circleP['stroke-width'] = 0;
   this.dropP = circleP;
@@ -76,23 +76,25 @@ debugger;
   }
   let atheta;
   const addLine = (nm,theta,r) => {
+  //  debugger;
     let dtheta;
     if (ornt === 'right') {
-      dtheta = -Math.PI/2;
+      dtheta = Math.PI/2;
     }
     if (ornt === 'down') {
       dtheta = 0;
+     // dtheta = Math.PI/2;
     }
     if (ornt === 'up') {
       dtheta = Math.PI;
     }
     if (ornt === 'left') {
-      dtheta = Math.PI/2;
+      dtheta = 3*Math.PI/2;
     }
     atheta = theta+dtheta;
     let cs = Math.cos(atheta);
     let sn = Math.sin(atheta);
-    //let e2 = Point.mk(r*cs,r*sn);
+    //let e2 = e0.plus(Point.mk(r*cs,r*sn));
     let e2 = e0.plus(Point.mk(r*sn,r*cs));
     if (genLines) {
       let line = this.lineP.instantiate();
@@ -102,12 +104,35 @@ debugger;
   }
   addLine('line2',theta,r);
   let theta0 = atheta;
-  addLine('line3',Math.PI-theta,r);
+  //addLine('line3',theta+Math.PI/2,r);
+  //addLine('line3',Math.PI/2-.1,r);
+  addLine('line3',-theta,r);
   let  theta1 = atheta;
   return {center:e0,radius:r,theta0,theta1};
 }
 
-rs.genCorners = function (extent,numCorners,d,ornt) {
+
+rs.genCorners = function (center,radius,theta0,theta1,numCorners) {
+  debugger;
+  let corners = [];
+  let dt = theta1-theta0;
+  let intv = dt/(numCorners-1);
+  for (let i = 0;i<numCorners;i++){
+    let th = theta0+i*intv;
+    //let v = Point.mk(Math.cos(th),Math.sin(th)).times(radius);
+    let v = Point.mk(Math.sin(th),Math.cos(th)).times(radius);
+    let p = center.plus(v);
+    corners.push(p);
+  }
+  return corners;
+}
+rs.genCorners1 = function (extent,d,ornt,numCorners) {
+  let sp = this.genSideParams(extent,d,ornt,1);
+  let {center,radius,theta0,theta1} = sp;
+  return this.genCorners(center,radius,theta0,theta1,numCorners);
+}
+
+rs.genCornerss = function (extent,numCorners,d,ornt) {
   let sp = this.genSideParams(extent,d,ornt);
   let {center:c,radius:r,theta0:t0,theta1:t1} = sp;
   let corners = [];
@@ -115,7 +140,7 @@ rs.genCorners = function (extent,numCorners,d,ornt) {
   let intv = dt/(numCorners-1);
   for (let i = 0;i<numCorners;i++) {
     let th = t0+i*intv;
-    let p = c.plus(Point.mk(Math.cos(th),Math.sin(th)).times(r));
+    let p = c.plus(Point.mk(Math.cos(th),Math.sin(th)).times(ra));
     corners.push(p);
   }
   return corners;
@@ -175,18 +200,27 @@ rs.initialize = function () {
   let gray = 100;
   let delta =50;
   addGon('gon',Point.mk(0,0),{r:gray,g:gray,b:gray});
-  let d = 15;
-  let sp = this.genSideParams(extent,d,'down',1);
-  let {center,radius,theta0,theta1} = sp;
-  let nc =3;
-  let crnsL = this.genCorners(extent,nc,d,'left');
-  let crnsU = this.genCorners(extent,nc,d,'up');
-  let crnsR = this.genCorners(extent,nc,d,'right');
-  let crnsD = this.genCorners(extent,nc,d,'down');
+  let d = 60;
+  
+  let nc =15;
+  let crnsD = this.genCorners1(extent,d,'down',nc);
+  let crnsL = this.genCorners1(extent,d,'left',nc);
+  let crnsU = this.genCorners1(extent,d,'up',nc);
+  let crnsR = this.genCorners1(extent,d,'right',nc);
+ /* let spD = this.genSideParams(extent,d,'down',1);
+  let {center,radius,theta0,theta1} = spD;
+  let crnsD = this.genCorners(center,radius,theta0,theta1,nc);
+  let spL = this.genSideParams(extent,d,'down',1);
+  let {center,radius,theta0,theta1} = spL;
+  let crnsL = this.genCorners(center,radius,theta0,theta1,nc);*/
+ //let crnsL = this.genCorners(extent,nc,d,'left');
+  //let crnsU = this.genCorners(extent,nc,d,'up');
+  //let crnsR = this.genCorners(extent,nc,d,'right');
   this.showPoints(crnsL);
-  this.showPoints(crnsU);
+  //this.showPoints(crnsU);
   this.showPoints(crnsR);
   this.showPoints(crnsD);
+  this.showPoints(crnsU);
   debugger;
   return;
   addGon('gonUL',Point.mk(-disp,-disp),{r:gray,g:gray,b:gray});
