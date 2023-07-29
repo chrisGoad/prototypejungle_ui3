@@ -3,12 +3,12 @@ import {rs as circlePP} from '/shape/circle.mjs';
 import {rs as linePP} from '/shape/line.mjs';
 import {rs as gonPP} from '/shape/polygon.mjs';
 import {rs as basicP} from '/generators/basics.mjs';
-import {rs as addAnimationMethods} from '/mlib/animate0.mjs';
+//import {rs as addAnimationMethods} from '/mlib/animate0.mjs';
 //import {rs as addDropMethods} from '/mlib/circleDrops.mjs';
 //import {rs as addPlaceDropMethods} from '/mlib/placeDrops.mjs';
 
 let rs = basicP.instantiate();
-addAnimationMethods(rs);
+//addAnimationMethods(rs);
 //addDropMethods(rs);
 //addPlaceDropMethods(rs);
 
@@ -75,7 +75,7 @@ rs.genSideParams = function (extent,d,ornt,genLines) {
 
 
 rs.genCorners = function (center,radius,theta0,theta1,numCorners) {
-  debugger;
+ // debugger;
   let corners = [];
   let dt = theta1-theta0;
   let intv = dt/(numCorners-1);

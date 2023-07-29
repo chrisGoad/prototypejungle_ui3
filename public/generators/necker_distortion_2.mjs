@@ -83,7 +83,7 @@ rs.initialize = function () {
   let cube = this.cube = Cube.mk(cubeDim,1);
   cube.lineP = lineP;
   let cubeLines = this.set('cubeLines',arrayShape.mk());
-  let cubeVertices = this.set('cubeVertice',arrayShape.mk());
+  let cubeVertices = this.set('cubeVertices',arrayShape.mk());
   cube.lines = cubeLines;
   cube.cubeVertices = cubeVertices;
   //let tr = Affine3d.mkTranslation(Point3d.mk(20,0,0));

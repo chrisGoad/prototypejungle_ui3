@@ -3,8 +3,12 @@ let rs = generatorP.instantiate();
 import {rs as linePP} from '/shape/line.mjs';
 import {rs as circlePP} from '/shape/circle.mjs';
 import {rs as gonPP} from '/shape/polygon.mjs';
+import {rs as addPathMethods} from '/mlib/path.mjs';	
+addPathMethods(rs);
 
-rs.setName('gons_0');
+rs.setName('gons_3');
+rs.pstate = {pspace:{},cstate:{}};
+
 let wd=100;
 let topParams = {width:wd,height:wd,frameStrokee:'white',frameStrokeWidth:0.1,framePadding:.6*wd,stepsPerMove:10,numStepss:24,numSteps:300, numCubes:15,
   dim:40,disp:48,numSegs:15,gray:100,delta:20
@@ -15,6 +19,15 @@ let topParams = {width:wd,height:wd,frameStrokee:'white',frameStrokeWidth:0.1,fr
 
 Object.assign(rs,topParams);
 
+rs.addSweepPath = function (params) {
+  let {pstate} = this;
+  let {cstate,pspace} = pstate;
+  let {name:nm,min,max,vel,sinusoidal,bounce,initVal} = params;
+  let ps = {kind:'sweep',min,max,sinusoidal,vel,bounce};
+  pspace[nm] = ps;
+  cstate[nm] = {value:initVal};
+}
+ // let {sinusoidal,min,max,vel,bounce,startDown,once,startAtStep:sas} = pspc;
 
 rs.initProtos = function () {
   let circleP = this.circleP = circlePP.instantiate();
@@ -57,18 +70,7 @@ rs.initialize = function () {
   let dD = 50;
   //let gclr = {r:0,g:0,b:0};
   let gclr = {r:gray,g:gray,b:gray};
- 
-/* addGon('gon00',dD,Point.mk(-disp,-disp),{r:gray,g:gray,b:gray});
-  addGon('gon01',dC,Point.mk(-disp,0),{r:gray,g:gray+delta,b:gray});
-  addGon('gon02',dD,Point.mk(-disp,disp),{r:gray,g:gray,b:gray});
-  
-  addGon('gon10',dC,Point.mk(0,-disp),{r:gray+delta,g:gray,b:gray});
-  addGon('gon11',dD,Point.mk(0,0),{r:gray+delta,g:gray+delta,b:gray});
-  addGon('gon12',dC,Point.mk(0,disp),{r:gray+delta,g:gray,b:gray});
-  
-  addGon('gon20',dD,Point.mk(disp,-disp),{r:gray,g:gray,b:gray});
-  addGon('gon21',dC,Point.mk(disp,0),{r:gray,g:gray+delta,b:gray});
-  addGon('gon22',dD,Point.mk(disp,disp),{r:gray,g:gray,b:gray});*/
+
   debugger;
   
    addGon('gon00',dD,Point.mk(-disp,-disp),gclr);
@@ -82,6 +84,15 @@ rs.initialize = function () {
   addGon('gon20',dD,Point.mk(disp,-disp),gclr);
   addGon('gon21',dC,Point.mk(disp,0),gclr);
   addGon('gon22',dD,Point.mk(disp,disp),gclr);
+  this.addSweepPath({name:'x',min:0,max:10,vel:2,initVal:0});
 }
+rs.updateState = function () {
+  let {pstate} = this;
+  let {cstate,pspace} = pstate;
+  debugger;
+  let val = cstate.x.value;
+  console.log('value=',val);
+}
+
 
 export {rs};
