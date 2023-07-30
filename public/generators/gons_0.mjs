@@ -74,23 +74,29 @@ rs.genSideParams = function (extent,d,ornt,genLines) {
 }
 
 
-rs.genCorners = function (center,radius,theta0,theta1,numCorners) {
+rs.genCorners = function (center,radius,theta0,theta1,numCorners,icorners) {
  // debugger;
-  let corners = [];
+  let adjust = !!icorners;
+  let corners = adjust?icorners:[];
   let dt = theta1-theta0;
   let intv = dt/(numCorners-1);
   for (let i = 0;i<numCorners;i++){
     let th = theta0+i*intv;
     let v = Point.mk(Math.sin(th),Math.cos(th)).times(radius);
     let p = center.plus(v);
-    corners.push(p);
+    if (adjust) {
+      corners[i]=p;
+    } else {
+      corners.push(p);
+    }
   }
   return corners;
 }
-rs.genCorners1 = function (extent,d,ornt,numCorners) {
+
+rs.genCorners1 = function (extent,d,ornt,numCorners,icorners) {
   let sp = this.genSideParams(extent,d,ornt,0);
   let {center,radius,theta0,theta1} = sp;
-  return this.genCorners(center,radius,theta0,theta1,numCorners);
+  return this.genCorners(center,radius,theta0,theta1,numCorners,icorners);
 }
 
 rs.genRectGon = function (extent,nsegs,d) {

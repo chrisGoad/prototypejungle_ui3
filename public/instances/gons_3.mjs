@@ -57,8 +57,10 @@ rs.initialize = function () {
  
   let extent = Point.mk(dim,dim);
  
-  const addGon = (nm,d,ps,clr) => {
-    let gon = this.genGonGon(extent,d,nc);
+  const adjustGon = (nm,d,ps,clr) => {
+    let gon = this[nm];
+    let corners = gon?gon.corners:undefined;
+    let gon = this.genGonGon(extent,d,nc,corners);
     this.set(nm,gon);
     gon.moveto(ps);
     let fill = `rgb(${clr.r},${clr.g},${clr.b})`;
@@ -66,25 +68,27 @@ rs.initialize = function () {
   }
 
   
-  let dC = 150;
-  let dD = 50;
+  let dVH = 150;//  inner vertical and horizontal
+  let dD = 50;//diagonal
   //let gclr = {r:0,g:0,b:0};
   let gclr = {r:gray,g:gray,b:gray};
 
   debugger;
   
    addGon('gon00',dD,Point.mk(-disp,-disp),gclr);
-  addGon('gon01',dC,Point.mk(-disp,0),gclr);
+  addGon('gon01',dVH,Point.mk(-disp,0),gclr);
   addGon('gon02',dD,Point.mk(-disp,disp),gclr);
   
-  addGon('gon10',dC,Point.mk(0,-disp),gclr);
+  addGon('gon10',dVH,Point.mk(0,-disp),gclr);
   addGon('gon11',dD,Point.mk(0,0),gclr);
-  addGon('gon12',dC,Point.mk(0,disp,-disp),gclr);
+  addGon('gon12',dVH,Point.mk(0,disp,-disp),gclr);
   
   addGon('gon20',dD,Point.mk(disp,-disp),gclr);
-  addGon('gon21',dC,Point.mk(disp,0),gclr);
+  addGon('gon21',dVH,Point.mk(disp,0),gclr);
   addGon('gon22',dD,Point.mk(disp,disp),gclr);
   this.addSweepPath({name:'x',min:0,max:10,vel:2,initVal:0});
+}
+rs.adjustGons = function (dD,dVH) {
 }
 rs.updateState = function () {
   let {pstate} = this;
