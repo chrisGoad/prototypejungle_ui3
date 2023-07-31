@@ -68,8 +68,17 @@ rs.initialize = function () {
   this.adjustGons(dD,dVH);
   let minval = Math.sqrt(30);
   let maxval = Math.sqrt(250);
-  this.addSweepPath({name:'x',min:minval,max:maxval,vel:.5,bounce:1,down:1,sinusoidal:1,initVal:minval+0.1*(maxval-minval)});
-  this.addSweepPath({name:'y',min:minval,max:maxval,vel:.5,bounce:1,down:1,sinusoidal:1,initVal:maxval});
+  let rng = maxval - minval;
+  let vel = 0.25;
+  this.addSweepPath({name:'x',min:minval,max:maxval,vel,bounce:1,down:1,sinusoidal:1,initVal:minval+0.5*rng});
+  this.addSweepPath({name:'y',min:minval,max:maxval,vel,bounce:1,down:1,sinusoidal:1,initVal:maxval});
+  let mincval=100;
+  let maxcval=200;
+  let crng = maxcval - mincval;;
+  let cvel = (crng/rng)*vel;
+  this.addSweepPath({name:'cx',min:mincval,max:maxcval,vel:cvel,bounce:1,down:1,sinusoidal:1,initVal:mincval+0.5*crng});
+  this.addSweepPath({name:'cy',min:mincval,max:maxcval,vel:cvel,bounce:1,down:1,sinusoidal:1,initVal:maxcval});
+
 }
 
 rs.adjustGon = function (nm,d,extent,ps,clr) {
@@ -77,40 +86,48 @@ rs.adjustGon = function (nm,d,extent,ps,clr) {
   let {numSegs} = this;
   let gon = this[nm];
   let newgon = this.genGonGon(extent,d,numSegs,gon);
+  let fill = `rgb(${clr.r},${clr.g},${clr.b})`;
   if (gon) {
+  gon.fill = fill;
     gon.update();
     gon.show();
     return;
   }
   this.set(nm,newgon);
   newgon.moveto(ps);
-  let fill = `rgb(${clr.r},${clr.g},${clr.b})`;
   newgon.fill = fill;
 }
-rs.adjustGons = function (dD,dVH) {
-  let {disp,extent,gclr} = this;
-  this.adjustGon('gon00',dD,extent,Point.mk(-disp,-disp),gclr);
-  this.adjustGon('gon01',dVH,extent,Point.mk(-disp,0),gclr);
-  this.adjustGon('gon02',dD,extent,Point.mk(-disp,disp),gclr);
+rs.adjustGons = function (dD,dVH,cD,cVH) {
+  let {disp,extent} = this;
+ // let clrD  = {r:cD,g:0,b:255-cD};
+  let clrD  = {r:cD,g:0,b:0};
+  //let clrVH  = {r:cVH,g:0,b:255-cVH};
+  let clrVH  = {r:cVH,g:0,b:0};
+  this.adjustGon('gon00',dD,extent,Point.mk(-disp,-disp),clrD);
+  this.adjustGon('gon01',dVH,extent,Point.mk(-disp,0),clrVH);
+  this.adjustGon('gon02',dD,extent,Point.mk(-disp,disp),clrD);
   
-  this.adjustGon('gon10',dVH,extent,Point.mk(0,-disp),gclr);
-  this.adjustGon('gon11',dD,extent,Point.mk(0,0),gclr);
-  this.adjustGon('gon12',dVH,extent,Point.mk(0,disp,-disp),gclr);
+  this.adjustGon('gon10',dVH,extent,Point.mk(0,-disp),clrVH);
+  this.adjustGon('gon11',dD,extent,Point.mk(0,0),clrD);
+  this.adjustGon('gon12',dVH,extent,Point.mk(0,disp,-disp),clrVH);
   
-  this.adjustGon('gon20',dD,extent,Point.mk(disp,-disp),gclr);
-  this.adjustGon('gon21',dVH,extent,Point.mk(disp,0),gclr);
-  this.adjustGon('gon22',dD,extent,Point.mk(disp,disp),gclr);
+  this.adjustGon('gon20',dD,extent,Point.mk(disp,-disp),clrD);
+  this.adjustGon('gon21',dVH,extent,Point.mk(disp,0),clrVH);
+  this.adjustGon('gon22',dD,extent,Point.mk(disp,disp),clrD);
 }
 rs.updateState = function () {
   let {pstate} = this;
   let {cstate,pspace} = pstate;
   debugger;
   let valx = cstate.x.value;
+  let valcx = cstate.cx.value;
   let valy = cstate.y.value;
+  let valcy = cstate.cy.value;
   let valxsq = valx*valx;
   let valysq = valy*valy;
-  console.log('x',valxsq,'y',valysq);
-  this.adjustGons(valxsq,valysq);
+  //console.log('x',valxsq,'y',valysq,'valcx',valcx,'valcy',valcy);
+  console.log('valcx',valcx,'valcy',valcy);
+  this.adjustGons(valxsq,valysq,valcx,valcy);
 }
 
 
