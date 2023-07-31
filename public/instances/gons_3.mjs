@@ -10,8 +10,8 @@ rs.setName('gons_3');
 rs.pstate = {pspace:{},cstate:{}};
 
 let wd=100;
-let topParams = {width:wd,height:wd,frameStrokee:'white',frameStrokeWidth:0.1,framePadding:.6*wd,stepsPerMove:10,numStepss:24,numSteps:300, numCubes:15,
-  dim:40,disp:48,numSegs:15,gray:100,delta:20
+let topParams = {width:wd,height:wd,frameStrokee:'white',frameStrokeWidth:0.1,framePadding:.6*wd,stepsPerMove:10,numStepss:24,numSteps:2000, numCubes:15,
+  dim:40,disp:50,numSegs:10,gray:100,delta:20
  
   };
   
@@ -22,10 +22,10 @@ Object.assign(rs,topParams);
 rs.addSweepPath = function (params) {
   let {pstate} = this;
   let {cstate,pspace} = pstate;
-  let {name:nm,min,max,vel,sinusoidal,bounce,initVal} = params;
+  let {name:nm,min,max,vel,sinusoidal,bounce,initVal,down} = params;
   let ps = {kind:'sweep',min,max,sinusoidal,vel,bounce};
   pspace[nm] = ps;
-  cstate[nm] = {value:initVal};
+  cstate[nm] = {value:initVal,down};
 }
  // let {sinusoidal,min,max,vel,bounce,startDown,once,startAtStep:sas} = pspc;
 
@@ -55,47 +55,62 @@ rs.initialize = function () {
   this.initProtos();
   this.addFrame();
  
-  let extent = Point.mk(dim,dim);
+  let extent = this.extent = Point.mk(dim,dim);
  
-  const adjustGon = (nm,d,ps,clr) => {
-    let gon = this[nm];
-    let corners = gon?gon.corners:undefined;
-    let gon = this.genGonGon(extent,d,nc,corners);
-    this.set(nm,gon);
-    gon.moveto(ps);
-    let fill = `rgb(${clr.r},${clr.g},${clr.b})`;
-    gon.fill = fill;
-  }
 
   
   let dVH = 150;//  inner vertical and horizontal
   let dD = 50;//diagonal
   //let gclr = {r:0,g:0,b:0};
-  let gclr = {r:gray,g:gray,b:gray};
+  let gclr = this.gclr = {r:gray,g:gray,b:gray};
 
   debugger;
-  
-   addGon('gon00',dD,Point.mk(-disp,-disp),gclr);
-  addGon('gon01',dVH,Point.mk(-disp,0),gclr);
-  addGon('gon02',dD,Point.mk(-disp,disp),gclr);
-  
-  addGon('gon10',dVH,Point.mk(0,-disp),gclr);
-  addGon('gon11',dD,Point.mk(0,0),gclr);
-  addGon('gon12',dVH,Point.mk(0,disp,-disp),gclr);
-  
-  addGon('gon20',dD,Point.mk(disp,-disp),gclr);
-  addGon('gon21',dVH,Point.mk(disp,0),gclr);
-  addGon('gon22',dD,Point.mk(disp,disp),gclr);
-  this.addSweepPath({name:'x',min:0,max:10,vel:2,initVal:0});
+  this.adjustGons(dD,dVH);
+  let minval = Math.sqrt(30);
+  let maxval = Math.sqrt(250);
+  this.addSweepPath({name:'x',min:minval,max:maxval,vel:.5,bounce:1,down:1,sinusoidal:1,initVal:minval+0.1*(maxval-minval)});
+  this.addSweepPath({name:'y',min:minval,max:maxval,vel:.5,bounce:1,down:1,sinusoidal:1,initVal:maxval});
+}
+
+rs.adjustGon = function (nm,d,extent,ps,clr) {
+  debugger;
+  let {numSegs} = this;
+  let gon = this[nm];
+  let newgon = this.genGonGon(extent,d,numSegs,gon);
+  if (gon) {
+    gon.update();
+    gon.show();
+    return;
+  }
+  this.set(nm,newgon);
+  newgon.moveto(ps);
+  let fill = `rgb(${clr.r},${clr.g},${clr.b})`;
+  newgon.fill = fill;
 }
 rs.adjustGons = function (dD,dVH) {
+  let {disp,extent,gclr} = this;
+  this.adjustGon('gon00',dD,extent,Point.mk(-disp,-disp),gclr);
+  this.adjustGon('gon01',dVH,extent,Point.mk(-disp,0),gclr);
+  this.adjustGon('gon02',dD,extent,Point.mk(-disp,disp),gclr);
+  
+  this.adjustGon('gon10',dVH,extent,Point.mk(0,-disp),gclr);
+  this.adjustGon('gon11',dD,extent,Point.mk(0,0),gclr);
+  this.adjustGon('gon12',dVH,extent,Point.mk(0,disp,-disp),gclr);
+  
+  this.adjustGon('gon20',dD,extent,Point.mk(disp,-disp),gclr);
+  this.adjustGon('gon21',dVH,extent,Point.mk(disp,0),gclr);
+  this.adjustGon('gon22',dD,extent,Point.mk(disp,disp),gclr);
 }
 rs.updateState = function () {
   let {pstate} = this;
   let {cstate,pspace} = pstate;
   debugger;
-  let val = cstate.x.value;
-  console.log('value=',val);
+  let valx = cstate.x.value;
+  let valy = cstate.y.value;
+  let valxsq = valx*valx;
+  let valysq = valy*valy;
+  console.log('x',valxsq,'y',valysq);
+  this.adjustGons(valxsq,valysq);
 }
 
 

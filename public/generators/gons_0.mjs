@@ -74,7 +74,7 @@ rs.genSideParams = function (extent,d,ornt,genLines) {
 }
 
 
-rs.genCorners = function (center,radius,theta0,theta1,numCorners,icorners) {
+rs.genCorners = function (center,radius,theta0,theta1,numCorners,icorners,idx) {
  // debugger;
   let adjust = !!icorners;
   let corners = adjust?icorners:[];
@@ -85,7 +85,7 @@ rs.genCorners = function (center,radius,theta0,theta1,numCorners,icorners) {
     let v = Point.mk(Math.sin(th),Math.cos(th)).times(radius);
     let p = center.plus(v);
     if (adjust) {
-      corners[i]=p;
+      corners[idx+i]=p;
     } else {
       corners.push(p);
     }
@@ -93,10 +93,10 @@ rs.genCorners = function (center,radius,theta0,theta1,numCorners,icorners) {
   return corners;
 }
 
-rs.genCorners1 = function (extent,d,ornt,numCorners,icorners) {
+rs.genCorners1 = function (extent,d,ornt,numCorners,icorners,idx) {
   let sp = this.genSideParams(extent,d,ornt,0);
   let {center,radius,theta0,theta1} = sp;
-  return this.genCorners(center,radius,theta0,theta1,numCorners,icorners);
+  return this.genCorners(center,radius,theta0,theta1,numCorners,icorners,idx);
 }
 
 rs.genRectGon = function (extent,nsegs,d) {
@@ -113,12 +113,23 @@ rs.genRectGon = function (extent,nsegs,d) {
  }
  
  
-rs.genGonGon = function (extent,d,nsegs) {
+rs.genGonGon = function (extent,d,nsegs,gon) {
+  let {numSegs} = this;
   let isnum = typeof d === 'number';
-  let crnsL = this.genCorners1(extent,isnum?d:d[0],'left',nsegs);
-  let crnsU = this.genCorners1(extent,isnum?d:d[1],'up',nsegs);
-  let crnsR = this.genCorners1(extent,isnum?d:d[2],'right',nsegs);
-  let crnsD = this.genCorners1(extent,isnum?d:d[3],'down',nsegs);
+  let idx = 0;
+  debugger;
+  let icorners = gon?gon.corners:undefined;
+  let crnsL = this.genCorners1(extent,isnum?d:d[0],'left',nsegs,icorners,idx);
+  idx += numSegs;
+  let crnsU = this.genCorners1(extent,isnum?d:d[1],'up',nsegs,icorners,idx);
+  idx += numSegs;
+  let crnsR = this.genCorners1(extent,isnum?d:d[2],'right',nsegs,icorners,idx);
+  idx += numSegs;
+  let crnsD = this.genCorners1(extent,isnum?d:d[3],'down',nsegs,icorners,idx);
+  idx += numSegs;
+  if (gon) {
+    return gon;
+  }
   let crns = crnsL.concat(crnsU,crnsR,crnsD);
   let agon = this.gonP.instantiate();
   agon.corners = crns;
