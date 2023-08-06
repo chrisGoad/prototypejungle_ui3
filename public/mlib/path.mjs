@@ -186,14 +186,16 @@ item.sinusoidVal = function (sv,ev,ivel,cstep) {
   
   let fr = cstep/steps;
   let nvl = down?sv - fr*delta:sv+fr*delta;
-  
+  let nnvl = down?sv - cstep*vel:sv+cstep*vel;
+  console.log('cstep',cstep,'vel',vel,'nvl',nvl,'nnvl',nnvl);
   let phase = (Math.PI)*(cstep/steps) - Math.PI/2; 
   let nvn =  (1+ Math.sin(phase))/2;
   let nv = down?sv - nvn*delta:sv+nvn*delta;
   if (isNaN(nvl)) {
     debugger;
   }
-  return {nosin:nvl,sin:nv};
+  debugger;
+  return {nosin:nnvl,sin:nv};
 }
 
 item.adjustSweepToNewStep = function (pstate,component,nstep) {
@@ -308,6 +310,15 @@ item.sweepNextState = function (pspace,cstate,component) {
  // csc.value = nosin;
 }    
 
+
+item.addSweepPath = function (params) {
+  let {pstate} = this;
+  let {cstate,pspace} = pstate;
+  let {name:nm,min,max,vel,sinusoidal,bounce,initVal,down} = params;
+  let ps = {kind:'sweep',min,max,sinusoidal,vel,bounce};
+  pspace[nm] = ps;
+  cstate[nm] = {value:initVal,down};
+}
 
 item.sweepFixedDurNextState = function (pspace,cstate,component) {
   //debugger;

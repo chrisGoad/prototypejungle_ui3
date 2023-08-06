@@ -216,6 +216,8 @@ c:\ffmpeg\bin\ffmpeg  -framerate 15 -i animations/paths_10_f%03d.jpg -s 500x500 
 c:\ffmpeg\bin\ffmpeg  -framerate 15 -i animations/emergence_f%03d.jpg -s 500x500  export/emergence.mp4
 c:\ffmpeg\bin\ffmpeg  -framerate 15 -i animations/emergence_f%03d.jpg -s 500x500  export/emergence.gif
 c:\ffmpeg\bin\ffmpeg  -framerate 15 -i animations/cubes_1_f%03d.jpg -s 500x500  export/cubes_1.mp4
+c:\ffmpeg\bin\ffmpeg  -framerate 30 -i animations/gons_3_f%03d.jpg -s 500x500  export/gons_3.gif
+c:\ffmpeg\bin\ffmpeg  -framerate 30 -i animations/spin_0_f%03d.jpg -s 500x500  export/spin_0.gif
 
 
 rm animations/spatter0_7*

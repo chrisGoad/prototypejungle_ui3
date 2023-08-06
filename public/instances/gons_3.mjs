@@ -10,15 +10,15 @@ rs.setName('gons_3');
 rs.pstate = {pspace:{},cstate:{}};
 
 let wd=100;
-let topParams = {width:wd,height:wd,frameStrokee:'white',frameStrokeWidth:0.1,framePadding:.6*wd,stepsPerMove:10,numStepss:24,numSteps:2000, numCubes:15,
-  dim:40,disp:50,numSegs:10,gray:100,delta:20
+let topParams = {width:wd,height:wd,frameStrokee:'white',frameStrokeWidth:0.1,framePadding:.6*wd,stepsPerMove:10,numCubes:15,
+  dim:40,disp:50,numSegs:10,gray:100,delta:20,saveAnimation:1
  
   };
   
 
 
 Object.assign(rs,topParams);
-
+/*
 rs.addSweepPath = function (params) {
   let {pstate} = this;
   let {cstate,pspace} = pstate;
@@ -28,7 +28,7 @@ rs.addSweepPath = function (params) {
   cstate[nm] = {value:initVal,down};
 }
  // let {sinusoidal,min,max,vel,bounce,startDown,once,startAtStep:sas} = pspc;
-
+*/
 rs.initProtos = function () {
   let circleP = this.circleP = circlePP.instantiate();
   circleP.dimension = 2;
@@ -69,7 +69,14 @@ rs.initialize = function () {
   let minval = Math.sqrt(30);
   let maxval = Math.sqrt(250);
   let rng = maxval - minval;
-  let vel = 0.25;
+  let vel = 0.125;
+  this.numSteps = 2*Math.floor(rng/vel);
+  console.log('numSteps',this.numSteps,'vel',vel);
+  vel = 0.25*(rng/vel)/this.numSteps;
+  this.numSteps = this.numSteps*3+1;
+   //this.numSteps = 2*Math.floor(rng/vel);
+     console.log('numSteps',this.numSteps,'vel',vel);
+
   this.addSweepPath({name:'x',min:minval,max:maxval,vel,bounce:1,down:1,sinusoidal:1,initVal:minval+0.5*rng});
   this.addSweepPath({name:'y',min:minval,max:maxval,vel,bounce:1,down:1,sinusoidal:1,initVal:maxval});
   let mincval=100;
