@@ -11,8 +11,8 @@ rs.setName('spin_0');
 rs.pstate = {pspace:{},cstate:{}};
 
 let wd=100;
-let topParams = {width:wd,height:wd,frameStrokee:'white',frameStrokeWidth:0.1,framePadding:.6*wd,numSteps:201/*1000*/,saveAnimation:1,
-  numSpinners:16,shapesPerSpinner:30
+let topParams = {width:wd,height:wd,frameStrokee:'white',frameStrokeWidth:0.1,framePadding:.6*wd,numSteps:138/*1000*/,saveAnimation:1,
+  numSpinners:32,shapesPerSpinner:30
   };
   
 rs.addSpinner = function (params) {
@@ -125,12 +125,15 @@ rs.initialize = function () {
   let maxval = 2*Math.PI-0.0002;
   let lowVel = (2*Math.PI)/400;
   let highVel = (2*Math.PI)/200;
-  let midVel = (2*Math.PI)/200;
+  let midVel = (2*Math.PI)/100;
   let midi = nsp/2;
+  let qi = nsp/4
+  let qo = nsp-nsp/4
   //let velDelta = (highVel-lowVel)/(nsp-1);
   let velDelta = (midVel-lowVel)/(nsp-1);
   for (let i=0;i<nsp;i++) {
-    let ifm = midi-Math.abs(i-midi);
+   // let ifm = midi-Math.abs(i-midi);
+    let ifm = midi-Math.min(Math.abs(i-qo),Math.abs(i-qi));
     this.addSweepPath({name:'x'+i,min:minval,max:maxval,vel:lowVel+ifm*velDelta,bounce:0,down:0,sinusoidal:0,initVal:0});
     //this.addSweepPath({name:'x'+i,min:minval,max:maxval,vel:lowVel+i*velDelta,bounce:0,down:0,sinusoidal:0,initVal:0});
   }
