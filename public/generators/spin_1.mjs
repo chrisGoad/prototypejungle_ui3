@@ -11,19 +11,25 @@ rs.setName('spin_0');
 rs.pstate = {pspace:{},cstate:{}};
 
 let wd=100;
-let topParams = {width:wd,height:wd,frameStrokee:'white',frameStrokeWidth:0.1,framePadding:.1*wd,numSteps:138/*1000*/,saveAnimation:1,
-  numSpinners:32,shapesPerSpinner:30
+let topParams = {width:wd,height:wd,frameStrokee:'white',frameStrokeWidth:0.1,framePadding:.1*wd,numSteps:4*138/*1000*/,saveAnimation:1,
+  numSpinners:32,shapesPerSpinner:30,pulseDurLow:30,pulseDurHigh:50
   };
   
 rs.addSpinner = function (params) {
   let {name,center,radius,numShapes:ns,shapeP} = params;
-  let {shapesPerSpinner:sps}= this;
+  let {pulseDurLow:pDL,pulseDurHigh:pDH,shapesPerSpinner:sps} = this;
   let sp = containerShape.mk();
+  let pdDelta = pDH-pDL;
   this.set(name,sp);
   for (let i=0;i<sps;i++) {
     let sh = shapeP.instantiate();
     let nm = 's'+i;
     sp.set(nm,sh);
+    let pdnm = 'pdur'+i;
+    let pd = pDL+ Math.random()*pdDelta;
+    sp[pdnm] = pd;
+    sp['pv'+i] = 1;
+    sp['pDown'+i] = 1;
   }
   sp.numShapes = sps;
   sp.radius = radius;
@@ -48,6 +54,32 @@ rs.spinTo = function (sp,theta) {
     let vec = Point.mk(Math.cos(a),Math.sin(a)).times(radius);
     let p = center.plus(vec);
     sh.moveto(p);
+    debugger;
+    let pdur = sp['pdur'+i];
+    let pvid = 'pv'+i;
+    let pv= sp[pvid];
+    let pstep = 1/pdur;
+    let pDid = 'pDown'+i;
+    let pDown= sp[pDid]
+    let npv;
+    if (pDown) {
+      npv = pv - pstep;
+      if (npv < 0.0001) {
+        sp[pDid] = 0;
+      }
+    } else {
+      npv = pv+pstep;
+      if (npv > 0.999) {
+        sp[pDid] = 1;
+      }
+    }
+    sp[pvid] =npv;
+    let rv = 50+Math.floor(npv*100);
+    let gv = 50+Math.floor(npv*150);
+    let bv = 5+Math.floor(npv*200);
+    let fill = `rgb(${rv},${gv},${bv})`;
+    console.log(i,'i','pdur',pdur,'pv',pv,'pDown',pDown,'npv',npv,'fill',fill);
+    sh.fill = fill;       
      sh.update();
     sh.show();
   }
