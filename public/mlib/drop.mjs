@@ -52,6 +52,7 @@ rs.dropCenters = function () {
   
 rs.generateDrops = function (params) {
   let {shapesC,drops,numRows,randomGridsForShapes,positions,saveState,pointFilter,noShapes} = this;
+  debugger;
   let shapes;
   if (!shapesC) { 
     shapesC = this.set('shapesC',containerShape.mk());

@@ -7,12 +7,12 @@ let rs = basicP.instantiate();
 import {rs as addPathMethods} from '/mlib/path.mjs';	
 addPathMethods(rs);
 
-rs.setName('spin_0');
+rs.setName('spin_1');
 rs.pstate = {pspace:{},cstate:{}};
 
 let wd=100;
-let topParams = {width:wd,height:wd,frameStrokee:'white',frameStrokeWidth:0.1,framePadding:.1*wd,numSteps:4*138/*1000*/,saveAnimation:1,
-  numSpinners:32,shapesPerSpinner:30,pulseDurLow:30,pulseDurHigh:50
+let topParams = {width:wd,height:wd,frameStrokee:'white',frameStrokeWidth:0.1,framePadding:.1*wd,numSteps:8*138/*1000*/,saveAnimation:1,
+  numSpinners:32,shapesPerSpinner:15,pulseDurLow:20,pulseDurHigh:50
   };
   
 rs.addSpinner = function (params) {
@@ -25,11 +25,21 @@ rs.addSpinner = function (params) {
     let sh = shapeP.instantiate();
     let nm = 's'+i;
     sp.set(nm,sh);
-    let pdnm = 'pdur'+i;
-    let pd = pDL+ Math.random()*pdDelta;
-    sp[pdnm] = pd;
-    sp['pv'+i] = 1;
-    sp['pDown'+i] = 1;
+    let pdnmr = 'pdurr'+i;
+    let pdnmg = 'pdurg'+i;
+    let pdnmb = 'pdurb'+i;
+    let pdr = pDL+ Math.random()*pdDelta;
+    let pdg = pDL+ Math.random()*pdDelta;
+    let pdb = pDL+ Math.random()*pdDelta;
+    sp[pdnmr] = pdr;
+    sp[pdnmg] = pdg;
+    sp[pdnmb] = pdb;
+    sp['pvr'+i] = 1;
+    sp['pvg'+i] = 1;
+    sp['pvb'+i] = 1;
+    sp['pDownr'+i] = 1;
+    sp['pDowng'+i] = 1;
+    sp['pDownb'+i] = 1;
   }
   sp.numShapes = sps;
   sp.radius = radius;
@@ -55,30 +65,34 @@ rs.spinTo = function (sp,theta) {
     let p = center.plus(vec);
     sh.moveto(p);
     debugger;
-    let pdur = sp['pdur'+i];
-    let pvid = 'pv'+i;
-    let pv= sp[pvid];
-    let pstep = 1/pdur;
-    let pDid = 'pDown'+i;
-    let pDown= sp[pDid]
-    let npv;
-    if (pDown) {
-      npv = pv - pstep;
-      if (npv < 0.0001) {
-        sp[pDid] = 0;
+    const forColor = (c) => {
+      let pdur = sp['pdur'+c+i];
+      let pvid = 'pv'+c+i;
+      let pv = sp[pvid];
+      let pstep = 1/pdur;
+      let pDid = 'pDown'+c+i;
+      let pDown = sp[pDid];
+      let npv;
+      if (pDown) {
+        npv = pv - pstep;
+        if (npv < 0.0001) {
+          sp[pDid] = 0;
+        }
+      } else {
+        npv = pv+pstep;
+        if (npv > 0.999) {
+          sp[pDid] = 1;
+        }
       }
-    } else {
-      npv = pv+pstep;
-      if (npv > 0.999) {
-        sp[pDid] = 1;
-      }
+      sp[pvid] =npv;
+      let v = 100+Math.floor(npv*150);
+      return v;
     }
-    sp[pvid] =npv;
-    let rv = 50+Math.floor(npv*100);
-    let gv = 50+Math.floor(npv*150);
-    let bv = 5+Math.floor(npv*200);
-    let fill = `rgb(${rv},${gv},${bv})`;
-    console.log(i,'i','pdur',pdur,'pv',pv,'pDown',pDown,'npv',npv,'fill',fill);
+    let rv = forColor('r');
+    let gv = forColor('g');
+    let bv = forColor('b');
+    let fill = `rgb(${rv},${rv},${bv})`;
+   // console.log(i,'i','pdur',pdur,'pv',pv,'pDown',pDown,'npv',npv,'fill',fill);
     sh.fill = fill;       
      sh.update();
     sh.show();
