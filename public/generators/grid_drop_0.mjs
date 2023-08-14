@@ -6,7 +6,7 @@ let rs = basicP.instantiate();
 
 rs.setName('grid_drop_0');
 let ht = 100;
-let topParams = {numRows:201,numCols:201,width:ht,height:ht,framePadding:.0*ht,frameStrokee:'white'};
+let topParams = {numRows:201,numCols:201,width:ht,height:ht,numSeeds:200/*80*/,framePadding:.0*ht,frameStrokee:'white'};
 
 Object.assign(rs,topParams);
 
@@ -120,9 +120,9 @@ rs.inRing =  function (c,d) {
       }
      // this.fillCell(p);
     }
-  }
+  } 
   let xbot = y+d;  
-  if (xbot<=hnr) {
+  if (1 ||(xbot<=hnr)) {
     let left = Math.max(x+1-d,-hnc);
     let right = Math.min(x+d-1,hnc);
     for (let i=left;i<=right;i++) {
@@ -150,6 +150,7 @@ rs.inRing =  function (c,d) {
      // this.fillCell(p);
     }
   }
+  return;
   let right = x+d;  
   if (right<=hnc) {
     let top = Math.max(y-d,-hnr);
@@ -243,7 +244,7 @@ rs.initProtos = function () {
 }
   
 rs.initialize = function () {
-  let {width,height,numRows,numCols} = this;
+  let {width,height,numRows,numCols,numSeeds} = this;
   debugger;
   this.cellW = width/numCols;
   this.cellH = height/numRows;
@@ -251,16 +252,14 @@ rs.initialize = function () {
   this.addFrame();
   this.cells = {};
   let hnr = (numRows-1)/2;
-  let noc = 80;
-  let ntf = 0.8*Math.floor(numRows*numCols);
-  ntf = numRows*numCols-noc;
+  let ntf = numRows*numCols-numSeeds;
   let pf = Point.mk(0,-3,'blue');
   let p = Point.mk(0,0);
   //this.fillCell(p);
   //this.fillCell(pf,'blue');
  // let rect = this.inRing(p,3);
   //let rect = this.inRing(p,3);
-    this.fillRandomCells(noc);
+    this.fillRandomCells(numSeeds);
 
   this.paint(ntf);
   return;
