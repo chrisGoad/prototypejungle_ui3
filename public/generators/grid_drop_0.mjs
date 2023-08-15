@@ -6,9 +6,12 @@ let rs = basicP.instantiate();
 
 rs.setName('grid_drop_0');
 let ht = 100;
-let topParams = {numRows:201,numCols:201,width:ht,height:ht,numSeeds:200/*80*/,framePadding:.0*ht,frameStrokee:'white'};
+let topParams = {numRows:201,numCols:201,width:ht,height:ht,numSeeds:200/*80*/,framePadding:.0*ht,frameStrokee:'white',
+   //sides:['top','bot']};
+   sides:['topp','left','right']};
 
 Object.assign(rs,topParams);
+
 
 rs.randomCell = function () {
   //debugger;
@@ -102,15 +105,16 @@ rs.unfilledCells = function () {
 }
      
 rs.inRing =  function (c,d) {
- let {numRows:nr,numCols:nc}  = this;
+ let {numRows:nr,numCols:nc,sides}  = this;
  // first the top
+ let dm = d;//Math.ceil(0.2*d)
  let {x,y} = c;
  let hnc = (nc-1)/2;
  let hnr = (nr-1)/2;
  let xtop = y-d;  
- if (xtop>=-hnr) {
-    let left = Math.max(x+1-d,-hnc);
-    let right = Math.min(x+d-1,hnc);
+ if ((sides.indexOf('top')>-1)&&(xtop>=-hnr)) {
+    let left = Math.max(x+1-dm,-hnc);
+    let right = Math.min(x+dm-1,hnc);
     for (let i=left;i<=right;i++) {
       let p = Point.mk(i,xtop);
       let cnm = this.cellName(p);
@@ -122,9 +126,9 @@ rs.inRing =  function (c,d) {
     }
   } 
   let xbot = y+d;  
-  if (1 ||(xbot<=hnr)) {
-    let left = Math.max(x+1-d,-hnc);
-    let right = Math.min(x+d-1,hnc);
+  if ((sides.indexOf('bot')>-1)&&(xbot<=hnr)) {
+    let left = Math.max(x+1-dm,-hnc);
+    let right = Math.min(x+dm-1,hnc);
     for (let i=left;i<=right;i++) {
       let p = Point.mk(i,xbot);
       let cnm = this.cellName(p);
@@ -135,9 +139,8 @@ rs.inRing =  function (c,d) {
    //   this.fillCell(p);
     }
   }
-  return;
   let left = x-d;  
-  if (left>=-hnc) {
+  if ((sides.indexOf('left')>-1)&&(left>=-hnc)) {
     let top = Math.max(y-d,-hnr);
     let bot = Math.min(y+d,hnr);
     for (let j=top;j<=bot;j++) {
@@ -150,9 +153,8 @@ rs.inRing =  function (c,d) {
      // this.fillCell(p);
     }
   }
-  return;
   let right = x+d;  
-  if (right<=hnc) {
+  if ((sides.indexOf('right')>-1)&&(right<=hnc)) {
     let top = Math.max(y-d,-hnr);
     let bot = Math.min(y+d,hnr);
     for (let j=top;j<=bot;j++) {
@@ -171,13 +173,14 @@ rs.nearestFilledCell = function (c) {
   let {numRows:nr,numCols:nc} = this;
   let hnr = (nr-1)/2;
   let cr = 1;
+  //cr = 5;
   let fnd = 0;
-  while (cr <= hnr) {
+  while (cr <= Math.floor(1*hnr)) {
     let fnd = this.inRing(c,cr);
     if (fnd) {
       return fnd;
     }
-    cr++;
+    cr=cr+1;
   }
 }
   
@@ -212,6 +215,33 @@ rs.fillRandomCells = function (n) {
       }
     }
   }
+}
+
+
+
+rs.fillCellsAtInterval = function (iv) {
+  let {numRows:nr,numCols:nc} = this;
+  let hnr = (nr-1)/2;
+  let lwr = Math.floor(0.5*hnr);
+  let hnc = (nc-1)/2;
+  let cr = iv-hnr;
+  cr = -lwr;
+  let cnt = 0;
+  //while (cr < lwr) {
+  //while (cr < hnr) {
+  while (cr < lwr) {
+    let cc = iv-hnc;
+    while (cc < hnc) {
+      let c = Point.mk(cc,cr);
+      let fill = this.randomFill();
+      let r = this.fillCell(c,fill);
+      cc = cc+iv;
+      cnt++;
+    }
+    cr = cr + iv;
+  } 
+  return cnt;  
+
 }
 rs.paint = function (n) {
  let ncf = 0;
@@ -252,14 +282,16 @@ rs.initialize = function () {
   this.addFrame();
   this.cells = {};
   let hnr = (numRows-1)/2;
-  let ntf = numRows*numCols-numSeeds;
+  //let ntf = numRows*numCols-numSeeds;
   let pf = Point.mk(0,-3,'blue');
   let p = Point.mk(0,0);
   //this.fillCell(p);
   //this.fillCell(pf,'blue');
  // let rect = this.inRing(p,3);
   //let rect = this.inRing(p,3);
-    this.fillRandomCells(numSeeds);
+   // this.fillRandomCells(numSeeds);
+    numSeeds = this.fillCellsAtInterval(20);
+    let ntf = numRows*numCols-numSeeds;
 
   this.paint(ntf);
   return;
