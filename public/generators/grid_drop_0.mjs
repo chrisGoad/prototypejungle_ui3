@@ -8,7 +8,7 @@ rs.setName('grid_drop_0');
 let ht = 100;
 let topParams = {numRows:201,numCols:201,width:ht,height:ht,numSeeds:200/*80*/,framePadding:.0*ht,frameStrokee:'white',
    //sides:['top','bot']};
-   sides:['topp','left','right']};
+   sides:['top','bot','left','right']};
 
 Object.assign(rs,topParams);
 
@@ -73,7 +73,7 @@ rs.fillCell = function (c,fill) {
 }
 
 rs.fillWithNearestColor = function (c) {
-  let rect = this.nearestFilledCell(c);
+  let rect = this.findFilledCell(c);
   if (rect) {
     let fill = rect.fill;
     this.fillCell(c,fill);
@@ -169,21 +169,51 @@ rs.inRing =  function (c,d) {
   }
 }
 
-rs.nearestFilledCell = function (c) {
-  let {numRows:nr,numCols:nc} = this;
+rs.findFilledCell = function (c) {
+  let {numRows:nr,numCols:nc,nearest} = this;
   let hnr = (nr-1)/2;
-  let cr = 1;
+  let cr=nearest?1:hnr
+  //cr = hnr;
   //cr = 5;
   let fnd = 0;
-  while (cr <= Math.floor(1*hnr)) {
+  const condition = () => {
+    return nearest?cr <= Math.floor(1*hnr):cr>0;
+  }
+  while (condition()) {
     let fnd = this.inRing(c,cr);
     if (fnd) {
       return fnd;
     }
-    cr=cr+1;
+    cr=nearest?cr+1:cr-1;
   }
 }
-  
+
+rs.nearestFilledCell = function (c) {
+  return this.findFilledCell(c,1);
+}
+
+rs.farthestFilledCell = function (c) {
+  return this.findFilledCell(c,0);
+}
+/*
+rs.nearestFilledCell = function (c) {
+  let {numRows:nr,numCols:nc,near} = this;
+  let hnr = (nr-1)/2;
+  let cr = 1;
+  cr = hnr;
+  //cr = 5;
+  let fnd = 0;
+  //while (cr <= Math.floor(1*hnr)) {
+  while (cr > 0) {
+    let fnd = this.inRing(c,cr);
+    if (fnd) {
+      return fnd;
+    }
+    //cr=cr+1;
+    cr=cr-1;
+  }
+}
+ */ 
    
    
 rs.randomFill = function () {
