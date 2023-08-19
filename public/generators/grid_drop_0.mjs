@@ -327,7 +327,23 @@ rs.cellWithShift0 = function (c,shift) {
   return Point.mk(-rx,y);
 }
 
-rs.dpyShift = function (shift) {
+
+rs.cellWithShift1 = function (c,shift) {
+  let {numCols:nc} = this;
+  let {x,y} = c;
+  let hnc = (nc-1)/2;
+  let shx = x+shift;
+  if (shx <= hnc) {
+    let rx = (shx-hnc-hnc);
+    return Point.mk(-rx,y);
+  }
+  debugger;
+ 
+  return Point.mk(shx,y);
+
+}
+
+rs.dpyShift = function (shift,stage) {
   let {numRows:nr,numCols:nc,copiedFill:cf} = this;
   let hnr = (nr-1)/2;
   let hnc = (nc-1)/2;
@@ -336,7 +352,7 @@ rs.dpyShift = function (shift) {
     //for (let j=0;j<=0;j++) {
       let p = Point.mk(i,j);
       let pnm = this.cellName(p);
-      let c = this.cellWithShift0(p,shift);
+      let c = stage?this.cellWithShift1(p,shift):this.cellWithShift0(p,shift);
       let cnm = this.cellName(c);
       console.log('shift',shift,'pnm',pnm,'cnm',cnm);
       let prect = this[pnm];
@@ -385,7 +401,7 @@ rs.initialize = function () {
 
   this.paint(ntf);
   this.copyFill();
-  this.numSteps = numCols;
+  this.numSteps = 2*numCols-1;
   return;
   this.fillWithNearestColor(p);
 //  let rect = this.nearestFilledCell(p);
@@ -402,9 +418,13 @@ rs.initialize = function () {
 }
 
 rs.updateState = function () {
-  let {numSteps:ns,stepsSoFar:ssf} = this;
+  let {numSteps:ns,stepsSoFar:ssf,numCols:nc} = this;
   debugger;
-  this.dpyShift(ssf);
+  if  (ssf<=nc) {
+    this.dpyShift(ssf,0);
+  } else {
+    this.dpyShift(ssf-nc,1);
+  }
 }
 
 export {rs}
