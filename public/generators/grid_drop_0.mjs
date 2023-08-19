@@ -9,9 +9,9 @@ addAnimationMethods(rs);
 
 rs.setName('grid_drop_0');
 let ht = 100;
-let topParams = {numRows:31,numCols:31,width:ht,height:ht,numSeeds:200/*80*/,framePadding:.0*ht,frameStrokee:'white',numSteps:20,
+let topParams = {numRows:151,numCols:151,width:ht,height:ht,numSeeds:200/*80*/,framePadding:.0*ht,frameStrokee:'white',numSteps:20,
    //sides:['top','bot']};
-   sides:['topp','bott','left','right'],nearest:1};
+   sides:['topp','bott','left','right'],nearest:1,saveAnimation:1};
 
 Object.assign(rs,topParams);
 
@@ -322,8 +322,9 @@ rs.cellWithShift0 = function (c,shift) {
   if (shx <= hnc) {
     return Point.mk(shx,y);
   }
-  rx = -(shx-hnx);
-  return Point.mk(rx,y);
+  debugger;
+  let rx = (shx-hnc-hnc);
+  return Point.mk(-rx,y);
 }
 
 rs.dpyShift = function (shift) {
@@ -332,14 +333,16 @@ rs.dpyShift = function (shift) {
   let hnc = (nc-1)/2;
   for (let i=-hnc;i<=hnc;i++) {
     for (let j=-hnr;j<=hnr;j++) {
+    //for (let j=0;j<=0;j++) {
       let p = Point.mk(i,j);
       let pnm = this.cellName(p);
       let c = this.cellWithShift0(p,shift);
-      let cnm = this.cellName(p);
+      let cnm = this.cellName(c);
+      console.log('shift',shift,'pnm',pnm,'cnm',cnm);
       let prect = this[pnm];
-      let crect = this[cnm];
-      if (prect&&crect) { 
-        prect.fill = crect.fill;
+      let cfill = cf[cnm];
+      if (prect&&cfill) { 
+        prect.fill = cfill;
         prect.update();
       }
     }
@@ -375,13 +378,14 @@ rs.initialize = function () {
   //this.fillCell(pf,'blue');
  // let rect = this.inRing(p,3);
   //let rect = this.inRing(p,3);
-   // this.fillRandomCells(numSeeds);
-    numSeeds = this.fillCellsAtInterval(20);
-   numSeeds = this.fillCellsAtInterval(3);
+   this.fillRandomCells(numSeeds);
+    //numSeeds = this.fillCellsAtInterval(20);
+   //numSeeds = this.fillCellsAtInterval(3);
     let ntf = numRows*numCols-numSeeds-1;
 
   this.paint(ntf);
   this.copyFill();
+  this.numSteps = numCols;
   return;
   this.fillWithNearestColor(p);
 //  let rect = this.nearestFilledCell(p);
