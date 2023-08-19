@@ -1,14 +1,17 @@
 import {rs as rectPP} from '/shape/rectangle.mjs';
 import {rs as basicP} from '/generators/basics.mjs';
+import {rs as addAnimationMethods} from '/mlib/animate0.mjs';
 
 
 let rs = basicP.instantiate();
 
+addAnimationMethods(rs);
+
 rs.setName('grid_drop_0');
 let ht = 100;
-let topParams = {numRows:201,numCols:201,width:ht,height:ht,numSeeds:200/*80*/,framePadding:.0*ht,frameStrokee:'white',
+let topParams = {numRows:31,numCols:31,width:ht,height:ht,numSeeds:200/*80*/,framePadding:.0*ht,frameStrokee:'white',numSteps:20,
    //sides:['top','bot']};
-   sides:['top','bot','left','right']};
+   sides:['topp','bott','left','right'],nearest:1};
 
 Object.assign(rs,topParams);
 
@@ -172,7 +175,7 @@ rs.inRing =  function (c,d) {
 rs.findFilledCell = function (c) {
   let {numRows:nr,numCols:nc,nearest} = this;
   let hnr = (nr-1)/2;
-  let cr=nearest?1:hnr
+  let cr=nearest?1:Math.floor(1*hnr);
   //cr = hnr;
   //cr = 5;
   let fnd = 0;
@@ -293,7 +296,60 @@ rs.paint = function (n) {
   }
 }
  
+rs.copyFill = function () {
+  let {numRows:nr,numCols:nc} = this;
+  let cp = {};
+  let hnr = (nr-1)/2;
+  let hnc = (nc-1)/2;
+  for (let i=-hnc;i<=hnc;i++) {
+    for (let j=-hnr;j<=hnr;j++) {
+      let p = Point.mk(i,j);
+      let cnm = this.cellName(p);
+      let rect = this[cnm];
+      if (rect) {
+        cp[cnm] = rect.fill;
+      }
+    }
+  }
+  this.copiedFill = cp;
+}
 
+rs.cellWithShift0 = function (c,shift) {
+  let {numCols:nc} = this;
+  let {x,y} = c;
+  let hnc = (nc-1)/2;
+  let shx = x+shift;
+  if (shx <= hnc) {
+    return Point.mk(shx,y);
+  }
+  rx = -(shx-hnx);
+  return Point.mk(rx,y);
+}
+
+rs.dpyShift = function (shift) {
+  let {numRows:nr,numCols:nc,copiedFill:cf} = this;
+  let hnr = (nr-1)/2;
+  let hnc = (nc-1)/2;
+  for (let i=-hnc;i<=hnc;i++) {
+    for (let j=-hnr;j<=hnr;j++) {
+      let p = Point.mk(i,j);
+      let pnm = this.cellName(p);
+      let c = this.cellWithShift0(p,shift);
+      let cnm = this.cellName(p);
+      let prect = this[pnm];
+      let crect = this[cnm];
+      if (prect&&crect) { 
+        prect.fill = crect.fill;
+        prect.update();
+      }
+    }
+  }
+}
+        
+ 
+
+  
+  
 rs.initProtos = function () {
   let {cellW,cellH} = this;
   let rectP = this.rectP = rectPP.instantiate();
@@ -321,9 +377,11 @@ rs.initialize = function () {
   //let rect = this.inRing(p,3);
    // this.fillRandomCells(numSeeds);
     numSeeds = this.fillCellsAtInterval(20);
-    let ntf = numRows*numCols-numSeeds;
+   numSeeds = this.fillCellsAtInterval(3);
+    let ntf = numRows*numCols-numSeeds-1;
 
   this.paint(ntf);
+  this.copyFill();
   return;
   this.fillWithNearestColor(p);
 //  let rect = this.nearestFilledCell(p);
@@ -338,6 +396,12 @@ rs.initialize = function () {
   this.fillCell(Point.mk(2,2));
   this.fillCell(Point.mk(0,0));
 }
- 
+
+rs.updateState = function () {
+  let {numSteps:ns,stepsSoFar:ssf} = this;
+  debugger;
+  this.dpyShift(ssf);
+}
+
 export {rs}
   
