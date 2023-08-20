@@ -9,7 +9,7 @@ addAnimationMethods(rs);
 
 rs.setName('grid_drop_0');
 let ht = 100;
-let topParams = {numRows:151,numCols:151,width:ht,height:ht,numSeeds:200/*80*/,framePadding:.0*ht,frameStrokee:'white',numSteps:20,
+let topParams = {numRows:151,numCols:151,width:ht,height:ht,numSeeds:/*200*/80,framePadding:.0*ht,frameStrokee:'white',numSteps:20,
    //sides:['top','bot']};
    sides:['topp','bott','left','right'],nearest:1,saveAnimation:1};
 
@@ -312,6 +312,21 @@ rs.copyFill = function () {
     }
   }
   this.copiedFill = cp;
+  let rcp = {};
+  for (let i=-hnc;i<=hnc;i++) {
+    for (let j=-hnr;j<=hnr;j++) {
+      let p = Point.mk(i,j);
+      let c = Point.mk(-i,j);
+      if (((i===1)&&(j===0))||((i===-1)&&(j===0))) {
+        debugger;
+      }
+      let pnm = this.cellName(p);
+      let cnm = this.cellName(c);
+      let fill = cp[pnm];
+      rcp[cnm] = fill;
+      }
+    }
+    this.reversedFill = rcp;
 }
 
 rs.cellWithShift0 = function (c,shift) {
@@ -319,12 +334,15 @@ rs.cellWithShift0 = function (c,shift) {
   let {x,y} = c;
   let hnc = (nc-1)/2;
   let shx = x+shift;
+  let p;
   if (shx <= hnc) {
-    return Point.mk(shx,y);
+    p = Point.mk(shx,y);
+  } else {
+    let nx = (shx-hnc-hnc);
+    p = Point.mk(nx,y);
+    p.reversed = 1;
   }
-  debugger;
-  let rx = (shx-hnc-hnc);
-  return Point.mk(-rx,y);
+  return p;
 }
 
 
@@ -335,28 +353,29 @@ rs.cellWithShift1 = function (c,shift) {
   let shx = x+shift;
   if (shx <= hnc) {
     let rx = (shx-hnc-hnc);
-    return Point.mk(-rx,y);
+    return Point.mk(-shx,y);
   }
-  debugger;
  
-  return Point.mk(shx,y);
+  return Point.mk(shx-hnc,y);
 
 }
 
 rs.dpyShift = function (shift,stage) {
-  let {numRows:nr,numCols:nc,copiedFill:cf} = this;
+  let {numRows:nr,numCols:nc,copiedFill:cf,reversedFill:rf} = this;
   let hnr = (nr-1)/2;
   let hnc = (nc-1)/2;
   for (let i=-hnc;i<=hnc;i++) {
     for (let j=-hnr;j<=hnr;j++) {
-    //for (let j=0;j<=0;j++) {
+    //for (let j=-0;j<=0;j++) {
       let p = Point.mk(i,j);
       let pnm = this.cellName(p);
-      let c = stage?this.cellWithShift1(p,shift):this.cellWithShift0(p,shift);
+      //let c = stage?this.cellWithShift1(p,shift):this.cellWithShift0(p,shift);
+      let c = this.cellWithShift0(p,shift);
       let cnm = this.cellName(c);
-      console.log('shift',shift,'pnm',pnm,'cnm',cnm);
+      let reversed = c.reversed;
+      console.log('reversed','shift',shift,'pnm',pnm,'cnm',cnm);
       let prect = this[pnm];
-      let cfill = cf[cnm];
+      let cfill = stage?(reversed?cf[cnm]:rf[cnm]):(reversed?rf[cnm]:cf[cnm]);
       if (prect&&cfill) { 
         prect.fill = cfill;
         prect.update();
@@ -419,10 +438,13 @@ rs.initialize = function () {
 
 rs.updateState = function () {
   let {numSteps:ns,stepsSoFar:ssf,numCols:nc} = this;
-  debugger;
+  //debugger;
   if  (ssf<=nc) {
     this.dpyShift(ssf,0);
   } else {
+    if ((ssf - nc)>=2) {
+      debugger;
+    }
     this.dpyShift(ssf-nc,1);
   }
 }
