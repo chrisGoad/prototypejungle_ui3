@@ -6,6 +6,15 @@ import {rs as addAnimationMethods} from '/mlib/animate0.mjs';
 let rs = basicP.instantiate();
 
 addAnimationMethods(rs);
+rs.setName('line_loop_0');
+
+let ht = 100;
+let topParams = {width:ht,height:ht,framePadding:.0*ht,frameStroke:'white',numSteps:20,
+   //sides:['top','bot']};
+   saveAnimation:1};
+
+Object.assign(rs,topParams);
+
 
 rs.segSet = [];
 rs.segSetShifted = [];
@@ -19,8 +28,8 @@ rs.addSegment = function (end0,end1) {
   let {x:x1,y:y1} = end1;
   let seg = LineSegment.mk(end0,end1);
   let rseg = LineSegment.mk(Point.mk(-x0,y0),Point.mk(-x1,y1));
-  let segShifted = LineSegment.mk(Point.mk(0,y0),Point.mk(0,y0));
-  let rsegShifted = LineSegment.mk(Point.mk(0,y1),Point.mk(0,y1));
+  let segShifted = LineSegment.mk(Point.mk(0,y0),Point.mk(0,y1));
+  let rsegShifted = LineSegment.mk(Point.mk(0,y0),Point.mk(0,y1));
   segSet.push(seg);
   segSetShifted.push(segShifted);
   rsegSet.push(rseg);
@@ -49,11 +58,11 @@ rs.shiftSegs = function (sgs,sgsShifted,shift) {
 
 rs.shiftAllSegs = function (shift) {
   let {segSet,rsegSet,segSetShifted,rsegSetShifted} = this;
-  this.shiftSegs(segSet,segSetShifted);
-  this.shiftSegs(rsegSet,rsegSetShifted);
+  this.shiftSegs(segSet,segSetShifted,shift);
+  this.shiftSegs(rsegSet,rsegSetShifted,shift);
 }
 
-rs.dpyShifted = function (shift) {
+rs.dpyShifted = function () {
   let {segSetShifted,linePool} = this;
   let ln =segSetShifted.length;
   const dpySeg = (seg,line) => {
@@ -83,8 +92,8 @@ rs.initialize = function () {
   debugger;
   this.addSegment(left,top);
   this.addSegment(left,bot);
-  this.shiftAllSegs();
-  this.dpyShifted(0);
+  this.shiftAllSegs(40);
+  this.dpyShifted();
 }
   
 
