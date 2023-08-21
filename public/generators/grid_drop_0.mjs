@@ -416,7 +416,7 @@ rs.initialize = function () {
    this.fillRandomCells(numSeeds);
     //numSeeds = this.fillCellsAtInterval(20);
    //numSeeds = this.fillCellsAtInterval(3);
-    let ntf = numRows*numCols-numSeeds-1;
+    let ntf = numRows*numCols-numSeeds;
 
   this.paint(ntf);
   this.copyFill();

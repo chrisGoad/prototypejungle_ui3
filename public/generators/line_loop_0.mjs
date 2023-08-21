@@ -19,10 +19,10 @@ rs.addSegment = function (end0,end1) {
   let {x:x1,y:y1} = end1;
   let seg = LineSegment.mk(end0,end1);
   let rseg = LineSegment.mk(Point.mk(-x0,y0),Point.mk(-x1,y1));
-  let segShifted = LineSegment.mk(Point.mk(0,y0),Point.mk(0,y0);
-  let rsegShifted = LineSegment.mk(Point.mk(0,y1),Point.mk(0,y1);
-  segSet.push(seg);,
-  segSetShifted.push(segShifted);,
+  let segShifted = LineSegment.mk(Point.mk(0,y0),Point.mk(0,y0));
+  let rsegShifted = LineSegment.mk(Point.mk(0,y1),Point.mk(0,y1));
+  segSet.push(seg);
+  segSetShifted.push(segShifted);
   rsegSet.push(rseg);
   rsegSetShifted.push(rsegShifted);
   let line = lineP.instantiate();
@@ -55,8 +55,8 @@ rs.shiftAllSegs = function (shift) {
 
 rs.dpyShifted = function (shift) {
   let {segSetShifted,linePool} = this;
-  let ln =segSegShifted.length;
-  const dpySeg = {seg,line) => {
+  let ln =segSetShifted.length;
+  const dpySeg = (seg,line) => {
     line.setEnds(seg.end0,seg.end1);
     line.update();
     line.show();
@@ -80,8 +80,10 @@ rs.initialize = function () {
   let left = Point.mk(-50,0);
   let top = Point.mk(50,-50);
   let bot = Point.mk(50,50);
+  debugger;
   this.addSegment(left,top);
   this.addSegment(left,bot);
+  this.shiftAllSegs();
   this.dpyShifted(0);
 }
   
