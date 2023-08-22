@@ -9,7 +9,7 @@ addAnimationMethods(rs);
 rs.setName('line_loop_0');
 
 let ht = 100;
-let topParams = {width:ht,height:ht,framePadding:.0*ht,frameStroke:'white',numSteps:20,
+let topParams = {width:ht,height:ht,framePadding:.0*ht,frameStroke:'white',numSteps:20,speed:10,numSteps:20,
    //sides:['top','bot']};
    saveAnimation:1};
 
@@ -47,6 +47,8 @@ rs.shiftSegs = function (sgs,sgsShifted,shift) {
     let {x:x1,y:y1} = end1;
     segShifted.end0.x = x0-shift;
     segShifted.end1.x = x1-shift;
+    segShifted.end0.y = y0;
+    segShifted.end1.y = y1;
   }
   let ln = sgs.length;
   for (let i=0;i<ln;i++) {
@@ -62,10 +64,58 @@ rs.shiftAllSegs = function (shift) {
   this.shiftSegs(rsegSet,rsegSetShifted,shift);
 }
 
+rs.xrangeIntersectSeg = function (seg,lb,ub) {
+  const intersectX=(seg,x)=> {
+    let {end0,end1} = seg;
+    let {x:x0,y:y0} = end0;
+    let {x:x1,y:y1} = end1;
+    if ((x1 <= x)||(x0 >= x)) {
+      return null;
+    }
+    let d0 = x-x0;
+    let d1 = x1-x;
+    let dx = x1-x0;
+    let dy = y1-y0;
+    let r = d0/dx;
+    let y = y0 + r*dy;
+    return y;
+    
+  }
+  let {end0,end1} = seg;
+  let {x:x0,y:y0} = end0;
+  let {x:x1,y:y1} = end1;
+  if ((x1<=lb) || (x0 >= ub)){
+    seg.hidden -=1;
+    return;
+  }
+  let ilb = intersectX(seg,lb);
+  let iub = intersectX(seg,ub);
+  seg.hidden = 0;
+  if (ilb !== null) {
+    end0.y = ilb;
+    end0.x= lb;
+  }
+   if (iub !== null) {
+    end0.y = iub;
+    end0.x= ub;
+  }
+}    
+
+rs.xrangeIntersectSegs = function (segs,lb,ub) {
+  let ln = segs.length;
+  for (let i=0;i<ln;i++) {
+     this.xrangeIntersectSeg(segs[i],lb,ub);
+  }
+}
+
 rs.dpyShifted = function () {
   let {segSetShifted,linePool} = this;
   let ln =segSetShifted.length;
   const dpySeg = (seg,line) => {
+    if (seg.hidden) {
+      line.hide();
+      return;
+    }
     line.setEnds(seg.end0,seg.end1);
     line.update();
     line.show();
@@ -82,6 +132,8 @@ rs.initProtos = function () {
 }
   
 rs.initialize = function () {
+  let {width} = this;
+  let hwd = 0.5*width;
   this.initProtos();
   this.addFrame();
   rs.set('linePool', arrayShape.mk());
@@ -91,11 +143,24 @@ rs.initialize = function () {
   let bot = Point.mk(50,50);
   debugger;
   this.addSegment(left,top);
+  
   this.addSegment(left,bot);
-  this.shiftAllSegs(40);
+  this.shiftAllSegs(0);
+  this.xrangeIntersectSegs(this.segSetShifted,-hwd,hwd);
   this.dpyShifted();
 }
   
 
+rs.updateState = function () {
+  let {numSteps:ns,stepsSoFar:ssf,speed,width} = this;
+  //debugger;
+  let hwd = 0.5*width;
+  let shift = Math.floor(speed*ssf);
+   this.shiftAllSegs(shift);
+   debugger;
+  this.xrangeIntersectSegs(this.segSetShifted,-hwd,hwd);
+  this.dpyShifted();
+ 
+}
 
 export {rs}
