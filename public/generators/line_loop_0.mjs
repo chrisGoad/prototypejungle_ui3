@@ -9,7 +9,7 @@ addAnimationMethods(rs);
 rs.setName('line_loop_0');
 
 let ht = 100;
-let topParams = {width:ht,height:ht,framePadding:.0*ht,frameStroke:'white',numSteps:20,speed:10,numSteps:20,
+let topParams = {width:ht,height:ht,framePadding:.0*ht,frameStrokee:'red',numSteps:20,speed:2,numSteps:20,
    //sides:['top','bot']};
    saveAnimation:1};
 
@@ -27,7 +27,7 @@ rs.addSegment = function (end0,end1) {
   let {x:x0,y:y0} = end0;
   let {x:x1,y:y1} = end1;
   let seg = LineSegment.mk(end0,end1);
-  let rseg = LineSegment.mk(Point.mk(-x0,y0),Point.mk(-x1,y1));
+  let rseg = LineSegment.mk(Point.mk(-x1,y1),Point.mk(-x0,y0));
   let segShifted = LineSegment.mk(Point.mk(0,y0),Point.mk(0,y1));
   let rsegShifted = LineSegment.mk(Point.mk(0,y0),Point.mk(0,y1));
   segSet.push(seg);
@@ -59,9 +59,9 @@ rs.shiftSegs = function (sgs,sgsShifted,shift) {
 }
 
 rs.shiftAllSegs = function (shift) {
-  let {segSet,rsegSet,segSetShifted,rsegSetShifted} = this;
+  let {segSet,rsegSet,segSetShifted,rsegSetShifted,width} = this;
   this.shiftSegs(segSet,segSetShifted,shift);
-  this.shiftSegs(rsegSet,rsegSetShifted,shift);
+  this.shiftSegs(rsegSet,rsegSetShifted,shift-width);
 }
 
 rs.xrangeIntersectSeg = function (seg,lb,ub) {
@@ -85,7 +85,7 @@ rs.xrangeIntersectSeg = function (seg,lb,ub) {
   let {x:x0,y:y0} = end0;
   let {x:x1,y:y1} = end1;
   if ((x1<=lb) || (x0 >= ub)){
-    seg.hidden -=1;
+    seg.hidden =1;
     return;
   }
   let ilb = intersectX(seg,lb);
@@ -96,8 +96,8 @@ rs.xrangeIntersectSeg = function (seg,lb,ub) {
     end0.x= lb;
   }
    if (iub !== null) {
-    end0.y = iub;
-    end0.x= ub;
+    end1.y = iub;
+    end1.x= ub;
   }
 }    
 
@@ -109,11 +109,13 @@ rs.xrangeIntersectSegs = function (segs,lb,ub) {
 }
 
 rs.dpyShifted = function () {
-  let {segSetShifted,linePool} = this;
+  let {segSetShifted,linePool,rsegSetShifted,rlinePool} = this;
   let ln =segSetShifted.length;
   const dpySeg = (seg,line) => {
     if (seg.hidden) {
       line.hide();
+      line.update();
+      
       return;
     }
     line.setEnds(seg.end0,seg.end1);
@@ -121,21 +123,25 @@ rs.dpyShifted = function () {
     line.show();
   }
   for (let i=0;i<ln;i++) {
-    dpySeg(segSetShifted[i],linePool[i]);
+   dpySeg(segSetShifted[i],linePool[i]);
+  }
+   for (let i=0;i<ln;i++) {
+    dpySeg(rsegSetShifted[i],rlinePool[i]);
   }
 }
     
 rs.initProtos = function () {
   let lineP = this.lineP = linePP.instantiate();
   lineP.stroke= 'rgb(255,255,255)';
-  lineP['stroke-width'] = 2;
+  lineP['stroke-width'] = .5;
 }
   
 rs.initialize = function () {
-  let {width} = this;
+  let {width,speed} = this;
   let hwd = 0.5*width;
   this.initProtos();
   this.addFrame();
+  this.numSteps = 2*Math.floor(width/speed);
   rs.set('linePool', arrayShape.mk());
   rs.set('rlinePool', arrayShape.mk());
   let left = Point.mk(-50,0);
@@ -147,18 +153,32 @@ rs.initialize = function () {
   this.addSegment(left,bot);
   this.shiftAllSegs(0);
   this.xrangeIntersectSegs(this.segSetShifted,-hwd,hwd);
+  this.xrangeIntersectSegs(this.rsegSetShifted,-hwd,hwd);
   this.dpyShifted();
 }
-  
+ 
+ 
 
 rs.updateState = function () {
-  let {numSteps:ns,stepsSoFar:ssf,speed,width} = this;
+  let {numSteps:ns,stepsSoFar:ssf,speed,width,segSet,rsegSet,segSetShifted,rsegSetShifted} = this;
   //debugger;
   let hwd = 0.5*width;
   let shift = Math.floor(speed*ssf);
-   this.shiftAllSegs(shift);
-   debugger;
+  ;
+  if (shift < width) {
+    this.shiftSegs(segSet,segSetShifted,shift);
+    this.shiftSegs(rsegSet,rsegSetShifted,shift-width);
+  } else {
+    debugger;
+    this.shiftSegs(segSet,segSetShifted,shift-2*width);
+    //this.shiftSegs(segSet,segSetShifted,-0);
+    this.shiftSegs(rsegSet,rsegSetShifted,shift-width);
+  }
+
+  
+   //this.shiftAllSegs(shift);
   this.xrangeIntersectSegs(this.segSetShifted,-hwd,hwd);
+  this.xrangeIntersectSegs(this.rsegSetShifted,-hwd,hwd);
   this.dpyShifted();
  
 }
