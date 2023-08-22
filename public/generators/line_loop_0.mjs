@@ -144,13 +144,25 @@ rs.initialize = function () {
   this.numSteps = 2*Math.floor(width/speed);
   rs.set('linePool', arrayShape.mk());
   rs.set('rlinePool', arrayShape.mk());
+  const addSegPair = (x) => {
+    let left = Point.mk(x-hwd,0);
+    let top = Point.mk(x+hwd,-hwd);
+    let bot = Point.mk(x+hwd,hwd);
+     this.addSegment(left,top);
+     this.addSegment(left,bot);
+  }
+  for (let i=0;i<=10;i++) {
+    addSegPair(i*5);
+  }
+  
+  /*
   let left = Point.mk(-50,0);
   let top = Point.mk(50,-50);
   let bot = Point.mk(50,50);
   debugger;
   this.addSegment(left,top);
   
-  this.addSegment(left,bot);
+  this.addSegment(left,bot);*/
   this.shiftAllSegs(0);
   this.xrangeIntersectSegs(this.segSetShifted,-hwd,hwd);
   this.xrangeIntersectSegs(this.rsegSetShifted,-hwd,hwd);
