@@ -27,7 +27,7 @@ rs.addSegment = function (end0,end1) {
   let {x:x0,y:y0} = end0;
   let {x:x1,y:y1} = end1;
   let nend0,nend1
-  if (x1<x0) {
+  /*if (x1<x0) {
     let svx0 = x0;
     let svy0 = y0;
     x0 = x1;
@@ -36,10 +36,10 @@ rs.addSegment = function (end0,end1) {
     y1 = svy0;
     nend0 = end1;
     nend1 = end0;
-  } else {
+  } else {*/
     nend0 = end0;
     nend1 = end1;
-  }
+  //}
     
   let seg = LineSegment.mk(nend0,nend1);
   let rseg = LineSegment.mk(Point.mk(-x1,y1),Point.mk(-x0,y0));
@@ -80,10 +80,26 @@ rs.shiftAllSegs = function (shift) {
 }
 
 rs.xrangeIntersectSeg = function (seg,lb,ub) {
+  let {end0,end1} = seg;
+  let {x:x0,y:y0} = end0;
+  let {x:x1,y:y1} = end1;
+  if (x1<x0) {
+     //seg.hidden = 1;
+     //return null;
+     debugger;
+    let svx0 = x0;
+    let svy0 = y0;
+    x0 = x1;
+    y0 = y1;
+    x1 = svx0;
+    y1 = svy0;
+    end0.x  = x0;
+    end0.y  = y0;
+    end1.x  = x1;
+    end1.y  = y1;
+  }
   const intersectX=(seg,x)=> {
-    let {end0,end1} = seg;
-    let {x:x0,y:y0} = end0;
-    let {x:x1,y:y1} = end1;
+ 
     if ((x1 <= x)||(x0 >= x)) {
       return null;
     }
@@ -96,9 +112,10 @@ rs.xrangeIntersectSeg = function (seg,lb,ub) {
     return y;
     
   }
-  let {end0,end1} = seg;
+  
+  /*let {end0,end1} = seg;
   let {x:x0,y:y0} = end0;
-  let {x:x1,y:y1} = end1;
+  let {x:x1,y:y1} = end1;*/
   if ((x1<=lb) || (x0 >= ub)){
     seg.hidden =1;
     return;

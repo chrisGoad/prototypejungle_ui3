@@ -26,8 +26,13 @@ rs.addTheSegments = function () {
     let left = Point.mk(x-hwd,0);
     let top = Point.mk(x+hwd,-hwd);
     let bot = Point.mk(x+hwd,hwd);
-     this.addSegment(left,top);
-     this.addSegment(left,bot);
+    if (Math.random() > 0.5) {
+      this.addSegment(left,top);
+      this.addSegment(left,bot);
+    } else {   
+      this.addSegment(top,left);
+      this.addSegment(bot,left);
+    }
   }
   for (let i=0;i<=10;i++) {
     addSegPair(i*5);
