@@ -26,7 +26,22 @@ rs.addSegment = function (end0,end1) {
   let {segSet,rsegSet,segSetShifted,rsegSetShifted,linePool,rlinePool,lineP} = this;
   let {x:x0,y:y0} = end0;
   let {x:x1,y:y1} = end1;
-  let seg = LineSegment.mk(end0,end1);
+  let nend0,nend1
+  if (x1<x0) {
+    let svx0 = x0;
+    let svy0 = y0;
+    x0 = x1;
+    y0 = y1;
+    x1 = svx0;
+    y1 = svy0;
+    nend0 = end1;
+    nend1 = end0;
+  } else {
+    nend0 = end0;
+    nend1 = end1;
+  }
+    
+  let seg = LineSegment.mk(nend0,nend1);
   let rseg = LineSegment.mk(Point.mk(-x1,y1),Point.mk(-x0,y0));
   let segShifted = LineSegment.mk(Point.mk(0,y0),Point.mk(0,y1));
   let rsegShifted = LineSegment.mk(Point.mk(0,y0),Point.mk(0,y1));

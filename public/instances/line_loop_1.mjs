@@ -28,7 +28,7 @@ rs.addTheSegments = function () {
    
      this.addSegment(center,e1);
   }
-  let ns = 10;
+  let ns = 100;
   for (let i=0;i<=ns;i++) {
     let a = (i*2*Math.PI)/ns;
     addSeg(a);
