@@ -9,7 +9,7 @@ addAnimationMethods(rs);
 rs.setName('line_loop_0');
 
 let ht = 100;
-let topParams = {width:ht,height:ht,framePadding:.0*ht,frameStrokee:'red',numSteps:20,speed:2,numSteps:20,
+let topParams = {width:ht,height:ht,framePadding:.0*ht,frameStrokee:'red',numSteps:20,speed:1,numSteps:20,
    //sides:['top','bot']};
    saveAnimation:1};
 
@@ -176,21 +176,25 @@ rs.updateState = function () {
   //debugger;
   let hwd = 0.5*width;
   let shift = Math.floor(speed*ssf);
-  ;
+  let smodw = shift%width;
   if (shift < width) {
     this.shiftSegs(segSet,segSetShifted,shift);
     this.shiftSegs(rsegSet,rsegSetShifted,shift-width);
+    this.xrangeIntersectSegs(this.segSetShifted,-hwd,hwd-shift);
+    this.xrangeIntersectSegs(this.rsegSetShifted,hwd-shift,hwd);
   } else {
     debugger;
     this.shiftSegs(segSet,segSetShifted,shift-2*width);
     //this.shiftSegs(segSet,segSetShifted,-0);
     this.shiftSegs(rsegSet,rsegSetShifted,shift-width);
+    //this.xrangeIntersectSegs(this.rsegSetShifted,-hwd,hwd-shift);
+    this.xrangeIntersectSegs(this.rsegSetShifted,-hwd,hwd);
+    //this.xrangeIntersectSegs(this.segSetShifted,hwd-shift,hwd);
+    this.xrangeIntersectSegs(this.segSetShifted,hwd-smodw,hwd);
+    //this.xrangeIntersectSegs(this.segSetShifted,hwd,hwd);
   }
 
   
-   //this.shiftAllSegs(shift);
-  this.xrangeIntersectSegs(this.segSetShifted,-hwd,hwd);
-  this.xrangeIntersectSegs(this.rsegSetShifted,-hwd,hwd);
   this.dpyShifted();
  
 }
