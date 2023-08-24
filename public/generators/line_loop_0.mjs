@@ -1,4 +1,4 @@
-import {rs as linePP} from '/shape/line.mjs';
+//import {rs as linePP} from '/shape/line.mjs';
 import {rs as basicP} from '/generators/basics.mjs';
 import {rs as addAnimationMethods} from '/mlib/animate0.mjs';
 
@@ -7,14 +7,14 @@ let rs = basicP.instantiate();
 
 addAnimationMethods(rs);
 rs.setName('line_loop_0');
-
+/*
 let ht = 100;
 let topParams = {width:ht,height:ht,framePadding:.0*ht,frameStrokee:'red',numSteps:20,speed:1,numSteps:20,
    //sides:['top','bot']};
    saveAnimation:1};
 
 Object.assign(rs,topParams);
-
+*/
 
 rs.segSet = [];
 rs.segSetShifted = [];
@@ -129,12 +129,12 @@ rs.dpyShifted = function () {
     dpySeg(rsegSetShifted[i],rlinePool[i]);
   }
 }
-    
+ /*   
 rs.initProtos = function () {
   let lineP = this.lineP = linePP.instantiate();
   lineP.stroke= 'rgb(255,255,255)';
   lineP['stroke-width'] = .5;
-}
+}*/
   
 rs.initialize = function () {
   let {width,speed} = this;
@@ -142,9 +142,10 @@ rs.initialize = function () {
   this.initProtos();
   this.addFrame();
   this.numSteps = 2*Math.floor(width/speed);
-  rs.set('linePool', arrayShape.mk());
-  rs.set('rlinePool', arrayShape.mk());
-  const addSegPair = (x) => {
+  this.set('linePool', arrayShape.mk());
+  this.set('rlinePool', arrayShape.mk());
+  this.addTheSegments();
+ /* const addSegPair = (x) => {
     let left = Point.mk(x-hwd,0);
     let top = Point.mk(x+hwd,-hwd);
     let bot = Point.mk(x+hwd,hwd);
@@ -153,7 +154,7 @@ rs.initialize = function () {
   }
   for (let i=0;i<=10;i++) {
     addSegPair(i*5);
-  }
+  }*/
   
   /*
   let left = Point.mk(-50,0);
