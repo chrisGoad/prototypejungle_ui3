@@ -220,6 +220,7 @@ c:\ffmpeg\bin\ffmpeg  -framerate 30 -i animations/gons_3_f%03d.jpg -s 500x500  e
 c:\ffmpeg\bin\ffmpeg  -framerate 15 -i animations/spin_0_f%03d.jpg -s 500x500  export/spin_0.gif
 c:\ffmpeg\bin\ffmpeg  -framerate 15 -i animations/grid_drop_0_f%03d.jpg -s 500x500  export/grid_drop_0.gif
 c:\ffmpeg\bin\ffmpeg  -framerate 30 -i animations/line_loop_0_f%03d.jpg -s 500x500  export/line_loop_0.gif
+c:\ffmpeg\bin\ffmpeg  -framerate 30 -i animations/line_loop_1_f%03d.jpg -s 500x500  export/line_loop_1.gif
 
 
 rm animations/spatter0_7*

@@ -6,7 +6,7 @@ rs.setName('line_loop_1');
 
 
 let ht = 100;
-let topParams = {width:ht,height:ht,framePadding:.0*ht,frameStrokee:'red',numSteps:20,speed:1,numSteps:20,numSpokes:100,
+let topParams = {width:ht,height:ht,framePadding:.0*ht,frameStrokee:'red',numSteps:20,speed:1,numSteps:20,numSpokes:200,
    //sides:['top','bot']};
    saveAnimation:1};
 
@@ -16,7 +16,7 @@ Object.assign(rs,topParams);
 rs.initProtos = function () {
   let lineP = this.lineP = linePP.instantiate();
   lineP.stroke= 'rgb(255,255,255)';
-  lineP['stroke-width'] = .5;
+  lineP['stroke-width'] = .1;
 }
 
 rs.addTheSegments = function () {

@@ -79,7 +79,9 @@ rs.shiftAllSegs = function (shift) {
   this.shiftSegs(rsegSet,rsegSetShifted,shift-width);
 }
 
-rs.rectIntersectSeg = function (rect,seg) {
+rs.rectIntersectSeg = function (rect,iseg) {
+debugger;
+  let seg = iseg.lengthen(1.01);
   let {end0,end1} = seg;
   let c0 = rect.contains(end0);
   let c1 = rect.contains(end1);
@@ -96,7 +98,8 @@ rs.rectIntersectSeg = function (rect,seg) {
     nend0 = c0?end0:end1;
     nend1 = is0?is0:(is1?is1:(is2?is2:is3));
     if (!nend1) {
-      debugger;
+      return null;
+      //debugger;
     }
     return LineSegment.mk(nend0,nend1);
   }
@@ -113,11 +116,8 @@ rs.rectIntersectSeg = function (rect,seg) {
       }
     }
   }
-  let ci = checkSide(is1)
-  if (ci) {
-    return ci;
-  }
-  ci = checkSide(is2)
+  checkSide(is1)
+  let ci = checkSide(is2)
   if (ci) {
     return ci;
   }
@@ -203,18 +203,22 @@ rs.updateState = function () {
   let hwd = 0.5*width;
   let shift = Math.floor(speed*ssf);
   let smodw = shift%width;
+  let eps = 0;
   if (shift < width) {
     this.shiftSegs(segSet,segSetShifted,shift);
     this.shiftSegs(rsegSet,rsegSetShifted,shift-width);
-    debugger;
-    this.boxIntersectSegs(this.segSetShifted,-hwd,hwd-shift,-hwd,hwd);
-    this.boxIntersectSegs(this.rsegSetShifted,hwd-shift,hwd,-hwd,hwd);
+   // debugger;
+    this.boxIntersectSegs(this.segSetShifted,-hwd,eps+hwd-shift,-hwd,hwd);
+    this.boxIntersectSegs(this.rsegSetShifted,hwd-shift-eps,hwd,-hwd,hwd);
   } else {
     debugger;
-    this.shiftSegs(segSet,segSetShifted,shift-2*width);
-    this.shiftSegs(rsegSet,rsegSetShifted,shift-width);
-    this.boxIntersectSegs(this.rsegSetShifted,-hwd,hwd,-hwd,hwd);
-    this.boxIntersectSegs(this.segSetShifted,hwd-smodw,hwd,-hwd,hwd);
+    this.shiftSegs(segSet,segSetShifted,smodw-width);
+    this.shiftSegs(rsegSet,rsegSetShifted,smodw);
+    //this.shiftSegs(rsegSet,rsegSetShifted,smodw-width);
+    debugger;
+    this.boxIntersectSegs(this.rsegSetShifted,-hwd,eps+hwd-smodw,-hwd,hwd);
+
+    this.boxIntersectSegs(this.segSetShifted,hwd-smodw-eps,hwd,-hwd,hwd);
   }
 
   
