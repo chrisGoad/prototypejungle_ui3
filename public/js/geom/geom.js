@@ -724,6 +724,17 @@ LineSegment.mk = function (end0,end1,dontCopy) {
 }
 
 
+LineSegment.copyto  = function(src) {
+  if (!src) {
+    debugger;
+  }
+  let {end0:srcend0,end1:srcend1} = src;
+  let {end0:dstend0,end1:dstend1} = this;
+  dstend0.copyto(srcend0);
+  dstend1.copyto(srcend1);
+  return this;
+}
+
 LineSegment.center = function () {
   //debugger;
 	let {end0,end1} = this;

@@ -6,7 +6,7 @@ rs.setName('line_loop_1');
 
 
 let ht = 100;
-let topParams = {width:ht,height:ht,framePadding:.0*ht,frameStrokee:'red',numSteps:20,speed:1,numSteps:20,
+let topParams = {width:ht,height:ht,framePadding:.0*ht,frameStrokee:'red',numSteps:20,speed:1,numSteps:20,numSpokes:100,
    //sides:['top','bot']};
    saveAnimation:1};
 
@@ -20,7 +20,7 @@ rs.initProtos = function () {
 }
 
 rs.addTheSegments = function () {
-  let {width} = this;
+  let {width,numSpokes:ns} = this;
   let hwd = 0.5*width;
   let center = Point.mk(0,0);
   const addSeg = (a) => {
@@ -28,7 +28,6 @@ rs.addTheSegments = function () {
    
      this.addSegment(center,e1);
   }
-  let ns = 100;
   for (let i=0;i<=ns;i++) {
     let a = (i*2*Math.PI)/ns;
     addSeg(a);

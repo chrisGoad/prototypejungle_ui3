@@ -79,64 +79,75 @@ rs.shiftAllSegs = function (shift) {
   this.shiftSegs(rsegSet,rsegSetShifted,shift-width);
 }
 
-rs.xrangeIntersectSeg = function (seg,lb,ub) {
+rs.rectIntersectSeg = function (rect,seg) {
   let {end0,end1} = seg;
-  let {x:x0,y:y0} = end0;
-  let {x:x1,y:y1} = end1;
-  if (x1<x0) {
-     //seg.hidden = 1;
-     //return null;
-     debugger;
-    let svx0 = x0;
-    let svy0 = y0;
-    x0 = x1;
-    y0 = y1;
-    x1 = svx0;
-    y1 = svy0;
-    end0.x  = x0;
-    end0.y  = y0;
-    end1.x  = x1;
-    end1.y  = y1;
+  let c0 = rect.contains(end0);
+  let c1 = rect.contains(end1);
+  if (c0 && c1) {
+    return seg;
   }
-  const intersectX=(seg,x)=> {
- 
-    if ((x1 <= x)||(x0 >= x)) {
-      return null;
+  let sides = rect.sides();
+  let is0 = seg.intersect(sides[0]);
+  let is1 = seg.intersect(sides[1]);
+  let is2 = seg.intersect(sides[2]);
+  let is3 = seg.intersect(sides[3]);
+  let nend0,nend1;
+  if (c0 !== c1) {
+    nend0 = c0?end0:end1;
+    nend1 = is0?is0:(is1?is1:(is2?is2:is3));
+    if (!nend1) {
+      debugger;
     }
-    let d0 = x-x0;
-    let d1 = x1-x;
-    let dx = x1-x0;
-    let dy = y1-y0;
-    let r = d0/dx;
-    let y = y0 + r*dy;
-    return y;
-    
+    return LineSegment.mk(nend0,nend1);
   }
+  if (is0) {
+    nend0 = is0;
+  }
+  const checkSide = (sideI) => {
+    if (sideI) {
+      if (nend0) {
+        return LineSegment.mk(nend0,sideI);
+      } else {
+        nend0=sideI;
+        return null;
+      }
+    }
+  }
+  let ci = checkSide(is1)
+  if (ci) {
+    return ci;
+  }
+  ci = checkSide(is2)
+  if (ci) {
+    return ci;
+  }
+  ci = checkSide(is3)
+  return ci;
+}  
   
-  /*let {end0,end1} = seg;
-  let {x:x0,y:y0} = end0;
-  let {x:x1,y:y1} = end1;*/
-  if ((x1<=lb) || (x0 >= ub)){
-    seg.hidden =1;
-    return;
+    
+    
+rs.boxIntersectSeg = function (seg,lbx,ubx,lby,uby) {
+ // debugger;
+  let corner = Point.mk(lbx,lby);
+  let ex= ubx-lbx;
+  let ey= uby-lby;
+  let rect = Rectangle.mk(corner,Point.mk(ex,ey));
+  let segt = LineSegment.mk(Point.mk(91.557,1.066),Point.mk(100,0));
+  let nseg = this.rectIntersectSeg(rect,seg);
+  if (nseg) {
+    seg.copyto(nseg);
+    seg.hidden =0;
+  } else {
+    seg.hidden=1;
   }
-  let ilb = intersectX(seg,lb);
-  let iub = intersectX(seg,ub);
-  seg.hidden = 0;
-  if (ilb !== null) {
-    end0.y = ilb;
-    end0.x= lb;
-  }
-   if (iub !== null) {
-    end1.y = iub;
-    end1.x= ub;
-  }
-}    
+ }
 
-rs.xrangeIntersectSegs = function (segs,lb,ub) {
+
+rs.boxIntersectSegs = function (segs,lbx,ubx,lby,uby) {
   let ln = segs.length;
   for (let i=0;i<ln;i++) {
-     this.xrangeIntersectSeg(segs[i],lb,ub);
+     this.boxIntersectSeg(segs[i],lbx,ubx,lby,uby);
   }
 }
 
@@ -177,28 +188,10 @@ rs.initialize = function () {
   this.set('linePool', arrayShape.mk());
   this.set('rlinePool', arrayShape.mk());
   this.addTheSegments();
- /* const addSegPair = (x) => {
-    let left = Point.mk(x-hwd,0);
-    let top = Point.mk(x+hwd,-hwd);
-    let bot = Point.mk(x+hwd,hwd);
-     this.addSegment(left,top);
-     this.addSegment(left,bot);
-  }
-  for (let i=0;i<=10;i++) {
-    addSegPair(i*5);
-  }*/
-  
-  /*
-  let left = Point.mk(-50,0);
-  let top = Point.mk(50,-50);
-  let bot = Point.mk(50,50);
   debugger;
-  this.addSegment(left,top);
-  
-  this.addSegment(left,bot);*/
   this.shiftAllSegs(0);
-  this.xrangeIntersectSegs(this.segSetShifted,-hwd,hwd);
-  this.xrangeIntersectSegs(this.rsegSetShifted,-hwd,hwd);
+  this.boxIntersectSegs(this.segSetShifted,-hwd,hwd,-hwd,hwd);
+  this.boxIntersectSegs(this.rsegSetShifted,-hwd,hwd,-hwd,hwd);
   this.dpyShifted();
 }
  
@@ -213,18 +206,15 @@ rs.updateState = function () {
   if (shift < width) {
     this.shiftSegs(segSet,segSetShifted,shift);
     this.shiftSegs(rsegSet,rsegSetShifted,shift-width);
-    this.xrangeIntersectSegs(this.segSetShifted,-hwd,hwd-shift);
-    this.xrangeIntersectSegs(this.rsegSetShifted,hwd-shift,hwd);
+    debugger;
+    this.boxIntersectSegs(this.segSetShifted,-hwd,hwd-shift,-hwd,hwd);
+    this.boxIntersectSegs(this.rsegSetShifted,hwd-shift,hwd,-hwd,hwd);
   } else {
     debugger;
     this.shiftSegs(segSet,segSetShifted,shift-2*width);
-    //this.shiftSegs(segSet,segSetShifted,-0);
     this.shiftSegs(rsegSet,rsegSetShifted,shift-width);
-    //this.xrangeIntersectSegs(this.rsegSetShifted,-hwd,hwd-shift);
-    this.xrangeIntersectSegs(this.rsegSetShifted,-hwd,hwd);
-    //this.xrangeIntersectSegs(this.segSetShifted,hwd-shift,hwd);
-    this.xrangeIntersectSegs(this.segSetShifted,hwd-smodw,hwd);
-    //this.xrangeIntersectSegs(this.segSetShifted,hwd,hwd);
+    this.boxIntersectSegs(this.rsegSetShifted,-hwd,hwd,-hwd,hwd);
+    this.boxIntersectSegs(this.segSetShifted,hwd-smodw,hwd,-hwd,hwd);
   }
 
   
