@@ -81,7 +81,7 @@ rs.shiftAllSegs = function (shift) {
 
 rs.rectIntersectSeg = function (rect,iseg) {
 debugger;
-  let seg = iseg.lengthen(1.01);
+  let seg = iseg.lengthen(1.05);
   let {end0,end1} = seg;
   let c0 = rect.contains(end0);
   let c1 = rect.contains(end1);

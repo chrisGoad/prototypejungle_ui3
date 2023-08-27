@@ -6,7 +6,7 @@ rs.setName('line_loop_1');
 
 
 let ht = 100;
-let topParams = {width:ht,height:ht,framePadding:.0*ht,frameStrokee:'red',numSteps:20,speed:1,numSteps:20,numSpokes:200,
+let topParams = {width:ht,height:ht,framePadding:.0*ht,frameStrokee:'red',numSteps:20,speed:1,numSteps:20,numSpokes:50,
    //sides:['top','bot']};
    saveAnimation:1};
 
