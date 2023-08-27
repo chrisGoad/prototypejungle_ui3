@@ -7,11 +7,16 @@ addDropMethods(rs);
 
 rs.setName('drop_circles_22');
 let ht= 100;
-let topParams = {width:ht,height:ht,framePadding:0.1*ht}
+let hht = 0.5*ht;
+let xt = Point.mk(hht,hht);
+let zone = rs.mkRectFromCenterExtent(Point.mk(0,0),xt);
+
+let topParams = {width:ht,height:ht,framePadding:0.1*ht,frameStroke:'white'}
+
 Object.assign(rs,topParams);
 
 //rs.dropParams = {dropTries:150,scale:0.5,radius:50}
-rs.dropParams = {dropTries:100000,maxLoops:100000,maxDrops:1000000};
+rs.dropParams = {zone,dropTries:100000,maxLoops:100000,maxDrops:1000000};
 
 rs.initProtos = function () {
   let circleP = this.circleP = circlePP.instantiate();
@@ -22,19 +27,32 @@ rs.initProtos = function () {
 
 rs.generateCircleDrop= function (p) { 
   let r  = Math.random();
-  let f =0.2;
-  let drop = {collideRadius:5*r*f*1.1,dimension:r*f*2,fill:'red'};
+  let f =.5;
+  f = 2;
+  let cf = 1.1;
+  cf=2;
+  let drop = {collideRadius:1.1*r*f*cf,dimension:r*f*2,fill:'red'};
   return drop;
 }
 
 rs.initialize = function () {
   this.initProtos();
-  let {circleP,dropParams} = this;
+  let {circleP,dropParams,width} = this;
+  let qwd = 1.005*0.25*width;
   this.addFrame();
   debugger;
   let shapes = this.set('drops',arrayShape.mk());
   let drops =  this.generateCircleDrops(dropParams);
-  this.installCircleDrops(shapes,circleP,drops);
+  let dFx = this.dropsFlipX(drops);
+  let dUL = this.moveDrops(drops,Point.mk(-qwd,-qwd));
+  let dUR = this.moveDrops(dFx,Point.mk(qwd,-qwd));
+  let dLL = this.moveDrops(drops,Point.mk(-qwd,qwd));
+  let dLR = this.moveDrops(dFx,Point.mk(qwd,qwd));
+  //this.installCircleDrops(shapes,circleP,drops);
+  this.installCircleDrops(shapes,circleP,dUL);
+  this.installCircleDrops(shapes,circleP,dUR);
+  this.installCircleDrops(shapes,circleP,dLL);
+  this.installCircleDrops(shapes,circleP,dLR);
 }
 
 export {rs};

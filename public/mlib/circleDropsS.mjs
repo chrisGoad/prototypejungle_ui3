@@ -54,6 +54,12 @@ rs.genRandomValue = function (lb,ub) {
   return lb + Math.random()*delta;
 }
 
+rs.mkRectFromCenterExtent = function (c,xt) {
+  let hxt = xt.times(-0.5);
+  let crn = c.plus(hxt);
+  let rect = Rectangle.mk(crn,xt);
+  return rect;
+}
   
 rs.generateCircleDrops = function (params) {
   let {zone,maxLoops=Infinity,maxDrops=Infinity,dropTries} = params;
@@ -86,6 +92,42 @@ rs.generateCircleDrops = function (params) {
     }
   }
   return drops;
+}
+rs.opDrops = function (drops,p,op) {
+  let nds=[];
+  drops.forEach((d)=>{
+    let {point} = d;
+    let nd = {};
+    Object.assign(nd,d);
+    nd.point = op(point,p);
+    nds.push(nd);
+  });
+  return nds;
+}
+rs.moveDrops = function (drops,p) {
+  let op = (pnt,d)=> {
+    return pnt.plus(d);
+  }
+  return this.opDrops(drops,p,op);
+}
+
+rs.dropsFlipX = function (drops,p) {
+  let op = (pnt)=> {
+    let {x,y} = pnt;
+    return Point.mk(-x,y);
+  }
+  return this.opDrops(drops,p,op);
+}
+rs.moveDropss = function (drops,p) {
+  let nds=[];
+  drops.forEach((d)=>{
+    let {point} = d;
+    let nd = {};
+    Object.assign(nd,d)
+    nd.point = point.plus(p);
+    nds.push(nd);
+  });
+  return nds;
 }
 
 rs.installCircleDrops = function (container,dropP,drops) {
