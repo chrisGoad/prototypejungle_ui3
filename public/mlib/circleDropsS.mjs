@@ -118,6 +118,25 @@ rs.dropsFlipX = function (drops,p) {
   }
   return this.opDrops(drops,p,op);
 }
+
+rs.dropsFlipY = function (drops,p) {
+  let op = (pnt)=> {
+    let {x,y} = pnt;
+    return Point.mk(x,-y);
+  }
+  return this.opDrops(drops,p,op);
+}
+
+
+rs.dropsFlipXY = function (drops,p) {
+  let op = (pnt)=> {
+    let {x,y} = pnt;
+    return Point.mk(-x,-y);
+  }
+  return this.opDrops(drops,p,op);
+}
+
+
 rs.moveDropss = function (drops,p) {
   let nds=[];
   drops.forEach((d)=>{
