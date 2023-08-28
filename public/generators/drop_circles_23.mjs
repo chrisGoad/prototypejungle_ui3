@@ -27,6 +27,7 @@ rs.initProtos = function () {
 
 rs.generateCircleDrop= function (p) { 
   let r  = Math.random();
+  //r=2;
   let f =.5;
   f = 2;
   let cf = 1.1;
@@ -57,9 +58,11 @@ rs.initialize = function () {
   /*the structure:
   A    Ax   A    Ax
   Ay   B    Bx   Axy
-  A    By   Bxy  Axy
+  A    By   Bxy  Ax
   Ay   Axy  Ay   Axy
   */
+  
+  
   let d00 = this.moveDrops(A,Point.mk(-qwd,-qwd));
   let d10 = this.moveDrops(Ax,Point.mk(-ewd,-qwd));
   let d20 = this.moveDrops(A,Point.mk(ewd,-qwd));
