@@ -36,13 +36,8 @@ rs.generateCircleDrop= function (p) {
   return drop;
 }
 
-rs.tableParms = function () {
-  let {width} = this;
-  let ewd = 1.5*0.125*width;
-  let qwd = 2.005*0.25*width;
-  return {ewd,qwd};
-}
 rs.buildPnts = function () {
+  debugger;
   let params = this.tableParams();
   let {ewd,qwd} = params;
   let p00 = Point.mk(-qwd,-qwd);
@@ -68,7 +63,6 @@ rs.buildPnts = function () {
   this.pnts= [p00,p10,p20,p30,p01,p11,p21,p31,p02,p12,p22,p32,p03,p13,p23,p33];
 }
 
-rs.buildPnts();
 
 rs.buildTable = function (occupants,pnts) {
   let ln=pnts.length;
@@ -80,16 +74,8 @@ rs.buildTable = function (occupants,pnts) {
   }
   return tb;
 }
-rs.initialize = function () {
-  this.initProtos();
-  let {circleP,dropParams,width} = this;
-  let ewd = 1.5*0.125*width;
-  let qwd = 2.005*0.25*width;
-  this.addFrame();
-  debugger;
-  let shapes = this.set('drops',arrayShape.mk());
- 
-  
+
+rs.theDrops = function (dropParams) {
   let A =  this.generateCircleDrops(dropParams);
   let B =  this.generateCircleDrops(dropParams);
   let Ax = this.dropsFlipX(A);
@@ -98,23 +84,7 @@ rs.initialize = function () {
   let Bxy = this.dropsFlipXY(B);
   let By = this.dropsFlipY(B);
   let Bx = this.dropsFlipX(B);
-  
-  /*the structure:
-  A    Ax   A    Ax
-  Ay   Axy  Ay   Axy
-  A    Ax   Ax   Ax
-  Ay   Axy  Ay   Axy
-  */
- 
-  let occupants = [
-  A  ,Ax ,A  ,Ax ,
-  Ay ,Axy,Ay ,Axy,
-  A  ,Ax ,A  ,Ax ,
-  Ay ,Axy,Ay ,Axy];
-
-  let table = this.buildTable(occupants,this.pnts);
-
-  table.forEach( (d) =>  this.installCircleDrops(shapes,circleP,d));
+  return {A,Ax,Ay,Axy,B,Bx,By,Bxy};
 }
 
 
