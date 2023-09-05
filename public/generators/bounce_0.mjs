@@ -6,7 +6,7 @@ let rs = basicP.instantiate();
 
 rs.setName('bounce_0');
 let ht=50;
-let topParams = {width:ht,height:ht,framePadding:0.1*ht,frameStroke:'white',frameStrokeWidth:2}
+let topParams = {width:ht,height:ht,framePadding:0.1*ht,frameStroke:'white',frameStrokeWidth:.2}
 
 Object.assign(rs,topParams);
 
@@ -30,7 +30,7 @@ t = (-b +- sqrt(b**2-4*a*c))/(2*a)
 
 rs.solveForT = function (params) {
   debugger;
-  let {A,V,P,r0,r1} = params;
+  let {A,V,P,r1,r2} = params;
   let {x:Ax,y:Ay} = A;  
   let {x:Vx,y:Vy} = V;
   let {x:Px,y:Py} = P;
@@ -39,7 +39,7 @@ rs.solveForT = function (params) {
   //let a = Vx+Vy;
   let a = Vx*Vx+Vy*Vy;
   let b =2*(Cx*Vx+Cy*Vy); 
-  let r = r0+r1;
+  let r = r1+r2;
   let c = Cx*Cx+Cy*Cy-r*r; 
 //  t = (-b +- sqrt(b**2-4*a*c))/(2*a)
 
@@ -49,8 +49,8 @@ rs.solveForT = function (params) {
     return undefined;
   }
   let itrm1 = Math.sqrt(itrm);
-  let t0 = (itrm1 -b)/(2*a);
-  let t1 = -(itrm1 +b)/(2*a);
+  let t1 = (itrm1 -b)/(2*a);
+  let t0 = -(itrm1 +b)/(2*a);
   const tpos=  (t) => {
      return A.plus(V.times(t));
   }
@@ -71,6 +71,20 @@ rs.solveForT = function (params) {
   return [p0,p1,t0,t1];
 }
 
+rs.collide = function (params) {
+  let  {v1,v2,x1,x2,m1,m2} =params;
+  debugger;
+  let x1mx2ln = (x1.difference(x2)).length();
+  let sqx1mx2ln = x1mx2ln*x1mx2ln;
+  let itrm1 = (2*m2/(m1+m2))* (v1.difference(v2).dotp(x1.difference(x2))/sqx1mx2ln);
+  let nv1 = v1.difference(x1.difference(x2).times(itrm1));
+  
+  //let x1mx2ln = (x1.difference(x2)).length();
+  //let sqx1mx2ln = x1mx2ln*x1mx2ln;
+  let itrm2 = (2*m1/(m1+m2))* (v2.difference(v1).dotp(x2.difference(x1))/sqx1mx2ln);
+  let nv2 = v2.difference(x2.difference(x1).times(itrm2));
+  return [nv1,nv2];
+}
 
 rs.initProtos = function () {
   let circleP = this.circleP = circlePP.instantiate();
@@ -89,14 +103,18 @@ rs.initialize = function () {
   let a = (Math.PI/180)*4;
   let V = Point.mk(Math.cos(a),Math.sin(a));
   let P = Point.mk(20,0);
-  let r0 = 1;
-  let r1=3;
-  let params = {A,V,P,r0,r1};
-  let line = this.lineP.instantiate();
-  this.set('line',line);
+  let r1 = 1;
+  let r2=3;
+  let params = {A,V,P,r1,r2};
+  let iline = this.lineP.instantiate();
+  this.set('iline',iline);
+  let oline1 = this.lineP.instantiate();
+  this.set('oline1',oline1);
+  let oline2 = this.lineP.instantiate();
+  this.set('oline2',oline2);
   let ln = P.length();
   let vp = V.times(ln*2);
-  line.setEnds(A,vp);
+  iline.setEnds(A,vp);
   let ps = this.solveForT(params);
   if (!ps) {
     return;
@@ -107,11 +125,23 @@ rs.initialize = function () {
  
   this.set('circ0',circ0);
   this.set('circ1',circ1);
+  circ1.stroke = 'red';
   this.set('circ2',circ2);
-  circ0.dimension = 2*r1;
-  circ1.dimension = 2*r0;
-  circ2.dimension = 2*r0;
+  circ0.dimension = 2*r2;
+  circ1.dimension = 2*r1;
+  circ2.dimension = 2*r1;
   let [c0,c1] =ps;
+  let colresParams = {v1:V,v2:Point.mk(0,0),x1:c0,x2:P,m1:1,m2:1};
+  let colres = this.collide(colresParams);
+  let [nv1,nv2] = colres;
+  let nv1ln = nv1.length();
+  let nv2ln = nv2.length();
+  oline1.stroke = 'green';
+  oline2.stroke = 'cyan';
+  let o1end1 = c1.plus(nv1.times(10*nv1ln));
+  oline1.setEnds(c0,o1end1);
+  let o2end1 = P.plus(nv2.times(10*nv2ln));
+  oline2.setEnds(P,o2end1);
   circ0.moveto(P);
   circ1.moveto(c0);
   circ2.moveto(c1);
