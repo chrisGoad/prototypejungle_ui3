@@ -28,7 +28,7 @@ t = (-b +- sqrt(b**2-4*a*c))/(2*a)
 */
 
 
-rs.solveForT1 = function (params) {
+rs.solveForT = function (params) {
   debugger;
   let {A,V,P,r1,r2} = params;
   let {x:Ax,y:Ay} = A;  
@@ -68,17 +68,7 @@ rs.solveForT1 = function (params) {
   let ck0 = check1(t0);
   let ck1 = check1(t1);
   debugger;
-  //return [p0,p1,t0,t1];
-  return t0;
-}
-rs.solveForT = function (particle1,particle2) {
-  let {ray:ray1,radius:r1} = particle1;
-  let {ray:ray2,radius:r2} = particle2;
-  let {initialPosition:ip1,velocity:v1} = ray1;
-  let {initialPosition:ip2,velocity:v2} = ray2;
-  let params = {A:ip1,V:v1,P:ip2,r1,r2};
-  let t = this.solveForT1(params);
-  return t;
+  return [p0,p1,t0,t1];
 }
 
 rs.bounceOffXY = function (ray,xyv,offY) {
@@ -109,16 +99,7 @@ rs.collide = function (params) {
   let nv2 = v2.difference(x2.difference(x1).times(itrm2));
   return [nv1,nv2];
 }
-// p2 assumed stationary, 
-rs.collideParticles = function (particle1,particle2) {
-  let {ray:ray1,mass:mass1,radius:radius1,position:pos1} = particle1;
-  let {ray:ray2,mass:mass2,radius:radius2,position:pos2} = particle2;
-  let {velocity:v1} = ray1;
-  let {velocity:v2} = ray2;
-  let params = {v1,v2,x1:pos1,x2:pos2,m1:mass1,m2:mass2};
-  let colres = this.collide(params);
-  return colres;
-}
+
 /*
 particle = {ray,mass,startTime,position,shape,radius}
 */
@@ -169,88 +150,41 @@ rs.displayLine = function(e0,e1,stroke) {
   line.update();
 }
 
-rs.circleCount = 0;
-rs.mkCircleForParticle = function (particle) {
-  let {circleCount:ccnt,circleP} = this;
-  let {radius,stroke} = particle;
-  let circ = circleP.instantiate();
-  let nm = 'circle_'+ccnt;
-  this.circleCount = ccnt+1;
-  this.set(nm,circ);
-  circ.dimension = 2*radius;
-  if (stroke) {
-    circ.stroke = stroke;
-  }
-  particle.shape = circ;
-  return circ;
-}
- 
-rs.mkCirclesForParticles = function (particles) {
-  particles.forEach((p) => {
-    
-    this.mkCircleForParticle(p);
-  });
-}
 
 rs.initialize = function () {
   debugger;
   this.initProtos();
   this.addFrame();
   let av = (Math.PI/180)*4;
-  let v1 = Point.mk(Math.cos(av),Math.sin(av)).times(5);
+  let v = Point.mk(Math.cos(av),Math.sin(av)).times(5);
   let ip = Point.mk(0,0);
-  let ray1 = {initialPosition:ip,velocity:v1};
-  /*let nray = this.bounceOffXY(ray1,20,1);
+  let ray = {initialPosition:ip,velocity:v};
+  let nray = this.bounceOffXY(ray,20,1);
   let {initialPosition:nip,velocity:nv} = nray;
   this.displayLine(ip,nip,'yellow');
-  this.displayLine(nip,nip.plus(nv.times(10)),'magenta');*/
-  //let A = Point.mk(0,0);
-  //let a = (Math.PI/180)*4;
-  //let V = Point.mk(Math.cos(a),Math.sin(a));
- // let P = Point.mk(20,0);
-  //let r1 = 1;
-  //let r2=3;
-  let prt1 = {ray:ray1,initialPosition:Point.mk(0,0),startTime:0,mass:0.5,radius:1};
-  let prt2 = {ray:{initialPosition:Point.mk(20,0),velocity:Point.mk(0,0)},startTime:0,mass:1,radius:3};
-  let prts = this.particles = [prt1,prt2];
-  this.mkCirclesForParticles(prts);
-  //let params = {A,V,P,r1,r2};
-  let {radius:radius1} = prt1;
-  let {ray:ray2,radius:radius2} = prt2;
-
-  let {initialPosition:ip1} = ray1;
-  let {initialPosition:ip2,velocity:v2} = ray2;
-  //let params = {A:ip1,V:v1,P:ip2,r1:radius1,r2:radius2};
-  
- // let t = this.solveForT(params);
-  let t = this.solveForT(prt1,prt2);
-  if (t === undefined) {
-    return;
-  }
-  this.updatePositions(t);
-  let colres = this.collideParticles(prt1,prt2);
-  let [nv1,nv2] = colres;
-  let nv1ln = nv1.length();
-  let nv2ln = nv2.length();
-  let cp1 = prt1.position;
-  let cp2 = prt2.position;
-  let o1end1 = cp1.plus(nv1.times(2*nv1ln));
-  this.displayLine(cp1,o1end1,'green');
-  let o2end1 = cp2.plus(nv2.times(2*nv2ln));
-  this.displayLine(cp2,o2end1,'cyan');
-  return;
- // let pos1 = prt1.initialPosition;
- // let pos2 = prt2.initialPosition;
- /* let ln = (ip2.difference(ip1)).length();
-  let vp = v1.times(ln*2);
-  this.displayLine(ip1,vp);*/
+  this.displayLine(nip,nip.plus(nv.times(10)),'magenta');
+  let A = Point.mk(0,0);
+  let a = (Math.PI/180)*4;
+  let V = Point.mk(Math.cos(a),Math.sin(a));
+  let P = Point.mk(20,0);
+  let r1 = 1;
+  let r2=3;
+  let params = {A,V,P,r1,r2};
+ /* let iline = this.lineP.instantiate();
+  this.set('iline',iline);
+  let oline1 = this.lineP.instantiate();
+  this.set('oline1',oline1);
+  let oline2 = this.lineP.instantiate();
+  this.set('oline2',oline2);
+ */
+  let ln = P.length();
+  let vp = V.times(ln*2);
+  this.displayLine(A,vp);
   //iline.setEnds(A,vp);
   let ps = this.solveForT(params);
   if (!ps) {
     return;
   }
-  let [c0,c1] =ps;
-
   let circ0=this.circleP.instantiate();
   let circ1=this.circleP.instantiate();
   let circ2=this.circleP.instantiate();
@@ -262,28 +196,32 @@ rs.initialize = function () {
   circ0.dimension = 2*r2;
   circ1.dimension = 2*r1;
   circ2.dimension = 2*r1;
-  let particle1 = {ray,startTime:0,shape:circ1,mass:0.5,radius:1};
-  let particle2 = {ray:{initialPosition:P,velocity:Point.mk(0,0)},startTime:0,shape:circ0,mass:1,radius:3};
-  //let prts = [particle0,particle1];
-  
+  let particle1 = {ray,startTime:0,shape:circ1,mass:0.5};
+  let particle0 = {ray:{initialPosition:P,velocity:Point.mk(0,0)},startTime:0,shape:circ0,mass:1};
+  this.particles = [particle0,particle1];
   debugger;
+  this.updatePositions(2);
   return;
+  let [c0,c1] =ps;
   let colresParams = {v1:V,v2:Point.mk(0,0),x1:c0,x2:P,m1:1,m2:.6};
- /* let colres = this.collide(colresParams);
+  let colres = this.collide(colresParams);
   let [nv1,nv2] = colres;
   let nv1ln = nv1.length();
   let nv2ln = nv2.length();
+  //oline1.stroke = 'green';
+  //oline2.stroke = 'cyan';
   let o1end1 = c1.plus(nv1.times(10*nv1ln));
+  //oline1.setEnds(c0,o1end1);
   this.displayLine(c0,o1end1,'green');
   let o2end1 = P.plus(nv2.times(10*nv2ln));
   this.displayLine(P,o2end1,'cyan');
+  //oline2.setEnds(P,o2end1);
   circ0.moveto(P);
   circ1.moveto(c0);
   circ2.moveto(c1);
   circ0.update();
   circ1.update();
   circ2.update();
-  */
 }
 
 
