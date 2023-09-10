@@ -1,12 +1,13 @@
 import {rs as circlePP} from '/shape/circle.mjs';
 import {rs as linePP} from '/shape/line.mjs';
 import {rs as basicP} from '/generators/basics.mjs';
-
+import {rs as addAnimationMethods} from '/mlib/animate0.mjs';
 let rs = basicP.instantiate();
+addAnimationMethods(rs);
 
 rs.setName('bounce_0');
 let ht=50;
-let topParams = {width:ht,height:ht,framePadding:0.1*ht,frameStroke:'white',frameStrokeWidth:.2}
+let topParams = {width:ht,height:ht,framePadding:0.1*ht,frameStroke:'white',frameStrokeWidth:.2,timePerStep:0.2,stopTime:10}
 
 Object.assign(rs,topParams);
 
@@ -97,7 +98,7 @@ rs.bounceOffXY = function (ray,xyv,offY) {
 
 rs.collide = function (params) {
   let  {v1,v2,x1,x2,m1,m2} =params;
-  debugger;
+//  debugger;
   let x1mx2ln = (x1.difference(x2)).length();
   let sqx1mx2ln = x1mx2ln*x1mx2ln;
   let itrm1 = (2*m2/(m1+m2))* (v1.difference(v2).dotp(x1.difference(x2))/sqx1mx2ln);
@@ -131,6 +132,7 @@ rs.updatePosition = function (particle,t) {
   particle.position = np;
   if (shape) {
     shape.moveto(np);
+    shape.update();
   }
 }
 
@@ -194,39 +196,36 @@ rs.mkCirclesForParticles = function (particles) {
 
 rs.initialize = function () {
   debugger;
+  let {timePerStep,stopTime} = this;
+  this.numSteps = Math.ceil(stopTime/timePerStep);
   this.initProtos();
   this.addFrame();
+  
   let av = (Math.PI/180)*4;
   let v1 = Point.mk(Math.cos(av),Math.sin(av)).times(5);
   let ip = Point.mk(0,0);
   let ray1 = {initialPosition:ip,velocity:v1};
+  
   /*let nray = this.bounceOffXY(ray1,20,1);
   let {initialPosition:nip,velocity:nv} = nray;
   this.displayLine(ip,nip,'yellow');
   this.displayLine(nip,nip.plus(nv.times(10)),'magenta');*/
-  //let A = Point.mk(0,0);
-  //let a = (Math.PI/180)*4;
-  //let V = Point.mk(Math.cos(a),Math.sin(a));
- // let P = Point.mk(20,0);
-  //let r1 = 1;
-  //let r2=3;
+   
   let prt1 = {ray:ray1,initialPosition:Point.mk(0,0),startTime:0,mass:0.5,radius:1};
   let prt2 = {ray:{initialPosition:Point.mk(20,0),velocity:Point.mk(0,0)},startTime:0,mass:1,radius:3};
   let prts = this.particles = [prt1,prt2];
   this.mkCirclesForParticles(prts);
-  //let params = {A,V,P,r1,r2};
   let {radius:radius1} = prt1;
   let {ray:ray2,radius:radius2} = prt2;
-
   let {initialPosition:ip1} = ray1;
   let {initialPosition:ip2,velocity:v2} = ray2;
-  //let params = {A:ip1,V:v1,P:ip2,r1:radius1,r2:radius2};
-  
- // let t = this.solveForT(params);
   let t = this.solveForT(prt1,prt2);
   if (t === undefined) {
     return;
   }
+  this.lastColTime = 0;
+  this.nextColTime =t;
+  return;
   this.updatePositions(t);
   let colres = this.collideParticles(prt1,prt2);
   let [nv1,nv2] = colres;
@@ -238,52 +237,31 @@ rs.initialize = function () {
   this.displayLine(cp1,o1end1,'green');
   let o2end1 = cp2.plus(nv2.times(2*nv2ln));
   this.displayLine(cp2,o2end1,'cyan');
-  return;
- // let pos1 = prt1.initialPosition;
- // let pos2 = prt2.initialPosition;
- /* let ln = (ip2.difference(ip1)).length();
-  let vp = v1.times(ln*2);
-  this.displayLine(ip1,vp);*/
-  //iline.setEnds(A,vp);
-  let ps = this.solveForT(params);
-  if (!ps) {
-    return;
-  }
-  let [c0,c1] =ps;
-
-  let circ0=this.circleP.instantiate();
-  let circ1=this.circleP.instantiate();
-  let circ2=this.circleP.instantiate();
  
-  this.set('circ0',circ0);
-  this.set('circ1',circ1);
-  circ1.stroke = 'red';
-  this.set('circ2',circ2);
-  circ0.dimension = 2*r2;
-  circ1.dimension = 2*r1;
-  circ2.dimension = 2*r1;
-  let particle1 = {ray,startTime:0,shape:circ1,mass:0.5,radius:1};
-  let particle2 = {ray:{initialPosition:P,velocity:Point.mk(0,0)},startTime:0,shape:circ0,mass:1,radius:3};
-  //let prts = [particle0,particle1];
-  
-  debugger;
-  return;
-  let colresParams = {v1:V,v2:Point.mk(0,0),x1:c0,x2:P,m1:1,m2:.6};
- /* let colres = this.collide(colresParams);
-  let [nv1,nv2] = colres;
-  let nv1ln = nv1.length();
-  let nv2ln = nv2.length();
-  let o1end1 = c1.plus(nv1.times(10*nv1ln));
-  this.displayLine(c0,o1end1,'green');
-  let o2end1 = P.plus(nv2.times(10*nv2ln));
-  this.displayLine(P,o2end1,'cyan');
-  circ0.moveto(P);
-  circ1.moveto(c0);
-  circ2.moveto(c1);
-  circ0.update();
-  circ1.update();
-  circ2.update();
-  */
+}
+
+rs.updateState = function () {
+  let {stepsSoFar:ssf,timePerStep,lastColTime:lct,nextColTime:nct,stopTime} = this;
+  let [prt1,prt2] = this.particles;
+  let ct = ssf*timePerStep;
+  if ((ct >= lct) && (ct < nct)) {
+    this.updatePositions(ct);
+  } else {
+    debugger;
+    let colres = this.collideParticles(prt1,prt2);
+    let [nv1,nv2] = colres;
+    this.lastColTime = nct;
+    this.nextColTime = stopTime;
+    let {ray:ray1} = prt1;
+    let {ray:ray2} = prt2;
+    ray1.initialPosition=prt1.position;
+    ray2.initialPosition=prt2.position;
+    ray1.velocity = nv1;
+    ray2.velocity = nv2;
+    prt1.startTime = nct;
+    prt2.startTime = nct;
+    this.updatePositions(ct);
+  }
 }
 
 
