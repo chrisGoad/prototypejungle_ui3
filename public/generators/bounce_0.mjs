@@ -83,7 +83,7 @@ rs.solveForT = function (particle1,particle2) {
   let t = this.solveForT1(params);
   return t;
 }
-
+/*
 rs.bounceOffXY = function (ray,xyv,offY) {
   let {initialPosition:ip,velocity:v} = ray;
   let {x,y} = ip;
@@ -96,6 +96,51 @@ rs.bounceOffXY = function (ray,xyv,offY) {
   let nip = offY?Point.mk(xyv,intsct):Point.mk(intsct,xyv);
   let nray = {initialPosition:nip,velocity:nv};
   return nray;
+}
+
+*/
+rs.lineSegVertical = function (ls) {
+  let {end0,end1} = ls;
+  let vec = end1.difference(end0);
+  let {x:vcx,y:vcy} = vec;
+  let ax = Math.abs(vcx);
+  let ay = Math.abs(vcy);
+  let vertical = ay > ax;
+  return vertical;
+  }
+  
+rs.lineSegmentSolveForT = function (particle,ls) {
+  let {ray,radius} = particle;
+  let {initialPosition:ip,velocity:v} = ray;
+  let {end0,end1} = ls;
+  let vertical = this.lineSegVertical(ls);
+  debugger;
+  let low,high;
+  if (vertical) {
+    let low = end0.y;
+    let high = end1.y;
+  } else {
+    let low = end0.x;
+    let high = end1.x;
+  }
+  let {x,y} = ip;
+  let {x:vx,y:vy} = v;
+  let slope = vy/vx;
+  let intsct = vertical?y + ((end0.x-radius)-x)*slope: x + (end0.y-y-radius)*1/slope;
+  if ((intsct < low) || (high < intsct)) {
+    return undefined;
+  }
+ /* let a = Math.atan2(vy,vx);
+  let na = vertical?Math.PI-a:-a;
+  let vln = v.length();
+  let nv = Point.mk(Math.cos(na),Math.sin(na)).times(vln);
+  let nray = {initialPosition:nip,velocity:nv};
+  */
+  let vln = v.length();
+  let nip = vertical?Point.mk(end0.x-radius,intsct):Point.mk(intsct,end0.y-radius);
+  let d = (nip.difference(ip)).length();
+  let t = d/vln;
+  return t;
 }
 
 rs.collide = function (params) {
@@ -122,6 +167,19 @@ rs.collideParticles = function (particle1,particle2) {
   let colres = this.collide(params);
   return colres;
 }
+rs.collideLineSegment = function (particle,ls) {
+  let {ray,radius,position:pos} = particle;
+  let {velocity:v} = ray;
+  let {x:vx,y:vy} = v;
+  let vertical = this.lineSegVertical(ls);
+  let a = Math.atan2(vy,vx);
+  let na = vertical?Math.PI-a:-a;
+  let vln = v.length();
+  let nv = Point.mk(Math.cos(na),Math.sin(na)).times(vln);
+  return nv;
+  //let nray = {initialPosition:pos,velocity:nv};
+}
+
 /*
 particle = {ray,mass,startTime,position,shape,radius}
 */
@@ -203,7 +261,8 @@ rs.initialize = function () {
   this.initProtos();
   this.addFrame();
   
-  let av = (Math.PI/180)*4;
+  //let av = (Math.PI/180)*4;
+  let av = (Math.PI/180)*10;
   let v1 = Point.mk(Math.cos(av),Math.sin(av)).times(5);
   let ip = Point.mk(0,0);
   let ray1 = {initialPosition:ip,velocity:v1};
@@ -216,20 +275,30 @@ rs.initialize = function () {
   let prt1 = {ray:ray1,initialPosition:Point.mk(0,0),startTime:0,mass:0.5,radius:1};
  // let prt2 = {ray:{initialPosition:Point.mk(20,0),velocity:Point.mk(0,0)},startTime:0,mass:1,radius:3};
   let prt2 = {ray:{initialPosition:Point.mk(20,-1.8),velocity:Point.mk(0,1.3)},startTime:0,mass:10,radius:3};
-  let prts = this.particles = [prt1,prt2];
+  let ls = LineSegment.mk(Point.mk(20,-10),Point.mk(20,10));
+  this.segments = [ls];
+  this.displayLine(ls.end0,ls.end1);
+  //let prts = this.particles = [prt1,prt2];
+  let prts = this.particles = [prt1];
   this.mkCirclesForParticles(prts);
+  //let t = this.solveForT(prt1,prt2);
+  let t = this.lineSegmentSolveForT(prt1,ls);
+  if (t === undefined) {
+    return;
+  }
+ // this.updatePositions(t);
+   
+//   this.displayLine(prt1.ray.initialPosition,prt1.position);
   let {radius:radius1} = prt1;
   let {ray:ray2,radius:radius2} = prt2;
   let {initialPosition:ip1} = ray1;
   let {initialPosition:ip2,velocity:v2} = ray2;
-  let t = this.solveForT(prt1,prt2);
-  if (t === undefined) {
-    return;
-  }
+ 
   this.lastColTime = 0;
   this.nextColTime =t;
   return;
   this.updatePositions(t);
+  
   let colres = this.collideParticles(prt1,prt2);
   let [nv1,nv2] = colres;
   let nv1ln = nv1.length();
@@ -246,23 +315,26 @@ rs.initialize = function () {
 rs.updateState = function () {
   let {stepsSoFar:ssf,timePerStep,lastColTime:lct,nextColTime:nct,stopTime} = this;
   let [prt1,prt2] = this.particles;
+  let [ls] = this.segments;
   let ct = ssf*timePerStep;
   if ((ct >= lct) && (ct < nct)) {
     this.updatePositions(ct);
   } else {
     debugger;
-    let colres = this.collideParticles(prt1,prt2);
-    let [nv1,nv2] = colres;
+    //let colres = this.collideParticles(prt1,prt2);
+    let nv1 = this.collideLineSegment(prt1,ls);
+
+    //let [nv1,nv2] = colres;
     this.lastColTime = nct;
     this.nextColTime = stopTime;
     let {ray:ray1} = prt1;
-    let {ray:ray2} = prt2;
+    //let {ray:ray2} = prt2;
     ray1.initialPosition=prt1.position;
-    ray2.initialPosition=prt2.position;
+   // ray2.initialPosition=prt2.position;
     ray1.velocity = nv1;
-    ray2.velocity = nv2;
+    //ray2.velocity = nv2;
     prt1.startTime = nct;
-    prt2.startTime = nct;
+    //prt2.startTime = nct;
     this.updatePositions(ct);
   }
 }
