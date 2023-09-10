@@ -7,7 +7,7 @@ addAnimationMethods(rs);
 
 rs.setName('bounce_0');
 let ht=50;
-let topParams = {width:ht,height:ht,framePadding:0.1*ht,frameStroke:'white',frameStrokeWidth:.2,timePerStep:0.2,stopTime:10}
+let topParams = {width:ht,height:ht,framePadding:0.1*ht,frameStroke:'white',frameStrokeWidth:.2,timePerStep:0.05,stopTime:10}
 
 Object.assign(rs,topParams);
 
@@ -77,7 +77,9 @@ rs.solveForT = function (particle1,particle2) {
   let {ray:ray2,radius:r2} = particle2;
   let {initialPosition:ip1,velocity:v1} = ray1;
   let {initialPosition:ip2,velocity:v2} = ray2;
-  let params = {A:ip1,V:v1,P:ip2,r1,r2};
+  let rv = v1.difference(v2)
+  //let params = {A:ip1,V:v1,P:ip2,r1,r2};
+  let params = {A:ip1,V:rv,P:ip2,r1,r2};
   let t = this.solveForT1(params);
   return t;
 }
@@ -212,7 +214,8 @@ rs.initialize = function () {
   this.displayLine(nip,nip.plus(nv.times(10)),'magenta');*/
    
   let prt1 = {ray:ray1,initialPosition:Point.mk(0,0),startTime:0,mass:0.5,radius:1};
-  let prt2 = {ray:{initialPosition:Point.mk(20,0),velocity:Point.mk(0,0)},startTime:0,mass:1,radius:3};
+ // let prt2 = {ray:{initialPosition:Point.mk(20,0),velocity:Point.mk(0,0)},startTime:0,mass:1,radius:3};
+  let prt2 = {ray:{initialPosition:Point.mk(20,-1.8),velocity:Point.mk(0,1.3)},startTime:0,mass:10,radius:3};
   let prts = this.particles = [prt1,prt2];
   this.mkCirclesForParticles(prts);
   let {radius:radius1} = prt1;
