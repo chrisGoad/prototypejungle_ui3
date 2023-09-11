@@ -37,7 +37,6 @@ where withX =its index
 
 
 rs.solveForT1 = function (params) {
-  debugger;
   let {A,V,P,r1,r2} = params;
   let {x:Ax,y:Ay} = A;  
   let {x:Vx,y:Vy} = V;
@@ -75,7 +74,6 @@ rs.solveForT1 = function (params) {
   let ckp1  = check0(t1);
   let ck0 = check1(t0);
   let ck1 = check1(t1);
-  debugger;
   //return [p0,p1,t0,t1];
   return t0;
 }
@@ -121,7 +119,6 @@ rs.lineSegmentSolveForT = function (particle,ls) {
   let {initialPosition:ip,velocity:v} = ray;
   let {end0,end1} = ls;
   let vertical = this.lineSegVertical(ls);
-  debugger;
   let low,high;
   if (vertical) {
     let low = end0.y;
@@ -132,8 +129,19 @@ rs.lineSegmentSolveForT = function (particle,ls) {
   }
   let {x,y} = ip;
   let {x:vx,y:vy} = v;
-  let slope = vy/vx;
-  let intsct = vertical?y + ((end0.x-radius)-x)*slope: x + (end0.y-y-radius)*1/slope;
+  let slope,islope;
+  if (vertical) {
+    if (vx===0) {
+      return undefined;
+    }
+    slope = vy/vx;
+  } else {
+    if  (vy===0) {
+      return undefined;
+    }
+    islope = vx/vy;
+  }
+  let intsct = vertical?y + ((end0.x-radius)-x)*slope: x + (end0.y-y-radius)*islope;
   if ((intsct < low) || (high < intsct)) {
     return undefined;
   }
@@ -185,7 +193,6 @@ rs.particleIdxCollisions = function (idx,allCols) {
   let cols = [];
   let prt = particles[idx]
   let pln = particles.length;
-  debugger;
   for (let i=idx+1;i<pln;i++) {
     let oprt = particles[i];
     let t= this.solveForT(prt,oprt);
@@ -216,6 +223,18 @@ rs.particleCollisions = function () {
   for (let i=0;i<pln;i++) {
     this.particleIdxCollisions(i,allCols);
   }
+  let compare = const (c0,c1) => {
+    let t0 = c0.time;
+    let t1 = c1.time;
+    if (t0<t1) {
+      return -1;
+    }
+    if (t0 === t1) {
+      return 0;
+    }
+    return 1;
+  };
+  allCols.sort(compare);
   this.allCollisions = allCols;
 }
   
@@ -323,6 +342,7 @@ rs.initialize = function () {
   let prts = this.particles = [prt1,prt2,prt3];
   debugger;
   this.mkCirclesForParticles(prts);
+  debugger;
   this.particleCollisions();
   let t=cwp?this.solveForT(prt1,prt2):this.lineSegmentSolveForT(prt3,ls);
   if (t === undefined) {
