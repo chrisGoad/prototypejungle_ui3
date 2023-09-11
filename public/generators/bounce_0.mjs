@@ -27,11 +27,11 @@ c = Cx**2+Cy**2-r1-r2;
 
 t = (-b +- sqrt(b**2-4*a*c))/(2*a)
 
-particle = {ray,mass,startTime,position,shape,radius,particleCollisions,segmentCollisions,index}
+particle = {ray,mass,startTime,position,shape,radius,collisions,index}
 
-collision = {time,with}
+collision = {time,withSegment,withParticle}
 
-where with =its index
+where withX =its index
 
 */
 
@@ -180,6 +180,45 @@ rs.collideLineSegment = function (particle,ls) {
   let nv = Point.mk(Math.cos(na),Math.sin(na)).times(vln);
   return nv;
 }
+rs.particleIdxCollisions = function (idx,allCols) {
+  let {stepsSoFar:ssf,timePerStep,particles,segments} = this;
+  let cols = [];
+  let prt = particles[idx]
+  let pln = particles.length;
+  debugger;
+  for (let i=idx+1;i<pln;i++) {
+    let oprt = particles[i];
+    let t= this.solveForT(prt,oprt);
+    if (t) {
+      let col = {time:t,withParticle:i};
+      cols.push(col);
+      allCols.push(col);
+    }
+  }
+  let sln = segments.length;
+  for (let i=0;i<sln;i++) {
+    let seg = segments[i];
+    let t= this.lineSegmentSolveForT(prt,seg);
+    if (t) {;
+      let col = {time:t,withSegment:i};
+      cols.push(col);
+      allCols.push(col);
+    }
+  }
+  prt.collisions = cols;
+  
+}
+
+rs.particleCollisions = function () {
+  let {particles} = this;
+  let pln = particles.length;
+  let allCols = [];
+  for (let i=0;i<pln;i++) {
+    this.particleIdxCollisions(i,allCols);
+  }
+  this.allCollisions = allCols;
+}
+  
 
 
 rs.updatePosition = function (particle,t) {
@@ -275,15 +314,16 @@ rs.initialize = function () {
   let ray1 = {initialPosition:ip,velocity:v1};
   let ray3 = {initialPosition:Point.mk(0,-5),velocity:v1};
   let prt1 = {ray:ray1,initialPosition:Point.mk(0,0),startTime:0,mass:0.5,radius:1};
+ // let prt1 = {ray:ray1,initialPosition:Point.mk(0,0),initialPosition:Point.mk(0,0),startTime:0,mass:0.5,radius:1};
   let prt2 = {ray:{initialPosition:Point.mk(20,-1.8),velocity:Point.mk(0,1.3)},startTime:0,mass:10,radius:3};
- let prt3 = {ray:ray3,initialPosition:Point.mk(0,-5),startTime:0,mass:0.5,radius:1};
+ let prt3 = {ray:ray3,startTime:0,mass:0.5,radius:1};
   let ls = LineSegment.mk(Point.mk(20,-10),Point.mk(20,10));
   this.segments = [ls];
   this.displaySegments();
-  //this.displayLine(ls.end0,ls.end1);
   let prts = this.particles = [prt1,prt2,prt3];
   debugger;
   this.mkCirclesForParticles(prts);
+  this.particleCollisions();
   let t=cwp?this.solveForT(prt1,prt2):this.lineSegmentSolveForT(prt3,ls);
   if (t === undefined) {
     return;
