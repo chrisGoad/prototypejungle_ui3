@@ -29,7 +29,7 @@ t = (-b +- sqrt(b**2-4*a*c))/(2*a)
 
 particle = {ray,mass,startTime,position,shape,radius,collisions,index}
 
-collision = {time,withSegment,withParticle}
+collision = {particleIndex,time,withSegment,withParticle}
 
 where withX =its index
 
@@ -152,7 +152,7 @@ rs.lineSegmentSolveForT = function (particle,ls) {
   return t;
 }
 
-rs.collide = function (params) {
+rs.collideParticle = function (params) {
   let  {v1,v2,x1,x2,m1,m2} =params;
 //  debugger;
   let x1mx2ln = (x1.difference(x2)).length();
@@ -167,16 +167,33 @@ rs.collide = function (params) {
   return [nv1,nv2];
  /// return nv1;
 }
+// only computes new velocities, does not install them
 
-rs.collideParticles = function (particle1,particle2) {
+rs.collide2particles = function (particle1,particle2) {
   let {ray:ray1,mass:mass1,radius:radius1,position:pos1} = particle1;
   let {ray:ray2,mass:mass2,radius:radius2,position:pos2} = particle2;
   let {velocity:v1} = ray1;
   let {velocity:v2} = ray2;
   let params = {v1,v2,x1:pos1,x2:pos2,m1:mass1,m2:mass2};
-  let colres = this.collide(params);
+  let colres = this.collideParticle(params);
   return colres;
 }
+
+rs.enactCollide2Particles = function (particle1,particle2,t) {
+  let prt1 = particle1;
+  let prt2 = particle2;
+  let colres = this.collide2particles(prt1,prt2);
+  let [nv1,nv2] = colres;
+  let {ray:ray1} = prt1;
+  let {ray:ray2} = prt2;    
+  ray1.initialPosition=prt1.position;
+  ray2.initialPosition=prt2.position;
+  prt1.startTime = t;
+  prt2.startTime = t;
+  ray1.velocity = nv1;
+  ray2.velocity = nv2;
+}
+
 rs.collideLineSegment = function (particle,ls) {
   let {ray,radius,position:pos} = particle;
   let {velocity:v} = ray;
@@ -188,6 +205,16 @@ rs.collideLineSegment = function (particle,ls) {
   let nv = Point.mk(Math.cos(na),Math.sin(na)).times(vln);
   return nv;
 }
+
+rs.enactCollideLineSegment = function (particle,ls,t) {
+  let prt = particle;
+  let nv = this.collideLineSegment(prt,ls);
+  let {ray:ray} = prt;
+  ray.initialPosition=prt.position;
+  ray.velocity = nv;
+  prt.startTime = t;
+}
+
 rs.particleIdxCollisions = function (idx,allCols) {
   let {stepsSoFar:ssf,timePerStep,particles,segments} = this;
   let cols = [];
@@ -197,7 +224,7 @@ rs.particleIdxCollisions = function (idx,allCols) {
     let oprt = particles[i];
     let t= this.solveForT(prt,oprt);
     if (t) {
-      let col = {time:t,withParticle:i};
+      let col = {particleIndex:idx,time:t,withParticle:i};
       cols.push(col);
       allCols.push(col);
     }
@@ -207,7 +234,7 @@ rs.particleIdxCollisions = function (idx,allCols) {
     let seg = segments[i];
     let t= this.lineSegmentSolveForT(prt,seg);
     if (t) {;
-      let col = {time:t,withSegment:i};
+      let col = {particleIndex:idx,time:t,withSegment:i};
       cols.push(col);
       allCols.push(col);
     }
@@ -223,7 +250,7 @@ rs.particleCollisions = function () {
   for (let i=0;i<pln;i++) {
     this.particleIdxCollisions(i,allCols);
   }
-  let compare = const (c0,c1) => {
+  let compare = (c0,c1) => {
     let t0 = c0.time;
     let t1 = c1.time;
     if (t0<t1) {
@@ -240,23 +267,22 @@ rs.particleCollisions = function () {
   
 
 
-rs.updatePosition = function (particle,t) {
-  debugger;
+rs.updatePosition = function (particle,t,moveShape) {
   let {ray,mass,startTime,shape} = particle;
   let {initialPosition:ip,velocity:v} = ray;
   let deltaT = t-startTime;
   let np = ip.plus(v.times(deltaT));
   particle.position = np;
-  if (shape) {
+  if (shape && moveShape) {
     shape.moveto(np);
     shape.update();
   }
 }
 
-rs.updatePositions = function (t) {
+rs.updatePositions = function (t,moveShapes) {
   let {particles} = this;
   particles.forEach( (p) => {
-    this.updatePosition(p,t);
+    this.updatePosition(p,t,moveShapes);
   });
 }
     
@@ -319,7 +345,7 @@ rs.mkCirclesForParticles = function (particles) {
   });
 }
 
-rs.initialize = function () {
+rs.initializee = function () {
   debugger;
   let {timePerStep,stopTime,collideWithParticle:cwp} = this;
   this.numSteps = Math.ceil(stopTime/timePerStep);
@@ -357,45 +383,102 @@ rs.initialize = function () {
  
 }
 
-rs.updateState = function () {
+rs.updateCollisions = function (firstTime) {
+    let {nextCollision} = this;
+    debugger;
+    this.particleCollisions();
+    let cols = this.allCollisions;
+    if (firstTime) {
+      this.lastCollision = {time:0};
+    } else {
+      this.lastCollision = nextCollision;
+    }
+    if (cols.length) {
+      this.nextCollision = cols[0];
+    } else {
+      this.nextCollision = {time:stopTime}
+    }
+}
+rs.initialize = function () {
+  debugger;
+  let {timePerStep,stopTime,collideWithParticle:cwp} = this;
+  this.numSteps = Math.ceil(stopTime/timePerStep);
+  this.initProtos();
+  this.addFrame();
+  
+  //let av = (Math.PI/180)*4;
+  let av = (Math.PI/180)*10;
+  let v1 = Point.mk(Math.cos(av),Math.sin(av)).times(5);
+  let ip = Point.mk(0,0);
+  let ray1 = {initialPosition:ip,velocity:v1};
+  let ray3 = {initialPosition:Point.mk(0,-5),velocity:v1};
+  let prt1 = {ray:ray1,initialPosition:Point.mk(0,0),startTime:0,mass:0.5,radius:1};
+  let prt2 = {ray:{initialPosition:Point.mk(16,-1.8),velocity:Point.mk(0,1.3)},startTime:0,mass:10,radius:3};
+  let prt3 = {ray:ray3,startTime:0,mass:0.5,radius:1};
+  let ls = LineSegment.mk(Point.mk(20,-10),Point.mk(20,10));
+  this.segments = [ls];
+  this.displaySegments();
+  let prts = this.particles = [prt1,prt2,prt3];
+  this.mkCirclesForParticles(prts);
+  debugger;
+  this.updatePositions(0);
+  this.updateCollisions(1);
+    
+}
+
+
+rs.updateStatee = function () {
   let {stepsSoFar:ssf,timePerStep,lastColTime:lct,nextColTime:nct,stopTime,collideWithParticle:cwp} = this;
   let [prt1,prt2,prt3] = this.particles;
   let [ls] = this.segments;
   let ct = ssf*timePerStep;
   debugger;
   if ((ct >= lct) && (ct < nct)) {
-    this.updatePositions(ct);
+    this.updatePositions(ct,1);
   } else {
     debugger;
-    let colres,nv1,nv2;   
+    let colres,nv1,nv2; 
+    this.updatePositions(nct,0);
     if (cwp) {
-      colres = this.collideParticles(prt1,prt2);
-      nv1 = colres[0];
-      nv2 = colres[1];
+      this.enactCollide2Particles(prt1,prt2,nct);
+      //nv1 = colres[0];
+      //nv2 = colres[1];
 
     } else {
-      nv1 = this.collideLineSegment(prt3,ls);
+      this.enactCollideLineSegment(prt3,ls,nct);
     }
 
     this.lastColTime = nct;
     this.nextColTime = stopTime;
-    let {ray:ray1} = prt1;
-    let {ray:ray2} = prt2;
-    let {ray:ray3} = prt3;
-    
-    if (cwp) {
-      ray1.initialPosition=prt1.position;
-      ray2.initialPosition=prt2.position;
-      prt1.startTime = nct;
-      prt2.startTime = nct;
-      ray1.velocity = nv1;
-      ray2.velocity = nv2;
+    this.updatePositions(ct,1);
+  }
+}
+
+
+rs.updateState = function () {
+  let {stepsSoFar:ssf,timePerStep,lastCollision,nextCollision,stopTime,segments,particles} = this;
+  //let [prt1,prt2,prt3] = this.particles;
+  let ct = ssf*timePerStep;
+  let {particleIndex:pi,time:nct,withSegment:ws,withParticle:wp} = nextCollision;
+    let lct = lastCollision.time;
+
+  if ((ct >= lct) && (ct < nct)) {
+    this.updatePositions(ct,1);
+  } else {
+    debugger;
+    this.updatePositions(nct,0);
+    let prt = particles[pi];
+    if (wp) {
+      this.enactCollide2Particles(prt,particles[wp],nct);
+      //nv1 = colres[0];
+      //nv2 = colres[1];
+
     } else {
-      ray3.initialPosition=prt3.position;
-      ray3.velocity = nv1;
-      prt3.startTime = nct;
+      this.enactCollideLineSegment(prt,segs[ws],nct);
     }
-    this.updatePositions(ct);
+    this.updateCollisions(0);
+    this.particleCollisions();
+    this.updatePositions(ct,1);
   }
 }
 
