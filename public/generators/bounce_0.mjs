@@ -157,15 +157,23 @@ rs.lineSegmentSolveForT = function (particle,ls) {
   let {end0,end1} = ls;
   let vertical = this.lineSegVertical(ls);
   let low,high;
+  let {x,y} = ip;
+  let {x:vx,y:vy} = v;
+  let deltaP,vP;
   if (vertical) {
     let low = end0.y;
     let high = end1.y;
+    deltaP = (end0.x - x)>0;
+    vP = vx>0;
   } else {
     let low = end0.x;
     let high = end1.x;
+    deltaP = (end0.y - y)>0;
+    vP = vy >0;
   }
-  let {x,y} = ip;
-  let {x:vx,y:vy} = v;
+  if (deltaP !== vP) {
+    return undefined;
+  }
   let slope,islope;
   if (vertical) {
     if (vx===0) {
@@ -269,6 +277,7 @@ rs.particleIdxCollisions = function (idx,allCols) {
   }
   let sln = segments.length;
   for (let i=0;i<sln;i++) {
+    debugger;
     let seg = segments[i];
     let t= this.lineSegmentSolveForT(prt,seg);
     if (t) {;
@@ -452,16 +461,18 @@ rs.initialize = function () {
   let v1 = Point.mk(Math.cos(av),Math.sin(av)).times(5);
   let ip = Point.mk(0,0);
   let ray1 = {initialPosition:ip,velocity:v1};
+  //let ray3 = {initialPosition:Point.mk(0,-8),velocity:v1};
   let ray3 = {initialPosition:Point.mk(0,-5),velocity:v1};
   let prt1 = {ray:ray1,initialPosition:Point.mk(0,0),startTime:0,mass:0.5,radius:1};
   let prt2 = {ray:{initialPosition:Point.mk(16,-1.8),velocity:Point.mk(0,1.3)},startTime:0,mass:10,radius:3};
   let prt3 = {ray:ray3,startTime:0,mass:0.5,radius:1};
   let ls = LineSegment.mk(Point.mk(20,-10),Point.mk(20,10));
-  //this.segments = [ls];
-  this.segments = [];
+  this.segments = [ls];
+ // this.segments = [];
   this.displaySegments();
- // let prts = this.particles = [prt1,prt2,prt3];
-  let prts = this.particles = [prt1,prt2];
+  //let prts = this.particles = [prt3];
+  let prts = this.particles = [prt1,prt2,prt3];
+  //let prts = this.particles = [prt1,prt2];
   this.mkCirclesForParticles(prts);
   debugger;
   this.updatePositions(0);
