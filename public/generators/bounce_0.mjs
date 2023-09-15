@@ -7,7 +7,7 @@ addAnimationMethods(rs);
 
 rs.setName('bounce_0');
 let ht=50;
-let topParams = {width:ht,height:ht,framePadding:0.1*ht,frameStroke:'white',frameStrokeWidth:.2,timePerStep:0.1,stopTime:30,collideWithParticle:1}
+let topParams = {width:ht,height:ht,framePadding:0.1*ht,frameStroke:'white',frameStrokeWidth:.2,timePerStep:0.05,stopTime:30,collideWithParticle:1}
 
 Object.assign(rs,topParams);
 
@@ -161,6 +161,7 @@ rs.lineSegmentSolveForT = function (particle,ls) {
   let {currentTime:ct}=this;
   particle.startTime=ct;
   let {ray,radius,position:cp} = particle;
+  debugger;
   ray.initialPosition = cp;
   //let {initialPosition:ip,velocity:v} = ray;
   let {velocity:v} = ray;
@@ -175,6 +176,7 @@ rs.lineSegmentSolveForT = function (particle,ls) {
     let high = end1.y;
     deltaP = (end0.x - x)>0;
     vP = vx>0;
+   
   } else {
     let low = end0.x;
     let high = end1.x;
@@ -184,6 +186,7 @@ rs.lineSegmentSolveForT = function (particle,ls) {
   if (deltaP !== vP) {
     return undefined;
   }
+  let rtu = vP?-radius:radius;
   let slope,islope;
   if (vertical) {
     if (vx===0) {
@@ -196,12 +199,14 @@ rs.lineSegmentSolveForT = function (particle,ls) {
     }
     islope = vx/vy;
   }
-  let intsct = vertical?y + ((end0.x-radius)-x)*slope: x + (end0.y-y-radius)*islope;
+  let intsct = vertical?y + (end0.x-x)*slope: x + (end0.y-y)*islope;
+ // let intsct = vertical?y + ((end0.x-radius)-x)*slope: x + (end0.y-y-radius)*islope;
   if ((intsct < low) || (high < intsct)) {
     return undefined;
   }
   let vln = v.length();
-  let nip = vertical?Point.mk(end0.x-radius,intsct):Point.mk(intsct,end0.y-radius);
+ // let nip = vertical?Point.mk(end0.x-radius,intsct):Point.mk(intsct,end0.y-radius);
+  let nip = vertical?Point.mk(end0.x+rtu,intsct):Point.mk(intsct,end0.y+rtu);
   let d = (nip.difference(cp)).length();
   let t = d/vln;
   return t;
@@ -255,7 +260,10 @@ rs.collideLineSegment = function (particle,ls) {
   let {velocity:v} = ray;
   let {x:vx,y:vy} = v;
   let vertical = this.lineSegVertical(ls);
+  debugger;
   let a = Math.atan2(vy,vx);
+  let rtd = 180/Math.PI;
+  let ad = rtd*a;
   let na = vertical?Math.PI-a:-a;
   let vln = v.length();
   let nv = Point.mk(Math.cos(na),Math.sin(na)).times(vln);
@@ -470,7 +478,8 @@ rs.initialize = function () {
   this.addFrame();
   
   //let av = (Math.PI/180)*4;
-  let av1 = (Math.PI/180)*10;
+  //let av1 = (Math.PI/180)*10;
+  let av1 = (Math.PI/180)*0;
   let v1 = Point.mk(Math.cos(av1),Math.sin(av1)).times(5);
   let av3 = (Math.PI/180)*25;
   let v3 = Point.mk(Math.cos(av3),Math.sin(av3)).times(5);
@@ -481,7 +490,7 @@ rs.initialize = function () {
   let prt1 = {ray:ray1,initialPosition:Point.mk(0,0),startTime:0,mass:0.5,radius:1};
   let prt2 = {ray:{initialPosition:Point.mk(16,-1.8),velocity:Point.mk(0,1.3)},startTime:0,mass:10,radius:3};
   let prt3 = {ray:ray3,startTime:0,mass:0.5,radius:1};
-   let boxD = 20;
+   let boxD = 21;
   let lsL = LineSegment.mk(Point.mk(-boxD,-boxD),Point.mk(-boxD,boxD));
   let lsR = LineSegment.mk(Point.mk(boxD,-boxD),Point.mk(boxD,boxD));
   let lsT = LineSegment.mk(Point.mk(-boxD,-boxD),Point.mk(boxD,-boxD));
