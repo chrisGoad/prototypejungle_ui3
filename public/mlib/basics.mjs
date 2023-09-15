@@ -577,6 +577,42 @@ item.resetShapes = function () {
   draw.refresh();
 }
 
+
+item.collides0 = function (point1,radius1,point2,radius2) {
+  let p1x = point1.x;
+  let p1y = point1.y;
+  let z = point1.z;
+  let p1z = z?z:0;
+  let p2x = point2.x;
+  let p2y = point2.y;
+  z = point1.z;
+  let p2z = z?z:0;
+
+  let minDist =  radius1 + radius2 ;
+  //console.log('minDist',minDist,'xd',p2x-p1x,'yd',p2y-p1y,'d',d);
+  if (Math.abs(p2x - p1x) >=  minDist) {return false;}
+  if (Math.abs(p2y - p1y) >= minDist) {return false;}
+  let d= point1.distance(point2);
+  return minDist >= d;
+}
+debugger;
+item.collides = function (npoint,nradius,circleDs) {
+  let n = circleDs.length;
+  for (let i=0;i<n;i++) {
+    let {point,collideRadius} = circleDs[i];
+    if (this.collides0(npoint,nradius,point,collideRadius)) {
+      return true;
+    }
+  }
+  return false
+}
+
+
+item.genRandomValue = function (lb,ub) {
+  let delta = ub-lb;
+  return lb + Math.random()*delta;
+}
+
 item.genRandomPoint = function (onw) {
   if (onw) {
     if (Rectangle.isPrototypeOf(onw)) {

@@ -3,11 +3,12 @@ import {rs as linePP} from '/shape/line.mjs';
 import {rs as basicP} from '/generators/basics.mjs';
 import {rs as addAnimationMethods} from '/mlib/animate0.mjs';
 let rs = basicP.instantiate();
+debugger;
 addAnimationMethods(rs);
 
 rs.setName('bounce_0');
 let ht=50;
-let topParams = {width:ht,height:ht,framePadding:0.1*ht,frameStroke:'white',frameStrokeWidth:.2,timePerStep:0.05,stopTime:30,collideWithParticle:1}
+let topParams = {width:ht,height:ht,framePadding:0.1*ht,frameStroke:'white',frameStrokeWidth:.2,timePerStep:0.1,stopTime:100,collideWithParticle:1}
 
 Object.assign(rs,topParams);
 
@@ -199,7 +200,7 @@ rs.lineSegmentSolveForT = function (particle,ls) {
     }
     islope = vx/vy;
   }
-  let intsct = vertical?y + (end0.x-x)*slope: x + (end0.y-y)*islope;
+  let intsct = vertical?y + (end0.x+rtu-x)*slope: x + (end0.y+rtu-y)*islope;
  // let intsct = vertical?y + ((end0.x-radius)-x)*slope: x + (end0.y-y-radius)*islope;
   if ((intsct < low) || (high < intsct)) {
     return undefined;
@@ -470,6 +471,34 @@ rs.updateCollisions = function (firstTime) {
       this.nextCollision = {time:stopTime}
     }
 }
+
+
+rs.genBox = function (boxD) {
+  let lsL = LineSegment.mk(Point.mk(-boxD,-boxD),Point.mk(-boxD,boxD));
+  let lsR = LineSegment.mk(Point.mk(boxD,-boxD),Point.mk(boxD,boxD));
+  let lsT = LineSegment.mk(Point.mk(-boxD,-boxD),Point.mk(boxD,-boxD));
+  let lsB = LineSegment.mk(Point.mk(-boxD,boxD),Point.mk(boxD,boxD));
+  this.segments = [lsL,lsR,lsT,lsB];
+  this.boxD = boxD;
+}
+
+rs.boxToRect = function (pad) {
+   let ibox = this.boxD - pad;
+   let c = Point.mk(-ibox,-ibox);
+   let xt = Point.mk(2*ibox,2*ibox);
+   let rect = Rectangle.mk(c,xt);
+   this.ibox = rect;
+   return rect;
+}
+
+rs.initProtos = function () {
+  let circleP = this.circleP = circlePP.instantiate();
+  circleP.stroke = 'white';
+  circleP['stroke-width'] = .1;
+  let lineP = this.lineP = linePP.instantiate();
+  lineP.stroke = 'white';
+  lineP['stroke-width'] = .2;
+}
 rs.initialize = function () {
   debugger;
   let {timePerStep,stopTime,collideWithParticle:cwp} = this;
@@ -479,7 +508,7 @@ rs.initialize = function () {
   
   //let av = (Math.PI/180)*4;
   //let av1 = (Math.PI/180)*10;
-  let av1 = (Math.PI/180)*0;
+  let av1 = (Math.PI/180)*44;
   let v1 = Point.mk(Math.cos(av1),Math.sin(av1)).times(5);
   let av3 = (Math.PI/180)*25;
   let v3 = Point.mk(Math.cos(av3),Math.sin(av3)).times(5);
@@ -490,12 +519,13 @@ rs.initialize = function () {
   let prt1 = {ray:ray1,initialPosition:Point.mk(0,0),startTime:0,mass:0.5,radius:1};
   let prt2 = {ray:{initialPosition:Point.mk(16,-1.8),velocity:Point.mk(0,1.3)},startTime:0,mass:10,radius:3};
   let prt3 = {ray:ray3,startTime:0,mass:0.5,radius:1};
-   let boxD = 21;
+  this.genBox(21);
+ /*  let boxD = 21;
   let lsL = LineSegment.mk(Point.mk(-boxD,-boxD),Point.mk(-boxD,boxD));
   let lsR = LineSegment.mk(Point.mk(boxD,-boxD),Point.mk(boxD,boxD));
   let lsT = LineSegment.mk(Point.mk(-boxD,-boxD),Point.mk(boxD,-boxD));
   let lsB = LineSegment.mk(Point.mk(-boxD,boxD),Point.mk(boxD,boxD));
-  this.segments = [lsL,lsR,lsT,lsB];
+  this.segments = [lsL,lsR,lsT,lsB];*/
  // this.segments = [];
   this.displaySegments();
   let prts = this.particles = [prt1];
