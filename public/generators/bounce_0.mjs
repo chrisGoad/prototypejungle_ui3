@@ -566,8 +566,43 @@ rs.updateStatee = function () {
   }
 }
 
+rs.collisionsBefore = function (t) {
+  let {allCollisions:allCols} = this;
+  let nCols = []
+  let ln = allCols.length;
+  for (let i=0;i<ln;i++) {
+    let ccol = allCols[i];
+    if (ccol.time <= t) {
+      nCols.push(ccol);
+    }
+  }
+  return nCols;   
+}
 
-rs.updateState = function () {
+rs.enactCollision  = function (col) {
+  let {particles,segments} = this;
+  let {particleIndex:pi,time:cct,withSegment:ws,withParticle:wp} = col;
+  this.updatePositions(cct,0);
+  let prt = particles[pi];
+  if (wp) {
+    this.enactCollide2Particles(prt,particles[wp],cct);
+  } else {
+    this.enactCollideLineSegment(prt,segments[ws],cct);
+  }
+}
+rs.firstColBefore = function (t) {
+  let {allCollisions:allCols} = this;
+  if (allCols.length) {
+    let ccol = allCols[0];
+    let cct = ccol.time;
+    if (cct <= t) {
+      return ccol;
+    }
+  }
+}
+       
+ 
+rs.updateStatee = function () {
   let {stepsSoFar:ssf,timePerStep,lastCollision,nextCollision,stopTime,segments,particles} = this;
   //let [prt1,prt2,prt3] = this.particles;
   let ct = ssf*timePerStep;
@@ -592,6 +627,34 @@ rs.updateState = function () {
     this.particleCollisions();
     this.updatePositions(ct,1);
   }
+}
+  
+rs.updateState = function () {
+  let {stepsSoFar:ssf,timePerStep,lastCollision,nextCollision,stopTime,segments,particles} = this;
+  //let [prt1,prt2,prt3] = this.particles;
+  let ct = ssf*timePerStep;
+  let {time:nct} = nextCollision;
+  let lct = lastCollision.time;
+  if ((ct >= lct) && (ct < nct)) {
+    this.updatePositions(ct,1);
+  } else {
+    let cta = nextCollision;
+    if (!cta) {
+      return undefined;
+    }
+    while (cta) {
+      this.enactCollision(cta);
+      this.updateCollisions(0);
+      this.particleCollisions();
+      cta = this.firstColBefore(ct);
+      if (cta) {
+        let nct = cta.time;
+        this.updatePositions(nct,1);
+      }
+    }
+  }
+  let allCols = this.allCollisions;
+  this.nextCollision = (allCols.length)?allCols[0]:undefined;
 }
 
 

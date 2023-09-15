@@ -52,7 +52,7 @@ rs.initialize = function () {
   let prts  = this.particles = [];
   rs.circleDs = [];
   let nump = 0;
-  while (nump<15) {
+  while (nump<30) {
     let prt = this.randomParticle(pparams);
     if (prt) {
       prts.push(prt);
