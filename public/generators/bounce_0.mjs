@@ -7,7 +7,7 @@ addAnimationMethods(rs);
 
 rs.setName('bounce_0');
 let ht=50;
-let topParams = {width:ht,height:ht,framePadding:0.1*ht,frameStroke:'white',frameStrokeWidth:.2,timePerStep:0.05,stopTime:10,collideWithParticle:1}
+let topParams = {width:ht,height:ht,framePadding:0.1*ht,frameStroke:'white',frameStrokeWidth:.2,timePerStep:0.1,stopTime:30,collideWithParticle:1}
 
 Object.assign(rs,topParams);
 
@@ -110,18 +110,24 @@ rs.v2s = function (v) {
 }
 
 rs.solveForT = function (particle1,particle2) {
-  let {ray:ray1,radius:r1} = particle1;
-  let {ray:ray2,radius:r2} = particle2;
-  let {initialPosition:ip1,velocity:v1} = ray1;
-  let {initialPosition:ip2,velocity:v2} = ray2;
-  let ip1s = this.v2s(ip1);
-  let ip2s = this.v2s(ip2);
+  debugger;
+  let {currentTime:ct}=this;
+  particle1.startTime=ct;
+  particle2.startTime=ct;
+  let {ray:ray1,radius:r1,position:cp1} = particle1;
+  let {ray:ray2,radius:r2,position:cp2} = particle2;
+  ray1.initialPosition = cp1;
+  ray2.initialPosition = cp2;
+  let {velocity:v1} = ray1;
+  let {velocity:v2} = ray2;
+  let cp1s = this.v2s(cp1);
+  let cp2s = this.v2s(cp2);
   let v1s = this.v2s(v1);
   let v2s = this.v2s(v2);
-  console.log('idx1',particle1.index,'idx2',particle2.index,'ip1',ip1s,'ip2',ip2s,'v1',v1s,'v2',v2s);
+  console.log('idx1',particle1.index,'idx2',particle2.index,'cp1',cp1s,'cp2',cp2s,'v1',v1s,'v2',v2s);
   let rv = v1.difference(v2)
   //let params = {A:ip1,V:v1,P:ip2,r1,r2};
-  let params = {A:ip1,V:rv,P:ip2,r1,r2};
+  let params = {A:cp1,V:rv,P:cp2,r1,r2};
   let t = this.solveForT1(params);
   return t;
 }
@@ -152,12 +158,16 @@ rs.lineSegVertical = function (ls) {
   }
   
 rs.lineSegmentSolveForT = function (particle,ls) {
-  let {ray,radius} = particle;
-  let {initialPosition:ip,velocity:v} = ray;
+  let {currentTime:ct}=this;
+  particle.startTime=ct;
+  let {ray,radius,position:cp} = particle;
+  ray.initialPosition = cp;
+  //let {initialPosition:ip,velocity:v} = ray;
+  let {velocity:v} = ray;
   let {end0,end1} = ls;
   let vertical = this.lineSegVertical(ls);
   let low,high;
-  let {x,y} = ip;
+  let {x,y} = cp;
   let {x:vx,y:vy} = v;
   let deltaP,vP;
   if (vertical) {
@@ -192,7 +202,7 @@ rs.lineSegmentSolveForT = function (particle,ls) {
   }
   let vln = v.length();
   let nip = vertical?Point.mk(end0.x-radius,intsct):Point.mk(intsct,end0.y-radius);
-  let d = (nip.difference(ip)).length();
+  let d = (nip.difference(cp)).length();
   let t = d/vln;
   return t;
 }
@@ -262,7 +272,7 @@ rs.enactCollideLineSegment = function (particle,ls,t) {
 }
 
 rs.particleIdxCollisions = function (idx,allCols) {
-  let {stepsSoFar:ssf,timePerStep,particles,segments} = this;
+  let {stepsSoFar:ssf,timePerStep,particles,segments,currentTime:ct} = this;
   let cols = [];
   let prt = particles[idx]
   let pln = particles.length;
@@ -270,7 +280,7 @@ rs.particleIdxCollisions = function (idx,allCols) {
     let oprt = particles[i];
     let t= this.solveForT(prt,oprt);
     if (t) {
-      let col = {particleIndex:idx,time:t,withParticle:i};
+      let col = {particleIndex:idx,time:ct+t,withParticle:i};
       cols.push(col);
       allCols.push(col);
     }
@@ -281,7 +291,7 @@ rs.particleIdxCollisions = function (idx,allCols) {
     let seg = segments[i];
     let t= this.lineSegmentSolveForT(prt,seg);
     if (t) {;
-      let col = {particleIndex:idx,time:t,withSegment:i};
+      let col = {particleIndex:idx,time:ct+t,withSegment:i};
       cols.push(col);
       allCols.push(col);
     }
@@ -328,6 +338,7 @@ rs.updatePosition = function (particle,t,moveShape) {
 }
 
 rs.updatePositions = function (t,moveShapes) {
+  this.currentTime = t;
   let {particles} = this;
   particles.forEach( (p) => {
     this.updatePosition(p,t,moveShapes);
@@ -403,11 +414,13 @@ rs.initializee = function () {
   this.addFrame();
   
   //let av = (Math.PI/180)*4;
-  let av = (Math.PI/180)*10;
-  let v1 = Point.mk(Math.cos(av),Math.sin(av)).times(5);
+  let av1 = (Math.PI/180)*10;
+  let v1 = Point.mk(Math.cos(av1),Math.sin(av1)).times(5);
+  let av3 = (Math.PI/180)*30;
+  let v3 = Point.mk(Math.cos(av1),Math.sin(av1)).times(5);
   let ip = Point.mk(0,0);
   let ray1 = {initialPosition:ip,velocity:v1};
-  let ray3 = {initialPosition:Point.mk(0,-5),velocity:v1};
+  let ray3 = {initialPosition:Point.mk(0,-4.5),velocity:v3};
   let prt1 = {ray:ray1,initialPosition:Point.mk(0,0),startTime:0,mass:0.5,radius:1};
  // let prt1 = {ray:ray1,initialPosition:Point.mk(0,0),initialPosition:Point.mk(0,0),startTime:0,mass:0.5,radius:1};
   let prt2 = {ray:{initialPosition:Point.mk(20,-1.8),velocity:Point.mk(0,1.3)},startTime:0,mass:10,radius:3};
@@ -457,24 +470,31 @@ rs.initialize = function () {
   this.addFrame();
   
   //let av = (Math.PI/180)*4;
-  let av = (Math.PI/180)*10;
-  let v1 = Point.mk(Math.cos(av),Math.sin(av)).times(5);
+  let av1 = (Math.PI/180)*10;
+  let v1 = Point.mk(Math.cos(av1),Math.sin(av1)).times(5);
+  let av3 = (Math.PI/180)*25;
+  let v3 = Point.mk(Math.cos(av3),Math.sin(av3)).times(5);
   let ip = Point.mk(0,0);
-  let ray1 = {initialPosition:ip,velocity:v1};
+  let ray1 = {initialPosition:ip,velocity:v1.times(-1)};
   //let ray3 = {initialPosition:Point.mk(0,-8),velocity:v1};
-  let ray3 = {initialPosition:Point.mk(0,-5),velocity:v1};
+  let ray3 = {initialPosition:Point.mk(0,-8),velocity:v3};
   let prt1 = {ray:ray1,initialPosition:Point.mk(0,0),startTime:0,mass:0.5,radius:1};
   let prt2 = {ray:{initialPosition:Point.mk(16,-1.8),velocity:Point.mk(0,1.3)},startTime:0,mass:10,radius:3};
   let prt3 = {ray:ray3,startTime:0,mass:0.5,radius:1};
-  let ls = LineSegment.mk(Point.mk(20,-10),Point.mk(20,10));
-  this.segments = [ls];
+   let boxD = 20;
+  let lsL = LineSegment.mk(Point.mk(-boxD,-boxD),Point.mk(-boxD,boxD));
+  let lsR = LineSegment.mk(Point.mk(boxD,-boxD),Point.mk(boxD,boxD));
+  let lsT = LineSegment.mk(Point.mk(-boxD,-boxD),Point.mk(boxD,-boxD));
+  let lsB = LineSegment.mk(Point.mk(-boxD,boxD),Point.mk(boxD,boxD));
+  this.segments = [lsL,lsR,lsT,lsB];
  // this.segments = [];
   this.displaySegments();
-  //let prts = this.particles = [prt3];
-  let prts = this.particles = [prt1,prt2,prt3];
+  let prts = this.particles = [prt1];
+  //let prts = this.particles = [prt1,prt2,prt3];
   //let prts = this.particles = [prt1,prt2];
   this.mkCirclesForParticles(prts);
   debugger;
+  this.currentTime = 0;
   this.updatePositions(0);
   this.updateCollisions(1);
     
