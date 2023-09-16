@@ -3,7 +3,7 @@ import {rs as linePP} from '/shape/line.mjs';
 import {rs as basicP} from '/generators/basics.mjs';
 import {rs as addAnimationMethods} from '/mlib/animate0.mjs';
 let rs = basicP.instantiate();
-debugger;
+
 addAnimationMethods(rs);
 
 rs.setName('bounce_0');
@@ -59,9 +59,9 @@ rs.solveForT1 = function (params) {
   let dp = V.dotp(vAP);
   let A3d  = this.v2s(A);
   let vPA3d  = this.v2s(A);
-  console.log('A',A3d,'vPA',vPA3d,'dotp',dp);
+ // console.log('A',A3d,'vPA',vPA3d,'dotp',dp);
   if (dp<=0) { 
-    console.log('return undefined');
+    //console.log('return undefined');
     return undefined;
   }
   let {x:Cx,y:Cy} = vPA;
@@ -75,7 +75,7 @@ rs.solveForT1 = function (params) {
   
   let itrm = b*b-4*a*c;
   if (itrm < 0) {
-    console.log('return undefined');
+    //console.log('return undefined');
     return undefined;
   }
   let itrm1 = Math.sqrt(itrm);
@@ -98,7 +98,7 @@ rs.solveForT1 = function (params) {
   let ck0 = check1(t0);
   let ck1 = check1(t1);
   //return [p0,p1,t0,t1];
-  console.log('return ',t0);
+ // console.log('return ',t0);
   return t0;
 }
 
@@ -110,8 +110,15 @@ rs.v2s = function (v) {
   return s;
 }
 
+rs.hasNaN = function (p) {
+ let {x,y} = p;
+ if (isNaN(x) || isNaN(y)) {
+   console.log('hasNaN');
+   //debugger;
+  }
+}
+
 rs.solveForT = function (particle1,particle2) {
-  debugger;
   let {currentTime:ct}=this;
   particle1.startTime=ct;
   particle2.startTime=ct;
@@ -121,11 +128,14 @@ rs.solveForT = function (particle1,particle2) {
   ray2.initialPosition = cp2;
   let {velocity:v1} = ray1;
   let {velocity:v2} = ray2;
+  this.hasNaN(v1);
+  this.hasNaN(v2);
+  
   let cp1s = this.v2s(cp1);
   let cp2s = this.v2s(cp2);
   let v1s = this.v2s(v1);
   let v2s = this.v2s(v2);
-  console.log('idx1',particle1.index,'idx2',particle2.index,'cp1',cp1s,'cp2',cp2s,'v1',v1s,'v2',v2s);
+  //console.log('idx1',particle1.index,'idx2',particle2.index,'cp1',cp1s,'cp2',cp2s,'v1',v1s,'v2',v2s);
   let rv = v1.difference(v2)
   //let params = {A:ip1,V:v1,P:ip2,r1,r2};
   let params = {A:cp1,V:rv,P:cp2,r1,r2};
@@ -162,7 +172,6 @@ rs.lineSegmentSolveForT = function (particle,ls) {
   let {currentTime:ct}=this;
   particle.startTime=ct;
   let {ray,radius,position:cp} = particle;
-  debugger;
   ray.initialPosition = cp;
   //let {initialPosition:ip,velocity:v} = ray;
   let {velocity:v} = ray;
@@ -225,13 +234,14 @@ rs.collideParticle = function (params) {
   //let sqx1mx2ln = x1mx2ln*x1mx2ln;
   let itrm2 = (2*m1/(m1+m2))* (v2.difference(v1).dotp(x2.difference(x1))/sqx1mx2ln);
   let nv2 = v2.difference(x2.difference(x1).times(itrm2));
+  this.hasNaN(nv1);
+  this.hasNaN(nv2);
   return [nv1,nv2];
  /// return nv1;
 }
 // only computes new velocities, does not install them
 
 rs.collide2particles = function (particle1,particle2) {
-  debugger;
   let {ray:ray1,mass:mass1,radius:radius1,position:pos1} = particle1;
   let {ray:ray2,mass:mass2,radius:radius2,position:pos2} = particle2;
   let {velocity:v1} = ray1;
@@ -262,7 +272,6 @@ rs.collideLineSegment = function (particle,ls) {
   let {velocity:v} = ray;
   let {x:vx,y:vy} = v;
   let vertical = this.lineSegVertical(ls);
-  debugger;
   let a = Math.atan2(vy,vx);
   let rtd = 180/Math.PI;
   let ad = rtd*a;
@@ -331,7 +340,6 @@ rs.particleIdxCollisions = function (idx,allCols) {
   }
   let sln = segments.length;
   for (let i=0;i<sln;i++) {
-    debugger;
     let seg = segments[i];
     let t= this.lineSegmentSolveForT(prt,seg);
     if (t) {;
@@ -364,12 +372,11 @@ rs.particleCollisions = function () {
     return 1;
   };
   allCols.sort(compare);
-  debugger;
   this.allCollisions = allCols;
 }
 */
 rs.particleCollisions = function () {
-  debugger;
+ // debugger;
   let nct = 1000000;
   let nextCol;
   let {particles} = this;
@@ -402,19 +409,21 @@ rs.particleCollisions = function () {
     return 1;
   };
   allCols.sort(compare);
-  debugger;
+ // debugger;
   this.allCollisions = allCols;
 }
   
  
 rs.updateParticleCollisions = function (lastCol) {
-  let {particles} = this;
+  let {particles,currentTime:ct} = this;
   let {particleIndex:pi,time:t,withParticle:wp,withSegment:ws} = lastCol;
   let prt1 = particles[pi];
   let prt2 = (wp===undefined)?undefined:particles[wp];
   let nxtcol;
   let nct =1000000;
   let col;
+  let lct = lastCol.time;
+  let pln = particles.length;
   particles.forEach( (prt) => {
     let prti = prt.index;
     let col;
@@ -422,11 +431,31 @@ rs.updateParticleCollisions = function (lastCol) {
       col = this.nextCollision(prt);
       prt.nextC = col;
     } else {
-      let t1 = this.solveForT(prt,prt1);
-      let t2 = prt2?this.solveForT(prt,prt2):1000000;
+      let rt1,rt2;
+      if (prt.index !== prt1.index) {
+        rt1 = this.solveForT(prt,prt1);
+      }
+      if (prt2 && (prt.index !== prt2.index)) {
+         rt2 = this.solveForT(prt,prt2);
+      } else {
+        rt2=100000;
+      }
+      let t1,t2;
+      if (rt1) {
+        t1 = rt1+ct;
+      }
+       if (rt2) {
+        t2 = rt2+ct;
+      }
       col = prt.nextC;
       let  t3 = col?col.time:1000000;
       let t1smallest,t2smallest,t3smallest;
+      if (t1 === undefined) {
+        t1 = 1000000;
+      }
+      if (t2 === undefined) {
+        t2 = 1000000;
+      }
       if (t1<t2) {
         if (t1<t3) {
           t1smallest = 1;
@@ -447,6 +476,9 @@ rs.updateParticleCollisions = function (lastCol) {
         col = {particleIndex:pi,time:t2,withParticle:prt2.index,withSegment:undefined};
       }
       prt.nextC = col;
+      if (col.time === lct) {
+        debugger;
+      }
       
     }
     if (col) {
@@ -545,7 +577,6 @@ rs.mkCirclesForParticles = function (particles) {
 }
 
 rs.initializee = function () {
-  debugger;
   let {timePerStep,stopTime,collideWithParticle:cwp} = this;
   this.numSteps = Math.ceil(stopTime/timePerStep);
   this.initProtos();
@@ -567,9 +598,7 @@ rs.initializee = function () {
   this.segments = [ls];
   this.displaySegments();
   let prts = this.particles = [prt1,prt2,prt3];
-  debugger;
   this.mkCirclesForParticles(prts);
-  debugger;
   this.particleCollisions();
   let t=cwp?this.solveForT(prt1,prt2):this.lineSegmentSolveForT(prt3,ls);
   if (t === undefined) {
@@ -586,7 +615,6 @@ rs.initializee = function () {
 
 rs.updateCollisions = function (firstTime) {
     let {nextC,stopTime} = this;
-    debugger;
     this.particleCollisions();
     let cols = this.allCollisions;
     if (firstTime) {
@@ -661,7 +689,6 @@ rs.initialize = function () {
   //let prts = this.particles = [prt1,prt2,prt3];
   //let prts = this.particles = [prt1,prt2];
   this.mkCirclesForParticles(prts);
-  debugger;
   this.currentTime = 0;
   this.updatePositions(0);
   this.updateCollisions(1);
@@ -677,7 +704,6 @@ rs.updateStatee = function () {
   if ((ct >= lct) && (ct < nct)) {
     this.updatePositions(ct,1);
   } else {
-    debugger;
     let colres,nv1,nv2; 
     this.updatePositions(nct,0);
     if (cwp) {
@@ -741,7 +767,6 @@ rs.updateStatee = function () {
   if ((ct >= lct) && (ct < nct)) {
     this.updatePositions(ct,1);
   } else {
-    debugger;
     this.updatePositions(nct,0);
     let prt = particles[pi];
     if (wp) {
@@ -771,6 +796,7 @@ rs.updateStateeee = function () {
     if (!cta) {
       return undefined;
     }
+    let loopCnt = 0;
     while (cta) {
       this.enactCollision(cta);
       this.updateCollisions(0);
@@ -797,16 +823,24 @@ rs.updateState = function () {
     if (!cta) {
       return undefined;
     }
+    debugger;
+    let loopCnt = 0;
     while (cta) {
       this.enactCollision(cta);
       //this.updateCollisions(0);
-      this.nextC = cta = this.particleCollisions();
+    //  this.nextC = cta = this.particleCollisions();
+      this.nextC = cta = this.updateParticleCollisions(cta);
       let ctat = cta.time;
+      console.log('ctat',ctat);
       if (ctat > ct) {
         
         return;
       }
       this.updatePositions(ctat,0);
+      loopCnt++;
+      if (loopCnt > 100) {
+        debugger;
+      }
       
     }
   }
