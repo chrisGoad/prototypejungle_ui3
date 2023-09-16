@@ -5,7 +5,7 @@ let rs = generatorP.instantiate();
 
 rs.setName('bounce_1');
 let ht=50;
-let topParams = {width:ht,height:ht,framePadding:0.1*ht,frameStroke:'white',frameStrokeWidth:.2,timePerStep:0.1,stopTime:100,collideWithParticle:1}
+let topParams = {width:ht,height:ht,framePadding:0.1*ht,frameStroke:'white',frameStrokeWidth:.2,timePerStep:0.1,stopTime:100,collideWithParticle:1,numParticles:10}
 
 Object.assign(rs,topParams);
 
@@ -41,7 +41,7 @@ rs.randomParticle = function (params) {
 
 rs.initialize = function () {
   debugger;
-  let {timePerStep,stopTime,collideWithParticle:cwp} = this;
+  let {timePerStep,stopTime,collideWithParticle:cwp,numParticles} = this;
   this.numSteps = Math.ceil(stopTime/timePerStep);
   this.initProtos();
   this.addFrame();
@@ -52,7 +52,7 @@ rs.initialize = function () {
   let prts  = this.particles = [];
   rs.circleDs = [];
   let nump = 0;
-  while (nump<30) {
+  while (nump<numParticles) {
     let prt = this.randomParticle(pparams);
     if (prt) {
       prts.push(prt);
@@ -64,7 +64,9 @@ rs.initialize = function () {
   debugger;
   this.currentTime = 0;
   this.updatePositions(0);
-  this.updateCollisions(1);
+  //this.updateCollisions(1);
+  this.nextC = this.particleCollisions();
+
     
 }
 

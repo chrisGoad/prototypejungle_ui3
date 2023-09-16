@@ -370,15 +370,26 @@ rs.particleCollisions = function () {
 */
 rs.particleCollisions = function () {
   debugger;
+  let nct = 1000000;
+  let nextCol;
   let {particles} = this;
   let pln = particles.length;
-  let allCols = [];
+  //let allCols = [];
   for (let i=0;i<pln;i++) {
     let prt = particles[i];
     let col = this.nextCollision(prt);
     prt.nextC = col;
-    allCols.push(col);
+    if (col) {
+      let t = col.time;
+      if (t<nct) {
+        nct = t;
+        nextCol = col;
+      }
+    }
+  //  allCols.push(col);
   }
+  return nextCol;
+  
   let compare = (c0,c1) => {
     let t0 = c0.time;
     let t1 = c1.time;
@@ -395,13 +406,12 @@ rs.particleCollisions = function () {
   this.allCollisions = allCols;
 }
   
-/*  
+ 
 rs.updateParticleCollisions = function (lastCol) {
   let {particles} = this;
   let {particleIndex:pi,time:t,withParticle:wp,withSegment:ws} = lastCol;
   let prt1 = particles[pi];
   let prt2 = (wp===undefined)?undefined:particles[wp];
-  let nct = 0;
   let nxtcol;
   let nct =1000000;
   let col;
@@ -441,16 +451,17 @@ rs.updateParticleCollisions = function (lastCol) {
     }
     if (col) {
       let t = col.time;
-      if (t < nct)) {
+      if (t < nct) {
         nct = t;
         nxtcol = col;
       }
     }
   });
   this.nextC = nxtcol;
+  return nxtcol;
 }
 
-*/
+
 
 rs.updatePosition = function (particle,t,moveShape) {
   let {ray,mass,startTime,shape} = particle;
@@ -747,7 +758,7 @@ rs.updateStatee = function () {
   }
 }
   
-rs.updateState = function () {
+rs.updateStateeee = function () {
   let {stepsSoFar:ssf,timePerStep,lastCollision,nextC,stopTime,segments,particles} = this;
   //let [prt1,prt2,prt3] = this.particles;
   let ct = ssf*timePerStep;
@@ -774,6 +785,34 @@ rs.updateState = function () {
   let allCols = this.allCollisions;
   this.nextC = (allCols.length)?allCols[0]:undefined;
 }
+
+rs.updateState = function () {
+  let {stepsSoFar:ssf,timePerStep,lastCollision,nextC,stopTime,segments,particles} = this;
+  let ct = ssf*timePerStep;
+  let nct = nextC.time;
+  if (ct<nct) {
+    this.updatePositions(ct,1);
+  } else {
+    let cta = nextC;
+    if (!cta) {
+      return undefined;
+    }
+    while (cta) {
+      this.enactCollision(cta);
+      //this.updateCollisions(0);
+      this.nextC = cta = this.particleCollisions();
+      let ctat = cta.time;
+      if (ctat > ct) {
+        
+        return;
+      }
+      this.updatePositions(ctat,0);
+      
+    }
+  }
+}
+  
+
 
 
 export {rs}
