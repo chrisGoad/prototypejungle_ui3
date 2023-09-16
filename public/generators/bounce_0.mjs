@@ -397,11 +397,58 @@ rs.particleCollisions = function () {
   
 /*  
 rs.updateParticleCollisions = function (lastCol) {
-    let {particles} = this;
-    let {particleIndex:pi,time:t,withParticle:wp,withSegment:ws} = lastCol;
-    particles.forEach( (prt) => {
-      let prti = prt.index;
-      if ((prti === pi) || (prti === wp)) {     
+  let {particles} = this;
+  let {particleIndex:pi,time:t,withParticle:wp,withSegment:ws} = lastCol;
+  let prt1 = particles[pi];
+  let prt2 = (wp===undefined)?undefined:particles[wp];
+  let nct = 0;
+  let nxtcol;
+  let nct =1000000;
+  let col;
+  particles.forEach( (prt) => {
+    let prti = prt.index;
+    let col;
+    if ((prti === pi) || (prti === wp)) { 
+      col = this.nextCollision(prt);
+      prt.nextC = col;
+    } else {
+      let t1 = this.solveForT(prt,prt1);
+      let t2 = prt2?this.solveForT(prt,prt2):1000000;
+      col = prt.nextC;
+      let  t3 = col?col.time:1000000;
+      let t1smallest,t2smallest,t3smallest;
+      if (t1<t2) {
+        if (t1<t3) {
+          t1smallest = 1;
+        } else {
+          t3smallest = 1;
+        }
+      } else {
+        if (t2 < t3) {
+          t2smallest = 1;
+        } else {
+          t3smallest = 1;
+        }
+      }
+      if (t1smallest) {
+        col = {particleIndex:pi,time:t1,withParticle:prt1.index,withSegment:undefined};
+      } 
+      if (t2smallest) {
+        col = {particleIndex:pi,time:t2,withParticle:prt2.index,withSegment:undefined};
+      }
+      prt.nextC = col;
+      
+    }
+    if (col) {
+      let t = col.time;
+      if (t < nct)) {
+        nct = t;
+        nxtcol = col;
+      }
+    }
+  });
+  this.nextC = nxtcol;
+}
 
 */
 
