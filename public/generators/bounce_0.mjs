@@ -159,6 +159,9 @@ rs.bounceOffXY = function (ray,xyv,offY) {
 
 */
 rs.lineSegVertical = function (ls) {
+  if (!ls) {
+    debugger;
+  }
   let {end0,end1} = ls;
   let vec = end1.difference(end0);
   let {x:vcx,y:vcy} = vec;
@@ -431,7 +434,8 @@ rs.updateParticleCollisions = function (lastCol) {
       col = this.nextCollision(prt);
       prt.nextC = col;
     } else {
-      let rt1,rt2;
+      let rt1 = undefined;
+      let rt2 =undefined;
       if (prt.index !== prt1.index) {
         rt1 = this.solveForT(prt,prt1);
       }
@@ -470,11 +474,18 @@ rs.updateParticleCollisions = function (lastCol) {
         }
       }
       if (t1smallest) {
-        col = {particleIndex:pi,time:t1,withParticle:prt1.index,withSegment:undefined};
+        col = {particleIndex:prti,time:t1,withParticle:prt1.index,withSegment:undefined};
+        if (prti===prt1.index) {
+          debugger;
+        }
       } 
       if (t2smallest) {
-        col = {particleIndex:pi,time:t2,withParticle:prt2.index,withSegment:undefined};
+        col = {particleIndex:prti,time:t2,withParticle:prt2.index,withSegment:undefined};
+        if (pi===prt2.index) {
+          debugger;
+        }
       }
+      
       prt.nextC = col;
       if (col.time === lct) {
         debugger;
@@ -739,7 +750,7 @@ rs.enactCollision  = function (col) {
   let {particleIndex:pi,time:cct,withSegment:ws,withParticle:wp} = col;
   this.updatePositions(cct,0);
   let prt = particles[pi];
-  if (wp) {
+  if (wp !== undefined) {
     this.enactCollide2Particles(prt,particles[wp],cct);
   } else {
     this.enactCollideLineSegment(prt,segments[ws],cct);
@@ -823,7 +834,7 @@ rs.updateState = function () {
     if (!cta) {
       return undefined;
     }
-    debugger;
+    //debugger;
     let loopCnt = 0;
     while (cta) {
       this.enactCollision(cta);
@@ -833,7 +844,8 @@ rs.updateState = function () {
       let ctat = cta.time;
       console.log('ctat',ctat);
       if (ctat > ct) {
-        
+       this.updatePositions(ct,1);
+       
         return;
       }
       this.updatePositions(ctat,0);
