@@ -8,7 +8,7 @@ addAnimationMethods(rs);
 
 rs.setName('bounce_0');
 let ht=50;
-let topParams = {width:ht,height:ht,framePadding:0.1*ht,frameStroke:'white',frameStrokeWidth:.2,timePerStep:0.1,stopTime:100,collideWithParticle:1}
+let topParams = {width:ht,height:ht,framePadding:0.1*ht,frameStroke:'white',frameStrokeWidth:.2,timePerStep:0.05,stopTime:100,collideWithParticle:1}
 
 Object.assign(rs,topParams);
 
@@ -229,7 +229,7 @@ rs.toCardinalDirection = function (v) {
 }
 rs.matchVelocities = function (v,nv) {
   //return nv;
-  let eps = 0.001;
+  let eps = 0.1;
   let {x:vx,y:vy} = v;
   let {x:nvx,y:nvy} = nv;
   let diffx = Math.abs(nvx-vx)<eps;

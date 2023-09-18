@@ -6,7 +6,7 @@ let rs = generatorP.instantiate();
 rs.setName('bounce_3');
 let ht=50;
 let topParams = {width:ht,height:ht,framePadding:0.1*ht,frameStroke:'white',frameStrokeWidth:.2,timePerStep:0.1,stopTime:100,
-                 collideWithParticle:1,numParticles:7,saveAnimation:1,boxD:0.8*ht,speedup:1.1}
+                 collideWithParticle:1,numParticles:7,saveAnimation:1,boxD:0.8*ht,speedup:1}
 
 Object.assign(rs,topParams);
 
@@ -112,10 +112,10 @@ rs.initialize = function () {
   this.circleDs = [];
   let nump = 0;
   pparams.numParticles = 5;
-  pparams.particlesByColumn = [9,9,9,9,9,9,9,9,9];
-  pparams.particlesByColumn = [9,9,9];
-  pparams.particlesByColumn = [5,5];
-  pparams.velocitiesByColumn = [Point.mk(1,.338).times(1),Point.mk(0,.338).times(1),Point.mk(0,.338).times(1)]
+  pparams.particlesByColumn = [9,9,9,9,9,9];
+ // pparams.particlesByColumn = [9,9,9];
+ // pparams.particlesByColumn = [5,5];
+  pparams.velocitiesByColumn = [Point.mk(1,.338).times(1),Point.mk(0,.338).times(1),Point.mk(0,.338).times(1),Point.mk(0,.338).times(1),Point.mk(0,.338).times(1),Point.mk(0,.338).times(1)]
   let hbd = 0.5*boxD;
 
   pparams.x = -.5*hbd;
