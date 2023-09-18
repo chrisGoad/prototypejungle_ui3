@@ -6,7 +6,7 @@ let rs = generatorP.instantiate();
 rs.setName('bounce_1');
 let ht=50;
 let topParams = {width:ht,height:ht,framePadding:0.1*ht,frameStroke:'white',frameStrokeWidth:.2,timePerStep:0.1,stopTime:100,
-   saveAnimation:1,collideWithParticle:1,numParticles:100,swp:.5}
+   saveAnimation:1,collideWithParticle:1,numParticles:100,swp:.5,boxD:0.8*ht,speedup:1.05}
 
 Object.assign(rs,topParams);
 
@@ -48,7 +48,7 @@ rs.initialize = function () {
   this.numSteps = Math.ceil(stopTime/timePerStep);
   this.initProtos();
   this.addFrame();
-  this.genBox(21);
+  this.genBox();
   let radius = .5;
   this.boxToRect(1.2*radius);
   let pparams = {radius,mass:1,speed:2}

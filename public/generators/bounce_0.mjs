@@ -207,6 +207,7 @@ rs.lineSegmentSolveForT = function (particle,ls) {
 }
 
 rs.collideParticle = function (params) {
+  let {speedup} = this;
   let  {v1,v2,x1,x2,m1,m2} =params;
   let x1mx2ln = (x1.difference(x2)).length();
   let sqx1mx2ln = x1mx2ln*x1mx2ln;
@@ -216,7 +217,7 @@ rs.collideParticle = function (params) {
   let nv2 = v2.difference(x2.difference(x1).times(itrm2));
   this.hasNaN(nv1);
   this.hasNaN(nv2);
-  return [nv1,nv2];
+  return [nv1.times(speedup),nv2.times(speedup)];
 }
 // only computes new velocities, does not install them
 
@@ -525,7 +526,8 @@ rs.genBox = function () {
 }
 
 rs.boxToRect = function (pad) {
-   let ibox = this.boxD - pad;
+   let hbd = 0.5*this.boxD;
+   let ibox = hbd - pad;
    let c = Point.mk(-ibox,-ibox);
    let xt = Point.mk(2*ibox,2*ibox);
    let rect = Rectangle.mk(c,xt);
@@ -550,6 +552,7 @@ rs.updateState = function () {
   let {stepsSoFar:ssf,timePerStep,lastCollision,nextC,stopTime,segments,particles} = this;
   let ct = ssf*timePerStep;
   let nct = nextC.time;
+  debugger;
   if (ct<nct) {
     this.updatePositions(ct,1);
   } else {
