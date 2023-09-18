@@ -3,7 +3,9 @@
 module.exports = {
 sections: 
 
-[     [0,'bounce_2','instances',1,'bounce_2',{likes:0,posted:0,category:'drop'}], 
+[     
+      [0,'bounce_3','instances',1,'bounce_3',{likes:0,posted:0,category:'drop'}], 
+      [0,'bounce_2','instances',1,'bounce_2',{likes:0,posted:0,category:'drop'}], 
       [0,'bounce_1','instances',1,'bounce_1',{likes:0,posted:0,category:'drop'}], 
       [0,'bounce_0','generators',1,'bounce_0',{likes:0,posted:0,category:'drop'}], 
       [0,'drop_circles_25','instances',1,'drop_circles_25',{likes:0,posted:0,category:'drop'}], 
