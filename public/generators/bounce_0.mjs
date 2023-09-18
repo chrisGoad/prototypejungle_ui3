@@ -206,6 +206,54 @@ rs.lineSegmentSolveForT = function (particle,ls) {
   return t;
 }
 
+rs.toCardinalDirection = function (v) {
+  let {x,y} = v;
+  let ln = v.length();
+  let eps = 0.1;
+  let axs = Math.abs(x);
+  let ays =Math.abs(y);
+  if (!(axs && ays)) {
+    console.log('non cardinal');
+  }
+  let nx = axs?0:x;
+  let ny = ays?0:y;
+  let nv =Point.mk(nx,ny);
+  let nln = nv.length();
+  let anln = Math.abs(nln);
+  if (anln < 0.01) {
+    return v;
+  }
+  let rt = ln/nln;
+  console.log('rt',rt);
+  return nv.times(rt);
+}
+rs.matchVelocities = function (v,nv) {
+  //return nv;
+  let eps = 0.001;
+  let {x:vx,y:vy} = v;
+  let {x:nvx,y:nvy} = nv;
+  let diffx = Math.abs(nvx-vx)<eps;
+  let diffmx = Math.abs(nvx+vx)<eps;
+  let nx,ny;
+  if (diffx) {
+    nx = vx;
+  } else if (diffmx) {
+    nx = -vx;
+  } else {
+    nx = nvx
+  }
+  let diffy = Math.abs(nvy-vy)<eps;
+  let diffmy = Math.abs(nvy+vy)<eps;
+  if (diffy) {
+    ny = vy;
+  } else if (diffmy) {
+    ny = -vy;
+  } else {
+    ny = nvy;
+  }
+  return Point.mk(nx,ny);
+}
+ 
 rs.collideParticle = function (params) {
   let {speedup} = this;
   let  {v1,v2,x1,x2,m1,m2} =params;
@@ -215,9 +263,14 @@ rs.collideParticle = function (params) {
   let nv1 = v1.difference(x1.difference(x2).times(itrm1));
   let itrm2 = (2*m1/(m1+m2))* (v2.difference(v1).dotp(x2.difference(x1))/sqx1mx2ln);
   let nv2 = v2.difference(x2.difference(x1).times(itrm2));
+  //let cv1 = this.toCardinalDirection(nv1);
+  let cv1 = this.matchVelocities(v1,nv1);
+  let cv2 = this.matchVelocities(v2,nv2);
+  //let cv2 = this.toCardinalDirection(nv2);
   this.hasNaN(nv1);
   this.hasNaN(nv2);
-  return [nv1.times(speedup),nv2.times(speedup)];
+ // return [nv1.times(speedup),nv2.times(speedup)];
+  return [cv1.times(speedup),cv2.times(speedup)];
 }
 // only computes new velocities, does not install them
 
@@ -269,7 +322,7 @@ rs.enactCollide2Particles = function (particle1,particle2,t) {
     
 }
 
-rs.collideLineSegment = function (particle,ls) {
+rs.collideLineSegmentt = function (particle,ls) {
   let {ray,radius,position:pos} = particle;
   let {velocity:v} = ray;
   let {x:vx,y:vy} = v;
@@ -280,6 +333,28 @@ rs.collideLineSegment = function (particle,ls) {
   let na = vertical?Math.PI-a:-a;
   let vln = v.length();
   let nv = Point.mk(Math.cos(na),Math.sin(na)).times(vln);
+  let cv = this.toCardinalDirection(nv);
+  return cv;
+  return nv;
+}
+
+rs.collideLineSegment = function (particle,ls) {
+  let {ray,radius,position:pos} = particle;
+  let {velocity:v} = ray;
+  
+  let {x:vx,y:vy} = v;
+  //let newv = Point.mk(vx,-vy);
+  //return newv;
+  let vertical = this.lineSegVertical(ls);
+  let a = Math.atan2(vy,vx);
+  let rtd = 180/Math.PI;
+  let ad = rtd*a;
+  let na = vertical?Math.PI-a:-a;
+  let vln = v.length();
+  let nv = Point.mk(Math.cos(na),Math.sin(na)).times(vln);
+ // let cv = this.toCardinalDirection(nv);
+  let cv = this.matchVelocities(v,nv);
+  return cv;
   return nv;
 }
 
@@ -390,6 +465,9 @@ rs.updateParticleCollisions = function (lastCol) {
         t2 = rt2+ct;
       }
       col = prt.nextC;
+      if (!col) {
+        return;
+      }
       let  t3 = col?col.time:1000000;
       let t1smallest,t2smallest,t3smallest;
       if (t1 === undefined) {
@@ -418,6 +496,9 @@ rs.updateParticleCollisions = function (lastCol) {
         }
       } 
       if (t2smallest) {
+        if (!prt2) {
+          debugger;
+        }
         col = {particleIndex:prti,time:t2,withParticle:prt2.index,withSegment:undefined};
         if (pi===prt2.index) {
           debugger;
@@ -552,7 +633,7 @@ rs.updateState = function () {
   let {stepsSoFar:ssf,timePerStep,lastCollision,nextC,stopTime,segments,particles} = this;
   let ct = ssf*timePerStep;
   let nct = nextC.time;
-  debugger;
+ // debugger;
   if (ct<nct) {
     this.updatePositions(ct,1);
   } else {

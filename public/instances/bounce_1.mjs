@@ -6,7 +6,7 @@ let rs = generatorP.instantiate();
 rs.setName('bounce_1');
 let ht=50;
 let topParams = {width:ht,height:ht,framePadding:0.1*ht,frameStroke:'white',frameStrokeWidth:.2,timePerStep:0.1,stopTime:100,
-   saveAnimation:1,collideWithParticle:1,numParticles:100,swp:.5,boxD:0.8*ht,speedup:1.05}
+   saveAnimation:1,collideWithParticle:1,numParticles:100,swp:.5,boxD:0.8*ht,speedup:1.00}
 
 Object.assign(rs,topParams);
 
@@ -25,7 +25,10 @@ rs.initProtos = function () {
 rs.randomParticle = function (params) {
   let {ibox,circleDs} = this;
   debugger;
-  let {radius,mass,speed} = params;
+  //let {radius,mass,speed} = params;
+  let {minRadius:minR,maxRadius:maxR,massPerArea:mpa,speed} = params;
+  let radius = minR + Math.random()*(maxR - minR);
+  let mass = mpa*radius*radius;
   let ra = Math.random()*2*Math.PI;
   let v = Point.mk(Math.cos(ra),Math.sin(ra)).times(speed);
   let p = this.genRandomPoint(ibox);
@@ -39,7 +42,7 @@ rs.randomParticle = function (params) {
   return prt;
 }
  
-rs.fills = ['black','white'];
+rs.fills = ['black','black'];
  
 
 rs.initialize = function () {
@@ -49,9 +52,9 @@ rs.initialize = function () {
   this.initProtos();
   this.addFrame();
   this.genBox();
-  let radius = .5;
-  this.boxToRect(1.2*radius);
-  let pparams = {radius,mass:1,speed:2}
+  let radius = 4;
+  this.boxToRect(2*radius);
+  let pparams = {minRadius:.5,maxRadius:4,massPerArea:1,speed:1}
   let prts  = this.particles = [];
   rs.circleDs = [];
   let nump = 0;

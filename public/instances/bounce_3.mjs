@@ -6,7 +6,7 @@ let rs = generatorP.instantiate();
 rs.setName('bounce_3');
 let ht=50;
 let topParams = {width:ht,height:ht,framePadding:0.1*ht,frameStroke:'white',frameStrokeWidth:.2,timePerStep:0.1,stopTime:100,
-                 collideWithParticle:1,numParticles:7,saveAnimation:1,boxD:0.8*ht,speedup:1.05}
+                 collideWithParticle:1,numParticles:7,saveAnimation:1,boxD:0.8*ht,speedup:1.1}
 
 Object.assign(rs,topParams);
 
@@ -40,10 +40,11 @@ rs.randomParticle = function (params) {
 }
   
 rs.xParticle = function (params) {
-//  debugger;
+  debugger;
   let {circleDs} = this;
-  let {radius,mass,speed,pos} = params;
-  let v = Point.mk(1,.08).times(speed);
+  let {radius,mass,velocity:v,pos} = params;
+ // let v = Point.mk(1,.01).times(speed);
+  //let v = Point.mk(1,.338).times(speed);
   if (0&&this.collides(pos,radius,circleDs)) {
     return undefined;
   }
@@ -76,12 +77,13 @@ rs.particleColumn = function (params) {
 
 rs.particleColumns = function (params) {
   let {boxD} = this;
-  let {particlesByColumn:pbc} = params;
+  let {particlesByColumn:pbc,velocitiesByColumn:vbc} = params;
   let nc = pbc.length;
   let delta = boxD/nc;
   let hbd = 0.5*boxD;
   for (let i = 0; i < nc;i++) {
     params.numParticles = pbc[i];
+    params.velocity = vbc[i]
     let x =  delta*(i+.5)-hbd;
     params.x = x;
     this.particleColumn(params);
@@ -102,7 +104,7 @@ rs.initialize = function () {
   this.initProtos();
   this.addFrame();
   this.genBox(21);
-  let radius = .5;
+  let radius = 2;
   //this.boxToRect(1.2*radius);
   let pparams = {radius,mass:1,speed:4};
  // let cparams = {radius:5,mass:25,speed:0,position:Point.mk(0,0)};
@@ -112,6 +114,8 @@ rs.initialize = function () {
   pparams.numParticles = 5;
   pparams.particlesByColumn = [9,9,9,9,9,9,9,9,9];
   pparams.particlesByColumn = [9,9,9];
+  pparams.particlesByColumn = [5,5];
+  pparams.velocitiesByColumn = [Point.mk(1,.338).times(1),Point.mk(0,.338).times(1),Point.mk(0,.338).times(1)]
   let hbd = 0.5*boxD;
 
   pparams.x = -.5*hbd;
