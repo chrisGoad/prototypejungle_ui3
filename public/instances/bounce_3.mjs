@@ -5,8 +5,8 @@ let rs = generatorP.instantiate();
 
 rs.setName('bounce_3');
 let ht=50;
-let topParams = {width:ht,height:ht,framePadding:0.1*ht,frameStroke:'white',frameStrokeWidth:.2,timePerStep:0.1,stopTime:100,
-                 collideWithParticle:1,numParticles:7,saveAnimation:1,boxD:0.8*ht,speedup:1}
+let topParams = {width:ht,height:ht,framePadding:0.1*ht,frameStroke:'white',frameStrokeWidth:.2,timePerStep:0.15,stopTime:200,
+                 collideWithParticle:1,numParticles:7,saveAnimation:1,boxD:0.8*ht,speedup:1,swp:0.1}
 
 Object.assign(rs,topParams);
 
@@ -64,6 +64,10 @@ rs.particleColumn = function (params) {
   let delta = boxD/numParticles;
     let hbd = 0.5*boxD;
     let y =  delta*(nump+.5)-hbd;
+    let v = params.velocity;
+    if (0&& (y > 0.1)) {
+      params.velocity = v.times(-1);
+    }
     let pos = Point.mk(x,y);
     params.pos = pos;
     let prt = this.xParticle(params);
@@ -104,7 +108,7 @@ rs.initialize = function () {
   this.initProtos();
   this.addFrame();
   this.genBox(21);
-  let radius = 2;
+  let radius = 1;
   //this.boxToRect(1.2*radius);
   let pparams = {radius,mass:1,speed:4};
  // let cparams = {radius:5,mass:25,speed:0,position:Point.mk(0,0)};

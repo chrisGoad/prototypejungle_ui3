@@ -228,8 +228,8 @@ rs.toCardinalDirection = function (v) {
   return nv.times(rt);
 }
 rs.matchVelocities = function (v,nv) {
-  //return nv;
-  let eps = 0.1;
+//  return nv;
+  let eps = 0.01;
   let {x:vx,y:vy} = v;
   let {x:nvx,y:nvy} = nv;
   let diffx = Math.abs(nvx-vx)<eps;
@@ -308,7 +308,7 @@ rs.enactCollide2Particles = function (particle1,particle2,t) {
   prt2.startTime = t;
   ray1.velocity = nv1;
   ray2.velocity = nv2;
-  if (fill1) {
+  if (fill1 && (Math.random() < swp)) {
     if (fill1 === fill2) {
       let ofill = this.theOtherFill(fill1);
       fill1 = ofill;
@@ -367,7 +367,7 @@ rs.enactCollideLineSegment = function (particle,ls,t) {
   ray.initialPosition=prt.position;
   ray.velocity = nv;
   prt.startTime = t;
-  if (fill) {
+  if (fill && (Math.random() < swp)) {
     let shape = prt.shape;
     let ofill =  this.theOtherFill(fill);
     shape.fill = ofill;
