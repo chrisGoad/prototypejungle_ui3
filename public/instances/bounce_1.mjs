@@ -43,6 +43,15 @@ rs.randomParticle = function (params) {
 }
  
 rs.fills = [{r:0,g:150,b:0},{r:100,g:100,b:250}];
+
+rs.updateColorsOnCollideP = function (prt1,prt2) {
+  this.exchangeColors(prt1,prt2);
+}
+
+
+rs.updateColorsOnCollideLS = function (prt) {
+  this.flipColor(prt);
+}
  
 
 rs.initialize = function () {

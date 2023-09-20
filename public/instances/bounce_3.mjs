@@ -73,7 +73,7 @@ rs.particleColumn = function (params) {
     let prt = this.xParticle(params);
     if (prt) {
       prts.push(prt);
-      prt.fill = (nump%2)?fills[0]:fills[1];
+      prt.fillStructure = (nump%2)?fills[0]:fills[1];
       nump++
     }
   }
@@ -98,7 +98,7 @@ rs.particleColumns = function (params) {
 
 
 
-rs.fills = [{r:0,g:100,b:0},{r:100,g:100,b:200}];
+rs.fills = [{r:0,g:0,b:0},{r:250,g:250,b:250}];
 
 rs.initialize = function () {
   debugger;
@@ -110,7 +110,7 @@ rs.initialize = function () {
   this.genBox(21);
   let radius = 1;
   //this.boxToRect(1.2*radius);
-  let pparams = {radius,mass:1,speed:4};
+  let pparams = {radius,mass:1,speed:4,};
  // let cparams = {radius:5,mass:25,speed:0,position:Point.mk(0,0)};
   let prts  = this.particles = [];
   this.circleDs = [];
