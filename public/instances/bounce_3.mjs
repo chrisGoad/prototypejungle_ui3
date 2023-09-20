@@ -98,7 +98,7 @@ rs.particleColumns = function (params) {
 
 
 
-rs.fills = ['black','white'];
+rs.fills = [{r:0,g:100,b:0},{r:100,g:100,b:200}];
 
 rs.initialize = function () {
   debugger;

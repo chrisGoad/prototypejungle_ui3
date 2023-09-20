@@ -36,7 +36,7 @@ c = Cx**2+Cy**2-r1-r2;
 
 t = (-b +- sqrt(b**2-4*a*c))/(2*a)
 
-particle = {ray,mass,startTime,position,shape,radius,collisions,index,fill}
+particle = {ray,mass,startTime,position,shape,radius,collisions,index,fillStructure}//fillStructure has the form {r:12,g:44,b:99}
 
 collision = {particleIndex,time,withSegment,withParticle}
 
@@ -44,6 +44,11 @@ where withX =its index
 
 */
 
+rs.fillStructure2fill = function (fs) {
+  let {r,g,b} = fs;
+  let fill = `rgb(${r},${g},${b})`;
+  return fill;
+}
 
 rs.solveForT1 = function (params) {
   let {A,V,P,r1,r2} = params;
@@ -294,30 +299,54 @@ rs.theOtherFill = function (fill) {
   }
   return ofill;
 }
+rs.fillsOf = function (prt) {
+  let pfill = this.fillStructure2fill(prt.fillStructure);
+  let sfill = prt.shape.fill;
+  return 'pfill:'+pfill+' sfill:'+sfill;
+}
+rs.updateFill = function (prt) {
+  let fs = prt.fillStructure;
+  let shp = prt.shape;
+  if (fs && shp) {
+    let fill = this.fillStructure2fill(fs);
+    shp.fill = fill;
+  }
+}
+    
 rs.enactCollide2Particles = function (particle1,particle2,t) {
   let {swp} = this;
   let prt1 = particle1;
   let prt2 = particle2;
   let colres = this.collide2particles(prt1,prt2);
   let [nv1,nv2] = colres;
-  let {ray:ray1,fill:fill1,shape:shape1} = prt1;
-  let {ray:ray2,fill:fill2,shape:shape2} = prt2;    
+  let {ray:ray1,fillStructure:FS1,shape:shape1} = prt1;
+  let {ray:ray2,fillStructure:FS2,shape:shape2} = prt2; 
   ray1.initialPosition=prt1.position;
   ray2.initialPosition=prt2.position;
   prt1.startTime = t;
   prt2.startTime = t;
   ray1.velocity = nv1;
   ray2.velocity = nv2;
-  if (fill1 && (Math.random() < swp)) {
-    if (fill1 === fill2) {
-      let ofill = this.theOtherFill(fill1);
-      fill1 = ofill;
-      fill2 = ofill;
+  let idx1 = prt1.index;
+  let idx2 = prt2.index;
+  console.log('Idx1',idx1,'idx2',idx2);
+  console.log('before prt1',this.fillsOf(prt1),'before prt2',this.fillsOf(prt2));
+ // console.log('Idx1',idx1,'fill1',fill1,'idx2',idx2,'fill2',fill2);
+  if (FS1 && (Math.random() < swp)) {
+    if (FS1 === FS2) {
+      let oFS = this.theOtherFill(FS1);
+      FS1 = oFS;
+      FS2 = oFS;
     }
-    shape1.fill = fill2;
-    prt1.fill = fill2;
-    shape2.fill = fill1;
-    prt2.fill = fill1;
+   // shape1.update();
+    
+    prt1.fillStructure = FS2;
+    this.updateFill(prt1);
+    prt2.fillStructure = FS1;
+    this.updateFill(prt2);
+      console.log('after prt1',this.fillsOf(prt1),'after prt2',this.fillsOf(prt2));
+
+   //console.log('pfill1',pfill1,'afill1',afill1,'pfill2',pfill2,'afill2',afill2);
   }
     
 }
@@ -361,18 +390,18 @@ rs.collideLineSegment = function (particle,ls) {
 rs.enactCollideLineSegment = function (particle,ls,t) {
   let {swp} = this;
   let prt = particle;
-  let fill = particle.fill;
+  let FS = prt.fillStructure;
   let nv = this.collideLineSegment(prt,ls);
   let {ray:ray} = prt;
   ray.initialPosition=prt.position;
   ray.velocity = nv;
   prt.startTime = t;
-  if (fill && (Math.random() < swp)) {
-    let shape = prt.shape;
-    let ofill =  this.theOtherFill(fill);
-    shape.fill = ofill;
-    prt.fill = ofill;
-   }
+  debugger;
+  if (FS && (Math.random() < swp)) {
+    let oFS =  this.theOtherFill(FS);
+    prt.fillStructure = oFS;
+    this.updateFill(prt);
+  }
 }
 
 rs.nextCollision = function (particle) {
@@ -571,7 +600,7 @@ rs.displaySegments = function () {
 rs.circleCount = 0;
 rs.mkCircleForParticle = function (particle) {
   let {circleCount:ccnt,circleP} = this;
-  let {radius,stroke,fill} = particle;
+  let {radius,stroke,fillStructure} = particle;
   let circ = circleP.instantiate();
   let nm = 'circle_'+ccnt;
   this.circleCount = ccnt+1;
@@ -580,8 +609,9 @@ rs.mkCircleForParticle = function (particle) {
   if (stroke) {
     circ.stroke = stroke;
   }
-  if (fill) {
-    circ.fill = fill;
+  debugger;
+  if (fillStructure) {
+    circ.fill = this.fillStructure2fill(fillStructure);
   }
   particle.shape = circ;
   return circ;
