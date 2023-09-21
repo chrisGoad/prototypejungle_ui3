@@ -122,6 +122,7 @@ rs.updateColorsOnCollideLS = function (prt) {
 
 rs.fills = [{r:0,g:0,b:0},{r:250,g:250,b:250}];
 rs.fills = [{r:0,g:0,b:0},{r:250,g:250,b:250},{r:0,g:0,b:250}];
+rs.fills = [{r:0,g:0,b:0},{r:250,g:250,b:250},{r:0,g:0,b:250},{r:0,g:150,b:0},{r:150,g:0,b:0}];
 
 rs.initialize = function () {
   debugger;

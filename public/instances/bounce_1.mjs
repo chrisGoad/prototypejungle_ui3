@@ -5,7 +5,7 @@ let rs = generatorP.instantiate();
 
 rs.setName('bounce_1');
 let ht=50;
-let topParams = {width:ht,height:ht,framePadding:0.1*ht,frameStroke:'white',frameStrokeWidth:.2,timePerStep:0.1,stopTime:100,
+let topParams = {width:ht,height:ht,framePadding:0.1*ht,frameStrokee:'white',frameStrokeWidth:.2,timePerStep:0.1,stopTime:100,
    saveAnimation:1,collideWithParticle:1,numParticles:100,swp:1,boxD:0.95*ht,speedup:1.00}
 
 Object.assign(rs,topParams);
@@ -79,17 +79,17 @@ rs.averageColors = function (prt1,prt2) {
 rs.fills = [{r:0,g:150,b:0},{r:100,g:100,b:250}];
 
 rs.updateColorsOnCollideP = function (prt1,prt2) {
-  //this.exchangeColors(prt1,prt2);
+  this.exchangeColors(prt1,prt2);
   //this.randomizeColors(prt1,prt2);
-  this.averageColors(prt1,prt2);
+ // this.averageColors(prt1,prt2);
 }
 
 
-rs.updateColorsOnCollideLS0 = function (prt) {
+rs.updateColorsOnCollideLS = function (prt) {
   debugger;
-  this.randomizeColors(prt);
+  //this.randomizeColors(prt);
 
- // this.flipColor(prt);
+  this.flipColor(prt);
 }
  
 
