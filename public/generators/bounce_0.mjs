@@ -8,7 +8,7 @@ addAnimationMethods(rs);
 
 rs.setName('bounce_0');
 let ht=50;
-let topParams = {width:ht,height:ht,framePadding:0.1*ht,frameStroke:'white',frameStrokeWidth:.2,timePerStep:0.05,stopTime:100,collideWithParticle:1}
+let topParams = {width:ht,height:ht,framePadding:0.1*ht,frameStrokee:'white',frameStrokeWidth:.2,timePerStep:0.05,stopTime:100,collideWithParticle:1}
 
 Object.assign(rs,topParams);
 
@@ -331,6 +331,26 @@ rs.exchangeColors = function (prt1,prt2) {
     this.updateFill(prt2); 
   }    
 }
+
+rs.nextColor = function (prt) {
+  let {fills} = this;
+  let {fillNumber:IFN,shape} = prt;
+  let FN = (IFN===undefined)?0:IFN;
+  let fln = fills.length;
+  let nxtn = (FN+1)%fln;
+  prt.fillNumber = nxtn;
+  let FS = fills[nxtn];
+  prt.fillStructure = FS;
+  this.updateFill(prt);
+}
+
+rs.nextColors = function (prt1,prt2) {
+  this.nextColor(prt1);
+  this.nextColor(prt2);
+}
+
+  
+  
 
 rs.flipColor = function (prt) {
   let {swp} = this;

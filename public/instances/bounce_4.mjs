@@ -5,8 +5,9 @@ let rs = generatorP.instantiate();
 
 rs.setName('bounce_4');
 let ht=50;
-let topParams = {width:ht,height:ht,framePadding:0.1*ht,frameStroke:'white',frameStrokeWidth:.2,timePerStep:0.15,stopTime:200,
-                 collideWithParticle:1,numParticles:7,saveAnimation:1,boxD:0.8*ht,speedup:1,swp:1}
+
+let topParams = {width:ht,height:ht,framePadding:0.1*ht,frameStrokee:'white',frameStrokeWidth:.2,timePerStep:0.15,stopTime:300,
+                 collideWithParticle:1,numParticles:7,saveAnimation:1,boxD:0.9*ht,speedup:1,swp:1}
 
 Object.assign(rs,topParams);
 
@@ -108,16 +109,19 @@ rs.particleColumnsOrRows = function (params) {
 
 
 rs.updateColorsOnCollideP = function (prt1,prt2) {
-  this.exchangeColors(prt1,prt2);
+  //this.exchangeColors(prt1,prt2);
+  this.nextColors(prt1,prt2);
 }
 
 
 rs.updateColorsOnCollideLS = function (prt) {
   debugger;
-  this.flipColor(prt);
+  //this.flipColor(prt);
+  this.nextColor(prt);
 }
 
 rs.fills = [{r:0,g:0,b:0},{r:250,g:250,b:250}];
+rs.fills = [{r:0,g:0,b:0},{r:250,g:250,b:250},{r:0,g:0,b:250}];
 
 rs.initialize = function () {
   debugger;
