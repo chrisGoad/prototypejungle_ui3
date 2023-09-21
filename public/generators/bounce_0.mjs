@@ -313,6 +313,8 @@ rs.updateFill = function (prt) {
   }
 }
 
+
+
 rs.exchangeColors = function (prt1,prt2) {
   let {swp} = this;
   let {fillStructure:FS1,shape:shape1} = prt1;
@@ -353,28 +355,9 @@ rs.enactCollide2Particles = function (particle1,particle2,t) {
   prt2.startTime = t;
   ray1.velocity = nv1;
   ray2.velocity = nv2;
-  this.updateColorsOnCollideP(prt1,prt2);
- /* let idx1 = prt1.index;
-  let idx2 = prt2.index;
-  console.log('Idx1',idx1,'idx2',idx2);
-  console.log('before prt1',this.fillsOf(prt1),'before prt2',this.fillsOf(prt2));
- // console.log('Idx1',idx1,'fill1',fill1,'idx2',idx2,'fill2',fill2);
-  if (FS1 && (Math.random() < swp)) {
-    if (FS1 === FS2) {
-      let oFS = this.theOtherFill(FS1);
-      FS1 = oFS;
-      FS2 = oFS;
-    }
-   // shape1.update();
-    
-    prt1.fillStructure = FS2;
-    this.updateFill(prt1);
-    prt2.fillStructure = FS1;
-    this.updateFill(prt2);
-      console.log('after prt1',this.fillsOf(prt1),'after prt2',this.fillsOf(prt2));
-*/
-   //console.log('pfill1',pfill1,'afill1',afill1,'pfill2',pfill2,'afill2',afill2);
-    
+  if (this.updateColorsOnCollideP) {
+    this.updateColorsOnCollideP(prt1,prt2); 
+  }
 }
 
 rs.collideLineSegmentt = function (particle,ls) {
@@ -422,11 +405,10 @@ rs.enactCollideLineSegment = function (particle,ls,t) {
   ray.initialPosition=prt.position;
   ray.velocity = nv;
   prt.startTime = t;
-  this.updateColorsOnCollideLS(prt);
- /* if (FS && (Math.random() < swp)) {
-    let oFS =  this.theOtherFill(FS);
-    prt.fillStructure = oFS;
-    this.updateFill(prt);*/
+  if (this.updateColorsOnCollideLS) {
+    this.updateColorsOnCollideLS(prt);
+  }
+ 
 }
 
 rs.nextCollision = function (particle) {
@@ -634,7 +616,6 @@ rs.mkCircleForParticle = function (particle) {
   if (stroke) {
     circ.stroke = stroke;
   }
-  debugger;
   if (fillStructure) {
     circ.fill = this.fillStructure2fill(fillStructure);
   }

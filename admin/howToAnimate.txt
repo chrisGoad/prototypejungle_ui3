@@ -223,6 +223,7 @@ c:\ffmpeg\bin\ffmpeg  -framerate 30 -i animations/line_loop_0_f%03d.jpg -s 500x5
 c:\ffmpeg\bin\ffmpeg  -framerate 30 -i animations/line_loop_1_f%03d.jpg  -s 500x500  export/line_loop_1.gif
 c:\ffmpeg\bin\ffmpeg  -framerate 30 -i animations/bounce_2_f%03d.jpg -vf scale=500:500  export/bounce_2.mp4
 c:\ffmpeg\bin\ffmpeg  -framerate 30 -i animations/bounce_1_f%03d.jpg -s 500x500  export/bounce_1.mp4
+c:\ffmpeg\bin\ffmpeg  -framerate 30 -i animations/bounce_4_f%03d.jpg -s 500x500  export/bounce_4.mp4
 
 
 rm animations/spatter0_7*
