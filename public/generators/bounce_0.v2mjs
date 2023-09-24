@@ -13,48 +13,32 @@ let topParams = {width:ht,height:ht,framePadding:0.1*ht,frameStrokee:'white',fra
 Object.assign(rs,topParams);
 
 /*
-For particle1 outside particle1
+
 A = particle1 initial position
 P = particle2 initial position
 V = particle1 velocity vector (particle2 is stationary]
 r1 = particle1 radius
-r2 = particle2 radius
+r2 = particle1 radius
 t = time of collision
 
-(Ax + Vx*t-Px)**2+ (Ay + Vy*t-Py)**2 = r1+r2;
+outside case
+(Ax + Vx*t-Px)**2+ (Ay + Vy*t-Py)**2 = r1+r2; (or r2-r1 if particle 1 is inside particle 2)
 
+let R = r1+r2 
 Cx = Ax-Px;
 Cy = Ay-Py;
 
-(Cx+Vx*t)**2+(Cy+Vy*t)**2 = r1+r2;
-(Cx**2 +2*Cx*Vx*t + (Vx*t)**2)+(Cy**2 +2*Cy*Vy*t + (Vy*t)**2) = r1+r2;
-(Cx**2+Cy**2 - r1-r2)+t*(2*Cx*Vx+2*Cy*Vy) + (t**2)*(Vx+Vy) = 0;
+(Cx+Vx*t)**2+(Cy+Vy*t)**2 = R;
+(Cx**2 +2*Cx*Vx*t + (Vx*t)**2)+(Cy**2 +2*Cy*Vy*t + (Vy*t)**2) = R;
+(Cx**2+Cy**2 - R)+t*(2*Cx*Vx+2*Cy*Vy) + (t**2)*(Vx+Vy) = 0;
 
 a=Vx+Vy;
 b = 2*Cx*Vx+2*Cy*Vy;
-c = Cx**2+Cy**2-r1-r2;
+c = Cx**2+Cy**2-R;
 
 t = (-b +- sqrt(b**2-4*a*c))/(2*a)
 
-
-For particle1 inside particle2
-A = particle1 initial position
-P = particle2 initial position
-V = particle1 velocity vector (particle2 is stationary]
-r1 = particle1 radius
-r2 = particle2 radius
-t = time of collision
-
-at t, this holds:
-
-let B = position of particle1 at t = A + v*t*
-let R = r2 -r1
-then distance(P,B) = r2 - r1 = R
-so distance(P,A+v*t) = R
-
-
-
-particle = {ray,mass,startTime,position,shape,radius,collisions,index,fillStructure,inside}//fillStructure has the form {r:12,g:44,b:99}
+particle = {ray,mass,startTime,position,shape,radius,collisions,index,fillStructure,container} //fillStructure has the form {r:12,g:44,b:99}
 
 collision = {particleIndex,time,withSegment,withParticle}
 
@@ -69,7 +53,6 @@ rs.fillStructure2fill = function (fs) {
 }
 
 rs.solveForT1 = function (params) {
-debugger;
   let {A,V,P,r1,r2,inside} = params;
   let {x:Ax,y:Ay} = A;  
   let {x:Vx,y:Vy} = V;
@@ -79,13 +62,12 @@ debugger;
   if (ln <0.01) {
      console.log('return undefined because ln = ',ln);
   }
-  let R = inside?r2-r1:r1+r2;
   let vAP = vPA.times(-1);
   let dp = V.dotp(vAP);
-  let As  = this.v2s(A);
-  let Ps  = this.v2s(P);
-  let Vs  = this.v2s(V);
-  if (dp<=0 && (!inside)) { 
+  let A3d  = this.v2s(A);
+  let vPA3d  = this.v2s(A);
+ // console.log('A',A3d,'vPA',vPA3d,'dotp',dp);
+  if (dp<=0) { 
     //console.log('return undefined');
     return undefined;
   }
@@ -93,7 +75,7 @@ debugger;
   //let a = Vx+Vy;
   let a = Vx*Vx+Vy*Vy;
   let b =2*(Cx*Vx+Cy*Vy); 
-  //let r = r1+r2;
+  let R = inside?r2-r1:r1+r2;
   let c = Cx*Cx+Cy*Cy-R*R; 
 //  t = (-b +- sqrt(b**2-4*a*c))/(2*a)
 
@@ -122,12 +104,9 @@ debugger;
   let ckp1  = check0(t1);
   let ck0 = check1(t0);
   let ck1 = check1(t1);
-     	console.log('A',As,'P',Ps,'V',Vs,'inside',inside,'r1',r1,'r2',r2,'t0',t0,'t1',t1);
-  debugger;
-  let t = inside?Math.max(t0,t1):t0;
   //return [p0,p1,t0,t1];
- // console.log('return ',t);
-  return t;
+ // console.log('return ',t0);
+  return t0;
 }
 
 rs.v2s = function (v) {
@@ -233,7 +212,7 @@ rs.lineSegmentSolveForT = function (particle,ls) {
   let t = d/vln;
   return t;
 }
-
+/*
 rs.toCardinalDirection = function (v) {
   let {x,y} = v;
   let ln = v.length();
@@ -255,6 +234,7 @@ rs.toCardinalDirection = function (v) {
   console.log('rt',rt);
   return nv.times(rt);
 }
+*/
 rs.matchVelocities = function (v,nv) {
 //  return nv;
   let eps = 0.01;
@@ -284,7 +264,7 @@ rs.matchVelocities = function (v,nv) {
  
 rs.collideParticle = function (params) {
   let {speedup} = this;
-  let  {v1,v2,x1,x2,m1,m2} =params;
+  let  {v1,v2,x1,x2,m1,m2,inside} =params;
   let x1mx2ln = (x1.difference(x2)).length();
   let sqx1mx2ln = x1mx2ln*x1mx2ln;
   let itrm1 = (2*m2/(m1+m2))* (v1.difference(v2).dotp(x1.difference(x2))/sqx1mx2ln);
@@ -303,7 +283,6 @@ rs.collideParticle = function (params) {
 // only computes new velocities, does not install them
 
 rs.collide2particles = function (particle1,particle2) {
-  debugger;
   let {ray:ray1,mass:mass1,radius:radius1,position:pos1} = particle1;
   let {ray:ray2,mass:mass2,radius:radius2,position:pos2} = particle2;
   let {velocity:v1} = ray1;
@@ -462,14 +441,10 @@ rs.nextCollision = function (particle) {
   let nt = undefined;
   let withP,withS;
   let pln = particles.length;
-  for (let i=pi+1;i<pln;i++) {
+  for (let i=0;i<pln;i++) {
     let oprt = particles[i];
-    let {inside} = particle;
-    let {oinside} = oprt;
-    let pio = inside === oprt;
-   // let oip = oinside === prt;
-    if ((i !== pi) && ((inside === oinside) || pio))  {
-      let t = this.solveForT(particle,oprt,pio);
+    if (i !== pi) {
+      let t = this.solveForT(particle,oprt,1);
       if ((t!==undefined) && ((nt === undefined) || (t < nt))) {
         nt = t;
         withP = i;
@@ -610,6 +585,7 @@ rs.updateParticleCollisions = function (lastCol) {
 
 
 rs.updatePosition = function (particle,t,moveShape) {
+ // debugger;
   let {ray,mass,startTime,shape} = particle;
   let {initialPosition:ip,velocity:v} = ray;
   let deltaT = t-startTime;
