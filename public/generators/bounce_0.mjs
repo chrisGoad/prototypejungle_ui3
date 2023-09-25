@@ -738,6 +738,22 @@ rs.mkEnclosure = function (params) {
 
  
 
+rs.moveParticleBy = function (prt,pnt) {
+  let {ray} = prt;
+  let {initialPosition:ip} = ray;
+  let np = ip.plus(pnt);
+  ray.initialPosition = np;
+}
+rs.moveEnclosureBy = function (enc,pnt) {
+  this.moveParticleBy(enc,pnt);
+  let {contents} = enc;
+  if (contents) {
+    contents.forEach((cn) => {
+      this.moveEnclosureBy(cn,pnt);
+    });
+  }
+}
+
 rs.particleArray =function (enclosures) {
   let pa = [];
   let eln = enclosures.length;
@@ -749,6 +765,7 @@ rs.particleArray =function (enclosures) {
       return [enclosure];
     }
     contents.forEach((prt) => {
+      prt.inside = enclosure;
       let prtpa = this.particleArray([prt]);
       prtpa.forEach( (sprt) => {
         pa.push(sprt);

@@ -3,7 +3,7 @@ import {rs as linePP} from '/shape/line.mjs';
 import {rs as generatorP} from '/generators/bounce_0.mjs';
 let rs = generatorP.instantiate();
 
-rs.setName('bounce_5');
+rs.setName('bounce_6');
 let ht=50;
 
 let topParams = {width:ht,height:ht,framePadding:0.1*ht,frameStrokee:'white',frameStrokeWidth:.2,timePerStep:0.15,stopTime:300,
@@ -38,7 +38,7 @@ rs.updateColorsOnCollideLS = function (prt) {
   this.nextColor(prt);
 }
 */
-
+/*
 
 rs.mkEnclosure0= function (params) {
   let {emass,eradius,cmass,cradius,speed,distanceFromEnclosure:dfe}= params;
@@ -52,7 +52,7 @@ rs.mkEnclosure0= function (params) {
   let enc = this.mkEnclosure(cparams);
   return enc;
 }
-    
+*/   
 
     
 /*  
@@ -70,14 +70,10 @@ rs.initialize = function () {
   this.genBox();
  
  debugger;
- let irad = 4;
+ let irad = 3;
  let radinc = 2;
- //let cr = 2;
- //let ips = [Point.mk(0,0)];
- //let vs0 = [Point.mk(5,1)];
- //let eparams0 =   {emass:1,eradius:cr+ra,cmass:1,cradius:cr,initialPositions:ips,velocities:vs0};
- let prt0 = {mass:2,radius:irad,startTime:0,ray:{initialPosition:Point.mk(0,0),velocity:Point.mk(5,1)}}
- //let prt0 = this.mkEnclosure(eparams0);
+ let prt0 = {mass:2,radius:irad,startTime:0,ray:{initialPosition:Point.mk(0,0),velocity:Point.mk(0,0),velocityy:Point.mk(5,1)}}
+ let prt1 = {mass:2,radius:irad,startTime:0,ray:{initialPosition:Point.mk(0,0),velocity:Point.mk(3,-2)}}
  const nextPart = (prt) => {
    let rd = prt.radius;
    let ray = {initialPosition:Point.mk(0,0),velocity:Point.mk(0,0)};
@@ -85,19 +81,26 @@ rs.initialize = function () {
    prt.inside = np;
    return np;
   }
-  let cprt = prt0;
+  let cprt0 = prt0;
   for (let i=0;i<3;i++) {
-    let nprt = nextPart(cprt);
-    cprt = nprt;
+    let nprt = nextPart(cprt0);
+    cprt0 = nprt;
   }
- let prts = this.particles = this.particleArray([cprt]);
+  cprt0.mass = 1;
+  cprt0.ray.velocity = Point.mk(1,1);
+   let cprt1 = prt1;
+  for (let i=0;i<3;i++) {
+    let nprt = nextPart(cprt1);
+    cprt1 = nprt;
+  }
+  this.moveEnclosureBy(cprt0,Point.mk(-0.22*ht,0));
+  this.moveEnclosureBy(cprt1,Point.mk(0.22*ht,0));
+ let prts = this.particles = this.particleArray([cprt0]);
   let hbd = 0.5*boxD;
   this.displaySegments();
   this.mkCirclesForParticles(prts);
-  //debugger;
   this.currentTime = 0;
   this.updatePositions(0);
-  //this.updateCollisions(1);
   debugger;
   this.nextC = this.particleCollisions();  
 }
