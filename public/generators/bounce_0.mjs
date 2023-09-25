@@ -513,7 +513,8 @@ rs.particleCollisions = function () {
   return nextCol;
 }
   
- 
+ // this is not in use. It works for the non-enclosing case but not when some particles are inside others. It was intended as an optimization; 
+// not checking the collision status of every pair of partices. But it resulted in little speedup.
 rs.updateParticleCollisions = function (lastCol) {
   let {particles,currentTime:ct} = this;
   let {particleIndex:pi,time:t,withParticle:wp,withSegment:ws} = lastCol;
@@ -714,7 +715,50 @@ rs.enactCollision  = function (col) {
   }
 }
 
+rs.mkEnclosure = function (params) {
+  let {emass,eradius,evelocityI,eInitialPositionI:eipi,cmass,cradius,initialPositions,velocities} = params;
+  let contents = [];
+  let evelocity = evelocityI?evelocityI:Point.mk(0,0);
+  let eip = eipi?eipi:Point.mk(0,0);
+  let ips = initialPositions;
+  let vs = velocities;
+  let nc = initialPositions.length;
+  let eray = {initialPosition:Point.mk(0,0),velocity:evelocity};
+  let enc = {ray:eray,mass:emass,radius:eradius,startTime:0};
+  for (let i=0;i<nc;i++) {
+    let ray = {initialPosition:ips[i],velocity:vs[i]}
+    let prt = {mass:cmass,radius:cradius,startTime:0,ray,inside:enc};
+    contents.push(prt);
+  }
+  enc.contents = contents;
+  return enc;
+}
   
+
+
+ 
+
+rs.particleArray =function (enclosures) {
+  let pa = [];
+  let eln = enclosures.length;
+  for (let i=0;i<eln;i++) {
+//  enclosures.forEach( (enclosure) => { Doesn't work!! I have no idea why.
+    let enclosure = enclosures[i];
+    let {contents}=enclosure;
+    if (!contents) {
+      return [enclosure];
+    }
+    contents.forEach((prt) => {
+      let prtpa = this.particleArray([prt]);
+      prtpa.forEach( (sprt) => {
+        pa.push(sprt);
+      });
+    });
+    pa.push(enclosure);
+  }
+  return pa;
+}
+     
 rs.updateState = function () {
   let {stepsSoFar:ssf,timePerStep,lastCollision,nextC,stopTime,segments,particles} = this;
   let ct = ssf*timePerStep;
@@ -749,7 +793,6 @@ rs.updateState = function () {
   }
 }
   
-
 
 
 export {rs}

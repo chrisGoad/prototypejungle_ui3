@@ -53,6 +53,8 @@ rs.mkEnclosure0= function (params) {
   return enc;
 }
     
+
+    
 /*  
 rs.fills = [{r:0,g:0,b:0},{r:250,g:250,b:250}];
 rs.fills = [{r:0,g:0,b:0},{r:250,g:250,b:250},{r:0,g:0,b:250}];
@@ -66,27 +68,29 @@ rs.initialize = function () {
   this.initProtos();
   this.addFrame();
   this.genBox();
- /* let radius1 = .5;
-  let radius2 = 5;
-  let mass1 = 1;
-  let mass2 = 10;
-  let ip1 = Point.mk(2,0);
-  let ip2 = Point.mk(0,0);
-  let v1 = Point.mk(2,1);
-  let v2 = Point.mk(0,0);
-  let ray1 = {initialPosition:ip1,velocity:v1};
-  let ray2 = {initialPosition:ip2,velocity:v2};
-  let prt2 = {ray:ray2,startTime:0,mass:mass2,radius:radius2};
-  let prt1 = {ray:ray1,startTime:0,mass:mass1,radius:radius1,inside:prt2};
-
-  //this.boxToRect(1.2*radius);
-  let params1 = {radius:radius1,mass:5,speed:0,position:Point.mk(0,0)};
-  let prts  = this.particles = [prt1,prt2];
- */
+ 
  debugger;
- let enc = this.mkEnclosure0({emass:.20,eradius:5,cmass:1,cradius:1,speed:1,distanceFromEnclosure:1.5});
- let encs = [enc];
- let prts = this.particles = this.particleArray(encs);
+ let irad = 4;
+ let radinc = 2;
+ //let cr = 2;
+ //let ips = [Point.mk(0,0)];
+ //let vs0 = [Point.mk(5,1)];
+ //let eparams0 =   {emass:1,eradius:cr+ra,cmass:1,cradius:cr,initialPositions:ips,velocities:vs0};
+ let prt0 = {mass:2,radius:irad,startTime:0,ray:{initialPosition:Point.mk(0,0),velocity:Point.mk(5,1)}}
+ //let prt0 = this.mkEnclosure(eparams0);
+ const nextPart = (prt) => {
+   let rd = prt.radius;
+   let ray = {initialPosition:Point.mk(0,0),velocity:Point.mk(0,0)};
+   let np = {mass:1,radius:rd+radinc,startTime:0,ray,contents:[prt]};
+   prt.inside = np;
+   return np;
+  }
+  let cprt = prt0;
+  for (let i=0;i<3;i++) {
+    let nprt = nextPart(cprt);
+    cprt = nprt;
+  }
+ let prts = this.particles = this.particleArray([cprt]);
   let hbd = 0.5*boxD;
   this.displaySegments();
   this.mkCirclesForParticles(prts);
@@ -95,9 +99,7 @@ rs.initialize = function () {
   this.updatePositions(0);
   //this.updateCollisions(1);
   debugger;
-  this.nextC = this.particleCollisions();
-
-    
+  this.nextC = this.particleCollisions();  
 }
 
 export {rs};
