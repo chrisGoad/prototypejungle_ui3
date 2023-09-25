@@ -54,8 +54,8 @@ so distance(P,A+v*t) = R
 
 
 
-particle = {ray,mass,startTime,position,shape,radius,collisions,index,fillStructure,inside}//fillStructure has the form {r:12,g:44,b:99}
-
+particle = {ray,mass,startTime,position,shape,radius,collisions,index,fillStructure,inside,contains}//fillStructure has the form {r:12,g:44,b:99}
+ray =  {initialPosition:Point,velocity:Point}
 collision = {particleIndex,time,withSegment,withParticle}
 
 where withX =its index
@@ -69,7 +69,6 @@ rs.fillStructure2fill = function (fs) {
 }
 
 rs.solveForT1 = function (params) {
-debugger;
   let {A,V,P,r1,r2,inside} = params;
   let {x:Ax,y:Ay} = A;  
   let {x:Vx,y:Vy} = V;
@@ -123,7 +122,6 @@ debugger;
   let ck0 = check1(t0);
   let ck1 = check1(t1);
      	console.log('A',As,'P',Ps,'V',Vs,'inside',inside,'r1',r1,'r2',r2,'t0',t0,'t1',t1);
-  debugger;
   let t = inside?Math.max(t0,t1):t0;
   //return [p0,p1,t0,t1];
  // console.log('return ',t);
@@ -457,6 +455,7 @@ rs.enactCollideLineSegment = function (particle,ls,t) {
 
 rs.nextCollision = function (particle) {
   let {particles,segments,currentTime:ct} = this;
+  debugger;
   let st = particle.startTime;
   let pi = particle.index;
   let nt = undefined;
@@ -465,8 +464,8 @@ rs.nextCollision = function (particle) {
   for (let i=pi+1;i<pln;i++) {
     let oprt = particles[i];
     let {inside} = particle;
-    let {oinside} = oprt;
-    let pio = inside === oprt;
+    let {inside:oinside} = oprt;
+    let pio = inside === oprt; // particle is inside oprt
    // let oip = oinside === prt;
     if ((i !== pi) && ((inside === oinside) || pio))  {
       let t = this.solveForT(particle,oprt,pio);
@@ -510,6 +509,7 @@ rs.particleCollisions = function () {
       }
     }
   }
+  this.nextC = nextCol;
   return nextCol;
 }
   
@@ -524,7 +524,9 @@ rs.updateParticleCollisions = function (lastCol) {
   let col;
   let lct = lastCol.time;
   let pln = particles.length;
-  particles.forEach( (prt) => {
+  for (let i=0;i<pln;i++) {
+    let prt = particles[i];
+ // particles.forEach( (prt) => {
     let prti = prt.index;
     let col;
     if ((prti === pi) || (prti === wp)) { 
@@ -602,7 +604,7 @@ rs.updateParticleCollisions = function (lastCol) {
         nxtcol = col;
       }
     }
-  });
+  };
   this.nextC = nxtcol;
   return nxtcol;
 }
@@ -728,7 +730,8 @@ rs.updateState = function () {
     let loopCnt = 0;
     while (cta) {
       this.enactCollision(cta);
-      this.nextC = cta = this.updateParticleCollisions(cta);
+     // this.nextC = cta = this.updateParticleCollisions(cta);
+      this.nextC = cta = this.particleCollisions(cta);
       let ctat = cta.time;
       //console.log('ctat',ctat);
       if (ctat > ct) {

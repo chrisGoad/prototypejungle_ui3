@@ -37,7 +37,58 @@ rs.updateColorsOnCollideLS = function (prt) {
   //this.flipColor(prt);
   this.nextColor(prt);
 }
+*/
+rs.mkEnclosure = function (params) {
+  let {emass,eradius,evelocityI,eInitialPositionI:eipi,cmass,cradius,initialPositions,velocities} = params;
+  let contents = [];
+  let evelocity = evelocityI?evelocityI:Point.mk(0,0);
+  let eip = eipi?eipi:Point.mk(0,0);
+  let ips = initialPositions;
+  let vs = velocities;
+  let nc = initialPositions.length;
+  let eray = {initialPosition:Point.mk(0,0),velocity:evelocity};
+  let enc = {ray:eray,mass:emass,radius:eradius,startTime:0};
+  for (let i=0;i<nc;i++) {
+    let ray = {initialPosition:ips[i],velocity:vs[i]}
+    let prt = {mass:cmass,radius:cradius,startTime:0,ray,inside:enc};
+    contents.push(prt);
+  }
+  enc.contents = contents;
+  return enc;
+}
+  
 
+rs.mkEnclosure0= function (params) {
+  let {emass,eradius,cmass,cradius,speed,distanceFromEnclosure:dfe}= params;
+  let dfc = eradius - cradius - dfe;
+  let ips = [Point.mk(-dfc,0),Point.mk(0,dfc),Point.mk(dfc,0),Point.mk(0,-dfc)];
+  //let ips = [Point.mk(-dfc,0),Point.mk(dfc,0)];
+  //let ips = [Point.mk(-dfc,0),Point.mk(0,dfc-1)];
+  let vs = [Point.mk(0,speed),Point.mk(speed,0),Point.mk(0,-speed),Point.mk(-speed,0)];
+  //let vs = [Point.mk(speed,0),Point.mk(-speed,0)];
+  let cparams = {emass,eradius,cmass,cradius,initialPositions:ips,velocities:vs};
+  let enc = this.mkEnclosure(cparams);
+  return enc;
+}
+
+rs.particleArray =function (enclosure) {
+  let {contents}=enclosure;
+  if (!contents) {
+    return [enclosure];
+  }
+  let pa = [];
+  contents.forEach((prt) => {
+    let prtpa = this.particleArray(prt);
+    prtpa.forEach( (sprt) => {
+      pa.push(sprt);
+    });
+  });
+  pa.push(enclosure);
+  return pa;
+}
+    
+    
+/*  
 rs.fills = [{r:0,g:0,b:0},{r:250,g:250,b:250}];
 rs.fills = [{r:0,g:0,b:0},{r:250,g:250,b:250},{r:0,g:0,b:250}];
 rs.fills = [{r:0,g:0,b:0},{r:250,g:250,b:250},{r:0,g:0,b:250},{r:0,g:150,b:0},{r:150,g:0,b:0}];
@@ -50,7 +101,7 @@ rs.initialize = function () {
   this.initProtos();
   this.addFrame();
   this.genBox();
-  let radius1 = .5;
+ /* let radius1 = .5;
   let radius2 = 5;
   let mass1 = 1;
   let mass2 = 10;
@@ -66,11 +117,14 @@ rs.initialize = function () {
   //this.boxToRect(1.2*radius);
   let params1 = {radius:radius1,mass:5,speed:0,position:Point.mk(0,0)};
   let prts  = this.particles = [prt1,prt2];
- 
+ */
+ debugger;
+ let enc = this.mkEnclosure0({emass:.20,eradius:5,cmass:1,cradius:1,speed:1,distanceFromEnclosure:1.5});
+ let prts = this.particles = this.particleArray(enc);
   let hbd = 0.5*boxD;
   this.displaySegments();
   this.mkCirclesForParticles(prts);
-  debugger;
+  //debugger;
   this.currentTime = 0;
   this.updatePositions(0);
   //this.updateCollisions(1);
