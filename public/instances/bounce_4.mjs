@@ -13,6 +13,13 @@ Object.assign(rs,topParams);
 
 
 
+rs.onUpdate = function () {
+  let {stepsSoFar:ssf,currentTime:t} = this;
+  console.log( 'steps',ssf,'time',t);
+  if (ssf >= 13) {
+    debugger;
+  }
+}
 
 rs.initProtos = function () {
   let circleP = this.circleP = circlePP.instantiate();

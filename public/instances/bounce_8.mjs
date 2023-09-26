@@ -6,8 +6,8 @@ let rs = generatorP.instantiate();
 rs.setName('bounce_6');
 let ht=50;
 
-let topParams = {width:ht,height:ht,framePadding:0.1*ht,frameStrokee:'white',frameStrokeWidth:.2,timePerStep:0.15,stopTime:55.94,
-                 collideWithParticle:1,numParticles:7,saveAnimation:1,boxD:0.9*ht,speedup:1,swp:1,numParticles:4}
+let topParams = {width:ht,height:ht,framePadding:0.1*ht,frameStrokee:'white',frameStrokeWidth:.2,timePerStep:0.15,stopTime:300,
+                 collideWithParticle:1,numParticles:7,saveAnimation:1,boxD:0.9*ht,speedup:1,swp:1,numParticles:3}
 
 Object.assign(rs,topParams);
 
@@ -84,6 +84,23 @@ rs.fills = [{r:0,g:0,b:0},{r:250,g:250,b:250}];
 rs.fills = [{r:0,g:0,b:0},{r:250,g:250,b:250},{r:0,g:0,b:250}];
 rs.fills = [{r:0,g:0,b:0},{r:250,g:250,b:250},{r:0,g:0,b:250},{r:0,g:150,b:0},{r:150,g:0,b:0}];
 */
+
+
+rs.onUpdate = function () {
+  let {stepsSoFar:ssf,currentTime:t,particles:prts} = this;
+  const vOf = (prt) =>  {
+    let v = prt.ray.velocity;
+    let vs = '('+v.x+','+v.y+')';
+    return vs;
+  }
+  const vels = () => {
+    let vs = vOf(prts[0])+vOf(prts[1])+vOf(prts[2])+vOf(prts[3])+vOf(prts[4]);
+    return vs;
+  }
+  console.log( 'steps',ssf,'time',t,'vels',vels());
+    //debugger;
+  
+}
 rs.initialize = function () {
    debugger;
   let {timePerStep,stopTime,fills,height:ht,boxD,numParticles:numP} = this;
@@ -94,31 +111,37 @@ rs.initialize = function () {
   this.genBox();
  
  debugger;
- let irad = 3;
+ let irad = 1;
+ let rad1 = 5;
  let radinc = 2;
- let prt0 = {mass:1,radius:irad,startTime:0,ray:{initialPosition:Point.mk(0,0),velocity:Point.mk(0,0),velocityy:Point.mk(5,1)}}
- let prt1 = {mass:2,radius:irad,startTime:0,ray:{initialPosition:Point.mk(0,0),velocity:Point.mk(3,-2)}}
- const nextPart = (prt) => {
-   let rd = prt.radius;
+ let prt0a = {mass:1,radius:irad,startTime:0,ray:{initialPosition:Point.mk(irad,0),velocity:Point.mk(0,0),velocity:Point.mk(0,0)}}
+ let prt0b = {mass:1,radius:irad,startTime:0,ray:{initialPosition:Point.mk(-irad,0),velocity:Point.mk(0,0),velocity:Point.mk(5,0)}}
+ let prt1 = {mass:2,radius:irad,startTime:0,ray:{initialPosition:Point.mk(irad+1,0),velocity:Point.mk(0,0)}}
+ const nextPart = (prt1,prt2) => {
+   let rd = prt1.radius;
    let ray = {initialPosition:Point.mk(0,0),velocity:Point.mk(0,0)};
-   let np = {mass:1,radius:rd+radinc,startTime:0,ray,contents:[prt]};
-   prt.inside = np;
+   let np = {mass:1,radius:prt2?rad1:rd+radinc,startTime:0,ray,contents:prt2?[prt1,prt2]:[prt1]};
+   prt1.inside = np;
+   if (prt2) {
+     prt2.inside = np;
+  }
    return np;
   }
-  let cprt0 = prt0;
+  let cprt0 = nextPart(prt0a,prt0b);
+  
   for (let i=0;i<numP-1;i++) {
     let nprt = nextPart(cprt0);
     cprt0 = nprt;
   }
   cprt0.mass = 1;
-  let speed = 4;//3.9999;
-  cprt0.ray.velocity = Point.mk(speed,-speed);
+  let speed = 0;//3.9999;
+  cprt0.ray.velocity = Point.mk(speed,0);
   /* let cprt1 = prt1;
   for (let i=0;i<3;i++) {
     let nprt = nextPart(cprt1);
     cprt1 = nprt;
   }*/
-  //this.moveEnclosureBy(cprt0,Point.mk(-0.22*ht,0.22*ht));
+ // this.moveEnclosureBy(cprt0,Point.mk(-0.22*ht,0));
   //this.moveEnclosureBy(cprt1,Point.mk(0.22*ht,-0.22*ht));
  let prts = this.particles = this.particleArray([cprt0]);
   let hbd = 0.5*boxD;

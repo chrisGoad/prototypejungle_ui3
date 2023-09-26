@@ -76,7 +76,7 @@ rs.solveForT1 = function (params) {
   let vPA = A.difference(P);
   let ln = vPA.length();
   if (ln <0.01) {
-     console.log('return undefined because ln = ',ln);
+//  console.log('return undefined because ln = ',ln);
   }
   let R = inside?r2-r1:r1+r2;
   let vAP = vPA.times(-1);
@@ -121,7 +121,7 @@ rs.solveForT1 = function (params) {
   let ckp1  = check0(t1);
   let ck0 = check1(t0);
   let ck1 = check1(t1);
-     	console.log('A',As,'P',Ps,'V',Vs,'inside',inside,'r1',r1,'r2',r2,'t0',t0,'t1',t1);
+//console.log('A',As,'P',Ps,'V',Vs,'inside',inside,'r1',r1,'r2',r2,'t0',t0,'t1',t1);
   let t = inside?Math.max(t0,t1):t0;
   //return [p0,p1,t0,t1];
  // console.log('return ',t);
@@ -258,8 +258,10 @@ rs.matchVelocities = function (v,nv) {
   let eps = 0.01;
   let {x:vx,y:vy} = v;
   let {x:nvx,y:nvy} = nv;
-  let diffx = Math.abs(nvx-vx)<eps;
-  let diffmx = Math.abs(nvx+vx)<eps;
+  let avx = Math.abs(vx);
+  let avy = Math.abs(vy);
+  let diffx = Math.abs(nvx-vx)<eps*avx;
+  let diffmx = Math.abs(nvx+vx)<eps*avx;
   let nx,ny;
   if (diffx) {
     nx = vx;
@@ -268,8 +270,8 @@ rs.matchVelocities = function (v,nv) {
   } else {
     nx = nvx
   }
-  let diffy = Math.abs(nvy-vy)<eps;
-  let diffmy = Math.abs(nvy+vy)<eps;
+  let diffy = Math.abs(nvy-vy)<eps*avy;;
+  let diffmy = Math.abs(nvy+vy)<eps*avy;
   if (diffy) {
     ny = vy;
   } else if (diffmy) {
@@ -301,7 +303,6 @@ rs.collideParticle = function (params) {
 // only computes new velocities, does not install them
 
 rs.collide2particles = function (particle1,particle2) {
-  debugger;
   let {ray:ray1,mass:mass1,radius:radius1,position:pos1} = particle1;
   let {ray:ray2,mass:mass2,radius:radius2,position:pos2} = particle2;
   let {velocity:v1} = ray1;
@@ -455,7 +456,7 @@ rs.enactCollideLineSegment = function (particle,ls,t) {
 
 rs.nextCollision = function (particle) {
   let {particles,segments,currentTime:ct} = this;
-  debugger;
+  //debugger;
   let st = particle.startTime;
   let pi = particle.index;
   let nt = undefined;
@@ -497,6 +498,7 @@ rs.particleCollisions = function () {
   let nextCol;
   let {particles} = this;
   let pln = particles.length;
+  debugger;
   for (let i=0;i<pln;i++) {
     let prt = particles[i];
     let col = this.nextCollision(prt);
@@ -509,6 +511,7 @@ rs.particleCollisions = function () {
       }
     }
   }
+  debugger;
   this.nextC = nextCol;
   return nextCol;
 }
@@ -658,6 +661,7 @@ rs.displaySegments = function () {
 rs.circleCount = 0;
 rs.mkCircleForParticle = function (particle) {
   let {circleCount:ccnt,circleP} = this;
+  const randomFill = {r:150*Math.random()+100,g:150*Math.random()+100,b:150*Math.random()+100};
   let {radius,stroke,fillStructure} = particle;
   let circ = circleP.instantiate();
   let nm = 'circle_'+ccnt;
@@ -669,16 +673,21 @@ rs.mkCircleForParticle = function (particle) {
   }
   if (fillStructure) {
     circ.fill = this.fillStructure2fill(fillStructure);
+  } else {
+    circ.fill = this.fillStructure2fill(randomFill);
   }
+
   particle.shape = circ;
   return circ;
 }
  
 rs.mkCirclesForParticles = function (particles) {
   let ln = particles.length;
-  for (let i=0;i<ln;i++) {
+  for (let i=ln-1;i>=0;i--) {
     let p = particles[i];
-    p.index = i; 
+    if (p.index === undefined) {
+      p.index = i; 
+    }
     this.mkCircleForParticle(p);
   }
 }
@@ -753,7 +762,23 @@ rs.moveEnclosureBy = function (enc,pnt) {
     });
   }
 }
-
+rs.vels = function () {
+  let {particles} = this;
+  const vOf = (prt) =>  {
+    let v = prt.ray.velocity;
+    let vs = '('+v.x+','+v.y+')';
+    return vs;
+  }
+  let pln = prts.length;
+  let vls = '';
+  for (let i = 0;i<pln;i++) {
+    let v = vOf(prts[i]);
+    let nm = i+' '+vs;
+    let vls  = vls+nm;
+  }
+  return vls;
+}
+ 
 rs.particleArray =function (enclosures) {
   let pa = [];
   let eln = enclosures.length;
@@ -762,15 +787,18 @@ rs.particleArray =function (enclosures) {
     let enclosure = enclosures[i];
     let {contents}=enclosure;
     if (!contents) {
+      enclosure.index = pa.length
       return [enclosure];
     }
     contents.forEach((prt) => {
       prt.inside = enclosure;
       let prtpa = this.particleArray([prt]);
       prtpa.forEach( (sprt) => {
+        sprt.index = pa.length;
         pa.push(sprt);
       });
     });
+    enclosure.index = pa.length;
     pa.push(enclosure);
   }
   return pa;
@@ -778,11 +806,18 @@ rs.particleArray =function (enclosures) {
      
 rs.updateState = function () {
   let {stepsSoFar:ssf,timePerStep,lastCollision,nextC,stopTime,segments,particles} = this;
+  if (ssf===146) {
+    debugger;
+  }
   let ct = ssf*timePerStep;
   let nct = nextC.time;
+  let onUp = this.onUpdate;
  // debugger;
   if (ct<nct) {
     this.updatePositions(ct,1);
+    if (onUp) {
+      this.onUpdate();
+    }
   } else {
     let cta = nextC;
     if (!cta) {
@@ -795,15 +830,19 @@ rs.updateState = function () {
       this.nextC = cta = this.particleCollisions(cta);
       let ctat = cta.time;
       //console.log('ctat',ctat);
-      if (ctat > ct) {
+      if (ctat >= ct) {
        this.updatePositions(ct,1);
        
         return;
       }
       this.updatePositions(ctat,0);
+      if (onUp) {
+        this.onUpdate();
+      }
       loopCnt++;
       if (loopCnt > 100) {
         debugger;
+       // return;
       }
       
     }

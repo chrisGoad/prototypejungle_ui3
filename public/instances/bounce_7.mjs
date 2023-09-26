@@ -6,7 +6,7 @@ let rs = generatorP.instantiate();
 rs.setName('bounce_6');
 let ht=50;
 
-let topParams = {width:ht,height:ht,framePadding:0.1*ht,frameStrokee:'white',frameStrokeWidth:.2,timePerStep:0.15,stopTime:55.94,
+let topParams = {width:ht,height:ht,framePadding:0.1*ht,frameStrokee:'white',frameStrokeWidth:.2,timePerStep:0.15,stopTime:300,
                  collideWithParticle:1,numParticles:7,saveAnimation:1,boxD:0.9*ht,speedup:1,swp:1,numParticles:4}
 
 Object.assign(rs,topParams);
@@ -38,7 +38,7 @@ rs.updateColorsOnCollideLS = function (prt) {
   this.nextColor(prt);
 }
 */
-/*
+
 
 rs.mkEnclosure0= function (params) {
   let {emass,eradius,cmass,cradius,speed,distanceFromEnclosure:dfe}= params;
@@ -52,7 +52,7 @@ rs.mkEnclosure0= function (params) {
   let enc = this.mkEnclosure(cparams);
   return enc;
 }
-*/   
+  
 
 rs.particlesMaxLength = function () {
   let {numParticles:numP,particles} = this;
@@ -93,34 +93,26 @@ rs.initialize = function () {
   this.addFrame();
   this.genBox();
  
- debugger;
- let irad = 3;
- let radinc = 2;
- let prt0 = {mass:1,radius:irad,startTime:0,ray:{initialPosition:Point.mk(0,0),velocity:Point.mk(0,0),velocityy:Point.mk(5,1)}}
- let prt1 = {mass:2,radius:irad,startTime:0,ray:{initialPosition:Point.mk(0,0),velocity:Point.mk(3,-2)}}
- const nextPart = (prt) => {
-   let rd = prt.radius;
-   let ray = {initialPosition:Point.mk(0,0),velocity:Point.mk(0,0)};
-   let np = {mass:1,radius:rd+radinc,startTime:0,ray,contents:[prt]};
-   prt.inside = np;
-   return np;
-  }
-  let cprt0 = prt0;
-  for (let i=0;i<numP-1;i++) {
-    let nprt = nextPart(cprt0);
-    cprt0 = nprt;
-  }
-  cprt0.mass = 1;
-  let speed = 4;//3.9999;
-  cprt0.ray.velocity = Point.mk(speed,-speed);
-  /* let cprt1 = prt1;
-  for (let i=0;i<3;i++) {
-    let nprt = nextPart(cprt1);
-    cprt1 = nprt;
-  }*/
-  //this.moveEnclosureBy(cprt0,Point.mk(-0.22*ht,0.22*ht));
+
+  let eparams = {emass:50,eradius:9,cmass:1,cradius:1,speed:4,distanceFromEnclosure:6.3};
+  let enc0 = this.mkEnclosure0(eparams);
+  eparams.distanceFromEnclosure=5;
+  eparams.speed=-4;
+  let enc1 = this.mkEnclosure0(eparams);
+  eparams.distanceFromEnclosure=3;
+
+  let enc2 = this.mkEnclosure0(eparams);
+    eparams.distanceFromEnclosure=1;
+  eparams.speed=-4;
+
+  let enc3 = this.mkEnclosure0(eparams);
+  
+  this.moveEnclosureBy(enc0,Point.mk(-0.22*ht,-0.22*ht));
+  this.moveEnclosureBy(enc1,Point.mk(0.22*ht,-0.22*ht));
+  this.moveEnclosureBy(enc2,Point.mk(-0.22*ht,0.22*ht));
+  this.moveEnclosureBy(enc3,Point.mk(0.22*ht,0.22*ht));
   //this.moveEnclosureBy(cprt1,Point.mk(0.22*ht,-0.22*ht));
- let prts = this.particles = this.particleArray([cprt0]);
+ let prts = this.particles = this.particleArray([enc0,enc1,enc2,enc3]);
   let hbd = 0.5*boxD;
   this.displaySegments();
   this.mkCirclesForParticles(prts);
