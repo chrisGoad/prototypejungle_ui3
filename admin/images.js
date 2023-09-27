@@ -17,6 +17,7 @@ sections:
  [0,'rotate_grid_0s','instances',1,'Spinny Grid',{video:'gif',likes:0,posted:0,category:'anim'}], 
 [0,'path_avoidance_5','generators',1,'Figure/Ground',{video:'gif',likes:0,posted:0,category:'anim'}], 
    [0,'gridSpinner_5','instances',1,'Walking',{video:'gif',likes:0,posted:0,category:'anim'}], 
+   [0,'bounce_4','instances',1,'Entropy',{video:'mp4',likes:0,posted:0,category:'anim'}], 
 
  //[10,'quad_3','generators',1,'Circles',{likes:72,posted:1,noTitle:1,category:'partition',variant:2}], 
  [10,'part2_0_25','instances',1,'Part2 9 25',{likes:72,posted:1,noTitle:1,category:'partition'}], 

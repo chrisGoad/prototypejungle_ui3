@@ -3,7 +3,7 @@ import {rs as linePP} from '/shape/line.mjs';
 import {rs as generatorP} from '/generators/bounce_0.mjs';
 let rs = generatorP.instantiate();
 
-rs.setName('bounce_6');
+rs.setName('bounce_8');
 let ht=50;
 
 let topParams = {width:ht,height:ht,framePadding:0.1*ht,frameStrokee:'white',frameStrokeWidth:.2,timePerStep:0.15,stopTime:300,
