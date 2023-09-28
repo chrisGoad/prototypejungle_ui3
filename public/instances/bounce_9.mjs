@@ -38,7 +38,23 @@ rs.updateColorsOnCollideLS = function (prt) {
   this.nextColor(prt);
 }
 */
-
+rs.mkParticles = function (params) {
+  let {eradius,mass,radius,speed,distanceFromEnclosure:dfe,numParticles:np,inside}= params;
+  let dfc = eradius - radius - dfe;
+  let ai = (Math.PI*2)/np;
+  let prts= [];
+  for (let i = 0;i<np;i++) {
+    let ca = i*ai;
+    let ip = Point.mk(Math.cos(ca),Math.sin(ca)).times(dfc);
+    let na = ca + Math.PI/2;
+    let vs = Point.mk(Math.cos(ca),Math.sin(ca)).times(speed);
+    let ray = {initialPosition:ip,velocity:vs};
+    let prt = {mass,radius,initialPositions:ip,velocities:vs,startTime:0,inside};
+    prts.push(prt);
+   
+  }
+  return prts;
+}
 
 rs.mkEnclosures= function (params) {
   let {emass,eradius,cmass,cradius,speed,distanceFromEnclosure:dfe,numParticles:np}= params;
@@ -97,16 +113,26 @@ rs.initialize = function () {
   this.addFrame();
   this.genBox();
  
-
-  let eparams = {emass:50,eradius:9,cmass:1,cradius:1,speed:4,distanceFromEnclosure:6.3,numParticles:4};
-  let encs = this.mkEnclosures(eparams);
-
+  let emass = 50;
+  let eradius = 9;
+  let cparams = {eradius,mass:1,cradius:1,speed:4,distanceFromEnclosure:6.3};
+  //let eparams = {emass:50,eradius:9,cmass:1,cradius:1,speed:4,distanceFromEnclosure:6.3};
+  let encs = [];
+  for  (let i=1;i<=4;i++) {
+    let enc = {mass:emass,radius:eradius,startTime:0,ray:{initialPosition:Point.mk(0,0),velocity:Point.mk(0,0)}};
+    cparams.numParticles = i;
+    cparams.inside = enc;
+    let prts = this.mkParticles(cparams);
+    encs.push(enc);
+  }
+ 
   this.moveEnclosureBy(encs[0],Point.mk(-0.22*ht,-0.22*ht));
   this.moveEnclosureBy(encs[1],Point.mk(0.22*ht,-0.22*ht));
   this.moveEnclosureBy(encs[2],Point.mk(-0.22*ht,0.22*ht));
   this.moveEnclosureBy(encs[3],Point.mk(0.22*ht,0.22*ht));
   //this.moveEnclosureBy(cprt1,Point.mk(0.22*ht,-0.22*ht));
-  let prts = this.particles = this.particleArray(encs);
+  let prts = this.particles = this.particleArray(encs[0]);
+  //let prts = this.particles = this.particleArray(encs);
   let hbd = 0.5*boxD;
   this.displaySegments();
   this.mkCirclesForParticles(prts);
