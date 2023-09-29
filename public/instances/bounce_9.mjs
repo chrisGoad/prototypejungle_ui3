@@ -47,9 +47,9 @@ rs.mkParticles = function (params) {
     let ca = i*ai;
     let ip = Point.mk(Math.cos(ca),Math.sin(ca)).times(dfc);
     let na = ca + Math.PI/2;
-    let vs = Point.mk(Math.cos(ca),Math.sin(ca)).times(speed);
+    let vs = Point.mk(Math.cos(na),Math.sin(na)).times(speed);
     let ray = {initialPosition:ip,velocity:vs};
-    let prt = {mass,radius,initialPositions:ip,velocities:vs,startTime:0,inside};
+    let prt = {mass,radius,ray,startTime:0,inside};
     prts.push(prt);
    
   }
@@ -64,8 +64,8 @@ rs.mkEnclosures= function (params) {
   for (let i = 0;i<np;i++) {
     let ca = i*ai;
     let ips = Point.mk(Math.cos(ca),Math.sin(ca)).times(dfc);
-    let na = ca + Math.PI/2;
-    let vs = Point.mk(Math.cos(ca),Math.sin(ca)).times(speed);
+    let na = ca + Math.PI/5;
+    let vs = Point.mk(Math.cos(na),Math.sin(na)).times(speed);
     let cparams = {emass,eradius,cmass,cradius,initialPositions:ips,velocities:vs};
     let enc = this.mkEnclosure(cparams);
     encs.push(enc);
@@ -88,7 +88,7 @@ rs.particlesMaxLength = function () {
   return maxL;   
 }
 
-rs.onUpdate = function () {
+rs.onUpdatee = function () {
   let {stepsSoFar:ssf,particles,currentTime:t} = this;
   let eps = .5;
   let pln = this.particlesMaxLength();
@@ -113,9 +113,9 @@ rs.initialize = function () {
   this.addFrame();
   this.genBox();
  
-  let emass = 50;
+  let emass = 500;
   let eradius = 9;
-  let cparams = {eradius,mass:1,cradius:1,speed:4,distanceFromEnclosure:6.3};
+  let cparams = {eradius,mass:1,radius:2,speed:4,distanceFromEnclosure:4.1};
   //let eparams = {emass:50,eradius:9,cmass:1,cradius:1,speed:4,distanceFromEnclosure:6.3};
   let encs = [];
   for  (let i=1;i<=4;i++) {
@@ -123,6 +123,7 @@ rs.initialize = function () {
     cparams.numParticles = i;
     cparams.inside = enc;
     let prts = this.mkParticles(cparams);
+    enc.contents =prts;
     encs.push(enc);
   }
  
@@ -131,7 +132,7 @@ rs.initialize = function () {
   this.moveEnclosureBy(encs[2],Point.mk(-0.22*ht,0.22*ht));
   this.moveEnclosureBy(encs[3],Point.mk(0.22*ht,0.22*ht));
   //this.moveEnclosureBy(cprt1,Point.mk(0.22*ht,-0.22*ht));
-  let prts = this.particles = this.particleArray(encs[0]);
+  let prts = this.particles = this.particleArray(encs);
   //let prts = this.particles = this.particleArray(encs);
   let hbd = 0.5*boxD;
   this.displaySegments();
