@@ -661,6 +661,7 @@ rs.displaySegments = function () {
 rs.circleCount = 0;
 rs.mkCircleForParticle = function (particle) {
   let {circleCount:ccnt,circleP} = this;
+  debugger;
   const randomFill = {r:150*Math.random()+100,g:150*Math.random()+100,b:150*Math.random()+100};
   let {radius,stroke,fillStructure} = particle;
   let circ = circleP.instantiate();
@@ -671,11 +672,13 @@ rs.mkCircleForParticle = function (particle) {
   if (stroke) {
     circ.stroke = stroke;
   }
+  let fill;
   if (fillStructure) {
-    circ.fill = this.fillStructure2fill(fillStructure);
+    fill = this.fillStructure2fill(fillStructure);
   } else {
-    circ.fill = this.fillStructure2fill(randomFill);
+    fill = this.fillStructure2fill(randomFill);
   }
+  circ.fill = fill;
 
   particle.shape = circ;
   return circ;
