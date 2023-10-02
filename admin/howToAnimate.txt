@@ -226,6 +226,7 @@ c:\ffmpeg\bin\ffmpeg  -framerate 30 -i animations/bounce_1_f%03d.jpg -s 500x500 
 c:\ffmpeg\bin\ffmpeg  -framerate 30 -i animations/bounce_4_f%03d.jpg -s 500x500  export/bounce_4.mp4
 c:\ffmpeg\bin\ffmpeg  -framerate 30 -i animations/bounce_6_f%03d.jpg -s 500x500  export/bounce_6.gif
 c:\ffmpeg\bin\ffmpeg  -framerate 30 -i animations/bounce_9_f%03d.jpg -s 500x500  export/bounce_9.mp4
+c:\ffmpeg\bin\ffmpeg  -framerate 30 -i animations/bounce_10_f%03d.jpg -s 500x500  export/bounce_10.mp4
 
 
 rm animations/spatter0_7*
