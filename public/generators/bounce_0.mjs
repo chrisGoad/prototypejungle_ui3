@@ -355,6 +355,31 @@ rs.exchangeColors = function (prt1,prt2) {
   }    
 }
 
+rs.nextBackgroundColor = function () {
+  let {backgroundFills:bf,backFillNumber:BFN,numRects:nmr,stepsSoFar:ssf,lastBackgroundColorChange:ILBCC} = this;
+  let LBCC = (ILBCC===undefined)?0:ILBCC;
+  let tslcc = ssf-LBCC;
+  this.lastBackgroundColorChange = ssf;
+  if (tslcc < 4) {
+    return;
+  }
+  let FN = (BFN===undefined)?0:BFN;
+  let BoxFS = bf[FN];
+  let BoxF = this.fillStructure2fill(BoxFS)
+  this.setBoxStroke(BoxF)
+
+  let bfln = bf.length;
+  let nxtn = (FN+1)%bfln;
+  
+  this.backFillNumber = nxtn;
+  let FS = bf[nxtn];
+  let F = this.fillStructure2fill(FS)
+  let rnm = 'brect'+(nmr-1);
+  let r = this[rnm];
+  r.fill = F;
+  r.update();
+}
+
 rs.nextColor = function (prt) {
   let {fills} = this;
   let {fillNumber:IFN,shape} = prt;
@@ -498,7 +523,6 @@ rs.particleCollisions = function () {
   let nextCol;
   let {particles} = this;
   let pln = particles.length;
-  debugger;
   for (let i=0;i<pln;i++) {
     let prt = particles[i];
     let col = this.nextCollision(prt);
@@ -511,7 +535,6 @@ rs.particleCollisions = function () {
       }
     }
   }
-  debugger;
   this.nextC = nextCol;
   return nextCol;
 }
@@ -654,8 +677,18 @@ rs.displaySegments = function () {
   let {segments} = this;
   segments.forEach((seg)=>{
     let {end0,end1} = seg;
-    this.displayLine(end0,end1);
+    this.displayLine(end0,end1,'cyan');
   });
+}
+
+rs.setBoxStroke = function (stroke) {
+  let {dpyLineCnt:n} = this;
+  for (let i=0;i<n;i++) {
+    let nm = 'line_'+i;
+    let ln  = this[nm];
+    ln.stroke = stroke;
+    ln.update();
+  }
 }
 
 rs.circleCount = 0;
@@ -809,9 +842,6 @@ rs.particleArray =function (enclosures) {
      
 rs.updateState = function () {
   let {stepsSoFar:ssf,timePerStep,lastCollision,nextC,stopTime,segments,particles} = this;
-  if (ssf===146) {
-    debugger;
-  }
   let ct = ssf*timePerStep;
   let nct = nextC.time;
   let onUp = this.onUpdate;

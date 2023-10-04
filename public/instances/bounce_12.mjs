@@ -26,6 +26,7 @@ rs.updateColorsOnCollideP = function (prt1,prt2) {
   //}
 }
 
+   
 rs.initProtos = function () {
   let circleP = this.circleP = circlePP.instantiate();
   circleP.stroke = 'white';

@@ -662,7 +662,10 @@ item.addText = function (textP,rt,n,p,color) {
   return txt;
 }
 core.root.backgroundColor = 'black';
-item.setBackgroundColor = (clr) => core.root.backgroundColor = clr; 
+item.setBackgroundColor = function (clr) {
+  core.root.backgroundColor = clr; 
+  this.update();
+}
 
 
 item.initProtos = function () {

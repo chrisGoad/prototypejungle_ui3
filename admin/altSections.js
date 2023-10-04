@@ -11,6 +11,8 @@ sections:
       [0,'paths_10','instances',1,'Tower',{likes:0,posted:0,category:'drop'}], 
       [0,'cubes_1','generators',1,'Cubes',{likes:0,posted:0,category:'drop'}], 
       [0,'drop_circles_20','generators',1,'Necker Distortion',{likes:0,posted:0,category:'drop'}], 
+      [0,'bounce_14','instances',1,'bounce_14',{likes:0,posted:0,category:'drop'}], 
+      [0,'bounce_13','instances',1,'bounce_13',{likes:0,posted:0,category:'drop'}], 
       [0,'bounce_12','instances',1,'bounce_12',{likes:0,posted:0,category:'drop'}], 
       [0,'bounce_11','instances',1,'bounce_11',{likes:0,posted:0,category:'drop'}], 
       [0,'bounce_10','instances',1,'bounce_10',{likes:0,posted:0,category:'drop'}], 

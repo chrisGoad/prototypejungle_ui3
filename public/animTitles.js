@@ -1,0 +1,1 @@
+let animTitles = ["You are getting very sleepy...","Bounce","Shifting Grid","Pulse","Symmetry Breaking 1","Symmetry Breaking 2","Necker Distortion","Tower","Spinning Tubes","Pulse and Dance","Emergence","Chase","Pulsation","Spinny Grid","Figure/Ground","Walking"];
