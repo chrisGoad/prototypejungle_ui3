@@ -6,7 +6,7 @@ let rs = generatorP.instantiate();
 rs.setName('bounce_14');
 let ht=43;
 
-let topParams = {width:ht,height:ht,framePadding:0.1*ht,frameStroke:'rgb(2,2,2)',frameStrokeWidth:.2,timePerStep:0.15,stopTime:255,
+let topParams = {width:ht,height:ht,framePadding:0.1*ht,frameStroke:'rgb(2,2,2)',frameStrokeWidth:.2,timePerStep:0.15,stopTimee:18,stopTime:25.6,
                  collideWithParticle:1,numParticles:7,saveAnimation:1,boxD:0.9*ht,speedup:1,swp:1,numParticles:4}
 
 Object.assign(rs,topParams);
@@ -14,6 +14,8 @@ Object.assign(rs,topParams);
 
 rs.fills = [{r:0,g:0,b:0},{r:250,g:250,b:250},{r:0,g:0,b:250},{r:0,g:150,b:0},{r:150,g:0,b:0}];
 rs.fills = [{r:0,g:0,b:0},{r:0,g:0,b:250},{r:0,g:150,b:0},{r:150,g:0,b:0}];
+rs.fills = [{r:0,g:0,b:250},{r:0,g:150,b:0},{r:150,g:0,b:0}];
+rs.fills = [{r:250,g:0,b:0},{r:0,g:250,b:0},{r:0,g:0,b:250}];
 rs.mkBFillsI = function (params,) {
   let {r,g,b,min,max,n} = params;
   let bfs = [];
@@ -45,14 +47,14 @@ rs.backgroundFills = rs.fills;
 
 
 // this is called whenever there is a collision
-rs.updateColorsOnCollideP = function (prt1,prt2) {
+rs.updateColorsOnCollidePP = function (prt1,prt2) {
   let {particles} = this;
   let pln = particles.length
   //this.exchangeColors(prt1,prt2);
   let maxIndex = Math.max(prt1.index,prt2.index);
   //if (maxIndex < (pln-1)) {
     this.nextColors(prt1,prt2);
-      this.nextBackgroundColor();
+    //  this.nextBackgroundColor();
 
   //}
 }
@@ -60,7 +62,7 @@ rs.updateColorsOnCollideP = function (prt1,prt2) {
 
 rs.updateColorsOnCollideLS = function () {
   console.log('ZZZZZ');
-  this.nextBackgroundColor();
+  //this.nextBackgroundColor();
 }
 rs.initProtos = function () {
   let circleP = this.circleP = circlePP.instantiate();
@@ -75,34 +77,51 @@ rs.closestParticle = function (prt,excluded) {
   let {particles} = this;
  */ 
   
-   
+rs.a2r = (Math.PI)/180;
 rs.mkParticles = function (params) {
-  let {eradius,mass,radius,speed,distanceFromEnclosure:dfe,numParticles:np,inside}= params;
-  let {fills} = this;
+  let {eradius,mass,radius,speed,distanceFromEnclosure:dfee,numParticles:np,inside}= params;
+  let {fills,a2r,boxD} = this;
   debugger;
-  let dfc = eradius - radius - dfe;
+  let dfe = 0;
+  //let dfc = eradius - radius - dfe;
+  let dfc = (boxD/2) - radius - dfe;
   let ai = (Math.PI*2)/np;
   let prts= [];
   for (let i = 0;i<np;i++) {
-    let ca = i*ai;
+    let ca = i*ai-0*a2r;
     let ip = Point.mk(Math.cos(ca),Math.sin(ca)).times(dfc);
-    let np= Point.mk(Math.cos(ca+ai),Math.sin(ca+ai)).times(dfc)
-    let hwp = ip.plus(np).times(.5);
+    let np= Point.mk(Math.cos(ca+ai),Math.sin(ca+ai)).times(dfc);
+    let vec = np.difference(ip);
+    let vln = vec.length();
+    let hwp = ip.plus(vec.times(1/2));
+   //let hwp = ip.plus(np).times(.5);
+     let twp = ip.plus(vec.times(1/3));
+    let ttwp = ip.plus(vec.times(2/3));
+
+    //let twp = ip.plus(np).times(1/3);
+    //let ttwp = ip.plus(np).times(2/3);
     let lnip = ip.length();
     let lnnp = np.length();
     let lnhwp = hwp.length();
+    let lntwp = twp.length();
+    let lnttwp = ttwp.length();
     console.log('i',i,'lengths',lnip,lnnp,lnhwp);
     let na = ca + Math.PI/2;
-    let vec = np.difference(ip);
-    let vln = vec.length();
     let vs = vec.times(speed/vln);
     let ray = {initialPosition:ip,velocity:vs};
     let rayhw  = {initialPosition:hwp,velocity:Point.mk(0,0)};
-    let prt = {mass,radius,ray,startTime:0,inside,fillNumber:0,fillStructure:fills[2]};
+    let raytw  = {initialPosition:twp,velocity:Point.mk(0,0)};
+    let rayttw  = {initialPosition:ttwp,velocity:Point.mk(0,0)};
+    let prt = {mass,radius,ray,startTime:0,inside,fillNumber:0,fillStructure:fills[0]};
     prts.push(prt);
-    let prthw = {mass,radius,ray:rayhw,startTime:0,inside,fillNumber:1,fillStructure:fills[3]};
+    //let prthw = {mass,radius,ray:rayhw,startTime:0,inside,fillNumber:1,fillStructure:fills[0]};
+    let prttw = {mass,radius,ray:raytw,startTime:0,inside,fillNumber:1,fillStructure:fills[1]};
+    let prtttw = {mass,radius,ray:rayttw,startTime:0,inside,fillNumber:1,fillStructure:fills[2]};
     if (1||(np>1)) {
-      prts.push(prthw);
+      prts.push(prttw);
+      //prts.push(prthw);
+
+      prts.push(prtttw);
     }
    
   }
@@ -127,7 +146,8 @@ rs.initialize = function () {
   this.genBox();
   let emass = 50000;
   let eradius = 18;
-  let cparams = {eradius,mass:1,radius:2,speed:3,distanceFromEnclosure:0.0,numParticles:4};
+  let dradius = .8;
+  let cparams = {eradius,mass:1,radius:.2,speed:3,distanceFromEnclosure:0.0,numParticles:4};
   let encs = [];
   let grv = 100;
   let enc = {mass:emass,radius:eradius,startTime:0,ray:{initialPosition:Point.mk(0,0),velocity:Point.mk(0,0)},fillStructure:{r:grv,g:grv,b:grv}};
@@ -139,13 +159,13 @@ rs.initialize = function () {
   //let prta= this.particles = this.particleArray(encs);
   let hbd = 0.5*boxD;
   this.displaySegments();
-  this.mkCirclesForParticles(prts);
+  this.mkCirclesForParticles(prts,dradius);
   this.currentTime = 0;
   this.updatePositions(0);
   this.nextC = this.particleCollisions(); 
   let hb = 0.5*boxD;
-  this.displayLine(Point.mk(0,-hb),Point.mk(0,hb));
-  this.displayLine(Point.mk(-hb,0),Point.mk(hb,0));
+  //this.displayLine(Point.mk(0,-hb),Point.mk(0,hb));
+  //this.displayLine(Point.mk(-hb,0),Point.mk(hb,0));
 }
 
 export {rs};

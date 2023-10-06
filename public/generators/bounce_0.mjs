@@ -673,11 +673,12 @@ rs.displayLine = function(e0,e1,stroke) {
   line.update();
 }
 
-rs.displaySegments = function () {
+rs.displaySegments = function (istroke) {
+  let stroke = istroke?istroke:'white';
   let {segments} = this;
   segments.forEach((seg)=>{
     let {end0,end1} = seg;
-    this.displayLine(end0,end1,'cyan');
+    this.displayLine(end0,end1,stroke);
   });
 }
 
@@ -692,16 +693,18 @@ rs.setBoxStroke = function (stroke) {
 }
 
 rs.circleCount = 0;
-rs.mkCircleForParticle = function (particle) {
+rs.mkCircleForParticle = function (particle,dradiusi) {
   let {circleCount:ccnt,circleP} = this;
   debugger;
   const randomFill = {r:150*Math.random()+100,g:150*Math.random()+100,b:150*Math.random()+100};
   let {radius,stroke,fillStructure} = particle;
+  let dradius = dradiusi?dradiusi:radius;
+
   let circ = circleP.instantiate();
   let nm = 'circle_'+ccnt;
   this.circleCount = ccnt+1;
   this.set(nm,circ);
-  circ.dimension = 2*radius;
+  circ.dimension = 2*dradius;
   if (stroke) {
     circ.stroke = stroke;
   }
@@ -717,14 +720,14 @@ rs.mkCircleForParticle = function (particle) {
   return circ;
 }
  
-rs.mkCirclesForParticles = function (particles) {
+rs.mkCirclesForParticles = function (particles,dradius) {
   let ln = particles.length;
   for (let i=ln-1;i>=0;i--) {
     let p = particles[i];
     if (p.index === undefined) {
       p.index = i; 
     }
-    this.mkCircleForParticle(p);
+    this.mkCircleForParticle(p,dradius);
   }
 }
 
