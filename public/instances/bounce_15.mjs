@@ -3,7 +3,7 @@ import {rs as linePP} from '/shape/line.mjs';
 import {rs as generatorP} from '/generators/bounce_0.mjs'
 let rs = generatorP.instantiate();
 
-rs.setName('bounce_14');
+rs.setName('bounce_15');
 let ht=43;
 
 let topParams = {width:ht,height:ht,framePadding:0.1*ht,frameStroke:'rgb(2,2,2)',frameStrokeWidth:.2,timePerStep:1/7,stopTimee:18,stopTime:28.6,stopStep:2*189,
@@ -144,15 +144,14 @@ rs.mkParticles = function (params) {
     let rayttw  = {initialPosition:ttwp,velocity:Point.mk(0,0)};
     let prt = {mass,radius,ray,startTime:0,inside,fillNumber:0,fillStructure:fills[0]};
     prts.push(prt);
-    //let prthw = {mass,radius,ray:rayhw,startTime:0,inside,fillNumber:1,fillStructure:fills[0]};
+    let prthw = {mass,radius,ray:rayhw,startTime:0,inside,fillNumber:1,fillStructure:fills[1]};
     let prttw = {mass,radius,ray:raytw,startTime:0,inside,fillNumber:1,fillStructure:fills[0]};
     let prtttw = {mass,radius,ray:rayttw,startTime:0,inside,fillNumber:1,fillStructure:fills[1]};
     if (1||(np>1)) {
-      prts.push(prttw);
+      prts.push(prthw);
       //prts.push(prthw);
-      prts.push(prtttw);
-      ips.push(twp);
-      ips.push(ttwp);
+      //prts.push(prtttw);
+      ips.push(hwp);
     }
    
   }

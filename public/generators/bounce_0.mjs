@@ -672,6 +672,7 @@ rs.displayLine = function(e0,e1,stroke) {
     line.stroke = stroke;
   }
   line.update();
+  return line;
 }
 
 rs.displaySegments = function (istroke) {

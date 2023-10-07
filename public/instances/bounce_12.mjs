@@ -103,7 +103,9 @@ rs.onUpdate = function () {
   let {stepsSoFar:ssf,currentTime:t} = this;
   console.log('steps',ssf,'time',t);
 }
-   
+rs.update = function () {
+}
+
 rs.initialize = function () {
    debugger;
   let {timePerStep,stopTime,stopStep,fills,height:ht,boxD,numParticles:numP} = this;
