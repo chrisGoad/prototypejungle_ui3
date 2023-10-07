@@ -6,9 +6,9 @@ let rs = generatorP.instantiate();
 rs.setName('bounce_15');
 let ht=43;
 
-let topParams = {width:ht,height:ht,framePadding:0.1*ht,frameStroke:'rgb(2,2,2)',frameStrokeWidth:.2,timePerStep:1/7,stopTimee:18,stopTime:28.6,stopStep:2*189,
+let topParams = {width:ht,height:ht,framePadding:0.1*ht,frameStroke:'rgb(82,82,92)',frameStrokeWidth:.2,timePerStep:1/7,stopTimee:18,stopTime:28.6,stopStep:224,
 
-                 chopOffBeginning:72,collideWithParticle:1,numParticles:7,saveAnimation:1,boxD:0.9*ht,speedup:1,swp:1,numParticles:4}
+                 chopOffBeginning:96,collideWithParticle:1,numParticles:7,saveAnimation:1,boxD:0.9*ht,speedup:1,swp:1,numParticles:4}
 
 Object.assign(rs,topParams);
 
@@ -213,7 +213,7 @@ rs.initialize = function () {
   //encs.push(enc);
   //let prta= this.particles = this.particleArray(encs);
   let hbd = 0.5*boxD;
-  this.displaySegments();
+ // this.displaySegments();
   this.mkCirclesForParticles(prts,dradius);
   this.currentTime = 0;
   this.updatePositions(0);
