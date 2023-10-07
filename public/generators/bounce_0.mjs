@@ -411,6 +411,7 @@ rs.flipColor = function (prt) {
 }
 rs.enactCollide2Particles = function (particle1,particle2,t) {
   let {swp} = this;
+  debugger;
   let prt1 = particle1;
   let prt2 = particle2;
   let colres = this.collide2particles(prt1,prt2);
