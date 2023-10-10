@@ -250,7 +250,6 @@ const displayError = function (msg) {
 core.setDisplayError(displayError);
 
 const saveTheImage = function (forMpix) {
-	debugger;
 	//saveTheThumb();
 //	return
   

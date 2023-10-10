@@ -844,7 +844,11 @@ rs.particleArray =function (enclosures) {
   }
   return pa;
 }
-     
+  rs.setNumSteps = function () {
+    let {stopTime,stopStep,timePerStep} = this;
+    this.numSteps = stopStep?stopStep:Math.ceil(stopTime/timePerStep);
+  }
+    
 rs.updateState = function () {
   let {stepsSoFar:ssf,timePerStep,lastCollision,nextC,stopTime,segments,particles} = this;
   let ct = ssf*timePerStep;

@@ -75,7 +75,7 @@ rs.initialDrop = function () {
 rs.initialize = function () {
   this.addFrame();
   let {circleP,circular} = this;
-  this.setBackgroundColor(circular?'white':'black');
+  this.//groundColor(circular?'white':'black');
   this.initProtos();
   if (circular) {
     let crc = this.circleP.instantiate();

@@ -6,7 +6,7 @@ let rs = generatorP.instantiate();
 rs.setName('bounce_15');
 let ht=43;
 
-let topParams = {width:ht,height:ht,framePadding:0.1*ht,frameStroke:'rgb(82,82,92)',frameStrokeWidth:.2,timePerStep:1/7,stopTimee:18,stopTime:28.6,stopStep:224,
+let topParams = {width:ht,height:ht,framePadding:0.1*ht,frameStroke:'rgb(82,82,92)',frameStrokeWidth:.2,timePerStep:1/7,stopTimee:18,stopTime:28.6,stopStep:225,
 
                  chopOffBeginning:96,collideWithParticle:1,numParticles:7,saveAnimation:1,boxD:0.9*ht,speedup:1,swp:1,numParticles:4}
 
@@ -70,6 +70,7 @@ rs.updateColorsOnCollideP = function (prt1,prt2) {
 
   let {particles,ips} = this;
   debugger;
+  //return;
   let pln = particles.length
   //this.exchangeColors(prt1,prt2);
   let maxIndex = Math.max(prt1.index,prt2.index);
@@ -117,6 +118,7 @@ rs.mkParticles = function (params) {
   let dfc = (boxD/2) - radius - dfe;
   let ai = (Math.PI*2)/np;
   let prts= [];
+ // for (let i = 0;i<np;i++) {
   for (let i = 0;i<np;i++) {
     let ca = i*ai-0*a2r;
     let ip = Point.mk(Math.cos(ca),Math.sin(ca)).times(dfc);
@@ -171,18 +173,26 @@ rs.update = function () {
 
 rs.displayWheel = function () {
   let {particles} = this;
-  //debugger;
+  debugger;
   let ln = particles.length;
   for (let i = 0;i<ln;i++) {
     let prt = particles[i];
     let spoke = prt.spoke;
     if (!spoke) {
       spoke = this.displayLine(Point.mk(0,0),prt.position,prt.shape.fill);
-     // prt.spoke = spoke;
+     //prt.spoke = spoke;
+      let nm = spoke.__name;
+      let sp = nm.split('_');
+      let n =  parseInt(sp[1]);
+      let pn= n-546;
+      if (1 && (pn>=0)) {
+        let sh = this['line_'+pn];
+        sh.hide();
+      }
     } else {
-      debugger;
       spoke.setEnds(Point.mk(0,0),prt.position);
       spoke.update();
+     
     }
   }
 }
@@ -201,8 +211,8 @@ rs.initialize = function () {
   let emass = 50000;
   let eradius = 18;
   let dradius = .8;
- // let cparams = {eradius,mass:1,radius:.022,speed:3,distanceFromEnclosure:0.0,numParticles:4};
-  let cparams = {eradius,mass:1,radius:.015,speed:3,distanceFromEnclosure:0.0,numParticles:4};
+  let cparams = {eradius,mass:1,radius:.022,speed:3,distanceFromEnclosure:0.0,numParticles:4};
+  //let cparams = {eradius,mass:1,radius:.015,speed:3,distanceFromEnclosure:0.0,numParticles:4};
   let encs = [];
   let grv = 100;
   let enc = {mass:emass,radius:eradius,startTime:0,ray:{initialPosition:Point.mk(0,0),velocity:Point.mk(0,0)},fillStructure:{r:grv,g:grv,b:grv}};
