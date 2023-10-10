@@ -3,11 +3,11 @@ import {rs as linePP} from '/shape/line.mjs';
 import {rs as generatorP} from '/generators/bounce_0.mjs'
 let rs = generatorP.instantiate();
 
-rs.setName('bounce_16');
+rs.setName('bounce_16')
 let ht=50;
 
-let topParams = {width:ht,height:ht,framePadding:0.1*ht,frameStroke:'rgb(2,2,2)',frameStrokeWidth:.2,timePerStep:0.15,stopTime:200,stopStep:1000,		
-                 collideWithParticle:1,numParticles:7,saveAnimation:1,boxD:0.9*ht,speedup:1,swp:1,numParticles:4}
+let topParams = {width:ht,height:ht,framePadding:0.1*ht,frameStroke:'rgb(2,2,2)',frameStrokeWidth:.2,timePerStep:0.15,stopTime:200,stopStep:1000	,		
+                 collideWithParticle:1,numParticles:7,saveAnimation:1,boxD:0.9*ht,speedup:1,swp:1,numParticles:4,chopOffBeginningg:480} //420 790
 	
 Object.assign(rs,topParams);
 
@@ -125,7 +125,7 @@ rs.drawLines = function () {
       let nm = line.__name;
       let sp = nm.split('_');
       let n =  parseInt(sp[1]);
-      let pn= n-54;
+      let pn= n-104;
       if (1 && (pn>=0)) {
         let sh = this['line_'+pn];
         sh.hide();

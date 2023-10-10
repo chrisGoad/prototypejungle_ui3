@@ -16,6 +16,12 @@ item.chopOffEnd = 0; // in steps
 item.stepInterval = 40;
 item.pauseAt = [];
 
+item.setNumSteps = function () {
+  let {stopTime,stopStep,timePerStep} = this;
+  this.numSteps = stopStep?stopStep:Math.ceil(stopTime/timePerStep);
+}
+
+
 item.oneStep = function (one) {
   if (this.paused) {
     return;
