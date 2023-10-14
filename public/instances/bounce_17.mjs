@@ -6,8 +6,8 @@ let rs = generatorP.instantiate();
 rs.setName('bounce_17')
 let ht=50;
 
-let topParams = {width:ht,height:ht,framePadding:0.1*ht,frameStroke:'rgb(2,2,2)',frameStrokeWidth:.2,timePerStep:0.15,stopTime:200,stopStep:1000	,		
-                 collideWithParticle:1,numParticles:7,saveAnimation:1,boxD:0.9*ht,speedup:1,swp:1,numParticles:4,chopOffBeginning:40,numLines:200} //420 790
+let topParams = {width:ht,height:ht,framePadding:0.1*ht,frameStroke:'rgb(2,2,2)',frameStrokeWidth:.2,timePerStep:0.15,stopTime:200,stopStep:146,// 2 particle164	,		
+                 collideWithParticle:1,numParticles:7,saveAnimation:1,boxD:0.9*ht,speedup:1,swp:1,numParticles:3,chopOffBeginningg:0,numLines:16} //420 790
 	
 Object.assign(rs,topParams);
 
@@ -71,12 +71,15 @@ rs.mkParticles = function (params) {
 }
 
 rs.drawLines = function () {
-  let {particlePairs,numLines:nl} = this;
+  let {particlePairs,numLines:nl,stepsSoFar:ssf} = this;
+  if (ssf > 50) {
+    debugger;
+  }
   particlePairs.forEach((pp) =>{
     let [prt1,prt2] = pp;
     let line = prt1.line;
     if (!line) {
-       debugger;
+    
       let line = this.displayLine(prt1.position,prt2.position,'white');
     //  prt1.line = line;
       let nm = line.__name;
@@ -86,20 +89,44 @@ rs.drawLines = function () {
       if (1 && (pn>=0)) {
         let sh = this['line_'+pn];
         sh.hide();
-        
+      } else {
+        debugger;
       }
     } else {
-      if (!line.hidden()) {
+      //if (!line.hidden()) {
         line.setEnds(prt1.position,prt2.position);
         line.update();
-      }  
+      //}  
     }
   });
 }
 
 rs.onUpdate = function () {
-  let {stepsSoFar:ssf,currentTime:t} = this;
-  console.log('steps',ssf,'time',t);
+  let {stepsSoFar:ssf,currentTime:t,particles:prts,initialPositions:ips} = this;
+  let maxd = 0;
+  if (!ips) {
+    let inps = [];
+    let ln = prts.length;
+    for (let i=0;i<ln;i++) {
+      let p = prts[i].position;
+      inps.push(p.copy());
+    }
+    this.initialPositions = inps;
+  } else {
+    let ln = prts.length;
+    for (let i=0;i<ln;i++) {
+      let ip = ips[i];
+      let cp = prts[i].position;
+      let d = cp.distance(ip);
+      if (d > maxd) {
+        maxd = d;
+      }
+    }
+  }
+  if ((maxd<1)&&(ssf>20)) {
+    console.log('steps',ssf,'time',t,'maxd',maxd);
+    this.paused = 1;
+  }
   if (!(ssf%1)){
   this.drawLines();
   }
@@ -114,21 +141,21 @@ rs.initialize = function () {
   this.initProtos();
   this.addFrame();
   this.genBox();
-  let cparams = {mass:1,radius:2,speed:3,numParticles:2};
+  let cparams = {mass:1,radius:2,speed:3,numParticles:numP};
   let prts = this.particles =this.mkParticles(cparams);
   let np = prts.length;
   for (let i=0;i<np;i++) {
     if (i%2) {
       let prt1 = prts[i-1]
       let prt2 = prts[i];
-      pp.push([prt1,prt2]);
+   //   pp.push([prt1,prt2]);
     }
     let ip = (i+3)%np;
     let ip2 = (i+5)%np;
     pp.push([prts[i],prts[ip]]);
     pp.push([prts[i],prts[ip2]]);
   }
-  this.displaySegments();
+  //this.displaySegments();
   this.mkCirclesForParticles(prts,.01);
   this.currentTime = 0;
   this.updatePositions(0);

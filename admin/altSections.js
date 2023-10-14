@@ -4,6 +4,8 @@ module.exports = {
 sections: 
 
 [     
+      [0,'color_blend_1','generators',1,'color blend 1',{likes:0,posted:0,category:'drop'}], 
+      [0,'color_blend_0','generators',1,'color blend 0',{likes:0,posted:0,category:'drop'}], 
       [0,'drop_circles_23','instances',1,'drop circles 23',{likes:0,posted:0,category:'drop'}], 
       [0,'paths_7','instances',1,'paths 7',{likes:0,posted:0,category:'drop'}], 
       [0,'paths_3','instances',1,'paths 3',{likes:0,posted:0,category:'drop'}], 

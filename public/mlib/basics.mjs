@@ -664,7 +664,7 @@ item.addText = function (textP,rt,n,p,color) {
 core.root.backgroundColor = 'black';
 item.setBackgroundColor = function (clr) {
   core.root.backgroundColor = clr; 
-  this.update();
+  //this.update();
 }
 
 
