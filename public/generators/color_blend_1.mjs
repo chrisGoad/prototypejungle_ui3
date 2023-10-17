@@ -9,7 +9,9 @@ addAnimationMethods(rs);
 
 rs.setName('color_blend_0');
 let ht=50;
-let topParams = {width:ht,height:ht,framePadding:0.0*ht,frameStroke:'white',frameStrokeWidth:.2,stepStop:40,frameFr:0.98}
+let rstep = 600;
+//rstep = 100;
+let topParams = {width:ht,height:ht,framePadding:0.0*ht,frameStroke:'white',frameStrokeWidth:.2,reverseStep:rstep,stopStep:rstep*2,frameFr:0.99}
 
 Object.assign(rs,topParams);
 rs.gonCount = 1;
@@ -163,8 +165,8 @@ rs.initialize = function () {
 }
 
 rs.updateState = function () {
-  let {iwdf,frameFr,gonCount:ni,width:wd} = this;
-  
+  let {iwdf,frameFr,gonCount:ni,stepsSoFar:ssf,width:wd,reverseStep:rstep} = this;
+  console.log('ssf',ssf,'iwdf',iwdf);
   this.resetGons();
   let iwd = iwdf*wd;
   let inc = iwd/ni;
@@ -179,10 +181,31 @@ rs.updateState = function () {
     iwdf = this.iwdf = 1;
     iwd = wd;
   }
+   if (ww<0) {
+    debugger;
+    n = n-2;
+    if (n<0) {
+      this.paused = 1;
+    }
+    cext = n*inc;
+    
+    this.gonCount=n;
+    iwdf = this.iwdf = cext/wd;
+    iwd = cext;
+  }
+  
+ 
   this.bottomTriangles(iwd,n);
   this.leftWing(iwd,n);
   this.rightWing(iwd,n);
   this.iwdf = frameFr*iwdf;
+  console.log('n',n,'cext',cext,'wd',wd);
+   //if ((n===1)&&(cext>=wd)&&(frameFr>1)) {
+   //   this.paused = 1;
+ // }
+  if (ssf===rstep) {
+    this.frameFr = 1/frameFr;
+  }
 }
 
 export {rs}

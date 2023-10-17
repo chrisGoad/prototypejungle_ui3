@@ -6,8 +6,8 @@ let rs = generatorP.instantiate();
 rs.setName('bounce_16')
 let ht=50;
 
-let topParams = {width:ht,height:ht,framePadding:0.1*ht,frameStroke:'rgb(2,2,2)',frameStrokeWidth:.2,timePerStep:0.15,stopTime:200,stopStep:1000	,		
-                 collideWithParticle:1,numParticles:7,saveAnimation:1,boxD:0.9*ht,speedup:1,swp:1,numParticles:4,chopOffBeginning:40,numLines:200} //420 790
+let topParams = {width:ht,height:ht,framePadding:0.1*ht,frameStroke:'rgb(2,2,2)',frameStrokeWidth:.2,timePerStep:0.15,stopTime:200,stopStep:1000	,reflect:1,		
+                 collideWithParticle:1,numParticles:7,saveAnimation:1,boxD:0.9*ht,speedup:1,swp:1,numParticles:4,chopOffBeginning:18,numLines:200} //420 790
 	
 Object.assign(rs,topParams);
 
@@ -29,8 +29,8 @@ rs.particlePairs = [];
 
 rs.mkParticles = function (params) {
   let {eradius,mass,radius,speed,distanceFromEnclosure:dfe,numParticles:np,inside}= params;
-  let {fills,particlePairs} = this;
-  let reflect = 1;
+  let {fills,particlePairs,reflect} = this;
+ // let reflect = 1;
   debugger;
   let dfc = eradius - radius - dfe;
   let ai = (Math.PI*2)/np;
