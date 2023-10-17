@@ -6,8 +6,8 @@ let rs = generatorP.instantiate();
 rs.setName('bounce_18')
 let ht=50;
 
-let topParams = {width:ht,height:ht,framePadding:0.1*ht,frameStroke:'rgb(2,2,2)',frameStrokeWidth:.2,timePerStep:0.15,stopTime:200,stopStep:1490,// 2 particle164	,		
-                 collideWithParticle:1,numParticles:7,saveAnimation:1,boxD:0.9*ht,speedup:1,swp:1,numParticles:3,chopOffBeginning:16,numLines:160} //420 790
+let topParams = {width:ht,height:ht,framePadding:0.1*ht,frameStroke:'rgb(2,2,2)',frameStrokeWidth:.2,timePerStep:0.15,stopTime:200,stopStep:534,// 2 particle164	,		
+                 collideWithParticle:1,numParticles:7,saveAnimation:1,boxD:0.9*ht,speedup:1,swp:1,numParticles:3,chopOffBeginningg:16,numLines:160} //420 790
 	
 Object.assign(rs,topParams);
 
@@ -27,11 +27,11 @@ rs.initProtos = function () {
 
 
 rs.particleRow = function (params) {
- // debugger;
+  debugger;
   let {boxD,particles:prts,particlePairs:pp,fills} = this;
   let {numParticles:numP,y,xVals,speed,mass,radius,particles} = params;
-  let delta = boxD/numP;
-  let hbd = 0.5*boxD;
+  let delta = boxD/(numP*2);
+  let hbd = 0.25*boxD;
   for (let i=0;i<numP;i++) {
     let x =  delta*(i+.5)-hbd;
     let v = Point.mk(speed,0.0*(1 + 0.00*Math.random()) *speed);
@@ -57,10 +57,12 @@ rs.mkParticles = function (params) {
   let bh = boxD/2;
     params.particles = prts;
 
-  for (let i = 0;i<nr;i++) {
+  for (let i = 1;i<nr;i++) {
     let y = i*ydelta - bh;
-    params.numParticles = i+1;
+    params.numParticles = 5;
     params.y=y;
+    params.speed = i%2?1:0.5;
+    params.speed = (i<4)||(i>6)?2:1;
     this.particleRow(params);
   }
   return prts;
@@ -132,7 +134,7 @@ rs.onUpdate = function () {
     this.paused = 1;
   }
   if (!(ssf%1)){
-    this.drawLines();
+  //  this.drawLines();
   }
   if (ssf===161) {
     //this.paused = 1;
@@ -148,7 +150,7 @@ rs.initialize = function () {
   this.initProtos();
   this.addFrame();
   this.genBox();
-  let cparams = {mass:1,radius:1,speed:3,numParticles:numP,numRows :10};
+  let cparams = {mass:1,radius:.5,speed:1,numParticles:numP,numRows :10};
   let prts = this.particles =this.mkParticles(cparams);
   let np = prts.length;
   for (let i=0;i<np;i++) {
@@ -162,8 +164,8 @@ rs.initialize = function () {
     pp.push([prts[i],prts[ip]]);
     pp.push([prts[i],prts[ip2]]);
   }
-  //this.displaySegments();
-  this.mkCirclesForParticles(prts,0.01);
+  this.displaySegments();
+  this.mkCirclesForParticles(prts);
   this.currentTime = 0;
   this.updatePositions(0);
   this.nextC = this.particleCollisions();  

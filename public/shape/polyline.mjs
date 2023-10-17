@@ -8,6 +8,7 @@ rs.stroke = "black";
 rs['stroke-width'] = 1;
 rs.role = 'spot';
 rs.points = [];
+rs.fill = 'none';
 
 rs.update = function () {
 	let {wayPoints} = this;
