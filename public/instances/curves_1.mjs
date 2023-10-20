@@ -7,9 +7,9 @@ let rs = generatorP.instantiate();
 rs.setName('curves_1')
 let ht=50;
 
-let topParams = {width:ht,height:ht,framePadding:0.1*ht,frameStroke:'white',frameStrokeWidth:.2,timePerStep:0.15,stopTime:200,stopStep:534,// 2 particle164	,		
-                 collideWithParticle:1,numParticles:7,saveAnimation:1,boxD:0.9*ht,speedup:1,swp:1,numParticles:3,chopOffBeginningg:16,numLines:160,
-                 yc:1,ifc:0} //420 790
+let topParams = {width:ht,height:ht,framePadding:0.1*ht,frameStroke:'white',frameStrokeWidth:.2,numSteps:200,// 2 particle164	,		
+                 saveAnimation:1,numLiness:160,
+                 yc:1,ifc:0,numRings:15} //420 790
 	
 Object.assign(rs,topParams);
 
@@ -25,44 +25,66 @@ rs.initProtos = function () {
   polylineP['stroke-width'] = .05;
 }
 
+rs.updatePolylines = function () {
+  let {numRings:n,yc,ifc} = this;
+  this.polyCnt = 0;
+  let off = 1;
+  let pnts = this.approximateCurve(Math.sin,off-8*Math.PI,off+8*Math.PI,400);
+  let rd = 20;
+  let iv = rd/n;
+  let theta=  (Math.PI/16);
+  for (let i=1;i<n;i++) {
+    let spnts = this.scale(pnts,1/8,ifc*i,0,yc*i);
+    if (i===3) {
+      debugger;
+    }
+    let ppnts = this.fromPolar(spnts);
+    let rpnts = this.rotate(ppnts,theta);
+    let ln = rpnts.length
+    let min=100000;
+    let max = 0;
+    for (let i=0;i<ln;i++) {
+      let pln = rpnts[i].length();
+      if (pln < min) {
+       min=pln;
+      } 
+      if (pln>max) {
+        max = pln;
+      }
+    }
+    console.log('min',min,'max',max);
+    this.displayPolyline(rpnts);
+  }
+
+}
 
 rs.initialize = function () {
    debugger;
   let {timePerStep,stopTime,fills,height:ht,boxD,numParticles:numP,yc,ifc} = this;
   let hht = 0.5*ht;
-  this.setNumSteps();
   this.initProtos();
   this.addFrame();
-  const f = (x) => {
-    debugger;
-    let y = Math.sin(x);
-    let sy = hht*y
-    return sy;
-  }
-  let off = 1;
-  let pnts = this.approximateCurve(Math.sin,off-8*Math.PI,off+8*Math.PI,400);
-  let rd = 20;8
-  let n = 15;
-  let iv = rd/n;
-//  let theta=  (Math.PI/180)*10;
-  let theta=  (Math.PI/16);
-  for (let i=1;i<n;i++) {
-   /* let yc,ofc,ifc,pow;
-    ofc = 0.85;ifc = .3333;pow = 1.5;
-    yc = 1;ofc = .5;ifc = 1;pow = 1;
-    yc = 1;ifc = .2;*/
-    debugger;
-    let spnts = this.scale(pnts,1/8,ifc*i,0,yc*i);
-   //let spnts = this.scale(pnts,1/8,ofc*Math.pow(ifc*i,pow),0,yc*i);
-    let ppnts = this.fromPolar(spnts);
-    debugger;
-    let rpnts = this.rotate(ppnts,theta);
-    
-    this.displayPolyline(rpnts);
-  }
-  return;
- 
+  //this.updatePolylines();
 }
+
+
+rs.updateState= function () {
+  let {stepsSoFar:ssf,yc,ifc,numSteps} = this;
+  debugger;
+  let hns = numSteps/2
+  let maxifc = 0.65;
+  if (ssf <= hns) {
+    this.ifc = maxifc*(ssf/hns);
+  } else {
+    let fr = (ssf-hns)/hns;
+    this.yc = 0.9*(1+fr);
+    this.ifc = maxifc*(1-fr);
+  }
+  this.updatePolylines();
+}
+  
+  
+
 
 export {rs}
   

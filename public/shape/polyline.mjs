@@ -1,4 +1,4 @@
-//polyline
+	//polyline
 
 
 let rs =  svg.Element.mk('<polyline/>');
@@ -10,7 +10,16 @@ rs.role = 'spot';
 rs.points = [];
 rs.fill = 'none';
 
+
+rs.setDomAtts = function () {
+  this.setDomAttribute('visibility',this.visibility);
+  this.setDomAttribute('fill',this.fill);
+  this.setDomAttribute('stroke-width',this['stroke-width']);
+  this.setDomAttribute('stroke',this.stroke);
+}
+
 rs.update = function () {
+  this.setDomAtts(this.__element);
 	let {wayPoints} = this;
   wayPoints.forEach((p) => {
     if (isNaN(p.x) || isNaN(p.y)) {

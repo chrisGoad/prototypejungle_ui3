@@ -1,6 +1,6 @@
 import {rs as circlePP} from '/shape/circle.mjs';
 import {rs as linePP} from '/shape/line.mjs';
-import {rs as polylinePP} from '/shape/polyline.mjs';
+import {rs as polylinePP} from '/shape/polygon.mjs';
 import {rs as generatorP} from '/generators/curves_0.mjs'
 let rs = generatorP.instantiate();
 
@@ -20,6 +20,7 @@ rs.initProtos = function () {
   lineP.stroke = 'white';
   lineP['stroke-width'] = .2;
   let polylineP = this.polylineP = polylinePP.instantiate();
+  polyline.fill = 'none';
   polylineP.stroke = 'white';
   polylineP['stroke-width'] = .2;
 }

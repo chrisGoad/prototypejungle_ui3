@@ -19,7 +19,7 @@ rs.approximateCurve = function (f,lb,ub,n) {
   for (let i=0;i<n;i++) {
    let x = lb + iv*i;
    let y = f(x);
-    console.log('x',x/(Math.PI),'y',y);
+ //   console.log('x',x/(Math.PI),'y',y);
     pnts.push(Point.mk(x,y));
   }
   return pnts;
@@ -40,7 +40,7 @@ rs.fromPolar = function (pnts)  {
     let vec = Point.mk(Math.cos(ip.x),Math.sin(ip.x));
     let r = vec.times(ip.y);
     let ln = r.length();
-    console.log('y',ip.y,'ln',ln);
+  //  console.log('y',ip.y,'ln',ln);
     //let r = vec.times(10);
     return r;
   });
@@ -57,13 +57,19 @@ rs.rotate = function (pnts,theta)  {
    
    
 rs.polyCnt = 0;
+rs.lineCnt = 0;
 rs.displayPolyline = function (pnts) {
   let {polyCnt:cnt} = this;
-  let ply = this.polylineP.instantiate();
-  ply.wayPoints = pnts;
+  let ln = pnts.length;
   let nm = 'p_'+cnt;
-  this.set(nm,ply);
+  let ply = this[nm];
+  if (!ply) {
+    ply = this.polylineP.instantiate();
+    this.set(nm,ply);
+  }
+  ply.wayPoints = pnts;
   ply.update();
+  ply.show();
   this.polyCnt = cnt+1;
 }
 
