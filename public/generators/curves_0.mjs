@@ -24,9 +24,11 @@ rs.approximateCurve = function (f,lb,ub,n) {
   }
   return pnts;
 }
-
-rs.scale= function (pnts,x,y) {
-  return pnts.map((p) => Point.mk(x*p.x,y*p.y));
+// scale and optionally add a constant to x and y
+rs.scale= function (pnts,x,y,ixc,iyc) {
+  let xc = ixc?ixc:0;
+  let yc = iyc?iyc:0;
+  return pnts.map((p) => Point.mk(xc+x*p.x,yc+y*p.y));
 }
 rs.translate = function (pnts,p) {
   return pnts.map((ip) => ip.plus(p));
