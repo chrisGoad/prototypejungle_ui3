@@ -7,8 +7,8 @@ let rs = generatorP.instantiate();
 rs.setName('curves_1')
 let ht=50;
 
-let topParams = {width:ht,height:ht,framePadding:0.1*ht,frameStroke:'white',frameStrokeWidth:.2,numSteps:200,// 2 particle164	,		
-                 saveAnimation:1,numLiness:160,
+let topParams = {width:ht,height:ht,framePadding:0.1*ht,frameStrokee:'white',frameStrokeWidth:.2,numSteps:3*2*32,// 2 particle164	,		
+                 saveAnimation:1,numLobes:2,maxifc:0.65,numCycles:6,
                  yc:1,ifc:0,numRings:15} //420 790
 	
 Object.assign(rs,topParams);
@@ -26,33 +26,21 @@ rs.initProtos = function () {
 }
 
 rs.updatePolylines = function () {
-  let {numRings:n,yc,ifc} = this;
+  let {numRings:n,yc,ifc,numLobes:nl} = this;
   this.polyCnt = 0;
+  let hnl = nl/2;
   let off = 1;
-  let pnts = this.approximateCurve(Math.sin,off-8*Math.PI,off+8*Math.PI,400);
+  let pnts = this.approximateCurve(Math.sin,off-hnl*Math.PI,off+hnl*Math.PI,400);
   let rd = 20;
   let iv = rd/n;
-  let theta=  (Math.PI/16);
+  let theta=  (Math.PI/nl);
   for (let i=1;i<n;i++) {
-    let spnts = this.scale(pnts,1/8,ifc*i,0,yc*i);
-    if (i===3) {
+    if (i===5) {
       debugger;
     }
+    let spnts = this.scale(pnts,1/hnl,ifc*i,0,yc*i);
     let ppnts = this.fromPolar(spnts);
     let rpnts = this.rotate(ppnts,theta);
-    let ln = rpnts.length
-    let min=100000;
-    let max = 0;
-    for (let i=0;i<ln;i++) {
-      let pln = rpnts[i].length();
-      if (pln < min) {
-       min=pln;
-      } 
-      if (pln>max) {
-        max = pln;
-      }
-    }
-    console.log('min',min,'max',max);
     this.displayPolyline(rpnts);
   }
 
@@ -60,15 +48,62 @@ rs.updatePolylines = function () {
 
 rs.initialize = function () {
    debugger;
-  let {timePerStep,stopTime,fills,height:ht,boxD,numParticles:numP,yc,ifc} = this;
+  let {timePerStep,stopTime,fills,height:ht,boxD,numParticles:numP,yc,maxifc} = this;
   let hht = 0.5*ht;
   this.initProtos();
   this.addFrame();
-  //this.updatePolylines();
+  this.ifc = maxifc;
+  this.updatePolylines();
+}
+
+
+const between = function (x,lb,ub) {
+  return (lb<=x)&&(x<ub);
+}
+
+rs.numLobesPerCycle = [2,4,8,16,64];
+rs.numLobesPerCycle = [64,8];
+rs.execCycle = function (n) {
+  let {numSteps,stepsSoFar:ssf,maxifc,numLobesPerCycle:nlpc} = this;
+  let numCycles = nlpc.length;
+  let numLobes = nlpc[n];
+  this.numLobes = numLobes;
+  let spc = numSteps/numCycles;
+  let spsc = spc/3;
+  let sc  = n*spc;
+  let sc0 = sc;
+  let sc1 = sc+spsc;
+  let sc2=sc +2*spsc;
+  let ec = sc+spc;
+  
+  if (between(ssf,sc0,sc1)) {
+    this.ifc = maxifc*((ssf-sc0)/spsc);
+  } else if (between(ssf,sc1,sc2)) {
+    let fr = (ssf-sc1)/spsc;
+    this.yc = 1+maxifc*fr;
+    this.ifc = maxifc*(1-fr);
+  } else if (between(ssf,sc2,ec)) {
+    let fr = (ssf-sc2)/spsc;
+    this.yc = 1+maxifc*(1-fr);
+  }
+  this.updatePolylines()  
+}  
+
+rs.whichCycle = function () {
+  let {stepsSoFar:ssf,numSteps,numLobesPerCycle:nlpc}  = this;
+  let numCycles = nlpc.length;
+  let spc = numSteps/numCycles;
+  let wc = Math.floor(ssf/spc);
+  return wc;
 }
 
 
 rs.updateState= function () {
+  debugger;
+  let wc = this.whichCycle();
+  this.execCycle(wc);
+}
+/*
   let {stepsSoFar:ssf,yc,ifc,numSteps} = this;
   debugger;
   let hns = numSteps/2
@@ -83,7 +118,7 @@ rs.updateState= function () {
   this.updatePolylines();
 }
   
-  
+  */
 
 
 export {rs}

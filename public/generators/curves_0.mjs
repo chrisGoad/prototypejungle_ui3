@@ -15,6 +15,7 @@ rs.approximateCurve = function (f,lb,ub,n) {
   let pnts =[];
   let delta = ub-lb;
   let iv = delta/(n-1);
+  let dop = delta/(2*Math.PI);
   //let iv = delta/n;
   for (let i=0;i<n;i++) {
    let x = lb + iv*i;
@@ -55,6 +56,22 @@ rs.rotate = function (pnts,theta)  {
   });
 }
    
+   
+   
+rs.maxf = function (pnts,f) {
+  let r = -Infinity;
+  pnts.forEach((p) => {
+    let v=f(p);
+    if (v>r) {
+      r=v
+    }   
+  });
+  return r;
+}
+
+rs.maxLength = function (pnts) {
+  return this.maxf(pnts,(p)=>p.length()); 
+}
    
 rs.polyCnt = 0;
 rs.lineCnt = 0;
