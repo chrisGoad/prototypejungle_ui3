@@ -7,7 +7,7 @@ let rs = generatorP.instantiate();
 rs.setName('curves_1')
 let ht=50;
 
-let topParams = {width:ht,height:ht,framePadding:0.1*ht,frameStrokee:'white',frameStrokeWidth:.2,numSteps:3*2*32,// 2 particle164	,		
+let topParams = {width:ht,height:ht,framePadding:0.1*ht,frameStrokee:'white',frameStrokeWidth:.2,numSteps:3*4*32,// 2 particle164	,		
                  saveAnimation:1,numLobes:2,maxifc:0.65,numCycles:6,
                  yc:1,ifc:0,numRings:15} //420 790
 	
@@ -61,6 +61,10 @@ const between = function (x,lb,ub) {
   return (lb<=x)&&(x<ub);
 }
 
+const betweenI = function (x,lb,ub) {
+  return (lb<=x)&&(x<=ub);
+}
+
 rs.numLobesPerCycle = [2,4,8,16,64];
 rs.numLobesPerCycle = [64,8];
 rs.execCycle = function (n) {
@@ -76,13 +80,13 @@ rs.execCycle = function (n) {
   let sc2=sc +2*spsc;
   let ec = sc+spc;
   
-  if (between(ssf,sc0,sc1)) {
+  if (betweenI(ssf,sc0,sc1)) {
     this.ifc = maxifc*((ssf-sc0)/spsc);
-  } else if (between(ssf,sc1,sc2)) {
+  } else if (betweenI(ssf,sc1,sc2)) {
     let fr = (ssf-sc1)/spsc;
     this.yc = 1+maxifc*fr;
     this.ifc = maxifc*(1-fr);
-  } else if (between(ssf,sc2,ec)) {
+  } else if (betweenI(ssf,sc2,ec)) {
     let fr = (ssf-sc2)/spsc;
     this.yc = 1+maxifc*(1-fr);
   }
