@@ -89,6 +89,7 @@ rs.displayPolyline = function (pnts) {
   ply.show();
   this.polyCnt = cnt+1;
 }
+/*
 rs.displayPolyline = function (pnts) {
   let {lineCnt:cnt} = this;
   debugger;
@@ -107,7 +108,7 @@ rs.displayPolyline = function (pnts) {
       }
   }
   this.lineCnt = ccnt;
-}
+}*/
 
 
 export {rs}
