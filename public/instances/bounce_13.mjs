@@ -45,7 +45,7 @@ rs.backgroundFills = rs.fills;
 
 
 // this is called whenever there is a collision
-rs.updateColorsOnCollideP = function (prt1,prt2) {
+rs.updateColorsOnCollidePP = function (prt1,prt2) {
   let {particles} = this;
   let pln = particles.length
   //this.exchangeColors(prt1,prt2);
@@ -58,7 +58,7 @@ rs.updateColorsOnCollideP = function (prt1,prt2) {
 }
 
 
-rs.updateColorsOnCollideLS = function () {
+rs.updateColorsOnCollideLSS = function () {
   console.log('ZZZZZ');
   debugger;
   this.nextBackgroundColor();

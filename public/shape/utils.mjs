@@ -13,8 +13,10 @@ item.setup = function (line) {
 }
 
 item.setEnds = function (line,p0,p1) {
-  line.setPointProperty('end0',p0);
-  line.setPointProperty('end1',p1);
+  //line.setPointProperty('end0',p0);
+  line.set('end0',p0.copy());
+  line.set('end1',p1.copy());
+  //line.setPointProperty('end1',p1);
 }
 
 item.controlPoints = function (line) {

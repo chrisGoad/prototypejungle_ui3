@@ -6,15 +6,19 @@ sections:
 [
  //anim
  
- [0,'part2_0_43','instances',1,'You are getting very sleepy...',{video:'gif',likes:0,posted:0,category:'anim'}],
- [0,'line_path_2_11','instances',1,'Bounce',{video:'gif',likes:0,posted:0,category:'anim'}], 
- [0,'part2_0_38','instances',1,'Shifting Grid',{video:'gif',likes:0,posted:0,category:'anim'}],
- [0,'part2_0_31','instances',1,'Pulse',{video:'gif',noTitle:0,likes:0,posted:0,category:'anim'}],
- 
+ //[0,'part2_0_43','instances',1,'You are getting very sleepy...',{video:'gif',likes:0,posted:0,category:'anim'}],
+    [0,'drop_circles_20','generators',1,'Necker Distortion',{video:'gif',likes:0,posted:0,category:'anim'}], 
+ //[0,'line_path_2_11','instances',1,'Bounce',{video:'gif',likes:0,posted:0,category:'anim'}], 
+  [0,'curves_1','instances',1,'Wave Functions',{video:'gif',likes:0,posted:0,category:'anim'}], 
+        [0,'bounce_16','instances',1,'Square Dance',{video:'mp4',likes:0,posted:0,category:'anim'}], 
+            [0,'part2_0_43','instances',1,'You are getting very sleepy...',{video:'gif',likes:0,posted:0,category:'anim'}],
+
+ //[0,'part2_0_31','instances',1,'Pulse',{video:'gif',noTitle:0,likes:0,posted:0,category:'anim'}],
  
    [0,'bounce_4','instances',1,'Symmetry Breaking 1',{video:'mp4',likes:0,posted:0,category:'anim'}], 
    [0,'bounce_13','instances',1,'Symmetry Breaking 2',{video:'mp4',likes:0,posted:0,category:'anim'}], 
-   [0,'drop_circles_20','generators',1,'Necker Distortion',{video:'gif',likes:0,posted:0,category:'anim'}], 
+    [0,'line_path_2_11','instances',1,'Bounce',{video:'gif',likes:0,posted:0,category:'anim'}], 
+   //[0,'drop_circles_20','generators',1,'Necker Distortion',{video:'gif',likes:0,posted:0,category:'anim'}], 
    [0,'paths_10','instances',1,'Tower',{video:'gif',likes:0,posted:0,category:'anim'}], 
    
    [0,'paths_7','instances',1,'Spinning Tubes',{video:'gif',likes:0,posted:0,category:'anim'}], 
@@ -28,8 +32,9 @@ sections:
 [0,'path_avoidance_5','generators',1,'Figure/Ground',{video:'gif',likes:0,posted:0,category:'anim'}], 
    [0,'gridSpinner_5','instances',1,'Walking',{video:'gif',likes:0,posted:0,category:'anim'}], 
    
-      [0,'curves_1','instances',1,'Wave Functions',{video:'gif',likes:0,posted:0,category:'anim'}], 
-      [0,'bounce_16','instances',1,'Square Dance',{video:'mp4',likes:0,posted:0,category:'anim'}], 
+    [0,'part2_0_38','instances',1,'Shifting Grid',{video:'gif',likes:0,posted:0,category:'anim'}],
+ [0,'part2_0_31','instances',1,'Pulse',{video:'gif',noTitle:0,likes:0,posted:0,category:'anim'}],
+   
 
  
  //partition

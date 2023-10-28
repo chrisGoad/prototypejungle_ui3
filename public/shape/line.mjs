@@ -8,9 +8,11 @@ utils.setup(item);
 item.setDomAtts = function () {
   let e0 = this.end0;
   let e1 = this.end1;
+  this.setDomAttribute('x1',e0.x);
   this.setDomAttribute('y1',e0.y);
   this.setDomAttribute('x2',e1.x);
   this.setDomAttribute('y2',e1.y);
+
   this.setDomAttribute('visibility',this.visibility);
   this.setDomAttribute('stroke',this.stroke);
   this.setDomAttribute('stroke-width',this['stroke-width']);

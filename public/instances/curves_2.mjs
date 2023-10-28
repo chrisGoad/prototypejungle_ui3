@@ -7,7 +7,7 @@ let rs = generatorP.instantiate();
 rs.setName('curves_1')
 let ht=50;
 
-let topParams = {width:ht,height:ht,framePadding:0.1*ht,frameStrokee:'white',frameStrokeWidth:.2,numSteps:3*4*32,// 2 particle164	,		
+let topParams = {width:ht,height:ht,framePadding:0.1*ht,frameStroke:'white',frameStrokeWidth:.2,numSteps:3*4*32,// 2 particle164	,		
                  saveAnimation:1,numLobes:2,maxifc:0.65,numCycles:6,
                  yc:1,ifc:0,numRings:15} //420 790
 	
@@ -26,7 +26,7 @@ rs.initProtos = function () {
 }
 
 rs.updatePolylines = function () {
-  let {numRings:n,yc,ifc,numLobes:nl} = this;
+  let {numRings:n,yc,ifc,numLobes:nl,height:ht} = this;
   this.polyCnt = 0;
   let hnl = nl/2;
   let off = 1;
@@ -38,10 +38,10 @@ rs.updatePolylines = function () {
     if (i===5) {
       debugger;
     }
-    let spnts = this.scale(pnts,1/hnl,ifc*i,0,yc*i);
-    let ppnts = this.fromPolar(spnts);
-    let rpnts = this.rotate(ppnts,theta);
-    this.displayPolyline(rpnts);
+    let spnts = this.scale(pnts,0.25*(1/nl)*ht,ifc*i,0,-yc*i);
+   // let ppnts = this.fromPolar(spnts);
+  //  let rpnts = this.rotate(ppnts,theta);
+    this.displayPolyline(spnts);
   }
 
 }

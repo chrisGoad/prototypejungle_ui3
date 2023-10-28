@@ -670,6 +670,7 @@ rs.displayLine = function(e0,e1,stroke) {
   if (stroke) { 
     line.stroke = stroke;
   }
+  line.show();
   line.update();
   return line;
 }

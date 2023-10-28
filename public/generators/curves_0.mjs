@@ -89,7 +89,25 @@ rs.displayPolyline = function (pnts) {
   ply.show();
   this.polyCnt = cnt+1;
 }
-
+rs.displayPolyline = function (pnts) {
+  let {lineCnt:cnt} = this;
+  debugger;
+  let ln = pnts.length;
+  let ccnt = cnt;
+  for (let i=0;i<ln-1;i++) {
+    let p = pnts[i];
+    let nm = 'line_'+(cnt+i);
+    let ln = this[nm];
+    if (!ln) {
+      ln = this.lineP.instantiate();
+      this.set(nm,ln);
+      ln.setEnds(pnts[i],pnts[i+1]);
+      ln.show();
+      ccnt++;
+      }
+  }
+  this.lineCnt = ccnt;
+}
 
 
 export {rs}
