@@ -68,7 +68,64 @@ rs.maxf = function (pnts,f) {
   });
   return r;
 }
+rs.containingBox = function (pnts) {
+  let minX = Infinity;
+  let maxX = -Infinity;
+  let minY = Infinity
+  let maxY = -Infinity
+  pnts.forEach((p) => {
+    let {x,y} = p;
+    if (x>MaxX) {
+      maxX = x;
+    }
+    if (y>MaxY) {
+      maxY = y;
+    }
+    if (x<MinX) {
+      minX = x;
+    }
+ 
+  });
+  let crn =Point.mk(minX,minY)
+  let ext = Point.mk(maxX-minX,maxY-minY);
+  let rect = Rectangle.mk(crn,ext)
+  return rect;
+}
 
+rs.containedPnts = function (box,pnts) {
+  let ln = pnts.length;
+  let cpnts = [];//indices
+  for (let i=0;i<ln;i++) {
+    let p = pnts[i];
+    if (box.contains(p)) {
+      cpnts.push(i);
+    }
+  }
+  return cpnts;
+}
+
+rs.containedSegs = function (box,pnts) {
+  let cpnts = this.containedPnts(box,pnts);
+  let ln = cpnts.length;
+  if (ln === 0) {
+    return [];
+  }
+  let fpi = cpnts[0];
+  let lpi = cpnts[ln-1]
+  let sg0 = LineSegment.mk(pnts[fpi-1],pnts[fpi]);
+  let segs = [sg0];
+  for (i=fpi;i<=fpi;i++) {
+    let p0 = pnts[i];
+    let p1 = pnts[i+1];
+    let seg = LineSegment.mk(p0,p1);
+    segs.push(seg);
+  }
+  return segs;
+}
+
+      
+    
+  
 rs.maxLength = function (pnts) {
   return this.maxf(pnts,(p)=>p.length()); 
 }
