@@ -811,15 +811,15 @@ LineSegment.mkAngled = function (p,angle,ln) {
   let e1 = p.plus(svec);
   return LineSegment.mk(e0,e1);
 }
-LineSegment.lengthen = function (ln) {
+LineSegment.lengthenBy = function (fr) {
 	let {end0,end1} = this;
 	let cntr = end0.plus(end1).times(0.5);
 	let vc= end1.difference(end0);
   let vln = vc.length();
-	let hvc = vc.times(ln*0.5);
-	//let nvc = vc.normalize();
 	let nvc = vc.times(1/vln);
-	let nhvc = hvc.plus(nvc.times(0.5*ln));
+	//let nvc = vc.normalize();
+	//let nhvc = hvc.plus(nvc.times(0.5*ln));
+	let hvc = nvc.times(0.5*fr*vln);
 	let nend0 = cntr.difference(hvc);
 	let nend1 = cntr.plus(hvc);
 	return LineSegment.mk(nend0,nend1);
@@ -2482,7 +2482,7 @@ LineSegment.intersect = function (seg1) {
     
 }
 
-Rectangle.intersectRectangle  = fuction (rect2) {
+Rectangle.intersectRectangle  = function (rect2) {
   let rect1 = this;
   let {corner:crn1,extent:ext1} = rect1;
   let {corner:crn2,extent:ext2} = rect2

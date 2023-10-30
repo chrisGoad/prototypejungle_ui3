@@ -1,5 +1,7 @@
 import {rs as circlePP} from '/shape/circle.mjs';
 import {rs as linePP} from '/shape/line.mjs';
+import {rs as rectPP} from '/shape/rectangle.mjs';
+
 import {rs as polylinePP} from '/shape/polyline.mjs';
 import {rs as generatorP} from '/generators/curves_0.mjs'
 let rs = generatorP.instantiate();
@@ -15,14 +17,18 @@ Object.assign(rs,topParams);
 
 rs.initProtos = function () {
   let circleP = this.circleP = circlePP.instantiate();
-  circleP.stroke = 'white';
-  circleP['stroke-width'] = .1;
+  circleP.fill = 'white';
+  circleP.dimension = .2
+  circleP['stroke-width'] = 0;
   let lineP = this.lineP = linePP.instantiate();
-  lineP.stroke = 'white';
-  lineP['stroke-width'] = .2;
+  lineP.stroke = 'red';
+  lineP['stroke-width'] = .15;
   let polylineP = this.polylineP = polylinePP.instantiate();
   polylineP.stroke = 'white';
-  polylineP['stroke-width'] = .15;
+  polylineP['stroke-width'] = .05;
+  let rectP = this.rectP = rectPP.instantiate();
+  rectP.stroke = 'red';
+  rectP['stroke-width'] = .15;
 }
 
 rs.updatePolylines = function (phase,amplitude) {
@@ -31,7 +37,8 @@ rs.updatePolylines = function (phase,amplitude) {
   //let hnl = nl/2;
   let off = 1;
   let xsc  = 7/nw;
-  
+  let horizontals = this.horizontals = [];
+  let verticals = this.verticals = [];
   
   let rd = 20;
   //let iv = rd/n;
@@ -56,10 +63,16 @@ rs.updatePolylines = function (phase,amplitude) {
     
    // let ppnts = this.fromPolar(spnts);
    let rpnts = this.rotate(tpnts,0.5*Math.PI);
+   horizontals.push(tpnts);
+   verticals.push(rpnts);
     this.displayPolyline(tpnts);
     this.displayPolyline(rpnts);
   }
-
+  let h0 = horizontals[0]
+  let v0 = verticals[0];
+  debugger;
+  let ipnt = this.intersectPointSets(h0,v0);
+  return ipnt;
 }
 
 rs.initialize = function () {

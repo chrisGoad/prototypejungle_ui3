@@ -75,14 +75,17 @@ rs.containingBox = function (pnts) {
   let maxY = -Infinity
   pnts.forEach((p) => {
     let {x,y} = p;
-    if (x>MaxX) {
+    if (x>maxX) {
       maxX = x;
     }
-    if (y>MaxY) {
+    if (y>maxY) {
       maxY = y;
     }
-    if (x<MinX) {
+    if (x<minX) {
       minX = x;
+    }
+    if (y<minY) {
+      minY = y;
     }
  
   });
@@ -114,11 +117,15 @@ rs.containedSegs = function (box,pnts) {
   let lpi = cpnts[ln-1]
   let sg0 = LineSegment.mk(pnts[fpi-1],pnts[fpi]);
   let segs = [sg0];
-  for (i=fpi;i<=fpi;i++) {
+  for (let i=fpi;i<=fpi;i++) {
     let p0 = pnts[i];
     let p1 = pnts[i+1];
     let seg = LineSegment.mk(p0,p1);
-    segs.push(seg);
+    let ln = seg.length();
+    debugger;
+    let lseg = seg.lengthenBy(1.5);
+    let nln = lseg.length();
+    segs.push(lseg);
   }
   return segs;
 }
@@ -139,7 +146,7 @@ LineSegment.anIntersection = function (segs) {
 rs.intersect2segSets = function (segs1,segs2) {
   let ln = segs1.length;
   for (let i=0;i<ln;i++) {
-    let sseg = segs[i];
+    let seg = segs1[i];
     //let isct = this.intersectLineSegs(seg,sseg);
     let isct = seg.anIntersection(segs2);
     if (isct) {
@@ -148,10 +155,51 @@ rs.intersect2segSets = function (segs1,segs2) {
   }
 }  
 
+rs.lineCount = 0;
+rs.displayLineSegment = function (sg,stroke) {
+  let {end0,end1} = sg;
+  let {lineP,lineCount:lcnt} = this;
+  let nm = 'line_'+lcnt;
+  this.lineCount = lcnt+1;
+  let line=this.lineP.instantiate();
+  line.stroke = stroke;
+  line.setEnds(end0,end1);
+  this.set(nm,line);
+  line.show();
+  line.update();
+}
+
+rs.pointCount = 0;
+
+rs.displayPoint = function (p,fill) {
+  let {circleP,pointCount:pcnt} = this;
+  let nm = 'p_'+pcnt;
+  this.pointCount = pcnt+1;
+  let c=this.circleP.instantiate();
+  c.fill = fill;
+  this.set(nm,c);
+  c.show();
+  c.update();
+  c.moveto(p);
+}
+  
+rs.displayRectangle = function (r) {
+  let {corner,extent} = r;
+  let {x:cx,y:cy} = corner;
+  let {x:ex,y:ey} = extent;;
+  let rect = this.rectP.instantiate();
+  rect . width = ex;
+  rect . height = ey;
+  let p = Point.mk(cx+0.5*ex,cy+0.5*ey);
+  this.set('rect',rect);
+  rect.show();
+  rect.update();
+  rect.moveto(p);
+}
+  
 
 
-Rectangle.intersectRectangle  = function (rect2) {
-  let rect1 = this;
+rs.intersectRectangle  = function (rect1,rect2) {
   let {corner:crn1,extent:ext1} = rect1;
   let {corner:crn2,extent:ext2} = rect2
   let {x:lwx1,y:lwy1} = crn1;
@@ -160,6 +208,8 @@ Rectangle.intersectRectangle  = function (rect2) {
   let {x:extx2,y:exty2} = ext2;
   let hx1 = lwx1+extx1;
   let hx2 = lwx2+extx2;
+  let hy1 = lwy1+exty1;
+  let hy2 = lwy2+exty2;
   if ((hx2<lwx2) || (hy2<lwy2)) {
     return;
   }
@@ -173,17 +223,27 @@ Rectangle.intersectRectangle  = function (rect2) {
   let extx = hx-lwx;
   let exty = hy-lwy;
   let rr = Rectangle.mk(Point.mk(lwx,lwy),Point.mk(extx,exty));
+  this.displayRectangle(rr);
   return rr;
 }
 
 
-rs.intersect2pointSets = function (pnts1,pnts2) {
+rs.intersectPointSets = function (pnts1,pnts2) {
   let box1 = this.containingBox(pnts1);
   let box2 = this.containingBox(pnts2);
-  let box = box1.intersectRectangle(box2);
-  let sgs1 = this.containedSegs(pnts1);
-  let sgs2= this.containedSegs(pnts2);
+  let box = this.intersectRectangle(box1,box2);
+  let sgs1 = this.containedSegs(box,pnts1);
+  sgs1.forEach((seg) => {
+    this.displayLineSegment(seg,'rgba(0,0,255,.5)');
+  });
+  let sgs2= this.containedSegs(box,pnts2);
+  sgs2.forEach((seg) => {
+    this.displayLineSegment(seg,'rgba(255,255,0,.5)');
+  });
   let isct = this.intersect2segSets(sgs1,sgs2);
+  if (isct) {
+    this.displayPoint(isct,'cyan');
+  }
   return isct;
 }
   
