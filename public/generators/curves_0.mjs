@@ -123,8 +123,69 @@ rs.containedSegs = function (box,pnts) {
   return segs;
 }
 
-      
-    
+LineSegment.anIntersection = function (segs) {
+  let seg = this;
+  let ln = segs.length;
+  for (let i=0;i<ln;i++) {
+    let sseg = segs[i];
+    //let isct = this.intersectLineSegs(seg,sseg);
+    let isct = seg.intersect(sseg);
+    if (isct) {
+      return isct;
+    }
+  }
+}  
+
+rs.intersect2segSets = function (segs1,segs2) {
+  let ln = segs1.length;
+  for (let i=0;i<ln;i++) {
+    let sseg = segs[i];
+    //let isct = this.intersectLineSegs(seg,sseg);
+    let isct = seg.anIntersection(segs2);
+    if (isct) {
+      return isct;
+    }
+  }
+}  
+
+
+
+Rectangle.intersectRectangle  = function (rect2) {
+  let rect1 = this;
+  let {corner:crn1,extent:ext1} = rect1;
+  let {corner:crn2,extent:ext2} = rect2
+  let {x:lwx1,y:lwy1} = crn1;
+  let {x:lwx2,y:lwy2} = crn2;
+  let {x:extx1,y:exty1} = ext1;
+  let {x:extx2,y:exty2} = ext2;
+  let hx1 = lwx1+extx1;
+  let hx2 = lwx2+extx2;
+  if ((hx2<lwx2) || (hy2<lwy2)) {
+    return;
+  }
+  if ((hx1<lwx1) || (hy1<lwy1)) {
+    return;
+  }
+  let lwx = Math.max(lwx1,lwx2);
+  let lwy = Math.max(lwy1,lwy2);
+  let hx = Math.min(hx1,hx2);
+  let hy = Math.min(hy1,hy2);
+  let extx = hx-lwx;
+  let exty = hy-lwy;
+  let rr = Rectangle.mk(Point.mk(lwx,lwy),Point.mk(extx,exty));
+  return rr;
+}
+
+
+rs.intersect2pointSets = function (pnts1,pnts2) {
+  let box1 = this.containingBox(pnts1);
+  let box2 = this.containingBox(pnts2);
+  let box = box1.intersectRectangle(box2);
+  let sgs1 = this.containedSegs(pnts1);
+  let sgs2= this.containedSegs(pnts2);
+  let isct = this.intersect2segSets(sgs1,sgs2);
+  return isct;
+}
   
 rs.maxLength = function (pnts) {
   return this.maxf(pnts,(p)=>p.length()); 
