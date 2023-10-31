@@ -68,10 +68,14 @@ rs.updatePolylines = function (phase,amplitude) {
     this.displayPolyline(tpnts);
     this.displayPolyline(rpnts);
   }
-  let h0 = horizontals[0]
-  let v0 = verticals[0];
+  
+  let h = horizontals[0]
+  let v = verticals[3];
+  let hln = horizontals.length;
+  let vln = verticals.length;
+  
   debugger;
-  let ipnt = this.intersectPointSets(h0,v0);
+  let ipnt = this.intersectPointSets(h,v);
   return ipnt;
 }
 
