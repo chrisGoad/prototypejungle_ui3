@@ -6,7 +6,7 @@ import {rs as polylinePP} from '/shape/polyline.mjs';
 import {rs as generatorP} from '/generators/curves_0.mjs'
 let rs = generatorP.instantiate();
 
-rs.setName('curves_3')
+rs.setName('curves_4')
 let ht=50;
 
 let topParams = {width:ht,height:ht,framePadding:0.1*ht,frameStrokee:'white',frameStrokeWidth:.2,numSteps:3*4*32,// 2 particle164	,		
