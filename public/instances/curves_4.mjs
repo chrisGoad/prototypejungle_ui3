@@ -10,7 +10,7 @@ rs.setName('curves_4')
 let ht=50;
 
 let topParams = {width:ht,height:ht,framePadding:0.1*ht,frameStrokee:'white',frameStrokeWidth:.2,numSteps:3*4*32,// 2 particle164	,		
-                 saveAnimation:1,numWaveLines:9,numWaves:2,maxifc:0.65,numCycles:6,
+                 saveAnimation:1,numWaveLines:18,numWaves:2,maxifc:0.65,numCycles:6,
                  yc:1,ifc:0,numRings:15} //420 790
 	
 Object.assign(rs,topParams);
@@ -18,7 +18,7 @@ Object.assign(rs,topParams);
 rs.initProtos = function () {
   let circleP = this.circleP = circlePP.instantiate();
   circleP.fill = 'white';
-  circleP.dimension = 2
+  circleP.dimension = 1;
   circleP['stroke-width'] = 0;
   let lineP = this.lineP = linePP.instantiate();
   lineP.stroke = 'red';
@@ -34,6 +34,8 @@ rs.initProtos = function () {
 rs.updatePolylines = function (phase,amplitude) {
   let {stepsSoFar:ssf,numWaveLines:nln,numWaves:nw,yc,ifc,numLobes:nl,height:ht,oofx} = this;
   this.polyCnt = 0;
+  this.pointCount = 0;
+  this.resetDisplayedLines();
   //let hnl = nl/2;
   let off = 1;
   let xsc  = 7/nw;
@@ -74,12 +76,17 @@ rs.updatePolylines = function (phase,amplitude) {
   let hln = horizontals.length;
   let vln = verticals.length;
   let isects = [];
+  let cnt=0;
   for (let j=0;j<nln;j++) {
       for (let i=0;i<nln;i++) {
         let h=horizontals[i]
         let v = verticals[j];
         let ipnt = this.intersectPointSets(h,v);
-        this.displayPoint(ipnt,'green');
+        if (ipnt) {
+          this.displayPoint(ipnt,'green');
+        } else {
+          debugger;
+        }
       }
   }
   debugger;

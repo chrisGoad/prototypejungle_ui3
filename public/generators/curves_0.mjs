@@ -114,12 +114,20 @@ rs.containedSegs = function (box,pnts) {
     return [];
   }
   let fpi = cpnts[0];
-  let lpi = cpnts[ln-1]
+  let lpi = cpnts[ln-1];
+  if (fpi===0) {
+    return [];
+  }
   let sg0 = LineSegment.mk(pnts[fpi-1],pnts[fpi]);
   let segs = [sg0];
-  for (let i=fpi-1;i<=lpi;i++) {
+  let loopStart = fpi<1?0:fpi-1;
+  for (let i=loopStart;i<=lpi;i++) {
     let p0 = pnts[i];
     let p1 = pnts[i+1];
+    if ((!p0)||(!p1)) {
+      debugger;
+      return [];
+    }
   //  this.displayPoint(p0,'yellow');
    // this.displayPoint(p1,'yellow');
     let seg = LineSegment.mk(p0,p1);
@@ -159,17 +167,37 @@ rs.intersect2segSets = function (segs1,segs2) {
 
 rs.lineCount = 0;
 rs.displayLineSegment = function (sg,stroke) {
-  let {end0,end1} = sg;
+  if ((!sg) || (!sg.end0) || (!sg.end1)) {
+     debugger;
+   }
+  let lsg = sg.lengthenBy(3);
+  let {end0,end1} = lsg;
   let {lineP,lineCount:lcnt} = this;
   let nm = 'line_'+lcnt;
   this.lineCount = lcnt+1;
-  let line=this.lineP.instantiate();
+  let line = this[nm];
+  if (!line) {
+    line=this.lineP.instantiate();
+    this.set(nm,line);
+  }
   line.stroke = stroke;
   line.setEnds(end0,end1);
-  this.set(nm,line);
   line.show();
   line.update();
 }
+
+rs.resetDisplayedLines = function () {
+  let {lineCount:lc} = this;
+  for (let i=0;i<lc;i++) {
+    let nm = 'line_'+i;
+    let line = this[nm];
+    if (line) {
+      line.hide();
+    }
+  }
+  this.lineCount = 0;
+}
+     
 
 rs.pointCount = 0;
 
@@ -177,9 +205,12 @@ rs.displayPoint = function (p,fill) {
   let {circleP,pointCount:pcnt} = this;
   let nm = 'pnt_'+pcnt;
   this.pointCount = pcnt+1;
-  let c=this.circleP.instantiate();
+  let c= this[nm];
+  if (!c) {
+    c=this.circleP.instantiate();
+    this.set(nm,c);
+  }
   c.fill = fill;
-  this.set(nm,c);
   c.show();
   c.update();
   c.moveto(p);
@@ -241,7 +272,7 @@ rs.intersectRectangle  = function (rect1,rect2) {
 
 
 rs.intersectPointSets = function (pnts1,pnts2) {
-  debugger;
+//  debugger;
   let box1 = this.containingBox(pnts1);
   let box2 = this.containingBox(pnts2);
   let box = this.intersectRectangle(box1,box2);
