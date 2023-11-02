@@ -10,7 +10,7 @@ rs.setName('curves_4')
 let ht=50;
 
 let topParams = {width:ht,height:ht,framePadding:0.1*ht,frameStrokee:'white',frameStrokeWidth:.2,numSteps:3*4*32,// 2 particle164	,		
-                 saveAnimation:1,numWaveLines:18,numWaves:2,maxifc:0.65,numCycles:6,
+                 saveAnimation:1,numWaveLines:7,numWaves:2,maxifc:0.65,numCycles:6,
                  yc:1,ifc:0,numRings:15} //420 790
 	
 Object.assign(rs,topParams);
@@ -31,6 +31,72 @@ rs.initProtos = function () {
   rectP['stroke-width'] = .15;
 }
 
+rs.updateCenters = function () {
+  let {isects,centers,numWaveLines:nwl} = this;
+  debugger;
+  for (let i = 0;i<nwl-1;i++) {
+    for (let j=0;j<nwl-1;j++)  {
+      let uli = i*nwl+j
+      let lli = (i+1)*nwl+j;
+      let UL = isects[uli];
+      let UR = isects[uli+1];
+      let LL = isects[lli];
+      let LR = isects[lli+1];
+      let cx =(UL.x+UR.x+LL.x+LR.x)/4;
+      let cy =(UL.y+UR.y+LL.y+LR.y)/4;
+      let C = Point.mk(cx,cy);
+      centers[i*(nwl-1)+j] = C;
+    }
+  }
+}
+
+rs.initCenters = function () {
+  let {numWaveLines:nwl} = this;
+  let centers=this.centers=[];
+  let nwlm1 = nwl-1;
+  for (let i=0;i<nwlm1;i++) {
+    for (let j=0;j<nwlm1;j++) {
+      centers.push(0);
+    }
+  }
+}
+ 
+
+rs.populateCenterShapes = function () {
+  let {numWaveLines:nwl,circleP} = this;
+  let centers=this.centers=[];
+  let centerShapes=this.set('centerShapes',arrayShape.mk());
+  let nwlm1 = nwl-1;
+  for (let i=0;i<nwlm1;i++) {
+    for (let j=0;j<nwlm1;j++) {
+      let shp = circleP.instantiate();   
+      centerShapes.push(shp);
+      shp.dimension=1;
+      shp.fill = 'red'
+      shp.show();
+      shp.update();
+    }
+  }
+}
+ 
+
+
+rs.updateCenterShapes = function () {
+  let {centers,centerShapes,numWaveLines:nwl} = this;
+  debugger;
+  let nwlm1 = nwl-1;
+  for (let i=0;i<nwlm1;i++) {
+    for (let j=0;j<nwlm1;j++) {
+      let idx = i*nwlm1+j;
+      let cp = centers[idx];
+      let shp = centerShapes[idx];
+      shp.moveto(cp)
+    }
+  }
+}
+
+    
+    
 rs.updatePolylines = function (phase,amplitude) {
   let {stepsSoFar:ssf,numWaveLines:nln,numWaves:nw,yc,ifc,numLobes:nl,height:ht,oofx} = this;
   this.polyCnt = 0;
@@ -75,7 +141,7 @@ rs.updatePolylines = function (phase,amplitude) {
   let v = verticals[3];
   let hln = horizontals.length;
   let vln = verticals.length;
-  let isects = [];
+  let isects = this.isects = [];
   let cnt=0;
   for (let j=0;j<nln;j++) {
       for (let i=0;i<nln;i++) {
@@ -84,12 +150,15 @@ rs.updatePolylines = function (phase,amplitude) {
         let ipnt = this.intersectPointSets(h,v);
         if (ipnt) {
           this.displayPoint(ipnt,'green');
+          isects.push(ipnt);
         } else {
           debugger;
         }
       }
   }
   debugger;
+  this.updateCenters();
+  this.updateCenterShapes();
   //let ipnt = this.intersectPointSets(h,v);
   //return ipnt;
 }
@@ -101,6 +170,8 @@ rs.initialize = function () {
   this.initProtos();
   this.addFrame();
   this.ifc = maxifc;
+  this.initCenters();
+  this.populateCenterShapes();
   this.updatePolylines(0,1);
   this.phase = 0;
 }
