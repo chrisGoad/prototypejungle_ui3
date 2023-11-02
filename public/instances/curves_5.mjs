@@ -2,15 +2,16 @@ import {rs as circlePP} from '/shape/circle.mjs';
 import {rs as linePP} from '/shape/line.mjs';
 import {rs as rectPP} from '/shape/rectangle.mjs';
 
+import {rs as polygonPP} from '/shape/polygon.mjs';
 import {rs as polylinePP} from '/shape/polyline.mjs';
 import {rs as generatorP} from '/generators/curves_0.mjs'
 let rs = generatorP.instantiate();
 
-rs.setName('curves_4')
+rs.setName('curves_5')
 let ht=50;
 
 let topParams = {width:ht,height:ht,framePadding:0.1*ht,frameStrokee:'white',frameStrokeWidth:.2,numSteps:3*4*32,// 2 particle164	,		
-                 saveAnimation:1,numWaveLines:5,numWaves:2,maxifc:0.65,numCycles:6,
+                 saveAnimation:1,numWaveLines:5,numWaves:2,maxifc:0.65,numCycles:6,amplitude:1,
                  yc:1,ifc:0,numRings:15} //420 790
 	
 Object.assign(rs,topParams);
@@ -21,9 +22,13 @@ rs.initProtos = function () {
   circleP.dimension = 1;
   circleP['stroke-width'] = 0;
   let lineP = this.lineP = linePP.instantiate();
-  lineP.stroke = 'red';
+  lineP.stroke = 'white';
   lineP['stroke-width'] = .15;
-  let polylineP = this.polylineP = polylinePP.instantiate();
+  let polygonP = this.polygonP = polygonPP.instantiate();
+  polygonP.stroke = 'white';
+  polygonP['stroke-width'] = .05;
+  polygonP.fill = 'rgb(0,50,50)';
+   let polylineP = this.polylineP = polylinePP.instantiate();
   polylineP.stroke = 'white';
   polylineP['stroke-width'] = .05;
   let rectP = this.rectP = rectPP.instantiate();
@@ -37,11 +42,11 @@ rs.updateCenters = function () {
   for (let i = 0;i<nwl-1;i++) {
     for (let j=0;j<nwl-1;j++)  {
       let uli = i*nwl+j
-      let lli = (i+1)*nwl+j;
+      let uri = (i+1)*nwl+j;
       let UL = isects[uli];
-      let UR = isects[uli+1];
-      let LL = isects[lli];
-      let LR = isects[lli+1];
+      let UR = isects[uri];
+      let LL = isects[uli+1];
+      let LR = isects[uri+1];
       let cx =(UL.x+UR.x+LL.x+LR.x)/4;
       let cy =(UL.y+UR.y+LL.y+LR.y)/4;
       let C = Point.mk(cx,cy);
@@ -49,7 +54,7 @@ rs.updateCenters = function () {
       let URvec = UR.difference(C);
       let LLvec = LL.difference(C);
       let LRvec = LR.difference(C);
-      let fr=0.33;
+      let fr=0.66;
       let ULp = C.plus(ULvec.times(fr));
       let URp = C.plus(URvec.times(fr));
       let LLp = C.plus(LLvec.times(fr));
@@ -85,22 +90,31 @@ rs.initCenters = function () {
  
 
 rs.populateCenterShapes = function () {
-  let {numWaveLines:nwl,circleP} = this;
+  let {numWaveLines:nwl,polygonP} = this;
   let centers=this.centers=[];
   let centerShapes=this.set('centerShapes',arrayShape.mk());
   let nwlm1 = nwl-1;
   for (let i=0;i<nwlm1;i++) {
     for (let j=0;j<nwlm1;j++) {
-      let shp = containerShape.mk()	
-      let crc = circleP.instantiate();   
+      let shp = containerShape.mk();
+      let gon = polygonP.instantiate();      
+    /*  let line0 = lineP.instantiate();   
+      let line1 = lineP.instantiate();   
+      let line2 = lineP.instantiate();   
+      let line3 = lineP.instantiate();   */
       centerShapes.push(shp);
-      shp.set('c',crc);
+      shp.set('gon',gon);
+      gon.show();
+     /* shp.set('line0',line0);
+      shp.set('line1',line1);
+      shp.set('line2',line2);
+      shp.set('line3',line3);*/
       shp.index = i;
       shp.period = 35+Math.floor(20*Math.random());
-      crc.dimension=1;
-      shp.fill = 'red'
+     // crc.dimension=1;
+      //shp.fill = 'red'
       shp.show();
-      crc.update();
+      //crc.update();
     }
   }
 }
@@ -120,8 +134,11 @@ rs.updateCenterShapes = function () {
   for (let i=0;i<nwlm1;i++) {
     for (let j=0;j<nwlm1;j++) {
       let idx = i*nwlm1+j;
-   //   let cp = centers[idx];
-      let cp = ULs[idx];
+      let C = centers[idx];
+      let UL = ULs[idx];
+      let UR = URs[idx];
+      let LR = LRs[idx];
+      let LL = LLs[idx];
       let shp = centerShapes[idx];
       let fc = 1;
       let period = shp.period;
@@ -137,9 +154,30 @@ rs.updateCenterShapes = function () {
       let fill = `rgb(${fillv},0,0)`;
      // shp.fill = fill;
       console.log('fr',fr,'cycle',cycle,'efr',efr,'div',div,'fill',fill);
-
+      let gon = shp.gon;
+      debugger;
+      gon.corners = [UL,UR,LR,LL];
+      gon.update();
+      if (((j===1) ||(j==2))&&((i===1) ||(i==2)))  {
+        gon.show();
+      } else {
+        gon.hide();
+      }
+    /*  let line0 = shp.line0;
+      let line1 = shp.line1;
+      let line2 = shp.line2;
+      let line3 = shp.line3;
+      line0.setEnds(UL,C);
+      line1.setEnds(UR,C);
+      line2.setEnds(LL,C);
+      line3.setEnds(LR,C);
+      line0.update();
+      line1.update();
+      line2.update();
+      line3.update();*/
+      
       //shp.update();
-     shp.moveto(cp);//.plus(Point.mk(div,0)));
+    // shp.moveto(cp);//.plus(Point.mk(div,0)));
     }
   }
 }
@@ -177,7 +215,7 @@ rs.updatePolylines = function (phase,amplitude) {
     let cofx = spnts[0].x;
     let ofx = ssf?oofx-cofx:0;
    // let tpnts = this.translate(spnts,Point.mk(ofx,3*(i-0.5*nln)));
-    let tpnts = this.translate(spnts,Point.mk(ofx,6*(i-0.5*nln)));
+    let tpnts = this.translate(spnts,Point.mk(ofx,4*(i-0.5*nln)));
     
    // let ppnts = this.fromPolar(spnts);
    let rpnts = this.rotate(tpnts,0.5*Math.PI);
@@ -228,10 +266,11 @@ rs.initialize = function () {
 
 
 rs.updateState= function () {
-  let {phase} = this;
+  let {phase,amplitude,stepsSoFar:ssf} = this;
   debugger;
+  //this.amplitude = 0.2+.004*ssf;
   let ph = this.phase =  phase + .05*Math.PI;
-  this.updatePolylines(ph,.5);
+  this.updatePolylines(ph,this.amplitude);
 }
 
 export {rs}
