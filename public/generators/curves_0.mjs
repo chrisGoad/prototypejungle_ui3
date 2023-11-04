@@ -295,10 +295,10 @@ rs.maxLength = function (pnts) {
   return this.maxf(pnts,(p)=>p.length()); 
 }
    
-rs.polyCnt = 0;
+rs.polylineCnt = 0;
 rs.lineCnt = 0;
 rs.displayPolyline = function (pnts) {
-  let {polyCnt:cnt} = this;
+  let {polylineCnt:cnt} = this;
   let ln = pnts.length;
   let nm = 'p_'+cnt;
   let ply = this[nm];
@@ -309,8 +309,32 @@ rs.displayPolyline = function (pnts) {
   ply.wayPoints = pnts;
   ply.update();
   ply.show();
-  this.polyCnt = cnt+1;
+  this.polylineCnt = cnt+1;
 }
+
+
+
+rs.polygonCnt = 0;
+
+
+rs.displayPolygon = function (pnts,fill) {
+  let {polygonCnt:cnt} = this;
+  let ln = pnts.length;
+  let nm = 'p_'+cnt;
+  let ply = this[nm];
+  if (!ply) {
+    ply = this.polygonP.instantiate();
+    this.set(nm,ply);
+  }
+  ply.corners = pnts;
+  if (fill) {
+    ply.fill = fill;
+  }
+  ply.update();
+  ply.show();
+  this.polygonCnt = cnt+1;
+}
+
 /*
 rs.displayPolyline = function (pnts) {
   let {lineCnt:cnt} = this;

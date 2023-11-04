@@ -11,7 +11,7 @@ rs.setName('curves_5')
 let ht=50;
 
 let topParams = {width:ht,height:ht,framePadding:0.1*ht,frameStrokee:'white',frameStrokeWidth:.2,numSteps:3*4*32,// 2 particle164	,		
-                 saveAnimation:1,numWaveLines:5,numWaves:2,maxifc:0.65,numCycles:6,amplitude:1,
+                 saveAnimation:1,numWaveLines:2,numWaves:2,maxifc:0.65,numCycles:6,amplitude:1,
                  yc:1,ifc:0,numRings:15} //420 790
 	
 Object.assign(rs,topParams);
@@ -158,7 +158,7 @@ rs.updateCenterShapes = function () {
       debugger;
       gon.corners = [UL,UR,LR,LL];
       gon.update();
-      if (((j===1) ||(j==2))&&((i===1) ||(i==2)))  {
+      if (1) {//((j===1) ||(j==2))&&((i===1) ||(i==2)))  {
         gon.show();
       } else {
         gon.hide();
@@ -186,7 +186,7 @@ rs.updateCenterShapes = function () {
     
 rs.updatePolylines = function (phase,amplitude) {
   let {stepsSoFar:ssf,numWaveLines:nln,numWaves:nw,yc,ifc,numLobes:nl,height:ht,oofx} = this;
-  this.polyCnt = 0;
+  this.polylineCnt = 0;
   this.pointCount = 0;
   this.resetDisplayedLines();
   //let hnl = nl/2;
@@ -213,16 +213,17 @@ rs.updatePolylines = function (phase,amplitude) {
       oofx = this.oofx =spnts[0].x;
     }
     let cofx = spnts[0].x;
-    let ofx = ssf?oofx-cofx:0;
+    let ofx = (ssf?oofx-cofx:0);
    // let tpnts = this.translate(spnts,Point.mk(ofx,3*(i-0.5*nln)));
     let tpnts = this.translate(spnts,Point.mk(ofx,4*(i-0.5*nln)));
     
    // let ppnts = this.fromPolar(spnts);
    let rpnts = this.rotate(tpnts,0.5*Math.PI);
+   let rtpnts = this.translate(rpnts,Point.mk(2,0));
    horizontals.push(tpnts);
-   verticals.push(rpnts);
+   verticals.push(rtpnts);
     this.displayPolyline(tpnts);
-    this.displayPolyline(rpnts);
+    this.displayPolyline(rtpnts);
   }
   
   let h = horizontals[0]
