@@ -7,11 +7,11 @@ import {rs as polylinePP} from '/shape/polyline.mjs';
 import {rs as generatorP} from '/generators/curves_0.mjs'
 let rs = generatorP.instantiate();
 
-rs.setName('curves_5')
+rs.setName('curves_8')
 let ht=50;
 
-let topParams = {width:ht,height:ht,framePadding:0.1*ht,frameStrokee:'white',frameStrokeWidth:.2,numSteps:40,// 2 particle164	,		
-                 saveAnimation:1,numWaveLines:2,numWaves:2,maxifc:0.65,numCycles:6,amplitude:1,
+let topParams = {width:ht,height:ht,framePadding:0.1*ht,frameStrokee:'white',frameStrokeWidth:.2,numSteps:74,// 2 particle164	,		
+                 saveAnimation:1,numWaveLines:7,numWaves:2,maxifc:0.65,numCycles:6,amplitude:1,lineSep:4,persistence:10,chopOffBeginning:34,
                  yc:1,ifc:0,numRings:15} //420 790
 	
 Object.assign(rs,topParams);
@@ -20,22 +20,30 @@ rs.initProtos = function () {
   let circleP = this.circleP = circlePP.instantiate();
   circleP.fill = 'white';
   circleP.dimension = 1;
+  circleP.dimension = 0;
   circleP['stroke-width'] = 0;
   let lineP = this.lineP = linePP.instantiate();
   lineP.stroke = 'white';
   lineP['stroke-width'] = .15;
+  lineP['stroke-width'] = 0;
   let polygonP = this.polygonP = polygonPP.instantiate();
   polygonP.stroke = 'white';
   polygonP['stroke-width'] = .05;
+  polygonP['stroke-width'] = 0;
   polygonP.fill = 'rgb(0,50,50)';
+  polygonP.fill = 'yellow'
+  polygonP.fill = 'black'
    let polylineP = this.polylineP = polylinePP.instantiate();
   polylineP.stroke = 'white';
   polylineP['stroke-width'] = .05;
+  //polylineP['stroke-width'] = 0;
   let rectP = this.rectP = rectPP.instantiate();
   rectP.stroke = 'red';
   rectP['stroke-width'] = .15;
 }
 /*
+
+
 
 */
 
@@ -48,17 +56,18 @@ rs.initialize = function () {
   this.ifc = maxifc;
   this.initCenters();
   this.populateCenterShapes();
-  this.updatePolylines(0,1);
+  this.updatePolylines(0,1,'white');
   this.phase = 0;
 }
 
 
 rs.updateState= function () {
   let {phase,amplitude,stepsSoFar:ssf} = this;
-  debugger;
+  //debugger;
+  console.log('ssf',ssf);
   //this.amplitude = 0.2+.004*ssf;
   let ph = this.phase =  phase + .05*Math.PI;
-  this.updatePolylines(ph,this.amplitude,'green');
+  this.updatePolylines(ph,this.amplitude,'white');
 }
 
 export {rs}

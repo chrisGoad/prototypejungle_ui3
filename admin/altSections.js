@@ -4,6 +4,8 @@ module.exports = {
 sections: 
 
 [     
+      [0,'curves_8','instances',1,'curves 8',{likes:0,posted:0,category:'drop'}], 
+      [0,'curves_7','instances',1,'curves 7',{likes:0,posted:0,category:'drop'}], 
       [0,'curves_6','instances',1,'curves 6',{likes:0,posted:0,category:'drop'}], 
       [0,'curves_5','instances',1,'curves 5',{likes:0,posted:0,category:'drop'}], 
       [0,'curves_4','instances',1,'curves 4',{likes:0,posted:0,category:'drop'}], 

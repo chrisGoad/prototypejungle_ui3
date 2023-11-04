@@ -10,8 +10,8 @@ let rs = generatorP.instantiate();
 rs.setName('curves_6')
 let ht=50;
 
-let topParams = {width:ht,height:ht,framePadding:0.1*ht,frameStroke:'white',frameStrokeWidth:.2,numSteps:120,spikeWidthFactor:.95,spinPerStep:0.01*Math.PI,	
-                 saveAnimation:1,numWaveLines:2,numWaves:2,maxifc:0.65,numCycles:6,amplitude:1,innerDim:10,outerDim:20,numSpikes:15,baseTheta:0,
+let topParams = {width:ht,height:ht,framePadding:0.1*ht,frameStroke:'white',frameStrokeWidth:.2,numSteps:256,spikeWidthFactor:.95,spinPerStep:Math.PI/128,	
+                 saveAnimation:1,numWaveLines:2,numWaves:2,maxifc:0.65,numCycles:6,amplitude:1,innerDim:2,outerDim:20,numSpikes:8,baseTheta:0,
                  yc:1,ifc:0,numRings:15} //420 790
 	
 Object.assign(rs,topParams);
@@ -90,22 +90,30 @@ rs.initialize = function () {
  
 }
 
+rs.sinify = function (x) {
+  let y = x*Math.PI-(Math.PI/2);
+  let z = 0.5*(Math.sin(y)+1);
+  console.log('sinify of ',x,' is ',z);
+  return z;
+}
 
 rs.updateState= function () {
   let {phase,amplitude,stepsSoFar:ssf,numSteps:ns,brect,spinPerStep:sps,outerC} = this;
   debugger;
-  this.baseTheta = ssf*sps;
-  let hns = 0.5*ns-2;
+  let fr = this.sinify(ssf/ns);
+  this.baseTheta = ns*fr*sps;
+ /// this.baseTheta = ssf*sps;
+  let hns = 0.5*ns;
   let swf,fill,v;
   if (ssf<=hns) {
-    swf = ssf/hns;
+    swf = this.sinify(ssf/hns);
     fill = 'white';
     v = Math.floor(swf*255);
   } else {
-    swf = (ssf-hns)/hns;
+    swf = this.sinify((ssf-hns)/hns);
     fill = 'black';
     v = Math.floor((1-swf)*255);
-  }    
+  }  
   outerC.fill = `rgb(${v},${v},${v})`;
   outerC.update();
   //this.amplitude = 0.2+.004*ssf;
