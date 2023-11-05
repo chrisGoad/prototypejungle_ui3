@@ -33,7 +33,9 @@ rs.initProtos = function () {
 
 rs.updatePolylines = function (phase,amplitude) {
   let {stepsSoFar:ssf,numWaveLines:nln,numWaves:nw,yc,ifc,numLobes:nl,height:ht,oofx} = this;
-  this.polyCnt = 0;
+  this.polylineCnt = 0;
+  this.pointCount = 0;
+  this.resetDisplayedLines();
   //let hnl = nl/2;
   let off = 1;
   let xsc  = 7/nw;

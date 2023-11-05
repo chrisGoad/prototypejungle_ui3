@@ -4,7 +4,7 @@ import {rs as polylinePP} from '/shape/polyline.mjs';
 import {rs as generatorP} from '/generators/curves_0.mjs'
 let rs = generatorP.instantiate();
 
-rs.setName('curves_1')
+rs.setName('curves_2')
 let ht=50;
 
 let topParams = {width:ht,height:ht,framePadding:0.1*ht,frameStroke:'white',frameStrokeWidth:.2,numSteps:3*4*32,// 2 particle164	,		
@@ -27,7 +27,7 @@ rs.initProtos = function () {
 
 rs.updatePolylines = function () {
   let {numRings:n,yc,ifc,numLobes:nl,height:ht} = this;
-  this.polyCnt = 0;
+  this.polylineCnt = 0;
   let hnl = nl/2;
   let off = 1;
   let pnts = this.approximateCurve(Math.sin,off-hnl*Math.PI,off+hnl*Math.PI,400);

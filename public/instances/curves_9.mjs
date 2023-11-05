@@ -4,11 +4,11 @@ import {rs as polylinePP} from '/shape/polyline.mjs';
 import {rs as generatorP} from '/generators/curves_0.mjs'
 let rs = generatorP.instantiate();
 
-rs.setName('curves_1')
+rs.setName('curves_9')
 let ht=50;
 
-let topParams = {width:ht,height:ht,framePadding:0.1*ht,frameStrokee:'white',frameStrokeWidth:.2,numSteps:3*4*32,// 2 particle164	,		
-                 saveAnimation:1,numLobes:2,maxifc:0.65,numCycles:6,persistence:1,
+let topParams = {width:ht,height:ht,framePadding:0.1*ht,frameStrokee:'white',frameStrokeWidth:.2,numSteps:3*4*32,chopOffEnd:1*4*32,// 2 particle164	,		
+                 saveAnimation:1,numLobes:2,maxifc:0.65,numCycles:6,persistence:2,thetaBump:0,thetaInc:0.008*Math.PI,
                  yc:1,ifc:0,numRings:15} //420 790
 	
 Object.assign(rs,topParams);
@@ -26,21 +26,30 @@ rs.initProtos = function () {
 }
 
 rs.updatePolylines = function () {
-  let {numRings:n,yc,ifc,numLobes:nl} = this;
-  this.polylineCnt = 0;
+  let {numRings:n,yc,ifc,maxifc,numLobes:nl,thetaBump,stepsSoFar:ssf,persistence} = this;
+  if (!(ssf%persistence)) {
+    this.polylineCnt = 0;
+  }
   let hnl = nl/2;
   let off = 1;
   let pnts = this.approximateCurve(Math.sin,off-hnl*Math.PI,off+hnl*Math.PI,400);
   let rd = 20;
   let iv = rd/n;
-  let theta=  (Math.PI/nl);
+  let theta=  (Math.PI/nl)+thetaBump;
   for (let i=1;i<n;i++) {
     if (i===5) {
       debugger;
     }
-    let spnts = this.scale(pnts,1/hnl,ifc*i,0,yc*i);
+    debugger;
+    console.log
+    let scaleDown = 3*(maxifc/(yc+ifc));
+    let xsD = ifc/maxifc;
+   // scaleDown = 1;
+    //let spnts = this.scale(pnts,(1/hnl)*scaleDown,ifc*i*scaleDown,0,yc*i);
+    let spnts = this.scale(pnts,(1/hnl)*xsD,ifc*i,0,yc*i);
     let ppnts = this.fromPolar(spnts);
-    let rpnts = this.rotate(ppnts,theta);
+    let sppnts = this.scale(ppnts,scaleDown,scaleDown);
+    let rpnts = this.rotate(sppnts,theta);
     this.displayPolyline(rpnts);
   }
 
@@ -67,6 +76,7 @@ const betweenI = function (x,lb,ub) {
 
 rs.numLobesPerCycle = [2,4,8,16,64];
 rs.numLobesPerCycle = [64,8];
+rs.numLobesPerCycle = [8];
 rs.execCycle = function (n) {
   let {numSteps,stepsSoFar:ssf,maxifc,numLobesPerCycle:nlpc} = this;
   let numCycles = nlpc.length;
@@ -90,6 +100,7 @@ rs.execCycle = function (n) {
     let fr = (ssf-sc2)/spsc;
     this.yc = 1+maxifc*(1-fr);
   }
+  
   this.updatePolylines()  
 }  
 
@@ -104,6 +115,8 @@ rs.whichCycle = function () {
 
 rs.updateState= function () {
   debugger;
+  let {thetaBump,thetaInc} = this;
+  this.thetaBump = thetaBump+thetaInc;
   let wc = this.whichCycle();
   this.execCycle(wc);
 }
