@@ -4,11 +4,11 @@ import {rs as polylinePP} from '/shape/polyline.mjs';
 import {rs as generatorP} from '/generators/curves_0.mjs'
 let rs = generatorP.instantiate();
 
-rs.setName('curves_9')
+rs.setName('curves_10')
 let ht=50;
 
-let topParams = {width:ht,height:ht,framePadding:0.1*ht,frameStrokee:'white',frameStrokeWidth:.2,numSteps:3*4*32,chopOffEnd:1*4*32,// 2 particle164	,		
-                 saveAnimation:1,numLobes:2,maxifc:0.65,numCycles:6,persistence:5,thetaBump:0,thetaInc:0.008*Math.PI,
+let topParams = {width:ht,height:ht,framePadding:0.1*ht,frameStrokee:'white',frameStrokeWidth:.2,numSteps:3*4*32,// 2 particle164	,		
+                 saveAnimation:1,numLobes:2,maxifc:0.65,numCycles:6,persistence:1,maxifc:0.65,lastCycle:0,
                  yc:1,ifc:0,numRings:15} //420 790
 	
 Object.assign(rs,topParams);
@@ -22,31 +22,21 @@ rs.initProtos = function () {
   lineP['stroke-width'] = .1;
   let polylineP = this.polylineP = polylinePP.instantiate();
   polylineP.stroke = 'white';
-  polylineP['stroke-width'] = .05;
+  polylineP['stroke-width'] = .075;
 }
 
 rs.updatePolylines = function () {
-  let {numRings:n,yc,ifc,maxifc,numLobes:nl,thetaBump,stepsSoFar:ssf,persistence} = this;
-  if (!(ssf%persistence)) {
-    this.polylineCnt = 0;
-  }
+  let {numRings:n,yc,ifc,numLobes:nl,maxifc,scaleDown} = this;
+  this.polylineCnt = 0;
   let hnl = nl/2;
   let off = 1;
   let pnts = this.approximateCurve(Math.sin,off-hnl*Math.PI,off+hnl*Math.PI,400);
   let rd = 20;
   let iv = rd/n;
-  let theta=  (Math.PI/nl)+thetaBump;
+  let theta=  (Math.PI/nl);
+ // let scaleDown = 3*(maxifc/(yc+ifc));
   for (let i=1;i<n;i++) {
-    if (i===5) {
-      debugger;
-    }
-    debugger;
-    console.log
-    let scaleDown = 3*(maxifc/(yc+ifc));
-    let xsD = ifc/maxifc;
-   // scaleDown = 1;
-    //let spnts = this.scale(pnts,(1/hnl)*scaleDown,ifc*i*scaleDown,0,yc*i);
-    let spnts = this.scale(pnts,(1/hnl)*xsD,ifc*i,0,yc*i);
+    let spnts = this.scale(pnts,1/hnl,ifc*i,0,yc*i);
     let ppnts = this.fromPolar(spnts);
     let sppnts = this.scale(ppnts,scaleDown,scaleDown);
     let rpnts = this.rotate(sppnts,theta);
@@ -73,23 +63,56 @@ const between = function (x,lb,ub) {
 const betweenI = function (x,lb,ub) {
   return (lb<=x)&&(x<=ub);
 }
-
+// ifc is the waviness
 rs.numLobesPerCycle = [2,4,8,16,64];
-rs.numLobesPerCycle = [64,8];
-rs.numLobesPerCycle = [8];
+rs.numLobesPerCycle = [4,8,16,64];
 rs.execCycle = function (n) {
   let {numSteps,stepsSoFar:ssf,maxifc,numLobesPerCycle:nlpc} = this;
   let numCycles = nlpc.length;
   let numLobes = nlpc[n];
   this.numLobes = numLobes;
   let spc = numSteps/numCycles;
-  let spsc = spc/3;
+  let sic = ssf%spc;
+  let fr = sic/spc;
+  let hspc =spc/2;
+  let ifh = sic<=hspc;
+  let frh = ifh?sic/hspc:(sic-hspc)/hspc; // (fraction in  half)
+  let spsc = spc/2;
   let sc  = n*spc;
   let sc0 = sc;
   let sc1 = sc+spsc;
-  let sc2=sc +2*spsc;
+ // let sc2=sc +2*spsc;
   let ec = sc+spc;
-  
+  //let fr;
+  let delta = 1/(maxifc-.0193)-1;
+
+  if (betweenI(ssf,sc0,sc1)) {
+    //fr = (ssf-sc0)/spsc;
+    this.ifc = maxifc*frh;
+    this.scaleDown = 1;
+  } else if (betweenI(ssf,sc1,ec)) {
+   // fr = (ssf-sc1)/spsc;
+    this.yc = 1+maxifc*frh;
+    this.ifc = maxifc*(1-frh);
+
+    this.scaleDown = (1-frh)+frh*delta
+
+  }
+ // this.scaleDown = 1;
+  if (ssf>=286) {
+    //console.log('fr',fr,'yc',this.yc,'ifc',this.ifc);
+  }
+ /* let delta = (1/1+maxifc)-1;
+  //let ifh = sic<=hspc;
+  let sd =this.scaleDown = 1;//ifh?1:(1-frsh)+frsh*delta;*/
+  if (!(ssf%1)) {
+     console.log('ssf',ssf,'fr',fr,'delta',delta,'scaleDown',this.scaleDown);
+   }     
+  //this.scaleDown = 1;//3*(maxifc/(this.yc+this.ifc));
+
+  this.updatePolylines()  
+}  
+/*
   if (betweenI(ssf,sc0,sc1)) {
     this.ifc = maxifc*((ssf-sc0)/spsc);
   } else if (betweenI(ssf,sc1,sc2)) {
@@ -100,10 +123,7 @@ rs.execCycle = function (n) {
     let fr = (ssf-sc2)/spsc;
     this.yc = 1+maxifc*(1-fr);
   }
-  
-  this.updatePolylines()  
-}  
-
+*/
 rs.whichCycle = function () {
   let {stepsSoFar:ssf,numSteps,numLobesPerCycle:nlpc}  = this;
   let numCycles = nlpc.length;
@@ -114,12 +134,17 @@ rs.whichCycle = function () {
 
 
 rs.updateState= function () {
-  debugger;
-  let {thetaBump,thetaInc,stepsSoFar:ssf,numSteps:ns} = this;
-  let fr = ssf/ns;
-  //this.persistence = 1+Math.floor(5*fr);
-  this.thetaBump = thetaBump+thetaInc;
+  let {lastCycle:lc,stepsSoFar:ssf} = this;
   let wc = this.whichCycle();
+  //console.log('wc',wc,'ssf',ssf);
+  if ((ssf === 287) || (ssf === 291)){
+    debugger;
+  }
+  if (wc > lc) {
+   // debugger;
+     this.yc = 1;
+    this.lastCycle = wc;
+  }
   this.execCycle(wc);
 }
 /*
