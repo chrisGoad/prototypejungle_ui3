@@ -7,8 +7,8 @@ let rs = generatorP.instantiate();
 rs.setName('curves_10')
 let ht=50;
 
-let topParams = {width:ht,height:ht,framePadding:0.07*ht,frameStrokee:'white',frameStrokeWidth:.2,numSteps:3*4*32,// 2 particle164	,		
-                 saveAnimation:1,numLobes:2,maxifc:0.65,numCycles:6,persistence:3,maxifc:0.65,lastCycle:0,
+let topParams = {width:ht,height:ht,framePadding:0.07*ht,frameStroke:'white',frameStrokeWidth:.2,numSteps:3*4*32,// 2 particle164	,		
+                 saveAnimation:1,numLobes:2,maxifc:0.65,numCycles:6,persistence:1,maxifc:0.65,lastCycle:0,
                  yc:1,ifc:0,numRings:10} //420 790
 	
 Object.assign(rs,topParams);
@@ -22,23 +22,21 @@ rs.initProtos = function () {
   lineP['stroke-width'] = .1;
   let polylineP = this.polylineP = polylinePP.instantiate();
   polylineP.stroke = 'white';
-  polylineP['stroke-width'] = .05;
+  polylineP['stroke-width'] = .06;
 }
 
 rs.updatePolylines = function () {
-  let {numRings:n,yc,ifc,numLobes:nl,maxifc,scaleDown,stepsSoFar:ssf,persistence} = this;
-  if (!(ssf%persistence)) this.polylineCnt = 0;
+  let {numRings:n,yc,ifc,numLobes:nl,maxifc,scaleDown} = this;
+  this.polylineCnt = 0;
   let hnl = nl/2;
   let off = 1;
-  let pnts = this.approximateCurve(Math.sin,off-hnl*Math.PI,off+hnl*Math.PI,1000);
+  let pnts = this.approximateCurve(Math.sin,off-hnl*Math.PI,off+hnl*Math.PI,400);
   let rd = 20;
   let iv = rd/n;
   let theta=  (Math.PI/nl);
  // let scaleDown = 3*(maxifc/(yc+ifc));
-  let fc = 1.5;
   for (let i=1;i<n;i++) {
-  debugger;
-    let spnts = this.scale(pnts,1/hnl,1.3*fc*ifc*i,0,fc*yc*i);
+    let spnts = this.scale(pnts,1/hnl,iv*ifc*i,0,1+yc*1.3*i);
     let ppnts = this.fromPolar(spnts);
     let sppnts = this.scale(ppnts,scaleDown,scaleDown);
     let rpnts = this.rotate(sppnts,theta);
@@ -111,7 +109,7 @@ rs.execCycle = function (n) {
      console.log('ssf',ssf,'fr',fr,'delta',delta,'scaleDown',this.scaleDown);
    }     
   //this.scaleDown = 1;//3*(maxifc/(this.yc+this.ifc));
-debugger;
+
   this.updatePolylines()  
 }  
 /*
