@@ -30,7 +30,7 @@ rs.initProtos = function () {
   polygonP.fill = 'rgb(0,50,50)';
    let polylineP = this.polylineP = polylinePP.instantiate();
   polylineP.stroke = 'white';
-  polylineP['stroke-width'] = .05;
+  polylineP['stroke-width'] = .1;
   let rectP = this.rectP = rectPP.instantiate();
   rectP.stroke = 'red';
   rectP['stroke-width'] = .15;

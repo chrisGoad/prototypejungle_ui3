@@ -241,7 +241,7 @@ c:\ffmpeg\bin\ffmpeg  -framerate 20 -i animations/curves_5_f%03d.jpg -s 1000x100
 c:\ffmpeg\bin\ffmpeg  -framerate 10 -i animations/curves_7_f%03d.jpg -s 500x500  export/curves_7.gif
 c:\ffmpeg\bin\ffmpeg  -framerate 20 -i animations/curves_8_f%03d.jpg -s 500x500  export/curves_8.gif
 c:\ffmpeg\bin\ffmpeg  -framerate 20 -i animations/curves_9_f%03d.jpg -s 500x500  export/curves_9.gif
-c:\ffmpeg\bin\ffmpeg  -framerate 20 -i animations/curves_10_f%03d.jpg -s 500x500  export/curves_10.gif
+c:\ffmpeg\bin\ffmpeg  -framerate 20 -i animations/curves_10_f%03d.jpg -s 700x700  export/curves_10.gif
 
 rm animations/spatter0_7*
 c:\ffmpeg\bin\ffmpeg  -framerate 10 -i animations/spatter0_6_f%03d.jpg -s 1000x1000  export/spatter0_6_1.mp4

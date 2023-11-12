@@ -346,6 +346,11 @@ rs.updateCenters = function () {
       let UR = isects[uri];
       let LL = isects[uli+1];
       let LR = isects[uri+1];
+      if (!LR) {
+        debugger;
+        console.log('nul LR');
+        continue;
+      }
       let cx =(UL.x+UR.x+LL.x+LR.x)/4;
       let cy =(UL.y+UR.y+LL.y+LR.y)/4;
       let C = Point.mk(cx,cy);
@@ -444,7 +449,7 @@ rs.updateCenterShapes = function () {
       //shp.dimension = 1+dim;
       let fill = `rgb(${fillv},0,0)`;
      // shp.fill = fill;
-      console.log('fr',fr,'cycle',cycle,'efr',efr,'div',div,'fill',fill);
+     // console.log('fr',fr,'cycle',cycle,'efr',efr,'div',div,'fill',fill);
       let gon = shp.gon;
       debugger;
       gon.corners = [UL,UR,LR,LL];

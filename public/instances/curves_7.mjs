@@ -10,8 +10,8 @@ let rs = generatorP.instantiate();
 rs.setName('curves_7')
 let ht=50;
 
-let topParams = {width:ht,height:ht,framePadding:0.1*ht,frameStrokee:'white',frameStrokeWidth:.2,numSteps:74,// 2 particle164	,		
-                 saveAnimation:1,numWaveLines:7,numWaves:2,maxifc:0.65,numCycles:6,amplitude:4,lineSep:4,persistence:4,chopOffBeginning:34,
+let topParams = {width:ht,height:ht,framePadding:-0.2*ht,frameStrokee:'white',frameStrokeWidth:.2,numSteps:74,//74 2 particle164	,		
+                 saveAnimation:1,numWaveLines:7,numWaves:2,maxifc:0.65,numCycles:6,amplitude:4,lineSep:4,persistence:4,chopOffBeginning:24,//34
                  yc:1,ifc:0,numRings:15} //420 790
 	
 Object.assign(rs,topParams);
@@ -61,9 +61,10 @@ rs.initialize = function () {
 rs.updateState= function () {
   let {phase,amplitude,stepsSoFar:ssf} = this;
   //debugger;
-  console.log('ssf',ssf);
+  console.log('ssf',ssf,'phase',this.phase/(2*Math.PI));
   //this.amplitude = 0.2+.004*ssf;
-  let ph = this.phase =  phase + .05*Math.PI;
+ // let ph = this.phase =  phase + .05*Math.PI;
+  let ph = this.phase =  phase + .04*Math.PI;
   this.updatePolylines(ph,this.amplitude,'white');
 }
 
