@@ -4,6 +4,8 @@ module.exports = {
 sections: 
 
 [     
+      [0,'necker','generators',1,'necker distortion',{likes:0,posted:0,category:'drop'}], 
+      [0,'stripes_1','instances',1,'stripes 1',{likes:0,posted:0,category:'drop'}], 
       [0,'stripes_0','instances',1,'stripes 0',{likes:0,posted:0,category:'drop'}], 
       [0,'curves_10','instances',1,'curves 10',{likes:0,posted:0,category:'drop'}], 
       [0,'curves_9','instances',1,'curves 9',{likes:0,posted:0,category:'drop'}], 

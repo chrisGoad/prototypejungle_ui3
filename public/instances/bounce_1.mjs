@@ -3,9 +3,9 @@ import {rs as linePP} from '/shape/line.mjs';
 import {rs as generatorP} from '/generators/bounce_0.mjs';
 let rs = generatorP.instantiate();
 
-rs.setName('bounce_1');
+rs.setName('bounce_2');
 let ht=50;
-let topParams = {width:ht,height:ht,framePadding:0.1*ht,frameStrokee:'white',frameStrokeWidth:.2,timePerStep:0.1,stopTime:100,
+let topParams = {width:ht,height:ht,framePadding:0.1*ht,frameStrokee:'white',frameStrokeWidth:.2,timePerStep:0.1,stopTime:181,
    saveAnimation:1,collideWithParticle:1,numParticles:100,swp:1,boxD:0.95*ht,speedup:1.00}
 
 Object.assign(rs,topParams);
