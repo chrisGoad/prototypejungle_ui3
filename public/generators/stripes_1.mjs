@@ -29,62 +29,13 @@ rs.displayStripe = function (stripe) {
   let shape = stripe.shape;
   shape . width = ex;
   shape . height = ey;
-  //rect . fill = fill;
   let p = Point.mk(cx+0.5*ex,cy+0.5*ey);
- // rectShapes.push(rect);
   shape.show();
   shape.update();
   shape.moveto(p);
 }
 
 
-rs.displayStripes = function () {
-  let {stripes} = this;
-  let ln = stripes.length;
-  for (let i=0;i<ln;i++) {
-    this.displayStripe(stripes[n]);
-  };
-}
-
-rs.allocRectangles = function (n) {
-  let {stripes} = this;
-  let stripe = [];
-  ra.forEach((r) => {
-    let rsh  = this.allocRectangleShape();
-    let stripe = {rectangle:r,shape:rsh}
-    stripes.push(stripe);
-    
-  });
-  return stripe;
-}
-
-rs.genStripe = function (params) {
-  let {stripes} = this;
-  let {stripeWidth:sw,stripeLength:sl,position:pos,vertical} = params;
-  let hsw = 0.5*sw;
-  let hsl = 0.5*sl;
-  let corner = vertical?Point.mk(pos-hsw,-hsl):Point.mk(-hsl,pos-hsw);
-  let ext = vertical?Point.mk(sw,sl):Point.mk(sl,sw);
-  let rect = Rectangle.mk(corner,ext);
-  rect.index = stripes.length;
-  return rect;
-}
-
-
-rs.genStripes = function (params) {
-  
-  let {stripeWidth:sw,stripeLength:sl,numStripes:ns,vertical} = params;
-  let hsl = 0.5*sl;
-  let intv = sl/(ns-1);
-  let rects = [];
-  for (let i=0;i<ns;i++) {
-    let ps = i*intv-hsl;
-    params.position = ps;
-    let rect = this.genStripe(params);
-    rects.push(rect);
-  }
-  return rects;
-}
 
 //each stripe is placed in a band with the stripe in the middle and padding separating the stripe from the bands next to it.
 // the fraction of the band occupied by the stripe is the stripeWidthFactor
@@ -94,24 +45,8 @@ rs.genStripes = function (params) {
  rs.allocStripesV = function (params) {
   let {stripeLength:sl,stripeWidthFactor:swf,bandWidths:bws,vertical,fill} = params;
   let ns = bws.length;
- /* let hsl = 0.5*sl;
-   let ns = bws.length;
-  let sum = 0;
-  for (let i = 0;i<ns;i++) {
-    sum=sum+bws[i]
-  }
-  let bwf = 0.5*sl/sum;*/
   const allocSide =  () => {
-   // let left=which==='left';
-   // let cp = left?-hsl:hsl;
     for (let i=0;i<ns;i++) {
-     /* let abw = bwf*bws[i];
-      let habw = 0.5*abw;
-      cp = left?cp+habw:cp-habw;
-      let sw = abw*swf;
-      let hsw = 0.5*sw;
-      let crn = vertical?Point.mk(cp-hsw,-hsl):Point.mk(-hsl,cp-hsw);
-      let ext = vertical?Point.mk(sw,sl):Point.mk(sl,sw);*/
       this.allocStripe(vertical,fill)
     }
   }
