@@ -43,10 +43,22 @@ rs.initialize = function () {
   let numVstripes = this.numVstripes = stripes.length+1;
   params.vertical = 0;
   params.fill = 'blue';
+  params.fill = 'rgba(0,0,0,0)';
   this.allocStripesV(params);
   this.updateStripesV(params);
+  this.uparams = params;
 
 }
+
+rs.updateState= function () {
+  let {stepsSoFar:ssf,uparams} = this;
+  let whib = 0.05*(ssf%20) -.5;
+  uparams.whereInBand = -whib;
+  this.updateStripesV(uparams);
+}
+  
+  
+
 
 export {rs}
   
