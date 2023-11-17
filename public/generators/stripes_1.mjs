@@ -70,6 +70,7 @@ rs.updateStripesV = function (params) {
   const updateSide =  (which) => {
     let left=which==='left';
     let cp = left?-hsl:hsl;
+    let ocp = cp;
     for (let i=0;i<ns;i++) {
       let abw = bwf*bws[i];
       let habw = 0.5*abw;
@@ -77,8 +78,23 @@ rs.updateStripesV = function (params) {
       let acp = cp+(left?whib*abw:-whib*abw);
       let sw = abw*swf;
       let hsw = 0.5*sw;
-      let crn = vertical?Point.mk(acp-hsw,-hsl):Point.mk(-hsl,acp-hsw);
-      let ext = vertical?Point.mk(sw,sl):Point.mk(sl,sw);
+      let osw =left?Math.min(acp-ocp,hsw):Math.min(ocp-acp,hsw); // one side width
+      
+      let rsw = osw < hsw; // reduced side width
+   //   rsw = false;
+      debugger;
+      let lsp = acp - (rsw?osw:hsw); //left side position
+      let rsp = acp+hsw; //right side position
+      let cnp = rsw?(lsp+rsp)/2:acp; //center position  
+      let asw = rsw?rsp-lsp:sw; // actual stripe width   
+      if (rsw) {           
+        console.log('acp-hsw',acp-hsw,'lsp',lsp,'sw',sw,'asw',asw,'osw',osw,'hsw',hsw);
+        debugger;
+      }
+      let crn = vertical?Point.mk(lsp,-hsl):Point.mk(-hsl,lsp);
+     // let crn = vertical?Point.mk(acp-hsw,-hsl):Point.mk(-hsl,acp-hsw);
+      //let ext = vertical?Point.mk(sw,sl):Point.mk(sl,sw);
+      let ext = vertical?Point.mk(asw,sl):Point.mk(sl,asw);
       let stripe = stripes[index];
       let rect = stripe.rectangle;
       rect.corner = crn;
@@ -107,8 +123,24 @@ rs.exponentialSeries = function (factor,length) {
   }
   return series;
 }
+
+rs.perspectiveSeries = function (op,v,d,length) {
+  const nthv = (n) => {
+    let p = op.difference(v.times(n));
+    let x = (d*(p.x))/(p.y)
+    return x;
+  }
+  let series = [];
+  let maxv = nthv(length-1);
+  for (let i=0;i<length;i++) {
+    let n = length-i-1;
+    series.push(nthv(n)/maxv);
+  }
+  return series;
+}
+    
   
- 
+     
 
 
 export {rs}
