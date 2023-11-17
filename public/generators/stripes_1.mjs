@@ -64,7 +64,7 @@ rs.updateStripesV = function (params) {
     sum=sum+bws[i]
   }
   let index = 0;
-  let bwf = 0.5*sl/sum;
+  let bwf = 0.5*sl/sum; // band width factor
   let rects = [];
   let vertical = 1;
   const updateSide =  (which) => {
@@ -72,23 +72,51 @@ rs.updateStripesV = function (params) {
     let cp = left?-hsl:hsl;
     let ocp = cp;
     for (let i=0;i<ns;i++) {
-      let abw = bwf*bws[i];
+      let rightBw = i?bws[i-1]:bws[i];
+      let leftBw = i<ns-1?bws[i+1]:bws[i];
+      let CL = whib+0.5;
+      let CR = -(whib-0.5);
+      let ibw = bwf*(leftBw*CL+rightBw*CR)/1;// interpolated band width 
+     
+    //  console.log('whib',whib,'isw',isw,'bws[i]',bws[i],'i',i)
+     let abw = bwf*bws[i];
+     // let abw = bwf*isw;
       let habw = 0.5*abw;
       cp = left?cp+habw:cp-habw;
       let acp = cp+(left?whib*abw:-whib*abw);
-      let sw = abw*swf;
-      let hsw = 0.5*sw;
-      let osw =left?Math.min(acp-ocp,hsw):Math.min(ocp-acp,hsw); // one side width
       
-      let rsw = osw < hsw; // reduced side width
-   //   rsw = false;
+      
+      let sw = abw*swf;
+      let isw = ibw*swf;
+      
+      
+       if (vertical && left)  {
+     //  console.log('i',i,'sw',sw,'isw',isw,'whib',whib,'CL',CL,'CR',CR,'leftBw',leftBw,'rightBw',rightBw,'ibw',ibw,'bws[i]',bws[i],'i',i);
+        debugger;
+      } else {
+           //   stripes[index].shape.hide();
+
+    //    return;
+      }
+      
+      let hsw = 0.5*sw;
+      let hisw = 0.5*isw;
+      //let osw =left?Math.min(acp-ocp,hsw):Math.min(ocp-acp,hsw); // one side width
+      let osw =left?Math.min(acp-ocp,hisw):Math.min(ocp-acp,hisw); // one side width
+      
+      let rsw = osw < hisw; // reduced side width
+    // rsw = false;
       debugger;
-      let lsp = acp - (rsw?osw:hsw); //left side position
-      let rsp = acp+hsw; //right side position
+     
+      let lsp = acp - (rsw?osw:hisw); //left side position
+      let rsp = acp+hisw; //right side position
       let cnp = rsw?(lsp+rsp)/2:acp; //center position  
-      let asw = rsw?rsp-lsp:sw; // actual stripe width   
+      let asw = rsw?rsp-lsp:isw; // actual stripe width 
+       if (rsw) {
+        console.log('i',i,'whib',whib,'hisw',hisw,'osw',osw,'asw',asw);
+      }      
       if (rsw) {           
-        console.log('acp-hsw',acp-hsw,'lsp',lsp,'sw',sw,'asw',asw,'osw',osw,'hsw',hsw);
+      //  console.log('acp-hsw',acp-hsw,'lsp',lsp,'sw',sw,'asw',asw,'osw',osw,'hsw',hsw);
         debugger;
       }
       let crn = vertical?Point.mk(lsp,-hsl):Point.mk(-hsl,lsp);

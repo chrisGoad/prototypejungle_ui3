@@ -55,7 +55,7 @@ rs.initialize = function () {
 
 rs.updateState= function () {
   let {stepsSoFar:ssf,uparams} = this;
-  let whib = 0.025*(ssf%40) -.5;
+  let whib = 0.025*(ssf%40) -.4;
   uparams.whereInBand = -whib;
   this.updateStripesV(uparams);
 }
