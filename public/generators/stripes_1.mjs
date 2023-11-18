@@ -21,7 +21,7 @@ rs.allocStripe = function (vertical,fill) {
   return stripe;
 }
 
-rs.displayStripe = function (stripe) {
+rs.displayStripe = function (stripe,fill) {
   let r = stripe.rectangle;
   let {corner,extent} = r;
   let {x:cx,y:cy} = corner;
@@ -29,6 +29,9 @@ rs.displayStripe = function (stripe) {
   let shape = stripe.shape;
   shape . width = ex;
   shape . height = ey;
+  if (fill) {
+    shape.fill = fill;
+  }
   let p = Point.mk(cx+0.5*ex,cy+0.5*ey);
   shape.show();
   shape.update();
@@ -55,7 +58,7 @@ rs.displayStripe = function (stripe) {
 }
 
 rs.updateStripesV = function (params) {
-  let {stripes} = this;
+  let {stripes,fills} = this;
   let {stripeLength:sl,stripeWidthFactor:swf,bandWidths:bws,whereInBand:whib,numVertical} = params;
   let hsl = 0.5*sl;
   let ns = bws.length;
@@ -72,6 +75,7 @@ rs.updateStripesV = function (params) {
     let cp = left?-hsl:hsl;
     let ocp = cp;
     for (let i=0;i<ns;i++) {
+      let fill = this.computeFill(i);
       let rightBw = i?bws[i-1]:bws[i];
       let leftBw = i<ns-1?bws[i+1]:bws[i];
       let CL = whib+0.5;
@@ -113,7 +117,7 @@ rs.updateStripesV = function (params) {
       let cnp = rsw?(lsp+rsp)/2:acp; //center position  
       let asw = rsw?rsp-lsp:isw; // actual stripe width 
        if (rsw) {
-        console.log('i',i,'whib',whib,'hisw',hisw,'osw',osw,'asw',asw);
+     //   console.log('i',i,'whib',whib,'hisw',hisw,'osw',osw,'asw',asw);
       }      
       if (rsw) {           
       //  console.log('acp-hsw',acp-hsw,'lsp',lsp,'sw',sw,'asw',asw,'osw',osw,'hsw',hsw);
@@ -127,7 +131,7 @@ rs.updateStripesV = function (params) {
       let rect = stripe.rectangle;
       rect.corner = crn;
       rect.extent  = ext;
-      this.displayStripe(stripe);
+      this.displayStripe(stripe,fill);
       cp = left?cp + habw:cp-habw;
       index++;
     }
