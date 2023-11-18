@@ -5,7 +5,8 @@ sections:
 
 [
  //anim
- 
+  [0,'bounce_1','instances',1,'Bounce 2',{video:'mp4',noTitle:0,likes:0,posted:0,category:'anim'}],
+
  //[0,'part2_0_43','instances',1,'You are getting very sleepy...',{video:'gif',likes:0,posted:0,category:'anim'}],
   //  [0,'drop_circles_20','generators',1,'Necker Distortion',{video:'gif',likes:0,posted:0,category:'anim'}], 
     [0,'necker','generators',1,'Necker Distortion',{video:'gif',likes:0,posted:0,category:'anim'}], 
@@ -37,9 +38,10 @@ sections:
    [0,'gridSpinner_5','instances',1,'Walking',{video:'gif',likes:0,posted:0,category:'anim'}], 
    
     [0,'part2_0_38','instances',1,'Shifting Grid',{video:'gif',likes:0,posted:0,category:'anim'}],
-       [0,'paths_7','instances',1,'Spinning Tubes',{videop:'gif',likes:0,posted:0,category:'anim'}], 
+       [0,'paths_7','instances',1,'Spinning Tubes',{video:'gif',likes:0,posted:0,category:'anim'}], 
  [0,'part2_0_31','instances',1,'Pulse',{video:'gif',noTitle:0,likes:0,posted:0,category:'anim'}],
- [0,'bounce_1','instances',1,'Bounce 2',{video:'mp4',noTitle:0,likes:0,posted:0,category:'anim'}],
+     [0,'stripes_1','instances',1,'Gridulous',{video:'gif',likes:0,posted:0,category:'anim'}], 
+
   
 
  

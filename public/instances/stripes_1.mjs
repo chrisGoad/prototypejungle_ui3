@@ -25,13 +25,36 @@ rs.initProtos = function () {
   polylineP['stroke-width'] = .05;
 }
 
+rs.genRan = function (lb,ub) {
+  let d = ub-lb;
+  let r = Math.floor(lb + Math.random()*d);
+  return r;
+}
+rs.genRans = function (lb,ub,n) {
+  let rans =[];
+  for (let i=0;i<n;i++) {
+    rans.push(this.genRan(lb,ub));
+  }
+  return rans;
+}
+rs.randomFill = function (rans,wr,wg,wb) {
+  let r = rans[wr];
+  let g = rans[wg];
+  let b = rans[wb]; 
+  //let fill = `rgb(${genran()},${genran()},${genran()})`;
+  let fill = `rgb(${r},${g},${b})`;
+  
+  return fill;
+}
 
 rs.mkFills = function (n) {
+  debugger;
   let fills = [];
+  let rans = this.genRans(100,250,6)
   for (let i=0;i<n;i++) {
-    let fill = 'red';
+    let fill = this.randomFill(rans,0,1,2);//'red';
     if (i<4) {
-      fill = 'white';
+      fill = this.randomFill(rans,3,4,5);//'white';
     } 
    
     fills.push(fill);
