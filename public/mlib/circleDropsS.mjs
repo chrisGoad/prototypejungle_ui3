@@ -156,6 +156,7 @@ rs.installCircleDrops = function (container,dropP,drops) {
   let drop = drops[i];
     let {point,fill,dimension} = drop;
     let crc=dropP.instantiate();
+    drop.shape = crc;
     crc.setDimension(dimension);
     if (fill) {
       crc.fill = fill;

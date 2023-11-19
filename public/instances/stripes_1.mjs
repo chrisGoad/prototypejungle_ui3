@@ -52,9 +52,9 @@ rs.mkFills = function (n) {
   let fills = [];
   let rans = this.genRans(100,250,6)
   for (let i=0;i<n;i++) {
-    let fill = this.randomFill(rans,0,1,2);//'red';
+    let fill = 'white';//this.randomFill(rans,0,1,2);//'red';
     if (i<4) {
-      fill = this.randomFill(rans,3,4,5);//'white';
+      fill = 'black';//this.randomFill(rans,3,4,5);//'white';
     } 
    
     fills.push(fill);
@@ -74,6 +74,7 @@ rs.initialize = function () {
   let hht = 0.5*ht;
   this.initProtos();
   this.addFrame();
+  this.setBackgroundColor('gray');
   let stripes = this.stripes=[];
   this.set('rectShapes',arrayShape.mk());
   let rect0 = Rectangle.mk(Point.mk(-2,-2),Point.mk(4,4));
