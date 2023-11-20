@@ -22,11 +22,35 @@ rs.collides0 = function (point1,radius1,point2,radius2) {
   return minDist >= d;
 }
 
-rs.collides = function (npoint,nradius,drops) {
+rs.collidesWithSides = function (point,radius) {
+  let {height:ht,width:wd} = this;
+  let hht = 0.5*ht;
+  let hwd = 0.5*wd;
+  let {x,y} = point;
+  let minx = x-radius;
+  let maxx = x+radius;
+  let miny = y-radius;
+  let maxy = y+radius;
+  if (minx<-hwd) {
+    return 1;
+  }
+  if (maxx>hwd) {
+    return 1;
+  }
+  if (miny<-hht) {
+    return 1;
+  }
+  if (maxy>hht) {
+    return 1;
+  }
+}
+
+rs.collides = function (npoint,nradius,drops,useDim) {
   let n = drops.length;
   for (let i=0;i<n;i++) {
-    let {point,collideRadius} = drops[i];
-    if (this.collides0(npoint,nradius,point,collideRadius)) {
+    let {point,collideRadius,dimension} = drops[i];
+    let r = useDim?dimension/2:collideRadius;
+    if (this.collides0(npoint,nradius,point,r)) {
       return true;
     }
   }
@@ -62,10 +86,12 @@ rs.mkRectFromCenterExtent = function (c,xt) {
 }
   
 rs.generateCircleDrops = function (params) {
-  let {zone,maxLoops=Infinity,maxDrops=Infinity,dropTries} = params;
+  let {zone,maxLoops=Infinity,maxDrops=Infinity,dropTries,drops} = params;
   let cnt =0;
   let tries = 0;
-  let drops = [];
+  if (!drops) {
+    drops = this.drops = [];
+  }
   debugger;
   while ((cnt < maxLoops) && (drops.length < maxDrops)) {
     cnt++;
@@ -86,7 +112,8 @@ rs.generateCircleDrops = function (params) {
     } else {
       console.log('pnt ',pnt);
       drop.point = pnt;;
-      //drop.point = camera?pnt.project(camera):pnt
+      //drop.point = camera?pnt.project(camera):pnt;
+      drop.index = drops.length;
       drops.push(drop);
       tries = 0;
     }
