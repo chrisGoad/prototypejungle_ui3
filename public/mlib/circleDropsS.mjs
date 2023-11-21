@@ -48,10 +48,13 @@ rs.collidesWithSides = function (point,radius) {
 rs.collides = function (npoint,nradius,drops,useDim) {
   let n = drops.length;
   for (let i=0;i<n;i++) {
-    let {point,collideRadius,dimension} = drops[i];
-    let r = useDim?dimension/2:collideRadius;
-    if (this.collides0(npoint,nradius,point,r)) {
-      return true;
+    let drop = drops[i];
+    if (drop) {
+      let {point,collideRadius,dimension} = drops[i];
+      let r = useDim?dimension/2:collideRadius;
+      if (this.collides0(npoint,nradius,point,r)) {
+        return true;
+      }
     }
   }
   return false
@@ -86,14 +89,17 @@ rs.mkRectFromCenterExtent = function (c,xt) {
 }
   
 rs.generateCircleDrops = function (params) {
-  let {zone,maxLoops=Infinity,maxDrops=Infinity,dropTries,drops} = params;
+  let {zone,maxLoops=Infinity,maxDrops=Infinity,dropTries} = params;
+  let {drops} = this;
   let cnt =0;
   let tries = 0;
   if (!drops) {
     drops = this.drops = [];
   }
   debugger;
-  while ((cnt < maxLoops) && (drops.length < maxDrops)) {
+  let newDrops = [];
+  let origNumDrops = drops.length;
+  while ((cnt < maxLoops) && ((drops.length-origNumDrops) < maxDrops)) {
     cnt++;
      let pnt = this.genRandomPoint(zone);
     let drop = this.generateCircleDrop(pnt);
@@ -115,10 +121,11 @@ rs.generateCircleDrops = function (params) {
       //drop.point = camera?pnt.project(camera):pnt;
       drop.index = drops.length;
       drops.push(drop);
+      newDrops.push(drop);
       tries = 0;
     }
   }
-  return drops;
+  return newDrops;
 }
 rs.opDrops = function (drops,p,op) {
   let nds=[];
@@ -176,20 +183,49 @@ rs.moveDropss = function (drops,p) {
   return nds;
 }
 
+rs.segFrom = function (drop) {
+  let {cvec,cdist,cdrop} = drop;
+  if (cvec) {
+    debugger;
+    let {point:p,dimension:dim0,cvec,cdrop,cdist} = drop;
+    let {dimension:dim1} = cdrop;
+    let e0 = p.plus(cvec.times(dim0));
+    let e1 = p.plus(cvec.times(cdist-dim1));
+    let seg = LineSegment.mk(e0,e1);
+    return seg;
+  }
+}
+  
 rs.installCircleDrops = function (container,dropP,drops) {
   debugger;
+  let {lineP} = this;
   let ln  = drops.length;
   for (let i=0;i<ln;i++) {
-  let drop = drops[i];
-    let {point,fill,dimension} = drop;
-    let crc=dropP.instantiate();
-    drop.shape = crc;
-    crc.setDimension(dimension);
-    if (fill) {
-      crc.fill = fill;
+    let drop = drops[i];
+    if (drop) {
+      let {point,fill,dimension,shape,cvec} = drop;
+      if (!shape) {
+        let crc=dropP.instantiate();
+        drop.shape = crc;
+        
+        crc.setDimension(dimension);
+        if (fill) {
+          crc.fill = fill;
+        }
+        container.push(crc);
+        crc.moveto(point);
+        if (cvec) {
+          debugger;
+          let sgf  = this.segFrom(drop);
+          let line = lineP.instantiate();
+          drop.line = line;
+          container.push(line);
+          line.setEnds(sgf.end0,sgf.end1);
+          line.show();
+          line.update();
+        }  
+      }
     }
-    container.push(crc);
-    crc.moveto(point);
   }
 }
 

@@ -687,6 +687,26 @@ item.initProtos = function () {
   textP["font-weight"] = "normal";
   textP.stroke = 'white';
 }
+item.genRan = function (lb,ub) {
+  let d = ub-lb;
+  let r = Math.floor(lb + Math.random()*d);
+  return r;
+}
+item.genRans = function (lb,ub,n) {
+  let rans =[];
+  for (let i=0;i<n;i++) {
+    rans.push(this.genRan(lb,ub));
+  }
+  return rans;
+}
+item.randomFill = function (rv,gv,bv,lb,ub) {
+  let r = rv==='ran'?this.genRan(lb,ub):rv;
+  let g = gv==='ran'?this.genRan(lb,ub):gv;
+  let b = bv==='ran'?this.genRan(lb,ub):bv;
+  //let g = wg==='ran'?this.genRan(lb,ub):rans[wg];
+  let fill = `rgb(${r},${g},${b})`;
+  return fill;
+}
 }
 export {rs};
  
