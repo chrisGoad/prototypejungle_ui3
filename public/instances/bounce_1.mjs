@@ -97,6 +97,7 @@ rs.initialize = function () {
   debugger;
   let {timePerStep,stopTime,collideWithParticle:cwp,numParticles,fills} = this;
   this.numSteps = Math.ceil(stopTime/timePerStep);
+  debugger;
   this.initProtos();
   this.addFrame();
   this.genBox();

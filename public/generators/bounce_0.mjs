@@ -2,9 +2,13 @@ import {rs as circlePP} from '/shape/circle.mjs';
 import {rs as linePP} from '/shape/line.mjs';
 import {rs as basicP} from '/generators/basics.mjs';
 import {rs as addAnimationMethods} from '/mlib/animate0.mjs';
+import {rs as addAudioMethods} from '/mlib/audio.mjs';	
+
 let rs = basicP.instantiate();
 
 addAnimationMethods(rs);
+addAudioMethods(rs);
+
 
 rs.setName('bounce_0');
 let ht=50;
@@ -844,9 +848,32 @@ rs.particleArray =function (enclosures) {
   }
   return pa;
 }
+
+rs.playTone = function () {
+  let {audioContext:context} = this;
+  let now = context.currentTime;
+  //if (!oscillator) {
+     let oscillator = this.oscillator = context.createOscillator();
+    oscillator.type = 'sine';
+     oscillator.frequency.value = 440;
+    oscillator.connect(context.destination);
+
+  //}
+  oscillator.start(now); 
+  oscillator.stop(now+.1); 
+  
+}
+
     
 rs.updateState = function () {
   let {stepsSoFar:ssf,timePerStep,lastCollision,nextC,stopTime,segments,particles} = this;
+  debugger;
+  this.initAudio();
+  if ((ssf%20)===19) {
+    console.log('playtone');
+    
+    this.playTone();
+  }
   let ct = ssf*timePerStep;
   let nct = nextC.time;
   let onUp = this.onUpdate;

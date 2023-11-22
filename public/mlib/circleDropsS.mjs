@@ -61,6 +61,13 @@ rs.collides = function (npoint,nradius,drops,useDim) {
 }
 
 rs.genRandomPoint = function (rect) {
+ let {stepsSoFar:ssf,width,height,updatingState:uping} = this;
+  if (uping) {
+    debugger;
+    let fc = width/20;
+    let p = Point.mk(fc*ssf,0);
+    return p;
+  }
   if (rect) {
     let {corner,extent} = rect;
     let lx = corner.x;
@@ -69,7 +76,6 @@ rs.genRandomPoint = function (rect) {
     let y = Math.random() * extent.y + ly;
     return Point.mk(x,y);
   }
-  let {width,height} = this;
   let rx = (Math.random()-0.5) * width;
    let ry= (Math.random()-0.5) * height;
   return Point.mk(rx,ry);
@@ -89,11 +95,11 @@ rs.mkRectFromCenterExtent = function (c,xt) {
 }
   
 rs.generateCircleDrops = function (params) {
-  let {zone,maxLoops=Infinity,maxDrops=Infinity,dropTries} = params;
+  let {zone,maxLoops=Infinity,maxDrops=Infinity,dropTries,stepsSoFar:ssf,udatingState:uping} = params;
   let {drops} = this;
   let cnt =0;
   let tries = 0;
-  if (!drops) {
+  if ((!drops) || (uping && !ssf)) {//fix this
     drops = this.drops = [];
   }
   debugger;

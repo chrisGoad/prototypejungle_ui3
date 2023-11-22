@@ -109,7 +109,7 @@ rs.closestDrop = function (drop) {
   let cdrop = null;
   for (let i=0;i<ln;i++) {
     let drop1 = drops[i];
-    if (drop1 && (drop !== drop1)) {
+    if (drop && drop1 && (drop !== drop1)) {
       let dist = this.dropDist(drop,drop1);
       if (dist<mind) {
         mind = dist;
@@ -122,7 +122,14 @@ rs.closestDrop = function (drop) {
 
 rs.addDrop = function (drop) {
   debugger;
+  if (!drop) {
+    debugger;
+    return;
+  }
   let cdrop = this.closestDrop(drop);
+  if (!cdrop) {
+    return;
+  }
   let p = drop.point;
   let cp = cdrop.point;
   let dist = cp.distance(p);
@@ -135,6 +142,7 @@ rs.addDrop = function (drop) {
   
 rs.addDrops = function (n) {
   let {dropParams,circleP,dropShapes} = this;
+  debugger;
   dropParams.maxDrops = n;
   let newDrops = this.generateCircleDrops(dropParams);
   newDrops.forEach((drop) => {
@@ -176,6 +184,7 @@ rs.initialize = function () {
 
 rs.updateState = function () {
   let {stepsSoFar:ssf} = this;
+  this.updatingState = 1;
   if (!(ssf%1)) {
     this.addDrops(1);
   }

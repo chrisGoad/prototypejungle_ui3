@@ -50,6 +50,13 @@ rs.collides = function (npoint,nradius,drops) {
 }
 
 rs.genRandomPoint = function (rect) {
+  let {stepsSoFar:ssf,width} = this;
+  if (ssf) {
+    debugger;
+    let fc = width/10;
+    let p = Point.mk(fc*ssf,0);
+    return p;
+  }
   if (rect) {
     let {corner,extent} = rect;
     let lx = corner.x;
