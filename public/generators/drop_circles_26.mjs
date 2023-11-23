@@ -20,7 +20,7 @@ let topParams = {width:ht,height:ht,framePadding:0.0*ht,frameStroke:'white',fram
 Object.assign(rs,topParams);
 
 //rs.dropParams = {dropTries:150,scale:0.5,radius:50}
-rs.dropParams = {zone,dropTries:1000,maxLoops:100000,maxDrops:60};
+rs.dropParams = {zone,dropTries:1000,maxLoops:100000,maxDrops:6};
 //rs.dropParams = {zone,dropTries:100000,maxLoops:100000,maxDrops:2};
 
 rs.initProtos = function () {
@@ -44,6 +44,7 @@ rs.generateCircleDrop= function (p) {
   let gv = 100;
   //let fill = this.randomFill(null,'ran','ran','ran',100,250);
   let fill = this.randomFill(rv,gv,'ran',100,250);
+ // let fill = 'transparent';
   //let drop = {collideRadius:d*0.5*cf,dimension:d,fill};
   let drop = {collideRadius:1*d,dimension:d,fill};
   return drop;
@@ -74,25 +75,17 @@ rs.detectCollisions = function () {
               }
             }*/
            // let {e0i:e0i1,e1i:e1i1,index:index1} = edge1;
-            let wtd,dtd;
             if (r1>r0) {
-              wtd = 1;
+              this.addEdge(d0);
+              drops[i1] = null;
               s1.hide();
             } else {
-              wtd =0;
-              s0.hide();
-            }
-            if (wtd===1) {
-              dtd = drops[i1];
-              drops[i1] = null;
-            } else {
-              dtd = drops[i0];
+              this.addEdge(d1);
               drops[i0] = null;
-            }
-            if (wtd == 0) {
+              s0.hide();
               continue;
             }
-            
+          
           }
         }
       }
@@ -150,12 +143,38 @@ rs.closestDrop = function (drop) {
   return cdrop;
 }
 
+rs.addEdge =function (d) {
+  let {edges,dropLines:lines,lineP} = this;
+  let line=lineP.instantiate();
+  lines.push(line);
+  debugger;
+  let i = edges.length;
+  let cd = this.closestDrop(d);
+  let cdcd = cd.cdrop;
+ // if (cdcd) {
+ //  continue;
+ // }
+  d.cdrop = cd;
+  let cdi = cd.index;
+  let e0 = d.point;
+  let e1 = cd.point;
+  let vec = e1.difference(e0);
+  let dist = vec.length();
+  let nvec = vec.times(1/dist);
+  let edge = {nvec,dist,e0i:d.index,e1i:cd.index,index:i};
+  d.edge = edge;
+  edges.push(edge);
+  return edge;
+}
+
 rs.computeEdges = function () {
   let {edges,drops} = this;
   let dln = drops.length;
   for (let i=0;i<dln;i++) {
     let d = drops[i]
     if (d) {
+     let edge = this.addEdge(d);
+     continue;
      // debugger;
      let cd = this.closestDrop(d);
      let cdcd = cd.cdrop;
@@ -169,7 +188,7 @@ rs.computeEdges = function () {
      let vec = e1.difference(e0);
      let dist = vec.length();
      let nvec = vec.times(1/dist);
-     let edge = {nvec,dist,e0i:d.index,e1i:cd.index,index:i};
+    // let edge = {nvec,dist,e0i:d.index,e1i:cd.index,index:i};
      d.edge = edge;
      edges.push(edge);
      }
@@ -241,6 +260,12 @@ rs.addDrops = function (n) {
   //debugger;
   dropParams.maxDrops = n;
   let newDrops = this.generateCircleDrops(dropParams);
+  let ln = newDrops.length;
+  for (let i=0;i<ln;i++) {
+    let d = newDrops[i];
+    debugger;
+    this.addEdge(d);
+  }
   this.installCircleDrops(dropShapes,circleP,this.drops);
 
 }
@@ -272,13 +297,13 @@ rs.expandCircles = function () {
       d.dimension = nd;
       shape.dimension = nd;
       shape.update();
-      this.adjustLine(d);
+      //this.adjustLine(d);
     }
   }
   for (let i=0;i<ln;i++) {
     let d = drops[i];
     if (d) {
-      this.adjustLine(d);
+      //this.adjustLine(d);
     }
   }    
 }
