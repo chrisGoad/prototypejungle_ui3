@@ -15,12 +15,12 @@ let hht = 0.5*ht;
 let xt = Point.mk(ht,ht);
 let zone = rs.mkRectFromCenterExtent(Point.mk(0,0),xt);
 let rd = 1;
-let topParams = {width:ht,height:ht,framePadding:0.0*ht,frameStroke:'white',expandFactor:1.03,refDim:10,minDim:5,numSteps:1000};
+let topParams = {width:ht,height:ht,framePadding:0.0*ht,frameStroke:'white',frameStrokeWidth:.1,expandFactor:1.03,refDim:12,minDim:2,numSteps:1000};
 
 Object.assign(rs,topParams);
 
 //rs.dropParams = {dropTries:150,scale:0.5,radius:50}
-rs.dropParams = {zone,dropTries:100000,maxLoops:100000,maxDrops:60};
+rs.dropParams = {zone,dropTries:1000,maxLoops:100000,maxDrops:60};
 //rs.dropParams = {zone,dropTries:100000,maxLoops:100000,maxDrops:2};
 
 rs.initProtos = function () {
@@ -34,33 +34,46 @@ rs.initProtos = function () {
 }
 
 rs.generateCircleDrop= function (p) { 
-  let {refDim:dim,minDim}  = this;
+  let {refDim:dim,minDim,drops}  = this;
+  let ln = drops.length;
   let delta = dim-minDim;
+  //let d=ln?minDim:2*minDim;
   let d = minDim+Math.random()*delta;
   let cf = 3;
   let rv = 100;
   let gv = 100;
   //let fill = this.randomFill(null,'ran','ran','ran',100,250);
   let fill = this.randomFill(rv,gv,'ran',100,250);
-  let drop = {collideRadius:d*0.5*cf,dimension:d,fill};
+  //let drop = {collideRadius:d*0.5*cf,dimension:d,fill};
+  let drop = {collideRadius:1*d,dimension:d,fill};
   return drop;
 }
 
 rs.detectCollisions = function () {
-  let {drops} = this;
+  let {drops,edges,lines} = this;
   let ln = drops.length;
   for (let i=0;i<ln;i++) {
     let d0 = drops[i];
     if (d0) {
-      let {point:p0,dimension:dim0,index:i0,shape:s0} = d0;
+      let {point:p0,dimension:dim0,index:i0,shape:s0,edge0} = d0;
       let r0 = dim0/2;
       for (let j=i+1;j<ln;j++) {
         let d1=drops[j];
         if (d1) { 
-          let {point:p1,dimension:dim1,index:i1,shape:s1} = d1;
+          let {point:p1,dimension:dim1,index:i1,shape:s1,edge:edge1} = d1;
           let r1 = dim1/2;
           let collision = this.collides0(p0,r0,p1,r1);
           if (collision) {
+            debugger;
+       /*     if (edge0) {
+              let {e0i:e0i0,e1i:e1i0,index:index0} = edge0;
+              if (((e0i0 === i) && (e0i1 === j))||((e0i0 === i) && (e0i1 === i))) {
+                let line = lines[index0]
+                line.hide();
+                edges[index0] = null;
+              }
+            }*/
+           // let {e0i:e0i1,e1i:e1i1,index:index1} = edge1;
             let wtd,dtd;
             if (r1>r0) {
               wtd = 1;
@@ -75,15 +88,6 @@ rs.detectCollisions = function () {
             } else {
               dtd = drops[i0];
               drops[i0] = null;
-            }
-            let cd = dtd.cdrop;
-            if (cd) {
-              let line=cd.line;
-              if (line) {
-                line.hide();
-              }
-              cd.cvec = null;
-              cd.cdrop = null;
             }
             if (wtd == 0) {
               continue;
@@ -146,6 +150,70 @@ rs.closestDrop = function (drop) {
   return cdrop;
 }
 
+rs.computeEdges = function () {
+  let {edges,drops} = this;
+  let dln = drops.length;
+  for (let i=0;i<dln;i++) {
+    let d = drops[i]
+    if (d) {
+     // debugger;
+     let cd = this.closestDrop(d);
+     let cdcd = cd.cdrop;
+     if (cdcd) {
+       continue;
+     }
+     d.cdrop = cd;
+     let cdi = cd.index;
+     let e0 = d.point;
+     let e1 = cd.point;
+     let vec = e1.difference(e0);
+     let dist = vec.length();
+     let nvec = vec.times(1/dist);
+     let edge = {nvec,dist,e0i:d.index,e1i:cd.index,index:i};
+     d.edge = edge;
+     edges.push(edge);
+     }
+  }
+}  
+
+rs.allocLines = function () {
+  let {edges,lineP,dropLines:lines} = this;
+  let ln=edges.length;
+  for (let i=0;i<ln;i++) {
+    let line = lineP.instantiate();
+    lines.push(line);
+  }
+}
+
+rs.showEdges = function () {
+  let {edges,dropLines:lines,drops} = this;
+  let eln = edges.length;
+  for (let i=0;i<eln;i++) {
+    let edge = edges[i];
+    if (edge) {
+   //   debugger;
+      let line =lines[i];
+      let {e0i,e1i,nvec,dist} = edge;
+      let d0 = drops[e0i];
+      let d1 = drops[e1i];
+      if (d0 && d1) {
+        let p0 = d0.point;
+        let dim0 = d0.dimension;
+        let dim1 = d1.dimension;
+        let e0 = p0.plus(nvec.times(dim0/2));
+        let e1 = p0.plus(nvec.times(dist-(dim1/2)));
+        line.setEnds(e0,e1);
+        line.show();
+        line.update();
+      } else {
+        line.hide();
+      }
+    }
+  }
+}
+     
+     
+/*     
 rs.addDrop = function (drop) {
   //debugger;
   if (!drop) {
@@ -167,23 +235,21 @@ rs.addDrop = function (drop) {
   drop.cvec = ncvec;
   drop.cdist = dist;
 }
-  
+  */
 rs.addDrops = function (n) {
   let {dropParams,circleP,dropShapes} = this;
   //debugger;
   dropParams.maxDrops = n;
   let newDrops = this.generateCircleDrops(dropParams);
-  newDrops.forEach((drop) => {
-    this.addDrop(drop);
-  });
   this.installCircleDrops(dropShapes,circleP,this.drops);
 
 }
 
+
 rs.adjustLine = function (drop) {
   let line = drop.line;
   if (line) {
-    debugger;
+   // debugger;
     let sgf  = this.segFrom(drop);
     if (sgf) {
       line.setEnds(sgf.end0,sgf.end1);
@@ -225,9 +291,13 @@ rs.initialize = function () {
   this.addFrame();
   debugger;
   let shapes = this.set('dropShapes',arrayShape.mk());
+  let lines = this.set('dropLines',arrayShape.mk());
+  this.edges = [];
   let drops =  this.drops = this.generateCircleDrops(dropParams);
-  
+  this.computeEdges();
+  this.allocLines();
   this.installCircleDrops(shapes,circleP,drops);
+  this.showEdges();
 
 }
 
@@ -238,6 +308,7 @@ rs.updateState = function () {
     this.addDrops(1);
   }
   this.expandCircles();
+  this.showEdges();
   this.detectSideCollisions();
   this.detectCollisions();
 }

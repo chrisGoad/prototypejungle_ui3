@@ -61,7 +61,7 @@ rs.collides = function (npoint,nradius,drops,useDim) {
 }
 
 
-rs.pointTable =[];// [Point.mk(0,0),Point.mk(-20,0),Point.mk(20,0)];
+rs.pointTable = [];//[Point.mk(0,0),Point.mk(-40,0),Point.mk(40,0)];
 
 rs.genRandomPoint = function (rect) {
  let {stepsSoFar:ssf,width,height,updatingState:uping,drops,pointTable} = this;
@@ -106,7 +106,6 @@ rs.generateCircleDrops = function (params) {
   if ((!drops) ) {//fix this
     drops = this.drops = [];
   }
-  debugger;
   let newDrops = [];
   let origNumDrops = drops.length;
   while ((cnt < maxLoops) && ((drops.length-origNumDrops) < maxDrops)) {
@@ -117,8 +116,9 @@ rs.generateCircleDrops = function (params) {
     if (!drop) {
       continue;
     } 
-    let collideRadius = drop.collideRadius;
-    let cl = this.collides(pnt,collideRadius,drops);
+    let  {collideRadius,dimension} = drop;
+    let cls = this.collidesWithSides(pnt,dimension/2);
+    let cl = this.collides(pnt,collideRadius,drops)||cls;
     if (cl) {
       tries++;
       if (tries >= dropTries) {
@@ -196,7 +196,7 @@ rs.moveDropss = function (drops,p) {
 rs.segFrom = function (drop) {
   let {cvec,cdist,cdrop} = drop;
   if (cvec) {
-    debugger;
+   // debugger;
     let {point:p,dimension:dim0,cvec,cdrop,cdist} = drop;
     let {dimension:dim1} = cdrop;
     let e0 = p.plus(cvec.times(dim0/2));
@@ -207,7 +207,7 @@ rs.segFrom = function (drop) {
 }
   
 rs.installCircleDrops = function (container,dropP,drops) {
-  debugger;
+  //debugger;
   let {lineP} = this;
   let ln  = drops.length;
   for (let i=0;i<ln;i++) {
