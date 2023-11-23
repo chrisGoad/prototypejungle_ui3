@@ -60,12 +60,15 @@ rs.collides = function (npoint,nradius,drops,useDim) {
   return false
 }
 
+
+rs.pointTable =[];// [Point.mk(0,0),Point.mk(-20,0),Point.mk(20,0)];
+
 rs.genRandomPoint = function (rect) {
- let {stepsSoFar:ssf,width,height,updatingState:uping} = this;
-  if (uping) {
-    debugger;
-    let fc = width/20;
-    let p = Point.mk(fc*ssf,0);
+ let {stepsSoFar:ssf,width,height,updatingState:uping,drops,pointTable} = this;
+  let ln = drops.length;
+  let tln = pointTable.length;
+  if (ln<tln) {
+    let p = pointTable[ln]
     return p;
   }
   if (rect) {
@@ -99,7 +102,8 @@ rs.generateCircleDrops = function (params) {
   let {drops} = this;
   let cnt =0;
   let tries = 0;
-  if ((!drops) || (uping && !ssf)) {//fix this
+//  if ((!drops) || (uping && !ssf)) {//fix this
+  if ((!drops) ) {//fix this
     drops = this.drops = [];
   }
   debugger;
@@ -195,8 +199,8 @@ rs.segFrom = function (drop) {
     debugger;
     let {point:p,dimension:dim0,cvec,cdrop,cdist} = drop;
     let {dimension:dim1} = cdrop;
-    let e0 = p.plus(cvec.times(dim0));
-    let e1 = p.plus(cvec.times(cdist-dim1));
+    let e0 = p.plus(cvec.times(dim0/2));
+    let e1 = p.plus(cvec.times(cdist-dim1/2));
     let seg = LineSegment.mk(e0,e1);
     return seg;
   }

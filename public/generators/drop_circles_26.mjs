@@ -21,6 +21,7 @@ Object.assign(rs,topParams);
 
 //rs.dropParams = {dropTries:150,scale:0.5,radius:50}
 rs.dropParams = {zone,dropTries:100000,maxLoops:100000,maxDrops:60};
+//rs.dropParams = {zone,dropTries:100000,maxLoops:100000,maxDrops:2};
 
 rs.initProtos = function () {
   let circleP = this.circleP = circlePP.instantiate();
@@ -60,14 +61,34 @@ rs.detectCollisions = function () {
           let r1 = dim1/2;
           let collision = this.collides0(p0,r0,p1,r1);
           if (collision) {
+            let wtd,dtd;
             if (r1>r0) {
-              drops[i1] = null;
+              wtd = 1;
               s1.hide();
             } else {
-              drops[i0] = null;
+              wtd =0;
               s0.hide();
+            }
+            if (wtd===1) {
+              dtd = drops[i1];
+              drops[i1] = null;
+            } else {
+              dtd = drops[i0];
+              drops[i0] = null;
+            }
+            let cd = dtd.cdrop;
+            if (cd) {
+              let line=cd.line;
+              if (line) {
+                line.hide();
+              }
+              cd.cvec = null;
+              cd.cdrop = null;
+            }
+            if (wtd == 0) {
               continue;
             }
+            
           }
         }
       }
@@ -85,8 +106,13 @@ rs.detectSideCollisions = function () {
       let {point:p,dimension:dim,shape:s} = d;
       let c=this.collidesWithSides(p,dim/2);
       if (c) {
-        debugger;
+        //debugger;
         this.collidesWithSides(p,dim/2);
+        let cd = d.cdrop;
+        if (cd) {
+          cd.cvec = null;
+          cd.cdrop = null;
+        }
         drops[i]=null;
         s.hide();
       }
@@ -121,28 +147,30 @@ rs.closestDrop = function (drop) {
 }
 
 rs.addDrop = function (drop) {
-  debugger;
+  //debugger;
   if (!drop) {
-    debugger;
+   // debugger;
     return;
   }
   let cdrop = this.closestDrop(drop);
   if (!cdrop) {
     return;
   }
+  
   let p = drop.point;
   let cp = cdrop.point;
   let dist = cp.distance(p);
   let cvec = cp.difference(p);
   let ncvec = cvec.times(1/dist);
   drop.cdrop = cdrop;
+  cdrop.cdrop = drop;
   drop.cvec = ncvec;
   drop.cdist = dist;
 }
   
 rs.addDrops = function (n) {
   let {dropParams,circleP,dropShapes} = this;
-  debugger;
+  //debugger;
   dropParams.maxDrops = n;
   let newDrops = this.generateCircleDrops(dropParams);
   newDrops.forEach((drop) => {
@@ -151,7 +179,22 @@ rs.addDrops = function (n) {
   this.installCircleDrops(dropShapes,circleP,this.drops);
 
 }
-    
+
+rs.adjustLine = function (drop) {
+  let line = drop.line;
+  if (line) {
+    debugger;
+    let sgf  = this.segFrom(drop);
+    if (sgf) {
+      line.setEnds(sgf.end0,sgf.end1);
+      line.show();
+      line.update(); 
+    } else {
+      line.hide();
+    }
+  }        
+}
+  
 rs.expandCircles = function () {
   let {drops,expandFactor:ef} = this;
   let ln = drops.length;
@@ -163,11 +206,17 @@ rs.expandCircles = function () {
       d.dimension = nd;
       shape.dimension = nd;
       shape.update();
+      this.adjustLine(d);
     }
   }
-
-      
+  for (let i=0;i<ln;i++) {
+    let d = drops[i];
+    if (d) {
+      this.adjustLine(d);
+    }
+  }    
 }
+
 
 rs.initialize = function () {
   this.initProtos();

@@ -413,14 +413,32 @@ rs.flipColor = function (prt) {
     this.updateFill(prt);
   }    
 }
+
+rs.freqTable = [220,440,880];
+
+rs.wift = 0;
+
+rs.nextFreq = function () {
+  let {wift,freqTable} = this;
+  let ftln = freqTable.length;
+  wift++;
+  this.wift = wift;
+  let freqi = wift%ftln;
+  return freqTable[freqi];
+}
 rs.enactCollide2Particles = function (particle1,particle2,t) {
   let {swp} = this;
   let prt1 = particle1;
   let prt2 = particle2;
   let colres = this.collide2particles(prt1,prt2);
   let [nv1,nv2] = colres;
-  let {ray:ray1,fillStructure:FS1,shape:shape1} = prt1;
-  let {ray:ray2,fillStructure:FS2,shape:shape2} = prt2; 
+  let {ray:ray1,fillStructure:FS1,shape:shape1,radius:r1} = prt1;
+  let {ray:ray2,fillStructure:FS2,shape:shape2,radius:r2} = prt2; 
+ // console.log('r1',r1,'r2',r2);
+  if (1||((r1>2)&&(r2>2))) {
+    this.playTone(this.nextFreq(),.1);
+    
+  }
   ray1.initialPosition=prt1.position;
   ray2.initialPosition=prt2.position;
   prt1.startTime = t;
@@ -758,6 +776,7 @@ rs.boxToRect = function (pad) {
 }
 
 rs.enactCollision  = function (col) {
+ // this.playTone();
   let {particles,segments} = this;
   let {particleIndex:pi,time:cct,withSegment:ws,withParticle:wp} = col;
   this.updatePositions(cct,0);
@@ -849,18 +868,19 @@ rs.particleArray =function (enclosures) {
   return pa;
 }
 
-rs.playTone = function () {
+rs.playTone = function (freq,dur) {
   let {audioContext:context} = this;
   let now = context.currentTime;
   //if (!oscillator) {
      let oscillator = this.oscillator = context.createOscillator();
     oscillator.type = 'sine';
-     oscillator.frequency.value = 440;
+    console.log('freq',freq);
+     oscillator.frequency.value = freq;
     oscillator.connect(context.destination);
 
   //}
   oscillator.start(now); 
-  oscillator.stop(now+.1); 
+  oscillator.stop(now+dur); 
   
 }
 
@@ -872,7 +892,7 @@ rs.updateState = function () {
   if ((ssf%20)===19) {
     console.log('playtone');
     
-    this.playTone();
+  //this.playTone();
   }
   let ct = ssf*timePerStep;
   let nct = nextC.time;
