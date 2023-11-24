@@ -36,7 +36,9 @@ item.oneStep = function (one) {
     } else {
       console.log('FRAME WAS NOT ESCAPED!');
     }
- 
+    if (this.onCompleteAnimation) {
+      this.onCompleteAnimation();
+    }
     return;
   }
   if (ns&&this.saveAnimation&&(ns>this.chopOffBeginning)) { // for some reason, the first frame is corrupted 

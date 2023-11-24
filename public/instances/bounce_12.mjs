@@ -6,8 +6,6 @@ let rs = generatorP.instantiate();
 rs.setName('bounce_12');
 let ht=50;
 
-//let topParams = {width:ht,height:ht,framePadding:0.1*ht,frameStroke:'rgb(2,2,2)',frameStrokeWidth:.2,timePerStep:0.15,stopTime:260,stopStep:258,
-// collideWithParticlee:1,numParticless:7,saveAnimation:1,boxD:0.9*ht,speedup:1,swp:1,numParticless:4,
 
 let topParams = {width:ht,height:ht,framePadding:0.1*ht,frameStroke:'rgb(2,2,2)',frameStrokeWidth:.2,timePerStep:0.15,stopTime:260,stopStep:258,
                  saveAnimation:1,boxD:0.9*ht,speedup:1,particlesPerRow:3,swp:1,columnPositions:[-18,-6,6],rowPositions:[-12,0,12],
@@ -35,7 +33,7 @@ rs.updateColorsOnCollidePP = function (prt1,prt2) {
 
 rs.updateColorsOnCollideLS = function () {
    let {stepsSoFar:ssf,currentTime:t} = this;
-  console.log('sideCollision ssf',ssf,'time',t);
+  //console.log('sideCollision ssf',ssf,'time',t);
 }
    
 rs.initProtos = function () {
@@ -55,19 +53,19 @@ rs.addParticleRow = function (parts,params){ // or column
   // let inc = boxD/(np+1);
   //let hb = 0.5*boxD;
   //let cp = inc-hb;
-  console.log('row',row,'po',po,'vertical',v);
+ // console.log('row',row,'po',po,'vertical',v);
  // console.log('row',row,'y',y,'vertical',v);
   if ((row === 2) && v) {
     debugger;
   }
   for (let i=0;i<np;i++) {
     let cp = po[i];
-    console.log('cp',cp);
+  //  console.log('cp',cp);
     //let yv = (GR?i===(np-1):i===0)?Math.sqrt(2)*radius+y:y;
     //let yv = (GR?i===(np-1):i===0)?1.99*radius+y:y;
     let vx = (!i)?(v?Point.mk(0,speed):Point.mk(speed,0)):Point.mk(0,0);
     let ip = v?Point.mk(y,cp):Point.mk(cp,y);
-    console.log('ip[',ip.x,ip.y,'] vx',vx.x,vx.y,']');
+   // console.log('ip[',ip.x,ip.y,'] vx',vx.x,vx.y,']');
     let ray = {initialPosition:ip,velocity:vx};
     let prt = {mass,radius,ray,startTime:0,fillNumber:v?1:2,fillStructure:fills[v?2:3]};
     parts.push(prt);
@@ -102,7 +100,7 @@ rs.mkParticles = function (params) {
 
 rs.onUpdate = function () {
   let {stepsSoFar:ssf,currentTime:t} = this;
-  console.log('steps',ssf,'time',t);
+ // console.log('steps',ssf,'time',t);
 }
 rs.update = function () {
 }

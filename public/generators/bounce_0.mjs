@@ -869,14 +869,20 @@ rs.particleArray =function (enclosures) {
 }
 
 rs.playTone = function (freq,dur) {
-  let {audioContext:context} = this;
+  let {audioContext:context,mediaRecorder:mr} = this;
   let now = context.currentTime;
+  const ts = context.getOutputTimestamp();
+  const ct = ts.contextTime;
+  const pt = ts.performanceTime;
+  console.log('playing tone at currentTime', now,'contextTime',ct,'performanceTime',pt);
+  
   //if (!oscillator) {
      let oscillator = this.oscillator = context.createOscillator();
     oscillator.type = 'sine';
     console.log('freq',freq);
      oscillator.frequency.value = freq;
-    oscillator.connect(context.destination);
+    //oscillator.connect(context.destination);
+    oscillator.connect(this.audioDest);
 
   //}
   oscillator.start(now); 
@@ -884,9 +890,14 @@ rs.playTone = function (freq,dur) {
   
 }
 
+rs.stopMediaRecorder = function () {
+  let {mediaRecorder:mr} = this;
+  mr.stop();
+}
+
     
 rs.updateState = function () {
-  let {stepsSoFar:ssf,timePerStep,lastCollision,nextC,stopTime,segments,particles} = this;
+  let {stepsSoFar:ssf,timePerStep,lastCollision,nextC,stopTime,segments,particles,mediaRecorder:mr} = this;
   debugger;
   this.initAudio();
   if ((ssf%20)===19) {
@@ -934,6 +945,11 @@ rs.updateState = function () {
   }
 }
   
+rs.onCompleteAnimation = function () {
+  let {mediaRecorder:mr} = this;
+  console.log('Animation complete');
+  mr.stop();
+}
 
 
 export {rs}
