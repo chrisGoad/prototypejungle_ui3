@@ -881,7 +881,7 @@ rs.playTone = function (freq,dur) {
     oscillator.type = 'sine';
     console.log('freq',freq);
      oscillator.frequency.value = freq;
-    //oscillator.connect(context.destination);
+    oscillator.connect(context.destination);
     oscillator.connect(this.audioDest);
 
   //}

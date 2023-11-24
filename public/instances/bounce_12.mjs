@@ -6,7 +6,16 @@ let rs = generatorP.instantiate();
 rs.setName('bounce_12');
 let ht=50;
 
+/*
+// orig let topParams = {width:ht,height:ht,framePadding:0.1*ht,frameStroke:'rgb(2,2,2)',frameStrokeWidth:.2,timePerStep:0.15,stopTime:260,stopStep:258,
+let topParams =         {width:ht,height:ht,framePadding:0.1*ht,frameStroke:'rgb(2,2,2)',frameStrokeWidth:.2,timePerStep:0.15,stopTime:260,stopStep:258,stepIntervall:80,
+                   saveAnimation:1,boxD:0.9*ht,speedup:1,particlesPerRow:3,swp:1,columnPositions:[-18,-6,6],rowPositions:[-12,0,12],
+                // saveAnimation:1,boxD:0.9*ht,speedup:2,particlesPerRow:3,swp:1,columnPositions:[-18,-6,6],rowPositions:[-12,0,12],
+      //           saveAnimation:1,boxD:0.9*ht,speedup:.1,particlesPerRow:3,swp:1,columnPositions:[-18,-12,-6,0,6],rowPositions:[-12,-6,0,6,12],
+               positionsOnRow:[-12,0,12],positionsOnColumn:[-12,-6,6],chopOffBeginning:72}
+              //   positionsOnRow:[-12,0,12],positionsOnColumn:[-12,-6,6],chopOffBeginning:72}
 
+*/
 let topParams = {width:ht,height:ht,framePadding:0.1*ht,frameStroke:'rgb(2,2,2)',frameStrokeWidth:.2,timePerStep:0.15,stopTime:260,stopStep:258,
                  saveAnimation:1,boxD:0.9*ht,speedup:1,particlesPerRow:3,swp:1,columnPositions:[-18,-6,6],rowPositions:[-12,0,12],
       //           saveAnimation:1,boxD:0.9*ht,speedup:1,particlesPerRow:3,swp:1,columnPositions:[-18,-12,-6,0,6],rowPositions:[-12,-6,0,6,12],
