@@ -135,7 +135,7 @@ rs.generateCircleDrops = function (params) {
     cnt++;
      let pnt = this.genRandomPoint(zone);
     let drop = this.generateCircleDrop(pnt);
-    console.log('pnt ln', pnt.length());
+ //   console.log('pnt ln', pnt.length());
     if (!drop) {
       continue;
     } 
@@ -149,7 +149,7 @@ rs.generateCircleDrops = function (params) {
         return drops;
       }
     } else {
-      console.log('pnt ',pnt);
+ //     console.log('pnt ',pnt);
       drop.point = pnt;;
       //drop.point = camera?pnt.project(camera):pnt;
       drop.index = drops.length;

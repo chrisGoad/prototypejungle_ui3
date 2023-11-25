@@ -15,7 +15,8 @@ let hht = 0.5*ht;
 let xt = Point.mk(ht,ht);
 let zone = rs.mkRectFromCenterExtent(Point.mk(0,0),xt);
 let rd = 1;
-let topParams = {width:ht,height:ht,framePadding:0.0*ht,frameStroke:'white',frameStrokeWidth:.1,expandFactor:1.03,refDim:12,minDim:2,numSteps:4000,stepInterval:50};
+let topParams = {width:ht,height:ht,framePadding:0.0*ht,frameStroke:'white',frameStrokeWidth:.1,saveAnimation:1,
+expandFactor:1.03,refDim:12,minDim:2,numSteps:295,chopOffBeginning:218,stepInterval:50};//50
 
 Object.assign(rs,topParams);
 
@@ -337,6 +338,7 @@ rs.initialize = function () {
 rs.updateState = function () {
   let {stepsSoFar:ssf} = this;
   this.updatingState = 1;
+  console.log('ssf',ssf);
   if (!(ssf%1)) {
     this.addDrops(1);
   }
