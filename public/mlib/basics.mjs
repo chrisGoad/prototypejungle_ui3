@@ -699,13 +699,28 @@ item.genRans = function (lb,ub,n) {
   }
   return rans;
 }
-item.randomFill = function (rv,gv,bv,lb,ub) {
-  let r = rv==='ran'?this.genRan(lb,ub):rv;
-  let g = gv==='ran'?this.genRan(lb,ub):gv;
-  let b = bv==='ran'?this.genRan(lb,ub):bv;
-  //let g = wg==='ran'?this.genRan(lb,ub):rans[wg];
-  let fill = `rgb(${r},${g},${b})`;
-  return fill;
+
+item.randomArray = function (a,lb,ub) {
+  let ln = a.length;
+  let ra = [];
+  for (let i=0;i<ln;i++) {
+    let av = a[i];
+    let v = av==='ran'?this.genRan(lb,ub):av;
+    ra.push(v);
+  }
+  return ra;
+  
+}
+
+item.arrayToRGB = function (a) {
+  let r = a[0];
+  let g = a[1];
+  let b = a[2];
+  let rgb = `rgb(${r},${g},${b})`;
+  return rgb;
+}
+item.randomRGB = function (rv,gv,bv,lb,ub) {
+  return this.arrayToRGB(this.randomArray([rv,gv,bv],lb,ub));
 }
 }
 export {rs};
