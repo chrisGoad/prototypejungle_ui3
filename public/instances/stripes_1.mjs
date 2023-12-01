@@ -7,6 +7,7 @@ let rs = generatorP.instantiate();
 rs.setName('stripes_1')
 let ht=50;
 
+//
 let topParams = {width:ht,height:ht,framePadding:0.1*ht,frameStroke:'rgb(102,102,102)',frameStrokeWidth:.2,numSteps:360,version:0,
                  saveAnimation:1,cycleNum:0,numStripes:9,stepsPerCycle:40};
 	
