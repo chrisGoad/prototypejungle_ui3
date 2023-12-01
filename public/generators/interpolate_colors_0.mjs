@@ -14,7 +14,7 @@ let ht= 100;
 let nr = 100;
  //nr = 10	;
 
-let topParams = {width:ht,height:ht,numRows:nr,numCols:nr,framePadding:0.01*ht,frameStroke:'white',frameStrokeWidth:1,saveAnimation:1,
+let topParams = {width:ht,height:ht,numRows:nr,numCols:nr,framePadding:0.01*ht,frameStroke:'white',frameStrokeWidth:.1,saveAnimation:1,
 numSteps:295,chopOffBeginning:218,stepInterval:50,ULC:[250,0,0],URC:[0,0,250],LLC:[0,250,0],LRC:[0,250,0]};//50
 //numSteps:295,chopOffBeginning:218,stepInterval:50,ULC:rs.randomFill('ran','ran','ran',100,250),URC:[0,0,250],LLC:[0,250,0],LRC:[0,250,0]};//50
 
@@ -124,17 +124,25 @@ rs.initialize = function () {
   this.initProtos();
   this.addFrame();
   this.generateLines();
-  this.ULC=this.randomArray(['ran','ran','ran'],10,250);
-  this.URC=this.randomArray(['ran','ran','ran'],10,250);
-  this.LLC=this.randomArray(['ran','ran','ran'],10,250);
-  this.LRC=this.randomArray(['ran','ran','ran'],10,250);
+  let ULC =this.ULC=this.randomArray(['ran','ran','ran'],10,250);
+  let URC = this.URC=this.randomArray(['ran','ran','ran'],10,250);
+  let LLC =this.LLC=this.randomArray(['ran','ran','ran'],10,250);
+  let LRC =this.LRC=this.randomArray(['ran','ran','ran'],10,250);
+  console.log('ULC',ULC,'URC',URC,'LLC',LLC,'LRC',LRC);
   this.paintGrid();
 }
 
 
 
+//rs.cycleDat = function (period,plen) {
+//  let {stepsSoFar:
 rs.updateState = function () {
-  let {stepsSoFar:ssf} = this;
+  let {stepsSoFar:ssf,ULCA,URCA,LLCA,LRCA,period,ULp,URp,LLp,LRp} = this;
+  let ULln = ULCA.length;
+  let URln = ULCA.length;
+  let LLln = ULCA.length;
+  let LRln = ULCA.length;
+  
  
 }
 
