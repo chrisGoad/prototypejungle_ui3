@@ -722,6 +722,16 @@ item.arrayToRGB = function (a) {
   let rgb = `rgb(${r},${g},${b})`;
   return rgb;
 }
+
+
+
+item.arrayToGray = function (a) {
+  let r = a[0];
+  let g = a[0];
+  let b = a[0];
+  let rgb = `rgb(${r},${g},${b})`;
+  return rgb;
+}
 item.randomRGB = function (rv,gv,bv,lb,ub) {
   return this.arrayToRGB(this.randomArray([rv,gv,bv],lb,ub));
 }
