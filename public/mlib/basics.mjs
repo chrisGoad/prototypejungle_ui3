@@ -700,17 +700,20 @@ item.genRans = function (lb,ub,n) {
   return rans;
 }
 
-item.randomArray = function (a,lb,ub) {
-  let ln = a.length;
+item.randomArray = function (lb,ub,a) {
+  let aISnum = typeof(a) === 'number';
+  let ln = aISnum?a:a.length;
   let ra = [];
   for (let i=0;i<ln;i++) {
-    let av = a[i];
+    let av = aISnum?'ran':a[i];
     let v = av==='ran'?this.genRan(lb,ub):av;
     ra.push(v);
   }
   return ra;
   
 }
+
+
 
 item.arrayToRGB = function (a) {
   let r = a[0];

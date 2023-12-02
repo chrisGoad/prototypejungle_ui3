@@ -15,7 +15,7 @@ let nr = 100;
  //nr = 10	;
 
 let topParams = {width:ht,height:ht,numRows:nr,numCols:nr,framePadding:0.01*ht,frameStroke:'white',frameStrokeWidth:.1,saveAnimation:1,
-numSteps:295,chopOffBeginning:218,stepInterval:50,ULC:[250,0,0],URC:[0,0,250],LLC:[0,250,0],LRC:[0,250,0]};//50
+numSteps:295,chopOffBeginning:218,stepInterval:50,ULC:[250,0,0],URC:[0,0,250],LLC:[0,250,0],LRC:[0,250,0],period:20};//50
 //numSteps:295,chopOffBeginning:218,stepInterval:50,ULC:rs.randomFill('ran','ran','ran',100,250),URC:[0,0,250],LLC:[0,250,0],LRC:[0,250,0]};//50
 
 Object.assign(rs,topParams);
@@ -82,6 +82,15 @@ rs.gridMember = function (i,j) {
   let line = lines[index]
   return line;
 }
+rs.randomArrayOfArrays = function (outerLength,innerLength,lb,ub) {
+  let oa = []
+  for (let i=0;i<outerLength;i++) {
+    let ia = this.randomArray(lb,ub,innerLength);
+    oa.push(ia);
+  }
+  return oa;
+}
+   
 rs.paintGrid = function () {
   debugger;
   let {numRows:nr,numCols:nc,ULC,URC,LLC,LRC} = this;
@@ -121,30 +130,63 @@ rs.paintGrid = function () {
 
 rs.initialize = function () {
   debugger;
+  let {period} = this;
   this.initProtos();
   this.addFrame();
   this.generateLines();
-  let ULC =this.ULC=this.randomArray(['ran','ran','ran'],10,250);
+  /*let ULC =this.ULC=this.randomArray(['ran','ran','ran'],10,250);
   let URC = this.URC=this.randomArray(['ran','ran','ran'],10,250);
   let LLC =this.LLC=this.randomArray(['ran','ran','ran'],10,250);
   let LRC =this.LRC=this.randomArray(['ran','ran','ran'],10,250);
+  */
+   let ULC =this.ULC=this.randomArray(10,250,3);
+  let URC = this.URC=this.randomArray(10,250,3);
+  let LLC =this.LLC=this.randomArray(10,250,3);
+  let LRC =this.LRC=this.randomArray(10,250,3);
+  this.ULp = period;
+  this.URp = period;
+  this.LLp = period;
+  this.LRp = period;
+  let ULCA = this.ULCA = this.randomArrayOfArrays(2,3,10,250);
+  this.URCA = this.randomArrayOfArrays(2,3,10,250);
+  this.LLCA = this.randomArrayOfArrays(2,3,10,250);
+  this.LRCA = this.randomArrayOfArrays(2,3,10,250);
+ 
+  debugger;
   console.log('ULC',ULC,'URC',URC,'LLC',LLC,'LRC',LRC);
   this.paintGrid();
 }
 
 
 
-//rs.cycleDat = function (period,plen) {
-//  let {stepsSoFar:
+rs.colorNow = function (period,colorA) { // period = steps between colors; colorA = color array
+  let {stepsSoFar:ssf} = this;
+  let len = colorA.length;
+  let cnum0 = Math.floor(ssf/period)%len;
+  let fr = (ssf - cnum0*period)/period;
+  let cnum1 = (cnum0+1)% len;
+  let c0 = colorA[cnum0];
+  let c1 = colorA[cnum1];
+  let c = this.interpolateArrays(c0,c1,fr);
+  return c;
+}
 rs.updateState = function () {
-  let {stepsSoFar:ssf,ULCA,URCA,LLCA,LRCA,period,ULp,URp,LLp,LRp} = this;
-  let ULln = ULCA.length;
-  let URln = ULCA.length;
-  let LLln = ULCA.length;
-  let LRln = ULCA.length;
+  let {stepsSoFar:ssf,ULCA,URCA,LLCA,LRCA,ULp,URp,LLp,LRp} = this;
+  debugger;
+  let ULCN = this.colorNow(ULp,ULCA);
+  let URCN = this.colorNow(URp,URCA);
+  let LLCN = this.colorNow(LLp,LLCA);
+  let LRCN = this.colorNow(LRp,LRCA);
+  this.ULC = ULCN;
+  this.URC = URCN;
+  this.LLC = LLCN;
+  this.LRC = LRCN;
+  this.paintGrid();
+}
+
   
  
-}
+
 
 export {rs};
 
