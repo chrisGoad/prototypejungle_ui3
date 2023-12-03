@@ -12,9 +12,9 @@ addDropMethods(rs);
 rs.setName('interpolate_colors_0');
 let ht= 100;
 let nr = 100;
- nr = 40	;
+nr = 10	;
 
-let topParams = {width:ht,height:ht,numRows:nr,numCols:nr,framePadding:0.01*ht,frameStroke:'white',frameStrokeWidth:.1,saveAnimation:1,
+let topParams = {width:ht,height:ht,numRows:nr,numCols:nr,framePadding:0.01*ht,frameStroke:'white',frameStrokeWidth:.1,saveAnimation:1,oneShot:0,
 numSteps:2000,chopOffBeginningg:218,stepInterval:50,ULC:[250,0,0],URC:[0,0,250],LLC:[0,250,0],LRC:[0,250,0],period:20,xgapf:.1,ygapf:.1};//50
 //numSteps:295,chopOffBeginning:218,stepInterval:50,ULC:rs.randomFill('ran','ran','ran',100,250),URC:[0,0,250],LLC:[0,250,0],LRC:[0,250,0]};//50
 
@@ -156,31 +156,47 @@ rs.paintGrid = function () {
 
 rs.initialize = function () {
   debugger;
-  let {period} = this;
+  let {period,oneShot,randomColors} = this;
   this.initProtos();
   this.addFrame();
   this.generateLines();
- // this.adjustLines();
-  /*let ULC =this.ULC=this.randomArray(['ran','ran','ran'],10,250);
-  let URC = this.URC=this.randomArray(['ran','ran','ran'],10,250);
-  let LLC =this.LLC=this.randomArray(['ran','ran','ran'],10,250);
-  let LRC =this.LRC=this.randomArray(['ran','ran','ran'],10,250);
- 
-   let ULC =this.ULC=this.randomArray(10,250,3);
-  let URC = this.URC=this.randomArray(10,250,3);
-  let LLC =this.LLC=this.randomArray(10,250,3);
-  let LRC =this.LRC=this.randomArray(10,250,3);*/
-  this.ULp = period;
-  this.URp = period;
-  this.LLp = period;
-  this.LRp = period;
-  let ULCA = this.ULCA = this.randomArrayOfArrays(4,4,0,250);
-  this.URCA = this.randomArrayOfArrays(5,4,0,250);
-  this.LLCA = this.randomArrayOfArrays(6,4,0,250);
-  this.LRCA = this.randomArrayOfArrays(4,4,0,250);
- 
-  debugger;
-  this.updateState();
+  if (oneShot) {
+    this.adjustLines();
+    let ULC,URC,LLC,LRC;
+    if (randomColors) {
+      ULC =this.ULC=this.randomArray(['ran','ran','ran'],10,250);
+      URC = this.URC=this.randomArray(['ran','ran','ran'],10,250);
+      LLC =this.LLC=this.randomArray(['ran','ran','ran'],10,250);
+      LRC =this.LRC=this.randomArray(['ran','ran','ran'],10,250);
+    } else {
+      ULC =this.ULC=[10,10,10];
+      URC = this.URC=[238,105,65];
+      LLC =this.LLC=URC;
+      LRC =this.LRC =[10,10,10];
+    }
+    this.paintGrid();
+  } else {
+    let ULCA,URCA,LLCA,LRCA;
+    this.ULp = period;
+    this.URp = period;
+    this.LLp = period;
+    this.LRp = period;
+    if (randomColors) {
+      this.ULCA = this.randomArrayOfArrays(4,4,0,250);
+      this.URCA = this.randomArrayOfArrays(5,4,0,250);
+      this.LLCA = this.randomArrayOfArrays(6,4,0,250);
+      this.LRCA = this.randomArrayOfArrays(4,4,0,250);
+    } else {
+      let color1 = [238,105,65];
+      let color2 = [10,10,10];
+      let color3 = [10,10,250];
+      this.ULCA = [color1,color2,color3,color3]
+      this.URCA = [color2,color1,color2];  
+      this.LLCA = [color2,color1,color2];
+      this.LRCA = [color1,color2,color3,color3];
+    }
+    this.updateState();
+  }
  // this.paintGrid();
 }
 
