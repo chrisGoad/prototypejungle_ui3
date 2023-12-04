@@ -4,13 +4,17 @@ import {rs as generatorP} from '/generators/interpolate_colors_2.mjs'
 let rs = generatorP.instantiate();
 
 
-rs.setName('interpolate_colors_1');
+rs.setName('interpolate_colors_2');
 let ht= 100;
 let nr = 201;
-//nr = 5	;
+let lowX = 75;
+let highX = 125;
+let lowY = 75;
+let highY = 125;
 
+let subParams = {lowX,lowY,highX,highY};
 let colors=[[0,250,10],[238,105,65],[10,10,250],[10,10,10]];
-let topParams = {width:ht,height:ht,numRows:nr,numCols:nr,randomColors:1,
+let topParams = {subParams,width:ht,height:ht,numRows:nr,numCols:nr,randomColors:1,
                   framePadding:0.01*ht,frameStroke:'white',frameStrokeWidth:.1,saveAnimation:1,oneShot:1,
 numSteps:2000,chopOffBeginningg:218,stepInterval:50,ULC:colors[0],URC:colors[1],LLC:colors[1],LRC:colors[0],CNC:colors[3],period:20,xgapf:.1,ygapf:.1};//50
 //numSteps:295,chopOffBeginning:218,stepInterval:50,ULC:rs.randomFill('ran','ran','ran',100,250),URC:[0,0,250],LLC:[0,250,0],LRC:[0,250,0]};//50
@@ -27,22 +31,27 @@ rs.initProtos = function () {
 
 rs.initialize = function () {
   debugger;
-  let {period,oneShot,randomColors,colors} = this;
+  let {period,oneShot,randomColors,colors,subParams} = this;
   this.initProtos();
   this.addFrame();
   this.generateLines();
   if (oneShot) {
     this.adjustLines();
-    let ULC,URC,LLC,LRC,CNC;
+    let ULC,URC,LLC,LRC,subULC,subURC,subLLC,subLRC;
     if (randomColors) {
       ULC =this.ULC=this.randomArray(10,250,['ran','ran','ran']);
       URC = this.URC=this.randomArray(10,250,['ran','ran','ran']);
       LLC =this.LLC=this.randomArray(10,250,['ran','ran','ran']);
       LRC =this.LRC=this.randomArray(10,250,['ran','ran','ran']);
-      CNC =this.CNC=this.randomArray(10,250,['ran','ran','ran']);
+      subULC =subParams.ULC=this.randomArray(10,250,['ran','ran','ran']);
+      subURC =subParams.URC=this.randomArray(10,250,['ran','ran','ran']);
+      subLLC =subParams.LLC=this.randomArray(10,250,['ran','ran','ran']);
+      subULC =subParams.LRC=this.randomArray(10,250,['ran','ran','ran']);
+
     } 
-   this.paintCenteredGrid();
-    //this.paintGrid();
+   this.paintGrid();
+   //this.paintCenteredGrid();
+    this.paintSubgrid(subParams);
   } else {
     let ULCA,URCA,LLCA,LRCA;
     this.ULp = period;

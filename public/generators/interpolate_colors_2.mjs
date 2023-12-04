@@ -190,6 +190,57 @@ rs.paintCenteredGrid = function () {
 }
 
 
+
+rs.paintSubgrid = function (params) {
+  let {lowX,highX,lowY,highY,ULC,URC,LLC,LRC} = params;
+  this.printColorArray('ULC',ULC);
+  this.printColorArray('URC',URC);
+  this.printColorArray('LLC',LLC);
+  this.printColorArray('LRC',LRC);
+  let UL = this.gridMember(lowX,lowY);
+  let UR = this.gridMember(highX,lowY);
+  let LL = this.gridMember(lowX,highY);
+  let LR = this.gridMember(highY,highY);
+  let LArrays= [];
+  let RArrays= [];
+  
+  
+  for (let j=lowY;j<=highY;j++){
+    let fr = (j-lowY)/(1+highY-lowY);
+    console.log('fr',fr);
+    
+    let left = this.interpolateArrays(ULC,LLC,fr);
+    LArrays.push(left);
+    
+    let right = this.interpolateArrays(URC,LRC,fr);
+    RArrays.push(right);
+  }
+  let cnt=0;
+  for (let j=lowY;j<=highY;j++) {
+    let left = LArrays[j-lowY];
+    let right = RArrays[j-lowY];
+   
+    for (let i=lowX;i<=highX;i++) {
+      let fr = (i-lowX)/(1+highX-lowX);
+      let c = this.interpolateArrays(left,right,fr);
+    
+      let line = this.gridMember(i,j);
+      line.stroke = this.arrayToRGB(c);
+      line.update();
+    }
+  }
+}
+
+rs.paintGrid = function () {
+  let {numRows:nr,numCols:nc,ULC,URC,LLC,LRC} = this;
+  let lowX = 0;
+  let lowY = 0;
+  let highX = nc-1;
+  let highY = nr-1;
+  let params = {lowX,lowY,highX,highY,ULC,URC,LLC,LRC};
+  this.paintSubgrid(params);
+}
+
 rs.colorNow = function (period,colorA) { // period = steps between colors; colorA = color array
   let {stepsSoFar:ssf} = this;
   let len = colorA.length;
