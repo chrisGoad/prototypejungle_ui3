@@ -1,35 +1,28 @@
-import {rs as circlePP} from '/shape/circle.mjs';
+
 import {rs as linePP} from '/shape/line.mjs';
-import {rs as basicP} from '/generators/basics.mjs';
-import {rs as addDropMethods} from '/mlib/circleDropsS.mjs';
-import {rs as addAnimationMethods} from '/mlib/animate0.mjs';
+import {rs as generatorP} from '/generators/interpolate_colors_2.mjs'
+let rs = generatorP.instantiate();
 
-let rs = basicP.instantiate();
 
-addAnimationMethods(rs);
-addDropMethods(rs);
-
-rs.setName('interpolate_colors_0');
+rs.setName('interpolate_colors_1');
 let ht= 100;
-let nr = 100;
-//nr = 10	;
+let nr = 101;
+//nr = 5	;
 
-let topParams = {width:ht,height:ht,numRows:nr,numCols:nr,framePadding:0.01*ht,frameStroke:'white',frameStrokeWidth:.1,saveAnimation:1,oneShot:1,
+let topParams = {colors:[[0,250,10],[238,105,65],[10,10,250],[10,10,10]],width:ht,height:ht,numRows:nr,numCols:nr,randomColors:1,
+                  framePadding:0.01*ht,frameStroke:'white',frameStrokeWidth:.1,saveAnimation:1,oneShot:1,
 numSteps:2000,chopOffBeginningg:218,stepInterval:50,ULC:[250,0,0],URC:[0,0,250],LLC:[0,250,0],LRC:[0,250,0],period:20,xgapf:.1,ygapf:.1};//50
 //numSteps:295,chopOffBeginning:218,stepInterval:50,ULC:rs.randomFill('ran','ran','ran',100,250),URC:[0,0,250],LLC:[0,250,0],LRC:[0,250,0]};//50
 
 Object.assign(rs,topParams);
 
 rs.initProtos = function () {
-  let circleP = this.circleP = circlePP.instantiate();
-  circleP.fill = 'white';
-  circleP['stroke-width'] = 0;
   let lineP = this.lineP = linePP.instantiate();
   lineP.stroke = 'white';
   lineP['stroke-width'] = .5;
 }
 
-
+/*
 rs.generateLines = function () {
   debugger;
   let lines = this.set('lines',arrayShape.mk());
@@ -40,7 +33,7 @@ rs.generateLines = function () {
     let line = lineP.instantiate();
     line.setEnds(Point.mk(-10,0),Point.mk(10,0));
     lines.push(line);
-    sizeFs.push(.0);
+    sizeFs.push(.1);
     line.show();
     line.update();
   }
@@ -110,73 +103,36 @@ rs.randomArrayOfArrays = function (outerLength,innerLength,lb,ub) {
   }
   return oa;
 }
+*/
    
-rs.paintGrid = function () {
- // debugger;
-  let {sizeFs,numRows:nr,numCols:nc,ULC,URC,LLC,LRC} = this;
-  let UL = this.gridMember(0,0);
-  let UR = this.gridMember(nc-1,0);
-  let LL = this.gridMember(0,nr-1);
-  let LR = this.gridMember(nc-1,nr-1);
-  let leftArrays = [];
-  let rightArrays = [];
-  for (let j=0;j<nc;j++){
-    let fr = j/(nc-1);
-    let aleft = this.interpolateArrays(ULC,LLC,fr);
-    debugger;
-    leftArrays.push(aleft);
-    let aright = this.interpolateArrays(URC,LRC,fr);
-    rightArrays.push(aright);
-    /*let rgbLeft = this.arrayToRGB(aleft);
-    let rgbRight = this.arrayToRGB(aright);
-    let lineLeft = this.gridMember(0,j);
-    let lineRight = this.gridMember(nc-1,j);
-    lineLeft.stroke =rgbLeft;
-    lineLeft.update();
-    lineRight.stroke =rgbRight;
-    lineRight.update();*/
-  }
-  let cnt=0;
-  for (let j=0;j<nr;j++) {
-    let aleft = leftArrays[j];
-    let aright = rightArrays[j];
-    for (let i=0;i<nc;i++) {
-      let fr = i/(nc-1);
-      let a = this.interpolateArrays(aleft,aright,fr);
-      let mins =.03
-    //  sizeFs[cnt] =1- (mins + (1-mins)*(a[3]/260));
-      cnt++;
-      let line = this.gridMember(i,j);
-      line.stroke = this.arrayToRGB(a);
-      //line.stroke = 'white';
-      line.update();
-    }
-  }
-}
 
 rs.initialize = function () {
   debugger;
-  let {period,oneShot,randomColors} = this;
+  let {period,oneShot,randomColors,colors} = this;
   this.initProtos();
   this.addFrame();
   this.generateLines();
   if (oneShot) {
     this.adjustLines();
-    let ULC,URC,LLC,LRC;
+    let ULC,URC,LLC,LRC,CNC;
     if (randomColors) {
-      ULC =this.ULC=this.randomArray(['ran','ran','ran'],10,250);
-      URC = this.URC=this.randomArray(['ran','ran','ran'],10,250);
-      LLC =this.LLC=this.randomArray(['ran','ran','ran'],10,250);
-      LRC =this.LRC=this.randomArray(['ran','ran','ran'],10,250);
+      ULC =this.ULC=this.randomArray(10,250,['ran','ran','ran']);
+      URC = this.URC=this.randomArray(10,250,['ran','ran','ran']);
+      LLC =this.LLC=this.randomArray(10,250,['ran','ran','ran']);
+      LRC =this.LRC=this.randomArray(10,250,['ran','ran','ran']);
+      CNC =this.CNC=this.randomArray(10,250,['ran','ran','ran']);
     } else {
-      let color1 = [10,40,10];
-      let color2 = [238,105,65];
-      ULC =this.ULC=color1;
-      URC = this.URC=color2;
-      LLC =this.LLC=color2;
-      LRC =this.LRC =color1;
+     /* let color0 = [250,250,10];
+      let color1 = [238,105,65];
+      let color2 = [10,10,250];
+      let color3 = [10,10,10];*/
+      ULC =this.ULC=colors[0];
+      URC = this.URC=colors[1];
+      LLC =this.LLC=URC;
+      LRC =this.LRC =ULC;
+      CNC =this.CNC =colors[3];
     }
-    this.paintGrid();
+    this.paintCenteredGrid();
   } else {
     let ULCA,URCA,LLCA,LRCA;
     this.ULp = period;

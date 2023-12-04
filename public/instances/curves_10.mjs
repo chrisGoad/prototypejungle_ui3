@@ -19,10 +19,10 @@ rs.initProtos = function () {
   circleP['stroke-width'] = .1;
   let lineP = this.lineP = linePP.instantiate();
   lineP.stroke = 'white';
-  lineP['stroke-width'] = .1;
+  lineP['stroke-width'] = .05;
   let polylineP = this.polylineP = polylinePP.instantiate();
   polylineP.stroke = 'white';
-  polylineP['stroke-width'] = .05;
+  polylineP['stroke-width'] = .025;
 }
 
 rs.updatePolylines = function () {

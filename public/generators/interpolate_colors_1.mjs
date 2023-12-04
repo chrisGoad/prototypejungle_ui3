@@ -9,10 +9,10 @@ let rs = basicP.instantiate();
 addAnimationMethods(rs);
 addDropMethods(rs);
 
-rs.setName('interpolate_colors_0');
+rs.setName('interpolate_colors_1');
 let ht= 100;
-let nr = 100;
-//nr = 10	;
+let nr = 101;
+//nr = 5	;
 
 let topParams = {width:ht,height:ht,numRows:nr,numCols:nr,framePadding:0.01*ht,frameStroke:'white',frameStrokeWidth:.1,saveAnimation:1,oneShot:1,
 numSteps:2000,chopOffBeginningg:218,stepInterval:50,ULC:[250,0,0],URC:[0,0,250],LLC:[0,250,0],LRC:[0,250,0],period:20,xgapf:.1,ygapf:.1};//50
@@ -40,7 +40,7 @@ rs.generateLines = function () {
     let line = lineP.instantiate();
     line.setEnds(Point.mk(-10,0),Point.mk(10,0));
     lines.push(line);
-    sizeFs.push(.0);
+    sizeFs.push(.1);
     line.show();
     line.update();
   }
@@ -112,44 +112,78 @@ rs.randomArrayOfArrays = function (outerLength,innerLength,lb,ub) {
 }
    
 rs.paintGrid = function () {
- // debugger;
-  let {sizeFs,numRows:nr,numCols:nc,ULC,URC,LLC,LRC} = this;
+ debugger;
+  let {sizeFs,numRows:nr,numCols:nc,ULC,URC,LLC,LRC,CNC} = this;
+  let cx = (nc-1)/2;
+  let cy = (nr-1)/2
   let UL = this.gridMember(0,0);
   let UR = this.gridMember(nc-1,0);
+  let CN = this.gridMember(cx,cy);
   let LL = this.gridMember(0,nr-1);
   let LR = this.gridMember(nc-1,nr-1);
-  let leftArrays = [];
-  let rightArrays = [];
-  for (let j=0;j<nc;j++){
+  let ULArrays= [];
+  let UCNArrays= [];
+  let URArrays= [];
+  
+  let LLArrays= [];
+  let LCNArrays= [];
+  let LRArrays= [];
+  
+  let TOPC = this.interpolateArrays(ULC,URC,0.5);
+  let BOTC = this.interpolateArrays(LLC,LRC,0.5);
+  
+  for (let j=0;j<=cx;j++){
+    let uj = j+cx;
     let fr = j/(nc-1);
-    let aleft = this.interpolateArrays(ULC,LLC,fr);
-    debugger;
-    leftArrays.push(aleft);
-    let aright = this.interpolateArrays(URC,LRC,fr);
-    rightArrays.push(aright);
-    /*let rgbLeft = this.arrayToRGB(aleft);
-    let rgbRight = this.arrayToRGB(aright);
-    let lineLeft = this.gridMember(0,j);
-    let lineRight = this.gridMember(nc-1,j);
-    lineLeft.stroke =rgbLeft;
-    lineLeft.update();
-    lineRight.stroke =rgbRight;
-    lineRight.update();*/
+    let frm = j/cx;
+    let lfr=uj/(nc-1)
+    
+    let auleft = this.interpolateArrays(ULC,LLC,fr);
+    ULArrays.push(auleft);
+    let alleft = this.interpolateArrays(ULC,LLC,lfr);
+    LLArrays.push(alleft);
+    
+    let aucenter = this.interpolateArrays(TOPC,CNC,frm);
+    UCNArrays.push(aucenter);
+    let alcenter = this.interpolateArrays(CNC,BOTC,frm);
+    LCNArrays.push(alcenter);
+    
+    let auright = this.interpolateArrays(URC,LRC,fr);
+    URArrays.push(auright);
+    let alright = this.interpolateArrays(URC,LRC,lfr);
+    LRArrays.push(alright);
   }
   let cnt=0;
-  for (let j=0;j<nr;j++) {
-    let aleft = leftArrays[j];
-    let aright = rightArrays[j];
-    for (let i=0;i<nc;i++) {
-      let fr = i/(nc-1);
-      let a = this.interpolateArrays(aleft,aright,fr);
+  for (let j=0;j<=cx;j++) {
+    let auleft = ULArrays[j];
+    let aucenter = UCNArrays[j];
+    let auright = URArrays[j];
+    let alleft = LLArrays[j];
+    let alcenter = LCNArrays[j];
+    let alright = LRArrays[j];
+
+    for (let i=0;i<=cx;i++) {
+      let fr = i/cx;
+      let aul = this.interpolateArrays(auleft,aucenter,fr);
+      let aur = this.interpolateArrays(aucenter,auright,fr);
+      let all = this.interpolateArrays(alleft,alcenter,fr);
+      let alr = this.interpolateArrays(alcenter,alright,fr);
       let mins =.03
     //  sizeFs[cnt] =1- (mins + (1-mins)*(a[3]/260));
       cnt++;
-      let line = this.gridMember(i,j);
-      line.stroke = this.arrayToRGB(a);
+      let ULline = this.gridMember(i,j);
+      let URline = this.gridMember(i+cx,j);
+      let LLline = this.gridMember(i,j+cx);
+      let LRline = this.gridMember(i+cx,j+cx);
+      ULline.stroke = this.arrayToRGB(aul);
+      URline.stroke = this.arrayToRGB(aur);
+      LLline.stroke = this.arrayToRGB(all);
+      LRline.stroke = this.arrayToRGB(alr);
       //line.stroke = 'white';
-      line.update();
+      ULline.update();
+      URline.update();
+      LLline.update();
+      LRline.update();
     }
   }
 }
@@ -162,19 +196,23 @@ rs.initialize = function () {
   this.generateLines();
   if (oneShot) {
     this.adjustLines();
-    let ULC,URC,LLC,LRC;
+    let ULC,URC,LLC,LRC,CNC;
     if (randomColors) {
       ULC =this.ULC=this.randomArray(['ran','ran','ran'],10,250);
       URC = this.URC=this.randomArray(['ran','ran','ran'],10,250);
       LLC =this.LLC=this.randomArray(['ran','ran','ran'],10,250);
       LRC =this.LRC=this.randomArray(['ran','ran','ran'],10,250);
+      CNC =this.CNC=this.randomArray(['ran','ran','ran'],10,250);
     } else {
-      let color1 = [10,40,10];
-      let color2 = [238,105,65];
-      ULC =this.ULC=color1;
-      URC = this.URC=color2;
-      LLC =this.LLC=color2;
-      LRC =this.LRC =color1;
+      let color0 = [250,250,10];
+      let color1 = [238,105,65];
+      let color2 = [10,10,250];
+      let color3 = [10,10,10];
+      ULC =this.ULC=color0;
+      URC = this.URC=color1;
+      LLC =this.LLC=URC;
+      LRC =this.LRC =ULC;
+      CNC =this.CNC =color3;
     }
     this.paintGrid();
   } else {
