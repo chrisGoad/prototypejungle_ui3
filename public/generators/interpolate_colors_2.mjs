@@ -52,10 +52,9 @@ rs.adjustLines = function () {
     let cx = -wd/2;
     for (let i=0;i<nc;i++) {
       let line = lines[cnt];
-      let sizeF = sizeFs[cnt];
-      let xgap = sizeF*xspacing;//0.001*wd;
+      let xgap = xgapf*xspacing;//0.001*wd;
       let hxgap = 0.5*xgap;
-      let ygap = sizeF*yspacing;//0.001*wd;
+      let ygap = ygapf*yspacing;//0.001*wd;
       let sw = yspacing-ygap;
       cnt++;
       line['stroke-width'] = sw;
@@ -193,6 +192,7 @@ rs.paintCenteredGrid = function () {
 
 rs.paintSubgrid = function (params) {
   let {lowX,highX,lowY,highY,ULC,URC,LLC,LRC} = params;
+  console.log('____________');
   this.printColorArray('ULC',ULC);
   this.printColorArray('URC',URC);
   this.printColorArray('LLC',LLC);
@@ -207,7 +207,7 @@ rs.paintSubgrid = function (params) {
   
   for (let j=lowY;j<=highY;j++){
     let fr = (j-lowY)/(1+highY-lowY);
-    console.log('fr',fr);
+   // console.log('fr',fr);
     
     let left = this.interpolateArrays(ULC,LLC,fr);
     LArrays.push(left);
