@@ -13,10 +13,10 @@ let lowY = 75;
 let highY = 125;
 
 let xdisp = 0,ydisp = 0;
-rs.subParamsA= [{lowX:25+xdisp,highX:75+xdisp,lowY:25+ydisp,highY:75+ydisp}];
+//rs.subParamsA= [{lowX:25+xdisp,highX:75+xdisp,lowY:25+ydisp,highY:75+ydisp}];
 
 let colors=[[0,250,10],[238,105,65],[10,10,250],[10,10,10]];
-let topParams = {width:ht,height:ht,numRows:nr,numCols:nr,randomColors:1,
+let topParams = {subParamsA:[],width:ht,height:ht,numRows:nr,numCols:nr,randomColors:1,
                   framePadding:0.01*ht,frameStroke:'white',frameStrokeWidth:.1,saveAnimation:1,oneShot:1,
 numSteps:2000,chopOffBeginningg:218,stepInterval:50,ULC:colors[0],URC:colors[1],LLC:colors[1],LRC:colors[0],CNC:colors[3],period:20,xgapf:.1,ygapf:.1};//50
 //numSteps:295,chopOffBeginning:218,stepInterval:50,ULC:rs.randomFill('ran','ran','ran',100,250),URC:[0,0,250],LLC:[0,250,0],LRC:[0,250,0]};//50
