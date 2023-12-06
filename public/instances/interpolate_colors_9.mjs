@@ -6,14 +6,19 @@ let rs = generatorP.instantiate();
 
 rs.setName('interpolate_colors_9');
 rs.randomColors = 0;
-rs.ULC = [ 240 , 66 , 207 ];
+let cornerColors = {ULC:[240,66,207],URC:[101,153,125],LLC:[126,18,61],LRC:[223,204,20]};
+/*rs.ULC = [ 240 , 66 , 207 ];
 rs.URC = [ 101 , 153 , 125 ];
 rs.LLC = [ 126 , 18 , 61 ]
-rs.LRC = [ 223 , 204 , 20 ];
+rs.LRC = [ 223 , 204 , 20 ];*/
+Object.assign(rs,cornerColors);
 
 
-rs.subParamsA = [{lowX:75,highX:125,lowY:0,highY:200,ULC:[ 78 , 248 , 164 ],URC: [ 46 , 201 , 15 ],LLC: [ 39 , 156 , 238 ],LRC:[ 239 , 40 , 112 ]}];
-
+let subParams = {lowX:75,highX:125,lowY:0,highY:200};
+let subColors = {ULC:[78,248,164],URC:[46,201,15],LLC:[39,156,238],LRC:[239,40,112]};
+Object.assign(subParams,subColors);
+//rs.subParamsA = [{lowX:75,highX:125,lowY:0,highY:200,ULC:[ 78 , 248 , 164 ],URC: [ 46 , 201 , 15 ],LLC: [ 39 , 156 , 238 ],LRC:[ 239 , 40 , 112 ]}];
+rs.subParamsA = [subParams];
 
 export {rs};
 
