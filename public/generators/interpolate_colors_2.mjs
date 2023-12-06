@@ -101,18 +101,37 @@ rs.randomArrayOfArrays = function (outerLength,innerLength,lb,ub) {
   }
   return oa;
 }
-rs.printColorArray = function (nm,ca)  {
-  console.log(nm,'= [',ca[0],',',ca[1],',',ca[2],']');
+rs.colorEntry = function (nm,ca)  {
+  let st = `${nm}:[${ca[0]},${ca[1]},${ca[2]}]`;
+  return st;
+}
+
+rs.colorEntries = function(ULC,URC,LLC,LRC,CNC) {
+  let st = '{';
+  st+=this.colorEntry('ULC',ULC);
+  st+=',';
+  st+=this.colorEntry('URC',URC);
+  st+=',';
+  st+=this.colorEntry('LLC',LLC);
+  st+=',';
+  st+=this.colorEntry('LRC',LRC);
+  if (CNC) {
+    st+=','
+    st+=this.colorEntry('CNC',CNC);
+  }
+  st+='}';
+
+  return st;
+}
+
+rs.printColors = function (ULC,URC,LLC,LRC,CNC) {
+  console.log(this.colorEntries(ULC,URC,LLC,LRC,CNC));
 }
 
 rs.paintCenteredGrid = function () {
  debugger;
   let {sizeFs,numRows:nr,numCols:nc,ULC,URC,LLC,LRC,CNC} = this;
-  this.printColorArray('ULC',ULC);
-  this.printColorArray('URC',URC);
-  this.printColorArray('LLC',LLC);
-  this.printColorArray('LRC',LRC);
-  this.printColorArray('CNC',CNC);
+  this.printColors(ULC,URC,LLC,LRC,CNC);
   
   let cx = (nc-1)/2;
   let cy = (nr-1)/2
@@ -193,10 +212,7 @@ rs.paintCenteredGrid = function () {
 rs.paintSubgrid = function (params) {
   let {lowX,highX,lowY,highY,ULC,URC,LLC,LRC} = params;
   console.log('____________');
-  this.printColorArray('ULC',ULC);
-  this.printColorArray('URC',URC);
-  this.printColorArray('LLC',LLC);
-  this.printColorArray('LRC',LRC);
+  this.printColors(ULC,URC,LLC,LRC);
   let UL = this.gridMember(lowX,lowY);
   let UR = this.gridMember(highX,lowY);
   let LL = this.gridMember(lowX,highY);

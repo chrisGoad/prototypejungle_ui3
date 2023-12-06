@@ -4,6 +4,7 @@ module.exports = {
 sections: 
 
 [     
+      [0,'interpolate_colors_9','instances',1,'Interpolate Colors 9',{likes:0,posted:0,category:'drop'}], 
       [0,'interpolate_colors_8','instances',1,'Interpolate Colors 8',{likes:0,posted:0,category:'drop'}], 
       [0,'interpolate_colors_7','instances',1,'Interpolate Colors 7',{likes:0,posted:0,category:'drop'}], 
       [0,'interpolate_colors_6','instances',1,'Interpolate Colors 6',{likes:0,posted:0,category:'drop'}], 

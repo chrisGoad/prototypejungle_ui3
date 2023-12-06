@@ -5,7 +5,6 @@ let rs = generatorP.instantiate();
 
 
 rs.setName('interpolate_colors_7');
-
 let ht= 100;
 let nr = 201;
 

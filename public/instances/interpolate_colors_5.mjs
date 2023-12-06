@@ -39,7 +39,8 @@ rs.initialize = function () {
   this.generateLines();
   if (oneShot) {
     this.adjustLines();
-    let ULC,URC,LLC,LRC,CNC,subULC,subURC,subLLC,subLRC,ln;
+    let ULC,URC,LLC,LRC,CNC,subULC,subURC,subLLC,subLRC;
+    let ln = subParamsA.length;
     if (randomColors) {
       ULC =this.ULC=this.randomArray(10,250,['ran','ran','ran']);
       URC = this.URC=this.randomArray(10,250,['ran','ran','ran']);
@@ -50,7 +51,6 @@ rs.initialize = function () {
       subURC  =this.randomArray(10,250,['ran','ran','ran']);
       subLLC =this.randomArray(10,250,['ran','ran','ran']);
       subLRC =this.randomArray(10,250,['ran','ran','ran']);
-      ln = subParamsA.length;
       for (let i=0;i<ln;i++) {
         subParamsA[i].ULC = subULC;
         subParamsA[i].URC = subURC;
@@ -58,7 +58,7 @@ rs.initialize = function () {
         subParamsA[i].LRC = subLRC;
       }
     } 
-   if (center) {
+    if (center) {
       this.paintCenteredGrid();
     } else {
       this.paintGrid();
