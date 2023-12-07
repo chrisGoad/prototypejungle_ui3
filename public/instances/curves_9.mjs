@@ -8,7 +8,7 @@ rs.setName('curves_9')
 let ht=50;
 
 let topParams = {width:ht,height:ht,framePadding:0.3*ht,frameStrokee:'white',frameStrokeWidth:.2,numSteps:3*4*32,chopOffEnd:1*4*32-1,// 2 particle164	,		
-                 saveAnimation:1,numLobes:2,maxifc:0.65,numCycles:6,persistence:2,thetaBump:0,thetaInc:0.008*Math.PI,
+                 saveAnimation:1,numLobes:2,maxifc:0.65,numCycles:6,persistence:2,thetaBump:0,thetaInc:0.008*Math.PI,chopOffBeginning:2,
                  yc:1,ifc:0,numRings:15} //420 790
 	
 Object.assign(rs,topParams);
