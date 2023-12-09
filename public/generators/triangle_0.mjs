@@ -188,7 +188,21 @@ rs.initialize = function () {
   //this.connectSegs(lsC,lsA,n);
 }
   
-  
+rs.addRow =  function (j) {
+  let {pal,sbase} = this;
+  let ln = pal.length;
+  let nq = ln - j-1;
+  let  v= pal[j];
+  let {x,y} =v;
+  for (let i=0;i<nq;i++) {
+    let p = Point.mk(x+sbase*i,y);
+    let qvs = this.mkQuadVertices(sbase,p);
+    this.mkGon(qvs);
+  }
+  let p = Point.mk(x+sbase*nq,y);
+  let qvs = this.mkTriangleVertices(sbase,p);
+  this.mkGon(qvs);
+}
 rs.initialize = function () {
   let {width:wd} = this;
   debugger;
@@ -196,15 +210,27 @@ rs.initialize = function () {
   this.addFrame();
   let lines = this.set('lines',arrayShape.mk());
   let gons = this.set('gons',arrayShape.mk());
-  let trisegs = this.mkTriangleSegs(0.7*wd);
+  let bbase = this.bbase = 0.7*wd;
+  let trisegs = this.mkTriangleSegs(bbase);
   let [lsA,lsB,lsC] = trisegs;
   this.addSeg(lsA);
   this.addSeg(lsB);
   this.addSeg(lsC);
-  return;
+
   let n = 200;
   n = 10;
-  this.mkTri(.2*wd,Point.mk(0,0));
+  n = 50;
+  let pal = this.pal = this.pointsAlong(lsA,n);
+  pal.unshift(lsA.end0);
+  let sbase = this.sbase = bbase/(n+1);
+  let {end0,end1} = lsA;
+ this.connectSegs(lsA,this.reverseSeg(lsB),n);
+  this.connectSegs(lsB,this.reverseSeg(lsC),n);
+  let ln = pal.length;
+  for (let i=0;i<ln;i++) {
+    this.addRow(i);
+  }
+  //this.mkTri(.2*wd,Point.mk(0,0));
   //let quad = this.mkQuad(.2*wd,Point.mk(0,0));
  }
 
