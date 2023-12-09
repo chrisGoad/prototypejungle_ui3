@@ -1,4 +1,4 @@
-import {rs as poygonPP} from '/shape/polygon.mjs';
+import {rs as gonPP} from '/shape/polygon.mjs';
 import {rs as linePP} from '/shape/line.mjs';
 import {rs as basicP} from '/generators/basics.mjs';
 
@@ -50,14 +50,68 @@ rs.connectSegs = function(lsA,lsB,n) {
   }
 }
 
-rs.mkTriangleSegs = function (base) {
+rs.mkTriangleVertices = function (base,ip) {
   let a2r = Math.PI/180;
   let ht = base*Math.sin(60*a2r);
   let hht = 0.5*ht;
   let hb = 0.5*base;
-  let v0 = Point.mk(-hb,hht);
-  let v1 = Point.mk(0,-hht);
-  let v2 = Point.mk(hb,hht);
+  let p=ip?ip:Point.mk(-hb,hht);
+  let v0 = Point.mk(0,0).plus(p);
+  let v1 = Point.mk(hb,-ht).plus(p);
+  let v2 = Point.mk(base,0).plus(p);
+  return [v0,v1,v2];
+}
+
+rs.mkQuadVertices = function (base,ip) {
+  let a2r = Math.PI/180;
+  let ht = base*Math.sin(60*a2r);
+  let hht = 0.5*ht;
+  let hb = 0.5*base;
+  let p=ip?ip:Point.mk(-hb,hht);
+  let v0 = Point.mk(0,0).plus(p);
+  let v1 = Point.mk(hb,-ht).plus(p);
+  let v2 = Point.mk(1.5*base,-ht).plus(p);
+  let v3 = Point.mk(base,0).plus(p);
+  return [v0,v1,v2,v3];
+}
+
+rs.gonCenter = function (gon) {
+  let cs = gon.corners;
+  let ln = cs.length;
+  let ps = cs[0];
+  for (let i=1;i<ln;i++) {
+    ps = ps.plus(cs[i]);
+  }
+  let avg = ps.times(1/ln);
+  return avg;
+ }
+    
+rs.mkGon = function (ps) {
+  let {gons,gonP} = this;
+  let gon = gonP.instantiate();
+  gons.push(gon);
+  gon.show();
+  gon.corners = ps;
+  gon.update();
+  debugger;
+  let cnt = this.gonCenter(gon);
+  gon.center = cnt;
+}
+
+rs.mkQuad = function (base,ip) {
+  let ps = this.mkQuadVertices(base,ip);
+  this.mkGon(ps);
+}
+
+rs.mkTri = function (base,ip) {
+  let ps = this.mkTriangleVertices(base,ip);
+  this.mkGon(ps);
+}
+ 
+
+
+rs.mkSegs = function (ps) {
+  let [v0,v1,v2] =ps;
   let lsA  = LineSegment.mk(v0,v1);
   let lsB  = LineSegment.mk(v1,v2);
   let lsC  = LineSegment.mk(v2,v0);
@@ -65,10 +119,20 @@ rs.mkTriangleSegs = function (base) {
 }
 
 
+rs.mkTriangleSegs = function (base,p) {
+  let ps = this.mkTriangleVertices(base,p);
+  return this.mkSegs(ps);
+}
+
+
 rs.initProtos = function () {
   let lineP = this.lineP = linePP.instantiate();
   lineP.stroke = 'white';
   lineP['stroke-width'] = .05;
+  let gonP = this.gonP = gonPP.instantiate();
+  gonP.stroke = 'white';
+  gonP['stroke-width'] = .05;
+  gonP.fill = 'blue';
 }
 rs.reverseSeg = function (ls) {
   let {end0,end1} = ls;
@@ -104,7 +168,7 @@ rs.initialize = function () {
   //this.connectSegs(lsB,lsC,n);
   //this.connectSegs(lsC,lsA,n);
 }
-rs.initializee = function () {
+rs.initialize = function () {
   let {width:wd} = this;
   debugger;
   this.initProtos();
@@ -125,7 +189,24 @@ rs.initializee = function () {
 }
   
   
-  
+rs.initialize = function () {
+  let {width:wd} = this;
+  debugger;
+  this.initProtos();
+  this.addFrame();
+  let lines = this.set('lines',arrayShape.mk());
+  let gons = this.set('gons',arrayShape.mk());
+  let trisegs = this.mkTriangleSegs(0.7*wd);
+  let [lsA,lsB,lsC] = trisegs;
+  this.addSeg(lsA);
+  this.addSeg(lsB);
+  this.addSeg(lsC);
+  return;
+  let n = 200;
+  n = 10;
+  this.mkTri(.2*wd,Point.mk(0,0));
+  //let quad = this.mkQuad(.2*wd,Point.mk(0,0));
+ }
 
 
 export {rs};
