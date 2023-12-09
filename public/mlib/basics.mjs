@@ -732,8 +732,54 @@ item.arrayToGray = function (a) {
   let rgb = `rgb(${r},${g},${b})`;
   return rgb;
 }
-item.randomRGB = function (rv,gv,bv,lb,ub) {
-  return this.arrayToRGB(this.randomArray([rv,gv,bv],lb,ub));
+
+item.sumArrays = function (aa) { 
+  let a0 = aa[0];
+  let iln = a0.length;
+  let ivl = a0.map( ()=>0);
+  aa.forEach ( (iv) => {
+    for (let i=0;i<iln;i++) {
+      ivl[i] = ivl[i]+iv[i];
+    }
+  }); 
+  return ivl;
+}  
+  
+
+item.arrayTimes = function (a,x) {
+  let ra = a.map((v) = x*v);
+  return ra;
+}
+ 
+    
+
+
+rs.interpolate = function (lb,ub,fr) {
+  let delta = ub-lb;
+  let v = lb+fr*delta;
+  return v;
+}
+
+rs.interpolateArrays = function(a0,a1,fr) {
+  let ln = a0.length; //a1 must have the same length
+  let ar = [];
+  for (let i=0;i<ln;i++) {
+    let a0e = a0[i];
+    let a1e = a1[i];
+    let v = this.interpolate(a0e,a1e,fr);
+    ar.push(v);
+  }
+  return ar;
+}
+item.randomColorArray = function (lb,ub,ia) {
+   let a =ia?ia:3;
+   let ra = this.randomArray(lb,ub,a);
+   let cra = ra.map(Math.floor);
+   return cra;
+}
+item.randomRGB = function (lb,ub,ia) {
+  let a =ia?ia:3;
+  return this.arrayToRGB(this.randomArray(lb,ub,a));
 }
 }
 export {rs};
