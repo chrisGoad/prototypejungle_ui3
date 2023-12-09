@@ -128,7 +128,7 @@ rs.mkTriangleSegs = function (base,p) {
 rs.initProtos = function () {
   let lineP = this.lineP = linePP.instantiate();
   lineP.stroke = 'white';
-  lineP['stroke-width'] = .5;
+  lineP['stroke-width'] = .05;
   let gonP = this.gonP = gonPP.instantiate();
   gonP.stroke = 'white';
   gonP['stroke-width'] = .0;
@@ -172,149 +172,7 @@ rs.initialize = function () {
   //this.connectSegs(lsB,lsC,n);
   //this.connectSegs(lsC,lsA,n);
 }
-rs.initialize = function () {
-  let {width:wd} = this;
-  debugger;
-  this.initProtos();
-  this.addFrame();
-  let lines = this.set('lines',arrayShape.mk());
-  let trisegs = this.mkTriangleSegs(0.7*wd);
-  let [lsA,lsB,lsC] = trisegs;
-  let n = 200;
-  n = 10;
-  this.connectSegs(lsA,this.reverseSeg(lsB),n);
-  this.connectSegs(lsB,this.reverseSeg(lsC),n);
-  //this.connectSegs(lsC,this.rreverseSeg(lsA),n);
-  this.addSeg(lsA);
-  this.addSeg(lsB);
-  this.addSeg(lsC);
-  //this.connectSegs(lsB,lsC,n);
-  //this.connectSegs(lsC,lsA,n);
-}
-  
-rs.addRow =  function (j) {
-  let {pal,sbase} = this;
-  let ln = pal.length;
-  let nq = ln - j-1;
-  let  v= pal[j];
-  let {x,y} =v;
-  for (let i=0;i<nq;i++) {
-    let p = Point.mk(x+sbase*i,y);
-    let qvs = this.mkQuadVertices(sbase,p);
-    this.mkGon(qvs);
-  }
-  let p = Point.mk(x+sbase*nq,y);
-  let qvs = this.mkTriangleVertices(sbase,p);
-  this.mkGon(qvs);
-}
 
-rs.orthVector = function (sg) {
-  let {end0,end1} = sg;
-  let vec = end1.difference(end0);
-  let ln = vec.length();
-  let nvec = vec.times(1/ln);
-  let {x,y} =nvec;
-  let nv = Point.mk(-y,x);
-  return nv.times(1);
-}
-
-rs.orthSeg = function (sg) {
-  let e0 = sg.end0;
-  let ov = this.orthVector(sg).times(10);
-  let oseg = LineSegment.mk(e0,e0.plus(ov));
-  return oseg;
-}
-
-rs.distFromSeg = function (p,sg) {
-  let ov = this.orthVector(sg);
-  let e0 = sg.end0;
-  let pv = p.difference(e0);
-  let d = ov.dotp(pv);
-  return d;
-}
-
-
-  
-  
-rs.initialize = function () {
-  debugger;
-  this.initProtos();
-   let {width:wd,circleP} = this;
- this.addFrame();
-  let lines = this.set('lines',arrayShape.mk());
-  let gons = this.set('gons',arrayShape.mk());
- /* let c = this.set('c',circleP.instantiate());
-  c.dimension = 10;
-  c.show();
-  c.update();*/
-  let bbase = this.bbase = 0.7*wd;
-  let a2r = Math.PI/180;
-  let tht = bbase*Math.sin(60*a2r);
-  let trisegs = this.mkTriangleSegs(bbase);
-  let [lsA,lsB,lsC] = trisegs;
-  this.addSeg(lsA);
-  this.addSeg(lsB);
-  this.addSeg(lsC);
-  let olsA  = this.orthSeg(lsA);
-  let olsB = this.orthSeg(lsB);
-  let olsC = this.orthSeg(lsC);
-  this.addSeg(olsA);
-  this.addSeg(olsB);
-  this.addSeg(olsC);
- 
-  
- // return;
-  let n = 200;
- // n = 10;
-  n = 5;
-  let pal = this.pal = this.pointsAlong(lsA,n);
-  pal.unshift(lsA.end0);
-  let sbase = this.sbase = bbase/(n+1);
-  /*let {end0,end1} = lsA;
- this.connectSegs(lsA,this.reverseSeg(lsB),n);
-  this.connectSegs(lsB,this.reverseSeg(lsC),n);*/
-  let ln = pal.length;
-  for (let i=0;i<ln;i++) {
-    this.addRow(i);
-  }
-  let lng = gons.length;
-  debugger;
-  let c0 = this.randomColorArray(10,250,3);
-  let c1 = this.randomColorArray(10,250,3);
-  let c2 = this.randomColorArray(10,250,3);
- 
-  c0 = [250,250,0];
-  c1 = [0,250,250];
-  c2 = [250,0,250];
-  for (let i = 0;i<lng;i++) {
-    let gon = gons[i];
-    let pt = gon.center;
-    
-    let dA = tht-this.distFromSeg(pt,lsA);
-    let dB = tht-this.distFromSeg(pt,lsB);
-    let dC = tht-this.distFromSeg(pt,lsC);
-    console.log('pt',pt,'dA',dA,'dB',dB,'dC',dC);
-    let fA = 1/dA;
-    let fB = 1/dB;
-    let fC = 1/dC;
-    let sum = fA+fB+fC;
-    let nfA = fA/sum;
-    let nfB = fB/sum;
-    let nfC = fC/sum;
-    console.log('NFA',nfA,'nfB',nfB,'nfC',nfC);
-    let wc0A = c0.map((v) => nfA*v);
-    let wc1B = c1.map((v) => nfB*v);
-    let wc2C = c2.map((v) => nfC*v);
-    
-    debugger;
-    let suma = this.sumArrays([wc0A,wc1B,wc2C]);
-    let fill = this.arrayToRGB(suma);
-    gon.fill = fill;
-
-  }
-  //this.mkTri(.2*wd,Point.mk(0,0));
-  //let quad = this.mkQuad(.2*wd,Point.mk(0,0));
- }
 
 
 export {rs};
