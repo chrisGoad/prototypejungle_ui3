@@ -753,14 +753,13 @@ item.arrayTimes = function (a,x) {
  
     
 
-
-rs.interpolate = function (lb,ub,fr) {
+item.interpolate = function (lb,ub,fr) {
   let delta = ub-lb;
   let v = lb+fr*delta;
   return v;
 }
 
-rs.interpolateArrays = function(a0,a1,fr) {
+item.interpolateArrays = function(a0,a1,fr) {
   let ln = a0.length; //a1 must have the same length
   let ar = [];
   for (let i=0;i<ln;i++) {

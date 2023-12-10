@@ -246,6 +246,7 @@ c:\ffmpeg\bin\ffmpeg  -framerate 2 -i animations/curves_9_f%03d.jpg -s 500x500  
 c:\ffmpeg\bin\ffmpeg  -framerate 20 -i animations/curves_10_f%03d.jpg -s 700x700  export/curves_10.gif
 c:\ffmpeg\bin\ffmpeg  -framerate 20 -i animations/stripes_1_f%03d.jpg -s 500x500  export/stripes_1.gif
 c:\ffmpeg\bin\ffmpeg  -framerate 20 -i animations/drop_circles_26_f%03d.jpg -s 500x500  export/drop_circles_26.gif
+c:\ffmpeg\bin\ffmpeg  -framerate 20 -i animations/triangle_1_f%03d.jpg -s 500x500  export/triangle_1.gif
 
 
 c:\ffmpeg\bin\ffmpeg -i export/bounce_12.mp4 -i export/bounce_12.wav -c:v copy -c:a aac -map 0:v -map 1:a export/blend_test.mp4

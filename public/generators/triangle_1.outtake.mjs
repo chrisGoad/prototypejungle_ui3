@@ -13,6 +13,10 @@ rs.setName('triangle_1');
 let ht= 100;
 let nr = 101;
 //nr = 5	;
+ let color0 = [250,250,10];
+      let color1 = [238,105,65];
+      let color2 = [10,10,250];
+      let color3 = [10,10,10];
 
 let topParams = {width:ht,height:ht,numRows:nr,numCols:nr,framePadding:0.01*ht,frameStrokee:'white',frameStrokeWidth:.1,saveAnimation:1,oneShot:1,
 numSteps:200,chopOffBeginningg:218,stepInterval:50,ULC:[250,0,0],URC:[0,0,250],LLC:[0,250,0],LRC:[0,250,0],period:20,xgapf:.1,ygapf:.1};//50
@@ -170,7 +174,45 @@ rs.addPoint = function (p) {
   c.moveto(p);
   c.update();
 }
-
+/*
+rs.initialize = function () {
+  let {width:wd} = this;
+  debugger;
+  this.initProtos();
+  this.addFrame();
+  let lines = this.set('lines',arrayShape.mk());
+  let trisegs = this.mkTriangleSegs(0.7*wd);
+  let [lsA,lsB,lsC] = trisegs;
+  let n = 200;
+  //this.connectSegs(lsA,this.reverseSeg(lsB),n);
+  this.connectSegs(lsB,this.rreverseSeg(lsC),n);
+  this.connectSegs(lsC,this.rreverseSeg(lsA),n);
+  this.addSeg(lsA);
+  this.addSeg(lsB);
+  this.addSeg(lsC);
+  //this.connectSegs(lsB,lsC,n);
+  //this.connectSegs(lsC,lsA,n);
+}
+rs.initialize = function () {
+  let {width:wd} = this;
+  debugger;
+  this.initProtos();
+  this.addFrame();
+  let lines = this.set('lines',arrayShape.mk());
+  let trisegs = this.mkTriangleSegs(0.7*wd);
+  let [lsA,lsB,lsC] = trisegs;
+  let n = 200;
+  n = 10;
+  this.connectSegs(lsA,this.reverseSeg(lsB),n);
+  this.connectSegs(lsB,this.reverseSeg(lsC),n);
+  //this.connectSegs(lsC,this.rreverseSeg(lsA),n);
+  this.addSeg(lsA);
+  this.addSeg(lsB);
+  this.addSeg(lsC);
+  //this.connectSegs(lsB,lsC,n);
+  //this.connectSegs(lsC,lsA,n);
+}
+*/
   
 rs.addRow =  function (j) {
   let {pal,sbase} = this;
@@ -237,7 +279,7 @@ rs.paintIt= function (params) {
   let {cornerColors:cc,angle:a,segs,center}=params;
   let {bbase,sbase,gons} =this;
   debugger;
-  let [c0,c1,c2,c3] = cc;
+  let [c0,c1,c2] = cc;
   let a2r = Math.PI/180;
   let tht = bbase*Math.sin(60*a2r);
   let [lsA,lsB,lsC]  = segs;
@@ -268,28 +310,21 @@ rs.paintIt= function (params) {
     let dA = tht-this.distFromSeg(pt,lsA);
     let dB = tht-this.distFromSeg(pt,lsB);
     let dC = tht-this.distFromSeg(pt,lsC);
-    let dCnt = 2*(pt.difference(center)).length();
-    console.log('pt',pt,'dA',dA,'dB',dB,'dC',dC,dCnt);
+    console.log('pt',pt,'dA',dA,'dB',dB,'dC',dC);
     let fA = 1/dA;
     let fB = 1/dB;
     let fC = 1/dC;
-    let fCnt = 1/dCnt;
-    let sum = c3?fA+fB+fC+fCnt:fA+fB+fC;
+    let sum = fA+fB+fC;
     let nfA = fA/sum;
     let nfB = fB/sum;
     let nfC = fC/sum;
-    let nfCnt = fCnt/sum;
     console.log('NFA',nfA,'nfB',nfB,'nfC',nfC);
     let wc0A = ca0.map((v) => nfA*v);
     let wc1B = ca1.map((v) => nfB*v);
     let wc2C = ca2.map((v) => nfC*v);
-    let wc3Cnt;
-    if (c3) {
-      wc3Cnt = c3.map((v) => nfCnt*v);
-    }
     
     debugger;
-    let suma = c3?this.sumArrays([wc0A,wc1B,wc2C,wc3Cnt]):this.sumArrays([wc0A,wc1B,wc2C]);
+    let suma = this.sumArrays([wc0A,wc1B,wc2C]);
     let fill = this.arrayToRGB(suma);
     gon.fill = fill;
     gon.update();
@@ -306,6 +341,10 @@ rs.initialize = function () {
   let lines = this.set('lines',arrayShape.mk());
   let gons = this.set('gons',arrayShape.mk());
   let points = this.set('points',arrayShape.mk());
+ /* let c = this.set('c',circleP.instantiate());
+  c.dimension = 10;
+  c.show();
+  c.update();*/
   let bbase = this.bbase = 0.9*wd;
   let a2r = Math.PI/180;
   let tht = bbase*Math.sin(60*a2r);
@@ -315,10 +354,41 @@ rs.initialize = function () {
   this.addSeg(lsB);
   this.addSeg(lsC);
   let triCenter = this.triCenter = this.triangleCenter(bbase);
+
+ /* let na = 360;
+  let ai = (2*Math.PI/na);
+  debugger;
+  this.addPoint(triCenter);
+  var lstw;
+  for (let i=0;i<na;i++) {
+    let a = ai*i;
+    debugger;
+    let intr = this.intersectSegs(triCenter,a,trisegs);
+    if (intr) {
+      let {which:wh,intersection:isct} = intr;
+      if (wh!==lstw) {
+        console.log('a',a/a2r,'which',wh);
+        this.addPoint(isct);
+        lstw = wh;
+      }
+    } else {
+      console.log('at',a/a2r,' no intersection');
+    }
+  }
+ 
+  return;
+  */
   let olsA  = this.orthSeg(lsA);
   let olsB = this.orthSeg(lsB);
   let olsC = this.orthSeg(lsC);
+  //this.addSeg(olsA);
+  //this.addSeg(olsB);
+  //this.addSeg(olsC);
+ 
+  
+ // return;
   let n = 200;
+ // n = 10;
   n = 50;
   let pal = this.pal = this.pointsAlong(lsA,n);
   pal.unshift(lsA.end0);
@@ -334,7 +404,6 @@ rs.initialize = function () {
   let c0 = this.randomColorArray(10,250,3);
   let c1 = this.randomColorArray(10,250,3);
   let c2 = this.randomColorArray(10,250,3);
-  let c3 = this.randomColorArray(10,250,3);
  
   c0 = [250,250,250];
   c1 = [0,0,0];
@@ -342,14 +411,40 @@ rs.initialize = function () {
    c0 = [250,0,0];
   c1 = [0,250,0];
   c2 = [0,0,250];
-  c3 = [250,250,0];
-  let cornerColors = this.cornerColors = [c0,c1,c2];//c3];
+  let cornerColors = this.cornerColors = [c0,c1,c2];
   let cangle = this.cangle = 0;
   let pparams = {cornerColors,angle:cangle,segs:trisegs,center:triCenter};
   this.paintIt(pparams);
+  return;
+  for (let i = 0;i<lng;i++) {
+    let gon = gons[i];
+    let pt = gon.center;
+    
+    let dA = tht-this.distFromSeg(pt,lsA);
+    let dB = tht-this.distFromSeg(pt,lsB);
+    let dC = tht-this.distFromSeg(pt,lsC);
+    console.log('pt',pt,'dA',dA,'dB',dB,'dC',dC);
+    let fA = 1/dA;
+    let fB = 1/dB;
+    let fC = 1/dC;
+    let sum = fA+fB+fC;
+    let nfA = fA/sum;
+    let nfB = fB/sum;
+    let nfC = fC/sum;
+    console.log('NFA',nfA,'nfB',nfB,'nfC',nfC);
+    let wc0A = c0.map((v) => nfA*v);
+    let wc1B = c1.map((v) => nfB*v);
+    let wc2C = c2.map((v) => nfC*v);
+    
+    debugger;
+    let suma = this.sumArrays([wc0A,wc1B,wc2C]);
+    let fill = this.arrayToRGB(suma);
+    gon.fill = fill;
 
-}
- 
+  }
+  //this.mkTri(.2*wd,Point.mk(0,0));
+  //let quad = this.mkQuad(.2*wd,Point.mk(0,0));
+ }
 
 rs.updateState = function () {
    debugger;
