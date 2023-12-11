@@ -770,6 +770,28 @@ item.interpolateArrays = function(a0,a1,fr) {
   }
   return ar;
 }
+// vValues specifies a vector (as array) of values at each vertex
+// given a point pt, this interpolates by inverse of distance  among those vectors
+item.interpolateVectors = function (params) {
+  let {vertices,vValues,pt} = params;
+  let vlen = vValues.length;
+  let ds = vertices.map((v) => pt.distance(v));
+  let fcs = ds.map((v)=>1/v);//factors
+  let sum =0;
+  fcs.forEach((v) => {
+    sum=sum+v;
+  });
+  let nfcs = fcs.map( (v) => v/sum);//normalized factors
+  let wvps = [];// weighted parameters
+  for (let j=0;j<vlen;j++) {
+    let vp = vValues[j];
+    let nfc = nfcs[j];
+    let wvp = vp.map((v)=>nfc*v);
+    wvps.push(wvp);
+  }
+  let suma= this.sumArrays(wvps);  //sum the weights
+  return suma;
+}  
 item.randomColorArray = function (lb,ub,ia) {
    let a =ia?ia:3;
    let ra = this.randomArray(lb,ub,a);

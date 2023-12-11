@@ -69,24 +69,6 @@ rs.adjustLines = function () {
 }
 
 
-rs.interpolate = function (lb,ub,fr) {
-  let delta = ub-lb;
-  let v = lb+fr*delta;
-  return v;
-}
-
-rs.interpolateArrays = function(a0,a1,fr) {
-  let ln = a0.length; //a1 must have the same length
-  let ar = [];
-  for (let i=0;i<ln;i++) {
-    let a0e = a0[i];
-    let a1e = a1[i];
-    let v = this.interpolate(a0e,a1e,fr);
-    ar.push(v);
-  }
-  return ar;
-}
-
 rs.gridMember = function (i,j) {
   let {lines,numRows:nr,numCols:nc} = this;
   let index = i+j*nc;

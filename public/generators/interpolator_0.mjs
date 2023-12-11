@@ -19,7 +19,7 @@ numSteps:200,chopOffBeginningg:218,stepInterval:50,ULC:[250,0,0],URC:[0,0,250],L
 //numSteps:295,chopOffBeginning:218,stepInterval:50,ULC:rs.randomFill('ran','ran','ran',100,250),URC:[0,0,250],LLC:[0,250,0],LRC:[0,250,0]};//50
 
 Object.assign(rs,topParams);
-
+/*
 rs.pointsAlong = function (ls,n) {
   let {end0,end1} = ls;
   let vec = end1.difference(end0);
@@ -49,7 +49,7 @@ rs.connectSegs = function(lsA,lsB,n) {
     line.update();
   }
 }
-
+*/
 rs.mkTriangleVertices = function (base,ip) {
   let a2r = Math.PI/180;
   let ht = base*Math.sin(60*a2r);
