@@ -257,7 +257,7 @@ item.addGonsForSubgrid = function (params) {
   let yavg = (yLow+yHigh)/2;
   let center = Point.mk(xavg,yavg);
   
-  
+  debugger;
   let gg = this.addGonGrid({numRows:ydiff,numCols:xdiff,width:subwd,height:subht,center});
   return gg;
 }
