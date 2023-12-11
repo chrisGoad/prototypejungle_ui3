@@ -5,7 +5,7 @@ let rs = generatorP.instantiate();
 debugger;
 
 rs.setName('rectangle_gon_grid_3');
-rs.randomColors = 0;
+rs.randomColors = 1;
 let cornerColors = {ULC:[240,66,207],URC:[101,153,125],LLC:[126,18,61],LRC:[223,204,20]};
 cornerColors = {ULC:[74,134,30],URC:[10,127,201],LLC:[17,171,209],LRC:[39,22,17]}
 cornerColors = {ULC:[55,72,197],URC:[230,120,25],LLC:[237,37,160],LRC:[227,47,244]}

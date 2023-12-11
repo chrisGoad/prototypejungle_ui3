@@ -47,25 +47,25 @@ rs.initialize = function () {
   let ULC,URC,LLC,LRC,CNC,subULC,subURC,subLLC,subLRC;
   let vValues;
   let ln = subParamsA.length;
+  let cc;
   if (randomColors) {
     let ULC =this.ULC=this.randomArray(10,250,['ran','ran','ran']);
     let URC = this.URC=this.randomArray(10,250,['ran','ran','ran']);
     let LLC =this.LLC=this.randomArray(10,250,['ran','ran','ran']);
     let LRC =this.LRC=this.randomArray(10,250,['ran','ran','ran']);
     let CNC =this.CNC=this.randomArray(10,250,['ran','ran','ran']);
-    vValues = [ULC,URC,LLC,LRC];
+    cc = {ULC,URC,LRC,LLC};
 
     subULC  =this.randomArray(10,250,['ran','ran','ran']);
     subURC  =this.randomArray(10,250,['ran','ran','ran']);
     subLLC =this.randomArray(10,250,['ran','ran','ran']);
     subLRC =this.randomArray(10,250,['ran','ran','ran']);
     for (let i=0;i<ln;i++) {
-      subParamsA[i].ULC = subULC;
-      subParamsA[i].URC = subURC;
-      subParamsA[i].LLC = subLLC;
-      subParamsA[i].LRC = subLRC;
+      let scc={ULC:subULC,URC:subURC,LRC:subLRC,LLC:subLLC};
+      subParamsA[i].cornerColors = scc;
     }
   } else {
+    cc = cornerColors;
     //let {ULC,URC,LRC,LLC} = cornerColors;
     //vValues = [ULC,URC,LLC,LRC];
   }
@@ -73,7 +73,7 @@ rs.initialize = function () {
   let {vertices,gons} = gg;
 
  // let vertices = this.mkRectangleVertices({width,height,center});
-  this.interpolateColors(gons,vertices,cornerColors);
+  this.interpolateColors(gons,vertices,cc);
   
 
   for (let i=0;i<ln;i++) {
