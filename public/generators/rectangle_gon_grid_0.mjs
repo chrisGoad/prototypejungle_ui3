@@ -11,7 +11,7 @@ rs.setName('rectangle_gon_grid_0');
 
 
 let ht= 100;
-let nr = 10;
+let nr = 50;
 //nr = 5	;
 
 let topParams = {width:ht,height:ht,numRows:nr,numCols:nr,framePadding:0.01*ht,frameStrokee:'white',frameStrokeWidth:.1,saveAnimation:1,oneShot:1,
@@ -46,13 +46,12 @@ rs.initialize = function () {
   let points = this.set('points',arrayShape.mk());
   let bbase = this.bbase = 0.9*wd;
   let gg = this.addGonGrid({numRows,numCols,width,height});
-  return;
   let c0 = [250,250,250];
   let c1 = [0,0,0];
   let c2 = [250,0,0];
-  let vValues =  [c0,c1,c2];
+  let c3= [0,0,250];
+  let vValues =  [c0,c1,c2,c3];
   let {vertices,gons} = gg;
-  debugger;
   this.interpolateColors(gons,vertices,vValues);
 }
     

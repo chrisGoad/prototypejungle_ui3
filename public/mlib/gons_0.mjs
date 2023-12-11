@@ -169,6 +169,7 @@ item.mkRectangleGon = function (center,width,height) {
   let {x:cx,y:cy} = center;
   let ps = [Point.mk(cx-hwd,cy-hht),Point.mk(cx+hwd,cy-hht),Point.mk(cx+hwd,cy+hht),Point.mk(cx-hwd,cy+hht)];
   let gon = this.mkGon(ps);
+  return gon;
 }
 item.addGonGrid = function (params) {
   debugger;
@@ -176,7 +177,23 @@ item.addGonGrid = function (params) {
   let xi = wd/nc;
   let yi = ht/nr;
   let cx = xi/2 -wd/2;
-  let cy =yi/2 -ht/2;
+  let gons = [];
+  for (let i=0;i<nc;i++) {
+    let cy =yi/2 -ht/2;
+    for (let j=0;j<nr;j++) {
+      let p = Point.mk(cx,cy);
+      let gon = this.mkRectangleGon(p,xi,yi);
+      gons.push(gon);
+      this.addGon(gon);
+      cy = cy+yi;
+    }
+    cx = cx+xi;
+  }
+  let hwd = wd/2;
+  let hht = ht/2;
+  let vertices = [Point.mk(-hwd,-hht),Point.mk(hwd,-hht),Point.mk(hwd,hht),Point.mk(-hwd,hht)];
+  return {vertices,gons}
+  
 }
 item.addGonTriangle = function (bbase,n) {
   let a2r = Math.PI/180;
