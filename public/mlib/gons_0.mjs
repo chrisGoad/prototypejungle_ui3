@@ -33,6 +33,17 @@ item.triangleCenter = function (base) {
   return Point.mk(0,0);
 }
 
+item.mkRectangleVertices = function (params) {
+  let {center,width:wd,height:ht} = params;
+  let hwd = wd/2;
+  let hht = ht/2;
+  let cnt = center?center:Point.mk(0,0);
+  let vs = [Point.mk(-wd,-ht),Point.mk(wd,-ht),Point.mk(wd,ht),Point.mk(-wd,ht)];
+  return vs;
+}
+  
+
+
 item.gonCenter = function (gon) {
   let cs = gon.corners;
   let ln = cs.length;
@@ -139,7 +150,7 @@ item.addRow =  function (pal,sbase,j) {
   }
   let p = Point.mk(x+sbase*nq,y);
   let qvs = this.mkTriangleVertices(sbase,p);
-  this.mkGon(qvs);
+  this.addGon(qvs);
 }
 
 
@@ -215,16 +226,33 @@ item.addGonTriangle = function (bbase,n) {
 
 }
 
-item.interpolateColors = function (gons,vertices,vValues)  {
+item.interpolateColors = function (gons,vertices,cornerColors,fn,dfn)  {
   gons.forEach((gon)=>{
+    let cc = cornerColors;
+    let vValues = [cc.ULC,cc.URC,cc.LRC,cc.LLC];
     let pt = this.gonCenter(gon);
-    let iv = this.interpolateVectors({vertices,vValues,pt});
-    let fill = this.arrayToRGB(iv);
+    let iv = this.interpolateVectors({vertices,vValues,pt,dfn});
+    let tv = fn?fn(iv):iv;
+    let fill = this.arrayToRGB(tv);
     gon.fill = fill;
     gon.update();
   });
 }
 
+item.addGonsForSubgrid = function (params) {
+  let {lowX,highX,lowY,highY,width,height,numRows,numCols} = params;
+  let xinc = width/numCols;
+  let yinc = height/numRows;
+  let xdiff = highX-lowX;
+  let ydiff = highY-lowY;
+  let subwd = xdiff*xinc;
+  let subht = ydiff*yinc;
+  let gg = this.addGonGrid({numRows:ydiff,numCols:xdiff,width:subwd,height:subht});
+  return gg;
+}
+  
+
+   
 }
 export {rs};
 

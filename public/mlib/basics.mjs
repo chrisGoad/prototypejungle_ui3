@@ -775,7 +775,12 @@ item.interpolateArrays = function(a0,a1,fr) {
 item.interpolateVectors = function (params) {
   let {vertices,vValues,pt} = params;
   let vlen = vValues.length;
-  let ds = vertices.map((v) => pt.distance(v));
+  let ds = vertices.map((v) => {
+    let d = pt.distance(v);
+    return d<0.01?.01:d;
+    return Math.sqrt(d);
+    return d>10?1000000:d;
+  });
   let fcs = ds.map((v)=>1/v);//factors
   let sum =0;
   fcs.forEach((v) => {
@@ -790,6 +795,8 @@ item.interpolateVectors = function (params) {
     wvps.push(wvp);
   }
   let suma= this.sumArrays(wvps);  //sum the weights
+  console.log('suma',suma[0],suma[1],suma[2]);
+  let sumd = suma[0]<100?[0,0,0]:[250,250,250];
   return suma;
 }  
 item.randomColorArray = function (lb,ub,ia) {
