@@ -9,6 +9,7 @@ sections:
       [0,'rectangle_gon_grid_1','instances',1,'Rectangle gon grid 1',{likes:0,posted:0,category:'drop'}], 
       [0,'rectangle_gon_grid_2','instances',1,'Rectangle gon grid 2',{likes:0,posted:0,category:'drop'}], 
       [0,'rectangle_gon_grid_3','instances',1,'Rectangle gon grid 3',{likes:0,posted:0,category:'drop'}], 
+      [0,'rectangle_gon_grid_4','instances',1,'Rectangle gon grid 4',{likes:0,posted:0,category:'drop'}], 
       [0,'triangle_4','generators',1,'Triangle 4',{likes:0,posted:0,category:'drop'}], 
       [0,'triangle_1','generators',1,'Triangle 1',{likes:0,posted:0,category:'drop'}], 
       [0,'triangle_0','generators',1,'Triangle 0',{likes:0,posted:0,category:'drop'}], 

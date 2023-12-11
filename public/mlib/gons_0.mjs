@@ -229,7 +229,8 @@ item.addGonTriangle = function (bbase,n) {
 item.interpolateColors = function (gons,vertices,cornerColors,fn,dfn)  {
   gons.forEach((gon)=>{
     let cc = cornerColors;
-    let vValues = [cc.ULC,cc.URC,cc.LRC,cc.LLC];
+    let isa = Array.isArray(cc);
+    let vValues = isa?cc:[cc.ULC,cc.URC,cc.LRC,cc.LLC];
     let pt = this.gonCenter(gon);
     let iv = this.interpolateVectors({vertices,vValues,pt,dfn});
     let tv = fn?fn(iv):iv;
@@ -247,7 +248,17 @@ item.addGonsForSubgrid = function (params) {
   let ydiff = highY-lowY;
   let subwd = xdiff*xinc;
   let subht = ydiff*yinc;
-  let gg = this.addGonGrid({numRows:ydiff,numCols:xdiff,width:subwd,height:subht});
+  let xLow = lowX*xinc;
+  let yLow = lowY*yinc;
+  let xHigh = highX*xinc;
+  let yHigh = highY*yinc;
+  let xvg = (xLow+xHigh)/2;
+  let xavg = (xLow+xHigh)/2;
+  let yavg = (yLow+yHigh)/2;
+  let center = Point.mk(xavg,yavg);
+  
+  
+  let gg = this.addGonGrid({numRows:ydiff,numCols:xdiff,width:subwd,height:subht,center});
   return gg;
 }
   
