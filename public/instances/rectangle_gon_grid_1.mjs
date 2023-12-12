@@ -6,7 +6,7 @@ debugger;
 let rs = generatorP.instantiate();
 
 
-rs.setName('interpolate_colors_2');
+rs.setName('rectangle_gon_grid_1');
 let ht= 100;
 let nr = 201;
 let lowX = 75;

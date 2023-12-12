@@ -185,6 +185,7 @@ item.mkRectangleGon = function (center,width,height) {
 item.addGonGrid = function (params) {
   debugger;
   let {numRows:nr,numCols:nc,width:wd,height:ht,center} = params;
+  let cnt = center?center:Point.mk(0,0);
   let xi = wd/nc;
   let yi = ht/nr;
   let cx = xi/2 -wd/2;
@@ -193,7 +194,7 @@ item.addGonGrid = function (params) {
     let cy =yi/2 -ht/2;
     for (let j=0;j<nr;j++) {
       let p = Point.mk(cx,cy);
-      let gon = this.mkRectangleGon(p,xi,yi);
+      let gon = this.mkRectangleGon(p.plus(cnt),xi,yi);
       gons.push(gon);
       this.addGon(gon);
       cy = cy+yi;
@@ -202,7 +203,7 @@ item.addGonGrid = function (params) {
   }
   let hwd = wd/2;
   let hht = ht/2;
-  let vertices = [Point.mk(-hwd,-hht),Point.mk(hwd,-hht),Point.mk(hwd,hht),Point.mk(-hwd,hht)];
+  let vertices = [Point.mk(-hwd,-hht).plus(cnt),Point.mk(hwd,-hht).plus(cnt),Point.mk(hwd,hht).plus(cnt),Point.mk(-hwd,hht).plus(cnt)];
   return {vertices,gons}
   
 }
@@ -231,8 +232,8 @@ item.interpolateColors = function (gons,vertices,cornerColors,fn,dfn)  {
     let cc = cornerColors;
     let isa = Array.isArray(cc);
     let vValues = isa?cc:[cc.ULC,cc.URC,cc.LRC,cc.LLC];
-    let pt = this.gonCenter(gon);
-    let iv = this.interpolateVectors({vertices,vValues,pt,dfn});
+    let p = this.gonCenter(gon);
+    let iv = this.interpolateVectors({vertices,vValues,p,dfn});
     let tv = fn?fn(iv):iv;
     let fill = this.arrayToRGB(tv);
     gon.fill = fill;
@@ -242,16 +243,18 @@ item.interpolateColors = function (gons,vertices,cornerColors,fn,dfn)  {
 
 item.addGonsForSubgrid = function (params) {
   let {lowX,highX,lowY,highY,width,height,numRows,numCols} = params;
+  let hwd = width/2;
+  let hht = height/2;
   let xinc = width/numCols;
   let yinc = height/numRows;
   let xdiff = highX-lowX;
   let ydiff = highY-lowY;
   let subwd = xdiff*xinc;
   let subht = ydiff*yinc;
-  let xLow = lowX*xinc;
-  let yLow = lowY*yinc;
-  let xHigh = highX*xinc;
-  let yHigh = highY*yinc;
+  let xLow = lowX*xinc-hwd;
+  let yLow = lowY*yinc-hht;
+  let xHigh = highX*xinc-hwd;
+  let yHigh = highY*yinc-hht;
   let xvg = (xLow+xHigh)/2;
   let xavg = (xLow+xHigh)/2;
   let yavg = (yLow+yHigh)/2;

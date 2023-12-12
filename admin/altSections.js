@@ -4,6 +4,7 @@ module.exports = {
 sections: 
 
 [     
+      [0,'drop_interpolate_0','generators',1,'drop interpolate 0',{likes:0,posted:0,category:'drop'}], 
       [0,'interpolator_0','generators',1,'Interpolator 0',{likes:0,posted:0,category:'drop'}], 
       [0,'rectangle_gon_grid_0','generators',1,'Rectangle gon grid 0',{likes:0,posted:0,category:'drop'}], 
       [0,'rectangle_gon_grid_1','instances',1,'Rectangle gon grid 1',{likes:0,posted:0,category:'drop'}], 

@@ -45,7 +45,11 @@ rs.generateCircleDrop= function (p) {
   let rv = 100;
   let gv = 100;
   //let fill = this.randomFill(null,'ran','ran','ran',100,250);
-  let fill = this.randomFill(rv,gv,'ran',100,250);
+ // let fill = this.randomFill(rv,gv,'ran',100,250);
+ //item.randomRGB = function (lb,ub,ia) {
+
+  let fill = this.randomRGB(100,250,[rv,gv,'ran']);
+ // let fill = this.randomRGB(100,250,3);
  // let fill = 'transparent';
   //let drop = {collideRadius:d*0.5*cf,dimension:d,fill};
   let drop = {collideRadius:1*d,dimension:d,fill};

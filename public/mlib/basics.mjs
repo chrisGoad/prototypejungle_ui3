@@ -716,9 +716,9 @@ item.randomArray = function (lb,ub,a) {
 
 
 item.arrayToRGB = function (a) {
-  let r = a[0];
-  let g = a[1];
-  let b = a[2];
+  let r = Math.floor(a[0]);
+  let g = Math.floor(a[1]);
+  let b = Math.floor(a[2]);
   let rgb = `rgb(${r},${g},${b})`;
   return rgb;
 }
@@ -773,13 +773,12 @@ item.interpolateArrays = function(a0,a1,fr) {
 // vValues specifies a vector (as array) of values at each vertex
 // given a point pt, this interpolates by inverse of distance  among those vectors
 item.interpolateVectors = function (params) {
-  let {vertices,vValues,pt} = params;
+  let {vertices,vValues,p,dfn} = params;
   let vlen = vValues.length;
   let ds = vertices.map((v) => {
-    let d = pt.distance(v);
+    let d = p.distance(v);
+    let dt = dfn?dfn(d):d;
     return d<0.01?.01:d;
-    return Math.sqrt(d);
-    return d>10?1000000:d;
   });
   let fcs = ds.map((v)=>1/v);//factors
   let sum =0;
@@ -807,7 +806,7 @@ item.randomColorArray = function (lb,ub,ia) {
 }
 item.randomRGB = function (lb,ub,ia) {
   let a =ia?ia:3;
-  return this.arrayToRGB(this.randomArray(lb,ub,a));
+  return this.arrayToRGB(this.randomColorArray(lb,ub,a));
 }
 }
 export {rs};
