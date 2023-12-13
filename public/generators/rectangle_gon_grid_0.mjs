@@ -11,7 +11,7 @@ rs.setName('rectangle_gon_grid_0');
 
 
 let ht= 100;
-let nr = 200;
+let nr = 500;
 //nr = 5	;
 
 let topParams = {width:ht,height:ht,numRows:nr,numCols:nr,framePadding:0.01*ht,frameStrokee:'white',frameStrokeWidth:.1,saveAnimation:1,oneShot:1,
@@ -59,43 +59,42 @@ rs.mkVertices = function (params) {
   return vs;
 }
 
-rs.colors =[[250,250,250],[250,250,250],[250,250,250],[250,250,250],[0,0,0],[250,250,250],[250,250,250],[0,0,0],[250,250,250],[250,250,250],[0,0,0],[0,0,0],[250,250,250],[0,0,0],[250,250,250],[250,250,250]];
+rs.colorss=[[250,250,250],[250,250,250],[250,250,250],[250,250,250],[0,0,0],[250,250,250],[250,250,250],[0,0,0],[250,250,250],[250,250,250],[0,0,0],[0,0,0],[250,250,250],[0,0,0],[250,250,250],[250,250,250]];
 
+rs.colorss =[[250,250,250],[250,250,250],[250,250,250],[250,250,250],[0,0,0],[250,250,250],[250,250,250],[0,0,0],[250,250,250],[250,250,250],[0,0,0],[0,0,0],[250,250,250],[0,0,0],[250,250,250],[250,250,250]];
 
 rs.mkColors = function (n) {
-  return this.colors;
-  let vs=[];
-  for (let i=0;i<n;i++) {
-    vs.push(Math.random()<0.5?[250,250,250]:[0,0,0]);
+  if  (this.colors) {
+    return this.colors;
   }
-  this.colors = vs;
-  const printArray = (a) => {
-    let st = '[';
-    let ln = a.length;
-    for (let i=0;i<ln;i++) {
-      st = st+a[i];
-      if (i<ln-1) {
-        st = st+',';
-      }
-    }
-    st = st+']';
-    return st;
-  }  
- const printArrays = (a) => {
-    let st = '[';
-    let ln = a.length;
-    for (let i=0;i<ln;i++) {
-      st = st+printArray(a[i]);
-      if (i<ln-1) {
-        st = st+',';
-      }
-    }
-    st = st+']';
-    return st;
-  }     
-  console.log('rs.colors ='+printArrays(vs)+';');
+  let vs=[];
+  let nmc = 5;
+  let ca =[[0,0,0],[250,250,250],[250,0,0],[0,250,0],[0,0,250]];
+  for (let i=0;i<n;i++) {
+    let wc = Math.floor(Math.random()*nmc);
+    vs.push(ca[wc]);
+  //  vs.push(Math.random()<0.5?[250,250,250]:[0,0,0]);
+  }	
+  console.log('rs.colors ='+JSON.stringify(vs)+';');
   return vs;
 }
+ rs.tfn = (v) => {
+  let v0 =v[0];
+  let v1 =v[1];
+  let v2 =v[2];
+  let vmod0 = Math.floor(v0%25);
+  let vmod1 = Math.floor(v1%25);
+  let vmod2 = Math.floor(v2%25);
+  let tbv0 = vmod0*25;
+  let tbv1 = vmod1*25;
+  let tbv2 = vmod2*25;
+  //return [tbv0,tbv1,tbv2];
+  return [tbv0,tbv0,tbv0];
+}
+
+
+ rs.dfn = (v) => v<0?25:v*v;
+
 
 rs.initialize = function () {
   debugger;
@@ -118,15 +117,8 @@ rs.initialize = function () {
  // let {vertices,gons} = gg;
  //const tfn = (v) => v[0]<125?[0,0,0]:[250,250,250];
  //const tfn = (v) => v[0]<125?[0,0,0]:(v[0]>150?[150,150,150]:v);
- const tfn = (v) => {
-  let v0 =v[0];
-  let vmod = Math.floor(v0%25);
-  let tbv = vmod*25;
-  return [tbv,tbv,tbv];
-}
- const dfn = (v) => v<0?25:v*v;
-  let {gons} = gg;
-  this.interpolateColors(gons,vertices,vValues,tfn,dfn);
+   let {gons} = gg;
+  this.interpolateColors(gons,vertices,vValues,this.tfn,this.dfn);
 }
     
 
