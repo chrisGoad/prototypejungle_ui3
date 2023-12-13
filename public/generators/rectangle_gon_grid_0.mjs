@@ -59,11 +59,41 @@ rs.mkVertices = function (params) {
   return vs;
 }
 
+rs.colors =[[250,250,250],[250,250,250],[250,250,250],[250,250,250],[0,0,0],[250,250,250],[250,250,250],[0,0,0],[250,250,250],[250,250,250],[0,0,0],[0,0,0],[250,250,250],[0,0,0],[250,250,250],[250,250,250]];
+
+
 rs.mkColors = function (n) {
+  return this.colors;
   let vs=[];
   for (let i=0;i<n;i++) {
     vs.push(Math.random()<0.5?[250,250,250]:[0,0,0]);
   }
+  this.colors = vs;
+  const printArray = (a) => {
+    let st = '[';
+    let ln = a.length;
+    for (let i=0;i<ln;i++) {
+      st = st+a[i];
+      if (i<ln-1) {
+        st = st+',';
+      }
+    }
+    st = st+']';
+    return st;
+  }  
+ const printArrays = (a) => {
+    let st = '[';
+    let ln = a.length;
+    for (let i=0;i<ln;i++) {
+      st = st+printArray(a[i]);
+      if (i<ln-1) {
+        st = st+',';
+      }
+    }
+    st = st+']';
+    return st;
+  }     
+  console.log('rs.colors ='+printArrays(vs)+';');
   return vs;
 }
 
