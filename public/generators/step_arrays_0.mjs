@@ -13,7 +13,7 @@ rs.interpolate = function (lb,ub,fr) {
   return lb+fr*delta;
 }
 
-rs.interpolateArrays = function (lba,uba,fr) {
+rs.interpolate = function (lba,uba,fr) {
   let ln = lb.length;
   let ra = [];
   for (let i=0;i<ln;i++) {

@@ -280,7 +280,7 @@ rs.interpolate = function (frmv,tov,fr) {
   return frmv +fr*(tov-frmv);
 }
 
-rs.interpolateArrays = function (frma,toa,fr) {
+rs.interpolate = function (frma,toa,fr) {
   let ln = frma.length;
   let rsa = [];
   for (let i=0;i<ln;i++) { 
@@ -297,7 +297,7 @@ rs.interpolateArrayOfArrays = function (frma,toa,fr) {
   for (let i=0;i<ln;i++) { 
     let frmv =frma[i];
     let tov = toa[i];
-    rsa.push(this.interpolateArrays(frmv,tov,fr));
+    rsa.push(this.interpolate(frmv,tov,fr));
   }
   return rsa;
 }

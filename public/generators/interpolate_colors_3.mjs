@@ -74,7 +74,7 @@ rs.interpolate = function (lb,ub,fr) {
   return v;
 }
 
-rs.interpolateArrays = function(a0,a1,fr) {
+rs.interpolate = function(a0,a1,fr) {
   let ln = a0.length; //a1 must have the same length
   let ar = [];
   for (let i=0;i<ln;i++) {
@@ -147,8 +147,8 @@ rs.paintCenteredGrid = function () {
   let LCNArrays= [];
   let LRArrays= [];
   
-  let TOPC = this.interpolateArrays(ULC,URC,0.5);
-  let BOTC = this.interpolateArrays(LLC,LRC,0.5);
+  let TOPC = this.interpolate(ULC,URC,0.5);
+  let BOTC = this.interpolate(LLC,LRC,0.5);
   
   for (let j=0;j<=cx;j++){
     let uj = j+cx;
@@ -156,19 +156,19 @@ rs.paintCenteredGrid = function () {
     let frm = j/cx;
     let lfr=uj/(nc-1)
     
-    let auleft = this.interpolateArrays(ULC,LLC,fr);
+    let auleft = this.interpolate(ULC,LLC,fr);
     ULArrays.push(auleft);
-    let alleft = this.interpolateArrays(ULC,LLC,lfr);
+    let alleft = this.interpolate(ULC,LLC,lfr);
     LLArrays.push(alleft);
     
-    let aucenter = this.interpolateArrays(TOPC,CNC,frm);
+    let aucenter = this.interpolate(TOPC,CNC,frm);
     UCNArrays.push(aucenter);
-    let alcenter = this.interpolateArrays(CNC,BOTC,frm);
+    let alcenter = this.interpolate(CNC,BOTC,frm);
     LCNArrays.push(alcenter);
     
-    let auright = this.interpolateArrays(URC,LRC,fr);
+    let auright = this.interpolate(URC,LRC,fr);
     URArrays.push(auright);
-    let alright = this.interpolateArrays(URC,LRC,lfr);
+    let alright = this.interpolate(URC,LRC,lfr);
     LRArrays.push(alright);
   }
   let cnt=0;
@@ -182,10 +182,10 @@ rs.paintCenteredGrid = function () {
 
     for (let i=0;i<=cx;i++) {
       let fr = i/cx;
-      let aul = this.interpolateArrays(auleft,aucenter,fr);
-      let aur = this.interpolateArrays(aucenter,auright,fr);
-      let all = this.interpolateArrays(alleft,alcenter,fr);
-      let alr = this.interpolateArrays(alcenter,alright,fr);
+      let aul = this.interpolate(auleft,aucenter,fr);
+      let aur = this.interpolate(aucenter,auright,fr);
+      let all = this.interpolate(alleft,alcenter,fr);
+      let alr = this.interpolate(alcenter,alright,fr);
       let mins =.03
     //  sizeFs[cnt] =1- (mins + (1-mins)*(a[3]/260));
       cnt++;
@@ -224,10 +224,10 @@ rs.paintSubgrid = function (params) {
     let fr = (j-lowY)/(1+highY-lowY);
    // console.log('fr',fr);
     
-    let left = this.interpolateArrays(ULC,LLC,fr);
+    let left = this.interpolate(ULC,LLC,fr);
     LArrays.push(left);
     
-    let right = this.interpolateArrays(URC,LRC,fr);
+    let right = this.interpolate(URC,LRC,fr);
     RArrays.push(right);
   }
   let cnt=0;
@@ -237,7 +237,7 @@ rs.paintSubgrid = function (params) {
    
     for (let i=lowX;i<=highX;i++) {
       let fr = (i-lowX)/(1+highX-lowX);
-      let c = this.interpolateArrays(left,right,fr);
+      let c = this.interpolate(left,right,fr);
     
       let line = this.gridMember(i,j);
       line.stroke = this.arrayToRGB(c);
@@ -265,7 +265,7 @@ rs.colorNow = function (period,colorA) { // period = steps between colors; color
   let cnum1 = (cnum0+1)% len;
   let c0 = colorA[cnum0];
   let c1 = colorA[cnum1];
-  let c = this.interpolateArrays(c0,c1,fr);
+  let c = this.interpolate(c0,c1,fr);
   console.log('ssf',ssf,'cnum0',cnum0,'cnum1',cnum1,'fr',fr);
   if (fr > 1) {
     debugger;

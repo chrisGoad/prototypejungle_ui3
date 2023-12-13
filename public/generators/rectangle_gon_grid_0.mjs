@@ -11,7 +11,7 @@ rs.setName('rectangle_gon_grid_0');
 
 
 let ht= 100;
-let nr = 500;
+let nr = 200;
 //nr = 5	;
 
 let topParams = {width:ht,height:ht,numRows:nr,numCols:nr,framePadding:0.01*ht,frameStrokee:'white',frameStrokeWidth:.1,saveAnimation:1,oneShot:1,
@@ -64,20 +64,19 @@ rs.colorss=[[250,250,250],[250,250,250],[250,250,250],[250,250,250],[0,0,0],[250
 rs.colorss =[[250,250,250],[250,250,250],[250,250,250],[250,250,250],[0,0,0],[250,250,250],[250,250,250],[0,0,0],[250,250,250],[250,250,250],[0,0,0],[0,0,0],[250,250,250],[0,0,0],[250,250,250],[250,250,250]];
 
 rs.mkColors = function (n) {
-  if  (this.colors) {
-    return this.colors;
-  }
+  let colors =this.colors;
   let vs=[];
   let nmc = 5;
   let ca =[[0,0,0],[250,250,250],[250,0,0],[0,250,0],[0,0,250]];
   for (let i=0;i<n;i++) {
     let wc = Math.floor(Math.random()*nmc);
-    vs.push(ca[wc]);
+    vs.push(colors?colors[i]:ca[wc]);
   //  vs.push(Math.random()<0.5?[250,250,250]:[0,0,0]);
   }	
   console.log('rs.colors ='+JSON.stringify(vs)+';');
   return vs;
 }
+rs.colors =[[0,0,0],[0,0,250],[0,0,0],[0,250,0],[0,250,0],[0,250,0],[0,250,0],[250,0,0],[0,0,0],[0,0,0],[250,0,0],[250,0,0],[0,0,250],[250,250,250],[250,250,250],[0,0,250]];
  rs.tfn = (v) => {
   let v0 =v[0];
   let v1 =v[1];

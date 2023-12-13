@@ -752,14 +752,27 @@ item.arrayTimes = function (a,x) {
 }
  
     
+//
+item.interpolate = function (a0,a1,fr) {
+  let isa = Array.isArray(a0);
+  let ar;
+  if (isa) {
+    let ln = a0.length; //a1 must have the same length
+    ar = [];
+    for (let i=0;i<ln;i++) {
+      let a0e = a0[i];
+      let a1e = a1[i];
+      let v = this.interpolate(a0e,a1e,fr);
+      ar.push(v);
+    }
+  } else {
+    let delta = a1-a0;
+    ar = a0+fr*delta;
+  }
+  return ar;
+}	
 
-item.interpolate = function (lb,ub,fr) {
-  let delta = ub-lb;
-  let v = lb+fr*delta;
-  return v;
-}
-
-item.interpolateArrays = function(a0,a1,fr) {
+item.interpolateArrayss	 = function(a0,a1,fr) {
   let ln = a0.length; //a1 must have the same length
   let ar = [];
   for (let i=0;i<ln;i++) {
@@ -770,6 +783,7 @@ item.interpolateArrays = function(a0,a1,fr) {
   }
   return ar;
 }
+
 // vValues specifies a vector (as array) of values at each vertex
 // given a point pt, this interpolates by inverse of distance  among those vectors
 item.interpolateVectors = function (params) {

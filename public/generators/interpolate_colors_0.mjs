@@ -84,7 +84,7 @@ rs.interpolate = function (lb,ub,fr) {
   return v;
 }
 
-rs.interpolateArrays = function(a0,a1,fr) {
+rs.interpolate = function(a0,a1,fr) {
   let ln = a0.length; //a1 must have the same length
   let ar = [];
   for (let i=0;i<ln;i++) {
@@ -122,10 +122,10 @@ rs.paintGrid = function () {
   let rightArrays = [];
   for (let j=0;j<nc;j++){
     let fr = j/(nc-1);
-    let aleft = this.interpolateArrays(ULC,LLC,fr);
+    let aleft = this.interpolate(ULC,LLC,fr);
     debugger;
     leftArrays.push(aleft);
-    let aright = this.interpolateArrays(URC,LRC,fr);
+    let aright = this.interpolate(URC,LRC,fr);
     rightArrays.push(aright);
     /*let rgbLeft = this.arrayToRGB(aleft);
     let rgbRight = this.arrayToRGB(aright);
@@ -142,7 +142,7 @@ rs.paintGrid = function () {
     let aright = rightArrays[j];
     for (let i=0;i<nc;i++) {
       let fr = i/(nc-1);
-      let a = this.interpolateArrays(aleft,aright,fr);
+      let a = this.interpolate(aleft,aright,fr);
       let mins =.03
     //  sizeFs[cnt] =1- (mins + (1-mins)*(a[3]/260));
       cnt++;
@@ -213,7 +213,7 @@ rs.colorNow = function (period,colorA) { // period = steps between colors; color
   let cnum1 = (cnum0+1)% len;
   let c0 = colorA[cnum0];
   let c1 = colorA[cnum1];
-  let c = this.interpolateArrays(c0,c1,fr);
+  let c = this.interpolate(c0,c1,fr);
   console.log('ssf',ssf,'cnum0',cnum0,'cnum1',cnum1,'fr',fr);
   if (fr > 1) {
     debugger;

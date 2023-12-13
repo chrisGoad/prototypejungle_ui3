@@ -241,7 +241,7 @@ rs.paintIt= function (params) {
   let a2r = Math.PI/180;
   let tht = bbase*Math.sin(60*a2r);
   let [lsA,lsB,lsC]  = segs;
-  let ii = this.interpolateArrays;
+  let ii = this.interpolate;
   let i0 =  this.intersectSegs(center,a+30*a2r,segs);
   let i1 =  this.intersectSegs(center,a+150*a2r,segs);
   let i2 =  this.intersectSegs(center,a+270*a2r,segs);
@@ -254,7 +254,7 @@ rs.paintIt= function (params) {
     let svec = intsct.difference(end0);
     let sln = svec.length();
     let fr = sln/bbase;
-    let ca = this.interpolateArrays(ce0,ce1,fr);
+    let ca = this.interpolate(ce0,ce1,fr);
     return ca;
   }
   let ca0 = getColor(i0);

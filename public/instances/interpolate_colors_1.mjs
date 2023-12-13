@@ -79,7 +79,7 @@ rs.colorNow = function (period,colorA) { // period = steps between colors; color
   let cnum1 = (cnum0+1)% len;
   let c0 = colorA[cnum0];
   let c1 = colorA[cnum1];
-  let c = this.interpolateArrays(c0,c1,fr);
+  let c = this.interpolate(c0,c1,fr);
   console.log('ssf',ssf,'cnum0',cnum0,'cnum1',cnum1,'fr',fr);
   if (fr > 1) {
     debugger;
