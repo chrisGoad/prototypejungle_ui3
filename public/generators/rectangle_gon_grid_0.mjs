@@ -82,12 +82,18 @@ rs.initialize = function () {
   let c2 = [250,0,0];
   let c3= [0,0,250];
   //let vValues =  [c0,c1,c2,c3];
-  let n=8;
+  let n=4;
   let vValues =  this.mkColors(n*n);
   let vertices = this.mkVertices({width,height,n});
  // let {vertices,gons} = gg;
  //const tfn = (v) => v[0]<125?[0,0,0]:[250,250,250];
- const tfn = (v) => v[0]<125?[0,0,0]:(v[0]>150?[150,150,150]:v);
+ //const tfn = (v) => v[0]<125?[0,0,0]:(v[0]>150?[150,150,150]:v);
+ const tfn = (v) => {
+  let v0 =v[0];
+  let vmod = Math.floor(v0%25);
+  let tbv = vmod*25;
+  return [tbv,tbv,tbv];
+}
  const dfn = (v) => v<0?25:v*v;
   let {gons} = gg;
   this.interpolateColors(gons,vertices,vValues,tfn,dfn);

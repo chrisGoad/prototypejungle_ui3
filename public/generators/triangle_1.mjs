@@ -14,7 +14,7 @@ let ht= 100;
 let nr = 101;
 //nr = 5	;
 
-let topParams = {width:ht,height:ht,numRows:nr,numCols:nr,framePadding:0.01*ht,frameStrokee:'white',frameStrokeWidth:.1,saveAnimation:1,oneShot:1,
+let topParams = {width:ht,height:ht,numRows:nr,numCols:nr,framePadding:0.1*ht,frameStrokee:'white',frameStrokeWidth:.1,saveAnimation:1,oneShot:1,
 numSteps:200,chopOffBeginningg:218,stepInterval:50,ULC:[250,0,0],URC:[0,0,250],LLC:[0,250,0],LRC:[0,250,0],period:20,xgapf:.1,ygapf:.1};//50
 //numSteps:295,chopOffBeginning:218,stepInterval:50,ULC:rs.randomFill('ran','ran','ran',100,250),URC:[0,0,250],LLC:[0,250,0],LRC:[0,250,0]};//50
 
@@ -50,12 +50,14 @@ rs.connectSegs = function(lsA,lsB,n) {
   }
 }
 
+rs.yoff = 10;
 rs.mkTriangleVertices = function (base,ip) {
+  let {yoff} = this;
   let a2r = Math.PI/180;
   let ht = base*Math.sin(60*a2r);
   let hht = 0.5*ht;
   let hb = 0.5*base;
-  let p=ip?ip:Point.mk(-hb,0.3333333*ht);
+  let p=ip?ip:Point.mk(-hb,0.3333333*ht+yoff);
   let v0 = Point.mk(0,0).plus(p);
   let v1 = Point.mk(hb,-ht).plus(p);
   let v2 = Point.mk(base,0).plus(p);
@@ -63,9 +65,10 @@ rs.mkTriangleVertices = function (base,ip) {
 }
 
 rs.triangleCenter = function (base) {
+   let {yoff} = this;
   let a2r = Math.PI/180;
   let ht = base*Math.sin(60*a2r);
-  let p=Point.mk(0,0);//.3333333*ht);
+  let p=Point.mk(0,yoff);//.3333333*ht);
   return p;
 }
 
@@ -340,10 +343,10 @@ rs.initialize = function () {
   c1 = [0,0,0];
   c2 = [250,0,0];
   c2 = [0,0,0];
-  /* c0 = [250,0,0];
+   c0 = [250,0,0];
   c1 = [0,250,0];
   c2 = [0,0,250];
-  c3 = [250,250,0];*/
+  c3 = [250,250,0];
   let cornerColors = this.cornerColors = [c0,c1,c2];//c3];
   let cangle = this.cangle = 0;
   let pparams = {cornerColors,angle:cangle,segs:trisegs,center:triCenter};
