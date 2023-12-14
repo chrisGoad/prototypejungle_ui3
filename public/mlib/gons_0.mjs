@@ -183,7 +183,6 @@ item.mkRectangleGon = function (center,width,height) {
   return gon;
 }
 item.addGonGrid = function (params) {
-  debugger;
   let {numRows:nr,numCols:nc,width:wd,height:ht,center} = params;
   let cnt = center?center:Point.mk(0,0);
   let xi = wd/nc;

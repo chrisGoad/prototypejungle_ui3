@@ -808,7 +808,6 @@ item.interpolateVectors = function (params) {
     wvps.push(wvp);
   }
   let suma= this.sumArrays(wvps);  //sum the weights
-  //console.log('suma',suma[0],suma[1],suma[2]);
   let sumd = suma[0]<100?[0,0,0]:[250,250,250];
   return suma;
 }  
