@@ -4,16 +4,17 @@ import {rs as circlePP} from '/shape/circle.mjs';
 import {rs as basicP} from '/generators/basics.mjs';
 import {rs as addGonMethods} from '/mlib/gons_0.mjs';
 import {rs as addAnimation} from '/mlib/animate0.mjs';
-debugger;
+import {rs as motionHistory} from '/motionHistory.mjs';
 
 let rs = basicP.instantiate();
+rs.motionHistory = motionHistory;
 addGonMethods(rs);
 addAnimation(rs);
 rs.setName('rectangle_gon_grid_0');
 
 
 let ht= 100;
-let nr = 200;
+let nr = 500;
 //nr = 5	;
 
 let topParams = {width:ht,height:ht,numRows:nr,numCols:nr,framePadding:0.01*ht,frameStroke:'white',frameStrokeWidth:.1,saveAnimation:1,oneShot:1,

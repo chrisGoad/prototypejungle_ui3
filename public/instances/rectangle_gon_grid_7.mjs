@@ -6,7 +6,7 @@ let rs = generatorP.instantiate();
 rs.setName('rectangle_gon_grid_7');
 
 let ht= 100;
-let nr = 201;
+let nr = 250;
 //let cornerColors = {ULC:[10,10,10],URC:[238,105,65],LLC:[238,105,65],LRC:[10,10,10]};
 let newParams = {numRows:nr,numCols:nr};//50
 
@@ -26,34 +26,7 @@ rs.icolors =
 [0,0,0],[0,250,0],[250,0,0],[250,250,250],
 [0,0,250],[0,250,0],[0,0,0],[250,250,250],
 [0,0,0],[0,250,0],[0,0,0],[0,0,250]];;
-/*
-[ 0, 1, 2, 3,
-  4, 5, 6, 7,
-  8, 9,10,11,
- 12,13,14,15]
- 
-rs.rotator =[12, 8, 4, 0,
- 13, 9, 5, 1,
- 14,10, 6, 2,
- 15,11, 7, 3 ];
 
-rs.rotate = function (a) {
-  let {rotator} = this;
-  let rv = [];
-  for (let i =0;i<16;i++) {
-    rv.push(a[rotator[i]]);
-  }
-  return rv;
-}
-
-rs.colors = rs.rotate(rs.icolors);
- 
-rs.colors =[[0,0,0],[0,0,250],[0,0,0],[0,250,0],[0,250,0],[0,250,0],[0,250,0],[250,0,0],[0,0,0],[0,0,0],[250,0,0],[250,0,0],[0,0,250],[250,250,250],[250,250,250],[0,0,250]]; 
-rs.colorsA = [rs.icolors];
-for (let i=1;i<4;i++) {
-  rs.colorsA.push(rs.rotate(rs.colorsA[i-1]));
-}
-*/
 rs.tfn = (v) => {
   let v0 =v[0];
   let v1 =v[1];

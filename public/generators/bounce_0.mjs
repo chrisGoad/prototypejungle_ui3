@@ -9,7 +9,6 @@ let rs = basicP.instantiate();
 addAnimationMethods(rs);
 addAudioMethods(rs);
 
-
 rs.setName('bounce_0');
 let ht=50;
 let topParams = {width:ht,height:ht,framePadding:0.1*ht,frameStrokee:'white',frameStrokeWidth:.2,timePerStep:0.05,stopTime:100,collideWithParticle:1}
@@ -661,20 +660,31 @@ rs.updateParticleCollisions = function (lastCol) {
 
 
 rs.updatePosition = function (particle,t,moveShape) {
-  let {ray,mass,startTime,shape} = particle;
+  let {currentFrame:cf} = this;
+  let {ray,mass,startTime,shape,index} = particle;
   let {initialPosition:ip,velocity:v} = ray;
   let deltaT = t-startTime;
   let np = ip.plus(v.times(deltaT));
   particle.position = np;
+  let pnm = 'p_'+index;
+  cf[pnm] = np;
   if (shape && moveShape) {
     shape.moveto(np);
     shape.update();
   }
 }
 
+
 rs.updatePositions = function (t,moveShapes) {
+  //debugger;
   this.currentTime = t;
   let {particles} = this;
+  let cf = this.currentFrame = {time:t};
+  let mh = this.motionHistory;
+  if (!mh) {
+    mh = this.motionHistory = [];
+  }
+  mh.push(cf);
   particles.forEach( (p) => {
     this.updatePosition(p,t,moveShapes);
   });
@@ -719,7 +729,7 @@ rs.setBoxStroke = function (stroke) {
 rs.circleCount = 0;
 rs.mkCircleForParticle = function (particle,dradiusi) {
   let {circleCount:ccnt,circleP} = this;
-  debugger;
+ // debugger;
   const randomFill = {r:150*Math.random()+100,g:150*Math.random()+100,b:150*Math.random()+100};
   let {radius,stroke,fillStructure} = particle;
   let dradius = dradiusi?dradiusi:radius;
@@ -898,10 +908,22 @@ rs.stopMediaRecorder = function () {
     
 rs.updateState = function () {
   let {stepsSoFar:ssf,timePerStep,lastCollision,nextC,stopTime,segments,particles,mediaRecorder:mr} = this;
-  debugger;
+  let mh = this.motionHistory;
+  //console.log('motionHistory:',JSON.stringify(mh));
+  if (ssf === 3) {
+    let  destPath = '/motionHistory.mjs';
+    let str = 'let rs = '+JSON.stringify(mh)+'; export {rs};';
+    debugger;
+     core.httpPost(destPath,str,function (rs) { 
+		   debugger;
+			 if (cb) {
+				 cb();
+			 }
+		});
+  }
   this.initAudio();
   if ((ssf%20)===19) {
-    console.log('playtone');
+    //console.log('playtone');
     
   //this.playTone();
   }
