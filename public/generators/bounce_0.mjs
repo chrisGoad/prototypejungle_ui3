@@ -676,7 +676,7 @@ rs.updatePosition = function (particle,t,moveShape) {
 
 
 rs.updatePositions = function (t,moveShapes) {
-  //debugger;
+  debugger;
   let {motionHistory:mh,recordingMotion:rm}=this;
   this.currentTime = t;
   let {particles} = this;

@@ -8,6 +8,7 @@ import {rs as motionHistory} from '/motionHistory.mjs';
 
 let rs = basicP.instantiate();
 rs.motionHistory = motionHistory;
+debugger;
 addGonMethods(rs);
 addAnimation(rs);
 rs.setName('rectangle_gon_grid_0');
@@ -175,7 +176,32 @@ rs.updateState = function () {
    this.interpolateColors(gons,vertices,this.colors,this.tfn,this.dfn);
 }
   
- 
+rs.processHistoryElement = function (elt) {
+  let pnms = Object.getOwnPropertyNames(elt);
+  let ln = pnms.length;
+  let par=[];
+  let t;
+  for (let i=0;i<ln;i++) {
+    let p = pnms[i];
+    let v = elt[p];
+    if (p==='time') {
+      t = v;
+      continue;
+    }
+    let {x,y} = v;
+    let pnt = Point.mk(x,y);
+    par.push(pnt);
+  }
+  return {time:t,points:par};
+}
+
+rs.processHistory = function (h) {
+  let ph = h.map((v) => this.processHistoryElement(v));
+    
+  return ph;
+}
+  
+   
 
 
 export {rs};
