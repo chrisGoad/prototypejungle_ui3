@@ -677,14 +677,16 @@ rs.updatePosition = function (particle,t,moveShape) {
 
 rs.updatePositions = function (t,moveShapes) {
   //debugger;
+  let {motionHistory:mh,recordingMotion:rm}=this;
   this.currentTime = t;
   let {particles} = this;
   let cf = this.currentFrame = {time:t};
-  let mh = this.motionHistory;
-  if (!mh) {
-    mh = this.motionHistory = [];
+  if (rm) {
+    if (!mh) {
+      mh = this.motionHistory = [];
+    }
+    mh.push(cf);
   }
-  mh.push(cf);
   particles.forEach( (p) => {
     this.updatePosition(p,t,moveShapes);
   });
@@ -907,10 +909,9 @@ rs.stopMediaRecorder = function () {
 
     
 rs.updateState = function () {
-  let {stepsSoFar:ssf,timePerStep,lastCollision,nextC,stopTime,segments,particles,mediaRecorder:mr} = this;
-  let mh = this.motionHistory;
+  let {stepsSoFar:ssf,timePerStep,lastCollision,nextC,stopTime,segments,particles,mediaRecorder:mr,motionHistory:mh} = this;
   //console.log('motionHistory:',JSON.stringify(mh));
-  if (ssf === 3) {
+  if ((ssf === 3)&&mh) {
     let  destPath = '/motionHistory.mjs';
     let str = 'let rs = '+JSON.stringify(mh)+'; export {rs};';
     debugger;
