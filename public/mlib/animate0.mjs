@@ -23,7 +23,6 @@ item.setNumSteps = function () {
 
 
 item.oneStep = function (one) {
-  debugger;
   if (this.paused) {
     return;
   }

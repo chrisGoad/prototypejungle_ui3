@@ -120,10 +120,12 @@ rs.rotate = function (a) {
   return rv;
 }
 rs.buildColorsA = function () {
-  this.colorsA = [this.icolors];
+  let {colors}  = this;
+  let cla = [colors];
   for (let i=1;i<4;i++) {
-    this.colorsA.push(this.rotate(this.colorsA[i-1]));
+    cla.push(this.rotate(cla[i-1]));
   }
+  this.colorsA = cla.reverse();
 }
 
 

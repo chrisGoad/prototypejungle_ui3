@@ -128,7 +128,9 @@ rs.solveForT1 = function (params) {
   let t = inside?Math.max(t0,t1):t0;
   //return [p0,p1,t0,t1];
  // console.log('return ',t);
-  return t;
+  let speed =  V.length();
+  let ttc = (r1+r2)/speed;  
+  return t//+ttc;
 }
 
 rs.v2s = function (v) {
@@ -677,7 +679,7 @@ rs.updatePosition = function (particle,t,moveShape) {
 
 rs.updatePositions = function (t,moveShapes) {
   debugger;
-  let {motionHistory:mh,recordingMotion:rm}=this;
+  let {motionHistory:mh,recordingMotion:rm,lastTime:lt}=this;
   this.currentTime = t;
   let {particles} = this;
   let cf = this.currentFrame = {time:t};
@@ -685,7 +687,10 @@ rs.updatePositions = function (t,moveShapes) {
     if (!mh) {
       mh = this.motionHistory = [];
     }
-    mh.push(cf);
+    if (Math.abs(t-lt) > .1) {
+      mh.push(cf);
+    }
+    this.lastTime = t;
   }
   particles.forEach( (p) => {
     this.updatePosition(p,t,moveShapes);
@@ -911,17 +916,6 @@ rs.stopMediaRecorder = function () {
 rs.updateState = function () {
   let {stepsSoFar:ssf,timePerStep,lastCollision,nextC,stopTime,segments,particles,mediaRecorder:mr,motionHistory:mh} = this;
   //console.log('motionHistory:',JSON.stringify(mh));
-  if ((ssf === 3)&&mh) {
-    let  destPath = '/motionHistory.mjs';
-    let str = 'let rs = '+JSON.stringify(mh)+'; export {rs};';
-    debugger;
-     core.httpPost(destPath,str,function (rs) { 
-		   debugger;
-			 if (cb) {
-				 cb();
-			 }
-		});
-  }
   this.initAudio();
   if ((ssf%20)===19) {
     //console.log('playtone');
@@ -969,9 +963,21 @@ rs.updateState = function () {
 }
   
 rs.onCompleteAnimation = function () {
-  let {mediaRecorder:mr} = this;
+  let {mediaRecorder:mr,motionHistory:mh} = this;
   console.log('Animation complete');
   mr.stop();
+  if (mh) {
+    let  destPath = '/motionHistory.mjs';
+    let str = 'let rs = '+JSON.stringify(mh)+'; export {rs};';
+    debugger;
+     core.httpPost(destPath,str,function (rs) { 
+		   debugger;
+			 if (cb) {
+				 cb();
+			 }
+		});
+  }
+  
 }
 
 
