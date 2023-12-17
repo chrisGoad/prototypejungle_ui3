@@ -107,7 +107,7 @@ rs.collide2particles = function (particle1,particle2) {
   if (coltime > tps) {
     return null;
   }
-  debugger;
+ // debugger;
   this.collided = 1;
   particle1.collided = 1;
   particle2.collided = 2;
@@ -424,7 +424,7 @@ rs.updateState = function () {
     
   }
 }
-  
+/*  
 rs.onCompleteAnimation = function () {
   let {mediaRecorder:mr,motionHistory:mh} = this;
   console.log('Animation complete');
@@ -440,9 +440,8 @@ rs.onCompleteAnimation = function () {
 			
 		});
   }
-  
 }
-
+*/
 
 export {rs}
   

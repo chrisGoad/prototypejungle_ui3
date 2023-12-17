@@ -36,6 +36,7 @@ item.oneStep = function (one) {
     } else {
       console.log('FRAME WAS NOT ESCAPED!');
     }
+    debugger;
     if (this.onCompleteAnimation) {
       this.onCompleteAnimation();
     }

@@ -961,7 +961,7 @@ rs.updateState = function () {
     }
   }
 }
-  
+/*  
 rs.onCompleteAnimation = function (cb) {
   let {mediaRecorder:mr,motionHistory:mh,whereToSave:wts} = this;
   console.log('Animation complete');
@@ -980,7 +980,7 @@ rs.onCompleteAnimation = function (cb) {
   
 }
 
-
+*/
 export {rs}
   
 

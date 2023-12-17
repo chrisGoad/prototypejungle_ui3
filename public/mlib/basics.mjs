@@ -21,12 +21,14 @@ item.setName = function (name,variant,jsonName) {
 }
 
  		
-rs.onCompleteAnimation = function (cb) {
+item.onCompleteAnimation = function (cb) {
   let {motionHistory:mh,whereToSave:wts} = this;
+  debugger;
   console.log('Animation complete');
   if (mh) {
     let  destPath = `/motionHistories/${wts}.mjs`;
-    let str = 'let rs = '+JSON.stringify(mh)+'; export {rs};';
+  //  let str = 'let rs = '+JSON.stringify(mh)+'; export {rs};';
+    let str =JSON.stringify(mh);
     debugger;
      core.httpPost(destPath,str,function (rs) { 
 		   debugger;
@@ -38,7 +40,7 @@ rs.onCompleteAnimation = function (cb) {
 }
 
 
-rs.processHistoryElement = function (elt) {
+item.processHistoryElement = function (elt) {
   let pnms = Object.getOwnPropertyNames(elt);
   let ln = pnms.length;
   let par=[];
@@ -57,17 +59,19 @@ rs.processHistoryElement = function (elt) {
   return {time:t,points:par};
 }
 
-rs.processHistory = function (h) {
+item.processHistory = function (h) {
   let ph = h.map((v) => this.processHistoryElement(v));
     
   return ph;
 }
 
 
-rs.getMotionHistory (nm,cb) {
-  let url = '/motionHistories/'+nm+'.mjs''
-  core.httpGet(url,(mh) => {
-    let pmh = this.processHistory(mh);
+item.getMotionHistory = function (nm,cb) {
+  debugger;
+  let url = '/motionHistories/'+nm+'.mjs';
+  core.httpGet(url,(err,mh) => {
+    let prs = JSON.parse(mh);
+    let pmh = this.processHistory(prs);
     cb(pmh);
   });
 }
@@ -167,7 +171,7 @@ item.addFrame = function (params) {
 }
 
 
-rs.drawGrid = function (lineP) {
+item.drawGrid = function (lineP) {
   let {numRows,numCols,width:wd,height:ht} = this;
   let deltaX = wd/numCols;
   let deltaY = ht/numRows;
