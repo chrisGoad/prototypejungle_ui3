@@ -25,8 +25,8 @@ rs.colorss =[[250,250,250],[0,0,0],[0,250,0],[250,0,0],[250,0,0],[250,250,250],[
 rs.colorss=[[250,250,250],[250,250,250],[250,250,250],[0,250,0],[250,250,250],[0,250,0],[250,250,250],[0,0,250],[0,250,0],[0,0,250],[250,250,250],[250,0,0],[0,0,0],[250,0,0],[250,0,0],[0,0,250]];
 
 rs.colors =
-//[[0,250,0],[250,0,0],[250,0,0],[0,0,250],
-[[0,0,0],[0,250,0],[250,0,0],[250,250,250]];
+[[0,250,0],[250,0,0],[250,0,0],[0,0,250],
+[0,0,0],[0,250,0],[250,0,0],[250,250,250]];
 //[0,0,250],[0,250,0],[0,0,0],[250,250,250],
 //[0,0,0],[0,250,0],[0,0,0],[0,0,250]];;
 
@@ -49,6 +49,10 @@ rs.tfn = (v) => {
   return [tbv0,tbv0,tbv0];
 }
 
+rs.onUpdate = function () {
+  let {stepsSoFar:ssf} = this;
+  console.log('steps',ssf);
+}
 
 rs.initialize = function () {
   debugger;
@@ -72,6 +76,9 @@ rs.updateState = function () {
   let {motion,stepsSoFar:ssf,gons} = this;
   let vertices = motion[ssf].points;
   this.interpolateColors(gons,vertices,this.colors,this.tfn,this.dfn);
+   let onUp = this.onUpdate;
+ // debugger;
+   this.onUpdate();
  }
 
 

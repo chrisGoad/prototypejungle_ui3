@@ -962,12 +962,12 @@ rs.updateState = function () {
   }
 }
   
-rs.onCompleteAnimation = function () {
-  let {mediaRecorder:mr,motionHistory:mh} = this;
+rs.onCompleteAnimation = function (cb) {
+  let {mediaRecorder:mr,motionHistory:mh,whereToSave:wts} = this;
   console.log('Animation complete');
   mr.stop();
   if (mh) {
-    let  destPath = '/motionHistory.mjs';
+    let  destPath = `/motionHistories/${wts}.mjs`;
     let str = 'let rs = '+JSON.stringify(mh)+'; export {rs};';
     debugger;
      core.httpPost(destPath,str,function (rs) { 

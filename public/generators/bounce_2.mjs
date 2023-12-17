@@ -83,7 +83,12 @@ rs.collide2particles = function (particle1,particle2) {
   let {ray:ray1,position:pos1} = particle1;
   let {ray:ray2,position:pos2} = particle2;
   let dist = pos2.distance(pos1);
-  if (dist>1) {
+  if ((dist>5) &&(dist<20)){
+    particle1.collided =0;
+    particle2.collided =0;
+    return null;
+  }
+  if (particle1.collided || particle2.collided) {
     return null;
   }
   let {velocity:v1} = ray1;
@@ -104,6 +109,8 @@ rs.collide2particles = function (particle1,particle2) {
   }
   debugger;
   this.collided = 1;
+  particle1.collided = 1;
+  particle2.collided = 2;
   let colpos = particleStill.position;
  // ray.initialPosition = particleMoving.position;
   particleStill.ray = {initialPosition:particleMoving.position,velocity:ray.velocity};
@@ -114,11 +121,49 @@ rs.collide2particles = function (particle1,particle2) {
   return 1;
 }
 
+rs.collideWithSegment = function (particle,ls) {
+  let {timePerStep:tps,stepsSoFar:ssf} = this;
+  let t = tps*ssf;
+  let vrt = this.lineSegVertical(ls);
+  let {ray,position:prtp} = particle;
+  let {velocity:vel} = ray; 
+  let vels = vrt?vel.x:vel.y;  //scalar velocity in the dimension that's relevant
+  let prtsp = vrt?prtp.x:prtp.y; //scalar position in the dimension that's relevant
+  let {end0:e0,end1:e1} = ls
+  let lssp = vrt?e0.x:e0.y;//scalar position in the dimension that's relevant
+  let away = vels*lssp <= 0;
+  let dist = Math.abs(lssp - prtsp);
+
+  if (away || (dist>1)) {
+    return 0;
+  }
+  let coltime = dist/vels;
+  let midpoint = e0.plus(e1.difference(e0).times(0.5))
+  ray.initialPosition = midpoint;
+  particle.startTime = t+coltime;
+  if (vrt) {
+    vel.x = -vels;
+  } else {
+    vel.y = -vels;
+  }
+  //particle.ray.velocity = Point.mk(0,0);
+}
+
+rs.collideWithSegments = function (particle){
+  let {segments} = this;
+  for (let i=0;i<4;i++) {
+    let ls = segments[i]
+    this.collideWithSegment(particle,ls);
+  }
+}
+  
+  
 rs.collideAllParticles = function () {
   let {particles} = this;
   let ln = particles.length;
   for (let i=0;i<ln;i++) {
     let pi = particles[i];
+    this.collideWithSegments(pi);
     for (let j=i+1;j<ln;j++) {
       let pj = particles[j];
       let col = this.collide2particles(pi,pj);
@@ -129,7 +174,8 @@ rs.collideAllParticles = function () {
   }
 }
 rs.updatePosition = function (particle,t) {
-  let {startTime:st,ray,shape} = particle;
+  let {currentFrame:cf} = this;
+  let {startTime:st,ray,shape,index} = particle;
   let {initialPosition:ip,velocity:vel} = ray;
  // let {timePerStep:tps,stepsSoFar:ssf} = this;
 //  let time = ssf*tps;
@@ -137,6 +183,8 @@ rs.updatePosition = function (particle,t) {
   let np = ip.plus(vel.times(et));
   particle.position = np;
   shape.moveto(np);
+  let pnm = 'p_'+index;
+  cf[pnm] = np;
 }
 
 
@@ -155,7 +203,6 @@ rs.collideLineSegmentt = function (particle,ls) {
   let nv = Point.mk(Math.cos(na),Math.sin(na)).times(vln);
   let cv = this.toCardinalDirection(nv);
   return cv;
-  return nv;
 }
 
 rs.collideLineSegment = function (particle,ls) {
@@ -198,7 +245,6 @@ rs.updatePositions = function () {
     this.lastTime = t;
   }
   if (collided) {
-    debugger;
   }
   particles.forEach( (p) => {
     this.updatePosition(p,t);
@@ -246,7 +292,7 @@ rs.mkCircleForParticle = function (particle,dradiusi) {
   let {circleCount:ccnt,circleP} = this;
  // debugger;
   const randomFill = {r:150*Math.random()+100,g:150*Math.random()+100,b:150*Math.random()+100};
-  let {radius,stroke,fillStructure} = particle;
+  let {radius,stroke,fill} = particle;
   let dradius = dradiusi?dradiusi:radius;
 
   let circ = circleP.instantiate();
@@ -257,7 +303,6 @@ rs.mkCircleForParticle = function (particle,dradiusi) {
   if (stroke) {
     circ.stroke = stroke;
   }
-  let fill='white';
   circ.fill = fill;
 
   particle.shape = circ;
@@ -383,16 +428,16 @@ rs.updateState = function () {
 rs.onCompleteAnimation = function () {
   let {mediaRecorder:mr,motionHistory:mh} = this;
   console.log('Animation complete');
-  mr.stop();
+  
+  //mr.stop();
   if (mh) {
+    console.log('motion history length =',mh.length);
     let  destPath = '/motionHistory.mjs';
     let str = 'let rs = '+JSON.stringify(mh)+'; export {rs};';
     debugger;
      core.httpPost(destPath,str,function (rs) { 
 		   debugger;
-			 if (cb) {
-				 cb();
-			 }
+			
 		});
   }
   

@@ -3,7 +3,7 @@ import {rs as linePP} from '/shape/line.mjs';
 import {rs as generatorP} from '/generators/bounce_2.mjs'
 let rs = generatorP.instantiate();
 
-rs.setName('bounce_11');
+rs.setName('bounce_19');
 let ht=50;
 
 let topParams = {width:ht,height:ht,framePadding:0.1*ht,frameStroke:'rgb(2,2,2)',frameStrokeWidth:.2,timePerStep:0.15,stopTime:255,
@@ -13,7 +13,7 @@ Object.assign(rs,topParams);
 
 
 rs.fills = [{r:0,g:0,b:0},{r:250,g:250,b:250},{r:0,g:0,b:250},{r:0,g:150,b:0},{r:150,g:0,b:0}];
-rs.fills = [{r:250,g:0,b:0},{r:0,g:250,b:0},{r:0,g:0,b:250},{r:250,g:250,b:0},{r:0,g:250,b:250},{r:250,g:0,b:250},{r:250,g:250,b:250},{r:100,g:100,b:100}];
+rs.fills = [[250,0,0],[0,250,0],[0,0,250],[250,250,0],[0,250,250],[250,0,250],[250,250,250],[100,100,100]];
 
 
 
@@ -34,7 +34,7 @@ rs.mkParticles = function (params) {
   let {eradius,mass,radius,speed,distanceFromEnclosure:dfe,numParticles:np,inside}= params;
   let {fills} = this;
   debugger;
-  let dfc = eradius - radius - dfe;
+  let dfc = eradius;// - radius - dfe;
   let ai = (Math.PI*2)/np;
   let prts= [];
  let fillNum =0
@@ -42,7 +42,8 @@ rs.mkParticles = function (params) {
   for (let i = 0;i<np;i++) {
     let ca = i*ai;
     let ip = Point.mk(Math.cos(ca),Math.sin(ca)).times(dfc);
-    let np= Point.mk(Math.cos(ca+ai),Math.sin(ca+ai)).times(dfc)
+  //  let np= Point.mk(Math.cos(ca+ai),Math.sin(ca+ai)).times(dfc)
+    let np= Point.mk(Math.cos(ca-ai),Math.sin(ca-ai)).times(dfc)
     let hwp = ip.plus(np).times(.5);
     let lnip = ip.length();
     let lnnp = np.length();
@@ -54,9 +55,12 @@ rs.mkParticles = function (params) {
     let vs = vec.times(speed/vln);
     let ray = {initialPosition:ip,velocity:vs};
     let rayhw  = {initialPosition:hwp,velocity:Point.mk(0,0)};
-    let prt = {radius,ray,startTime:0,inside};
+    let fill1 = this.arrayToRGB(fills[fillNum]);
+    let fill2 = this.arrayToRGB(fills[fillNum+1]);
+    let prt = {radius,ray,startTime:0,inside,fill:fill1};
     prts.push(prt);
-    let prthw = {radius,ray:rayhw,startTime:0,inside};
+    
+    let prthw = {radius,ray:rayhw,startTime:0,inside,fill:fill2};
     fillNum = fillNum+2;
     if (1) {
       prts.push(prthw);
@@ -76,7 +80,7 @@ rs.initialize = function () {
   let {timePerStep,stopTime,fills,height:ht,boxD,numParticles:numP} = this;
   let hht = 0.5*ht;
   this.numSteps = Math.ceil(stopTime/timePerStep);
-  this.numSteps = 541;//10000;//269;//1000;//69;
+  this.numSteps = 543;//4479;//541;//10000;//269;//1000;//69;
   this.initProtos();
   this.addFrame();
   this.genBox();

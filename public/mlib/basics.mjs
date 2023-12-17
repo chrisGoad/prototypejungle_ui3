@@ -15,10 +15,63 @@ item.setName = function (name,variant,jsonName) {
 	let theName = this.name = nameWithV+(this.signIt?'_s':'');
   this.variant = variant;
 	core.vars.whereToSave = theName;
+  this.whereToSave = theName;
 	let pathPart = jsonName?jsonName:nameWithV;
 	this.path = `json/${pathPart}.json`;
 }
 
+ 		
+rs.onCompleteAnimation = function (cb) {
+  let {motionHistory:mh,whereToSave:wts} = this;
+  console.log('Animation complete');
+  if (mh) {
+    let  destPath = `/motionHistories/${wts}.mjs`;
+    let str = 'let rs = '+JSON.stringify(mh)+'; export {rs};';
+    debugger;
+     core.httpPost(destPath,str,function (rs) { 
+		   debugger;
+			 if (cb) {
+				 cb();
+			 }
+		});
+  }
+}
+
+
+rs.processHistoryElement = function (elt) {
+  let pnms = Object.getOwnPropertyNames(elt);
+  let ln = pnms.length;
+  let par=[];
+  let t;
+  for (let i=0;i<ln;i++) {
+    let p = pnms[i];
+    let v = elt[p];
+    if (p==='time') {
+      t = v;
+      continue;
+    }
+    let {x,y} = v;
+    let pnt = Point.mk(x,y);
+    par.push(pnt);
+  }
+  return {time:t,points:par};
+}
+
+rs.processHistory = function (h) {
+  let ph = h.map((v) => this.processHistoryElement(v));
+    
+  return ph;
+}
+
+
+rs.getMotionHistory (nm,cb) {
+  let url = '/motionHistories/'+nm+'.mjs''
+  core.httpGet(url,(mh) => {
+    let pmh = this.processHistory(mh);
+    cb(pmh);
+  });
+}
+ 
 
 item.numFrames = 0;
 item.numRects =0;
