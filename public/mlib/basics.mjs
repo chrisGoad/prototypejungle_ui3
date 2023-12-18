@@ -27,8 +27,8 @@ item.onCompleteAnimation = function (cb) {
   console.log('Animation complete');
   if (mh) {
     let  destPath = `/motionHistories/${wts}.mjs`;
-  //  let str = 'let rs = '+JSON.stringify(mh)+'; export {rs};';
-    let str =JSON.stringify(mh);
+    let str = 'let rs = '+JSON.stringify(mh)+'; export {rs};';
+   // let str =JSON.stringify(mh);
     debugger;
      core.httpPost(destPath,str,function (rs) { 
 		   debugger;
@@ -77,6 +77,19 @@ item.getMotionHistory = function (nm,cb) {
 }
  
 
+item.historyRadius = function (mh) {
+  let maxr= -Infinity;
+  mh.forEach((m)=>{
+    let {points} =m;
+    points.forEach( (p) => {
+     let {x,y} = p;
+     let ax = Math.abs(x);
+     let ay = Math.abs(y);
+     maxr = Math.max(ax,ay);
+    });
+  });
+  return maxr;
+}
 item.numFrames = 0;
 item.numRects =0;
 item.addRectangle  = function (iparams) {
@@ -865,8 +878,9 @@ item.interpolateVectors = function (params) {
     wvps.push(wvp);
   }
   let suma= this.sumArrays(wvps);  //sum the weights
+  let sumi = suma.map((v)=>Math.floor(v));
   let sumd = suma[0]<100?[0,0,0]:[250,250,250];
-  return suma;
+  return sumi;
 }  
 item.randomColorArray = function (lb,ub,ia) {
    let a =ia?ia:3;

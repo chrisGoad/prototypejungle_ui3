@@ -1,10 +1,12 @@
 import {rs as circlePP} from '/shape/circle.mjs';
 import {rs as basicP} from '/generators/basics.mjs';
 import {rs as addAnimationMethods} from '/mlib/animate0.mjs';
-
+import {rs as motionHistory} from '/motionHistories/motion_1.mjs';
+debugger;
 let rs = basicP.instantiate();
 
 addAnimationMethods(rs);
+
 
 rs.setName('playRecording');
 let ht=50;
@@ -73,17 +75,18 @@ rs.initialize = function () {
   debugger;
   let shapes = this.set('shapes',arrayShape.mk());
   this.initProtos();
-  this.getMotionHistory(fromWhere,(mh) => {
-    this.motionHistory = mh;
-    let hr = this.historyRadius(mh);
-    let nr = 1.1*hr;
-    this.width = 2*nr;
-    this.height = 2*nr;
-    this.addFrame();
-    this.numSteps = mh.length;
-    this.mkShapes();
-    this.updateState();
-  });
+  let mh = this.motionHistory = this.processHistory(motionHistory);
+ // this.getMotionHistory(fromWhere,(mh) => {
+ //   this.motionHistory = mh;
+  let hr = this.historyRadius(mh);
+  let nr = 1.1*hr;
+  this.width = 2*nr;
+  this.height = 2*nr;
+  this.addFrame();
+  this.numSteps = mh.length;
+  this.mkShapes();
+  this.updateState();
+  //});
 }
 
 

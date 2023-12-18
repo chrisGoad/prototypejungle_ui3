@@ -5,7 +5,7 @@ let rs = generatorP.instantiate();
 rs.setName('motion_1');
 let ht=50;
 
-let topParams = {width:ht,height:ht,framePadding:0.1*ht,frameStroke:'rgb(2,2,2)',frameStrokeWidth:.2,timePerStep:1,stopTime:255,recordingMotion:1,
+let topParams = {width:ht,height:ht,framePadding:0.1*ht,frameStroke:'rgb(2,2,2)',frameStrokeWidth:.2,timePerStep:1,stopTime:256,recordingMotion:1,
     numShapes:4,circleRadius:1,ringRadius:ht*.8};
 
 Object.assign(rs,topParams);
@@ -37,7 +37,7 @@ rs. computePosition = function (shape,t) {
   let index = shape.index;
   let frs = index/ns;
   let fr = t/stopTime;
-  let a = (fr+frs) * Math.PI*2;
+  let a = -((fr+frs) * Math.PI*2);
   let p = Point.mk(Math.cos(a),Math.sin(a)).times(rr);
   return p;
 }

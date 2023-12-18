@@ -1,10 +1,11 @@
+debugger;
 import {rs as gonPP} from '/shape/polygon.mjs';
 import {rs as linePP} from '/shape/line.mjs';
 import {rs as circlePP} from '/shape/circle.mjs';
 import {rs as basicP} from '/generators/basics.mjs';
 import {rs as addGonMethods} from '/mlib/gons_0.mjs';
 import {rs as addAnimation} from '/mlib/animate0.mjs';
-import {rs as motionHistory} from '/motionHistory.mjs';
+import {rs as motionHistory} from '/motionHistories/motion_1.mjs';
 
 let rs = basicP.instantiate();
 rs.motionHistory = motionHistory;
@@ -16,6 +17,7 @@ rs.setName('rectangle_gon_grid_0');
 
 let ht= 100;
 let nr = 500;
+nr = 50;
 //nr = 5	;
 
 let topParams = {width:ht,height:ht,numRows:nr,numCols:nr,framePadding:0.01*ht,frameStroke:'white',frameStrokeWidth:.1,saveAnimation:1,oneShot:1,
@@ -132,7 +134,8 @@ rs.buildColorsA = function () {
 rs.setColors= function (stage,fr) {
   let colors0 = this.colorsA[stage];
   let colors1 = this.colorsA[(stage+1)%4];
-  this.colors = this.interpolate(colors0,colors1,fr);
+  let colors = this.interpolate(colors0,colors1,fr);
+  this.colors = colors;
 }
 
 
