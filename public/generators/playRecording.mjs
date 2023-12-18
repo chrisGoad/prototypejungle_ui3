@@ -8,7 +8,7 @@ addAnimationMethods(rs);
 
 rs.setName('playRecording');
 let ht=50;
-let topParams = {width:ht,height:ht,framePadding:0.1*ht,frameStroke:'white',frameStrokeWidth:.2,radius:1,fromWhere:'bounce_19'}
+let topParams = {width:ht,height:ht,framePadding:0.1*ht,frameStroke:'white',frameStrokeWidth:.2,radius:1,fromWhere:'motion_1'}
 
 Object.assign(rs,topParams);
 
@@ -53,15 +53,33 @@ rs.initProtos = function () {
   circleP['stroke-width'] = .1;
 }
 
+rs.historyRadius = function (mh) {
+  let maxr= -Infinity;
+  mh.forEach((m)=>{
+    let {points} =m;
+    points.forEach( (p) => {
+     let {x,y} = p;
+     let ax = Math.abs(x);
+     let ay = Math.abs(y);
+     maxr = Math.max(ax,ay);
+    });
+  });
+  return maxr;
+}
+
 
 rs.initialize = function () {
   let {fromWhere} = this;
   debugger;
   let shapes = this.set('shapes',arrayShape.mk());
   this.initProtos();
-  this.addFrame();
   this.getMotionHistory(fromWhere,(mh) => {
     this.motionHistory = mh;
+    let hr = this.historyRadius(mh);
+    let nr = 1.1*hr;
+    this.width = 2*nr;
+    this.height = 2*nr;
+    this.addFrame();
     this.numSteps = mh.length;
     this.mkShapes();
     this.updateState();
