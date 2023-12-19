@@ -854,22 +854,42 @@ item.interpolateArrayss	 = function(a0,a1,fr) {
   return ar;
 }
 
+item.pointReducedPrecision = function (p,pow) {
+  let {x,y} = p;
+  let rx = Math.floor(x*pow)/pow;
+  let ry = Math.floor(y*pow)/pow;
+  let rp = {x:rx,y:ry};
+  return JSON.stringify(rp);
+}
+item.arrayReducedPrecision = function (a,pow) {
+  let ra = a.map((v) => Math.floor(v*pow)/pow);
+  return JSON.stringify(ra);
+}
 // vValues specifies a vector (as array) of values at each vertex
 // given a point pt, this interpolates by inverse of distance  among those vectors
-item.interpolateVectors = function (params) {
+item.interpolateVectors = function (params,pow) {
   let {vertices,vValues,p,dfn} = params;
+  if (v) {
+    console.log('p',this.pointReducedPrecision(p));
+  }
   let vlen = vValues.length;
   let ds = vertices.map((v) => {
     let d = p.distance(v);
     let dt = dfn?dfn(d):d;
     return d<0.01?.01:d;
   });
+  if (pow) {
+    console.log('ds',this.arrayReducedPrecision(ds));
+  }
   let fcs = ds.map((v)=>1/v);//factors
   let sum =0;
   fcs.forEach((v) => {
     sum=sum+v;
   });
   let nfcs = fcs.map( (v) => v/sum);//normalized factors
+  if (pow) {
+    console.log('nfcs',this.arrayReducedPrecision(nfcs));
+  }
   let wvps = [];// weighted parameters
   for (let j=0;j<vlen;j++) {
     let vp = vValues[j];
@@ -877,8 +897,17 @@ item.interpolateVectors = function (params) {
     let wvp = vp.map((v)=>nfc*v);
     wvps.push(wvp);
   }
+  if (pow) {
+    console.log('wvps',this.arrayReducedPrecision(wvps));
+  }
   let suma= this.sumArrays(wvps);  //sum the weights
+  if (pow) {
+    console.log('sumi',this.arrayReducedPrecision(suma));
+  }
   let sumi = suma.map((v)=>Math.floor(v));
+   if (pow) {
+    console.log('sumi',JASON.stringify(sumi));
+  }
   let sumd = suma[0]<100?[0,0,0]:[250,250,250];
   return sumi;
 }  
