@@ -226,14 +226,16 @@ item.addGonTriangle = function (bbase,n) {
 
 }
 
-item.interpolateColors = function (gons,vertices,cornerColors,fn,dfn)  {
+//item.interpolateColors = function (gons,vertices,cornerColors,fn,dfn)  {
+item.interpolateColors = function (params)  {
+  let {gons,vertices,colors:cornerColors,tfn,dfn,verbose} = params;
   gons.forEach((gon)=>{
     let cc = cornerColors;
     let isa = Array.isArray(cc);
     let vValues = isa?cc:[cc.ULC,cc.URC,cc.LRC,cc.LLC];
     let p = this.gonCenter(gon);
-    let iv = this.interpolateVectors({vertices,vValues,p,dfn});
-    let tv = fn?fn(iv):iv;
+    let iv = this.interpolateVectors({vertices,vValues,p,dfn,verbose});
+    let tv = tfn?tfn(iv):iv;
     let fill = this.arrayToRGB(tv);
     gon.fill = fill;
     gon.update();

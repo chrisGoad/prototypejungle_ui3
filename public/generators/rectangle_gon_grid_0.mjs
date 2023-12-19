@@ -143,7 +143,7 @@ rs.setColors= function (stage,fr) {
 rs.initialize = function () {
   debugger;
   this.initProtos();
-   let {width:wd,circleP,numRows,numCols,width,height,stepsPerStage:sps} = this;
+   let {width:wd,circleP,numRows,numCols,width,height,stepsPerStage:sps,tfn,dfn,colors} = this;
    this.numSteps=4*sps;
    this.addFrame();
   let lines = this.set('lines',arrayShape.mk());
@@ -168,17 +168,21 @@ rs.initialize = function () {
    this.buildColorsA();
    this.setColors(0,0);
   //this.interpolateColors(gons,vertices,vValues,this.tfn,this.dfn);
-  this.interpolateColors(gons,vertices,this.colors,this.tfn,this.dfn);
+  let iparams ={gons,vertices,colors:this.colors,tfn,dfn};
+  this.interpolateColors(iparams);
+ // this.interpolateColors(gons,vertices,this.colors,this.tfn,this.dfn);
 }
    
 rs.updateState = function () {
-  let {stepsPerStage:sps,stepsSoFar:ssf,gons,vertices,vValues,colors} = this;
+  let {stepsPerStage:sps,stepsSoFar:ssf,gons,vertices,vValues,colors,tfn,dfn,verbose} = this;
   console.log('UPDATE');
   debugger;	
   let stage = Math.floor(ssf/sps);
   let fr = (ssf%sps)/sps;
   this.setColors(stage,fr);
-   this.interpolateColors(gons,vertices,this.colors,this.tfn,this.dfn);
+  let iparams ={gons,vertices,colors,tfn,dfn,verbose}
+   this.interpolateColors(iparams);
+   //this.interpolateColors(gons,vertices,this.colors,this.tfn,this.dfn);
 }
   
 rs.processHistoryElement = function (elt) {

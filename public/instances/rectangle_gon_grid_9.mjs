@@ -92,19 +92,21 @@ rs.initialize = function () {
 
 
 rs.updateState = function () {
-  let {stepsPerStage:sps,motion,stepsSoFar:ssf,gons} = this;
-  if (ssf===32) {
+  let {stepsPerStage:sps,motion,stepsSoFar:ssf,gons,colors,tfn,dfn} = this;
+  if (ssf>25) {
     debugger;
   }
-  if (ssf>32) {
-    debugger;
-    return;
+  if (ssf>30) {
+ //   debugger;
+  //  return;
   }
   let stage = Math.floor(ssf/sps);
   let fr = (ssf%sps)/sps;
   this.setColors(stage,fr);
   let vertices = motion[ssf].points;
-  this.interpolateColors(gons,vertices,this.colors,this.tfn,this.dfn);
+  let iparams ={gons,vertices,colors,tfn,dfn};
+ // this.interpolateColors(gons,vertices,this.colors,this.tfn,this.dfn);
+  this.interpolateColors(iparams);
    let onUp = this.onUpdate;
  // debugger;
    this.onUpdate();

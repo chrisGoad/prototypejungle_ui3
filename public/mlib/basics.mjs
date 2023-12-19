@@ -869,7 +869,7 @@ item.arrayReducedPrecision = function (a,pow) {
 // given a point pt, this interpolates by inverse of distance  among those vectors
 item.interpolateVectors = function (params,pow) {
   let {vertices,vValues,p,dfn} = params;
-  if (v) {
+  if (pow) {
     console.log('p',this.pointReducedPrecision(p));
   }
   let vlen = vValues.length;
