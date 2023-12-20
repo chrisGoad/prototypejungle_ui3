@@ -10,7 +10,7 @@ rs.setName('rectangle_gon_grid_10');
 
 let ht= 55;
 let nr = 250;
- nr = 20;
+ nr = 100;
 //let cornerColors = {ULC:[10,10,10],URC:[238,105,65],LLC:[238,105,65],LRC:[10,10,10]};
 let newParams = {width:ht,height:ht,numRows:nr,numCols:nr,verbose:100};//50
 
@@ -27,6 +27,7 @@ rs.mkrcas = function  (n)  {
   this.colors = rcas;
 }
 rs.colors = [[0,0,0],[100,100,100],[175,175,175],[250,250,250]];
+rs.colors = [[0,100,175],[100,175,250],[175,250,0],[250,0,100]];
 
 
 
@@ -51,8 +52,8 @@ rs.tfn = (v,vrb) => {
   if (vrb&&0) {
     console.log('v1',v1,'vmod1',vmod1,'tbv1',tbv1);
   }
-  //return [tbv0,tbv2,tbv0];
- //return [tbv1,tbv1,tbv1];
+return [tbv0,tbv1,tbv2];
+return [tbv1,tbv1,tbv1];
  // return [v0,v1,v2];
   return [v1,v1,v1];
 }
