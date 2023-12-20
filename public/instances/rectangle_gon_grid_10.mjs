@@ -16,6 +16,18 @@ let newParams = {width:ht,height:ht,numRows:nr,numCols:nr,verbose:100};//50
 
 Object.assign(rs,newParams);
 
+rs.rca = function () {
+ return this.randomColorArray(0,250);
+}
+rs.mkrcas = function  (n)  {
+  let rcas = [];
+  for (let i=0;i<ln;i++) {
+     rcas.push(this.rca());
+  }
+  this.colors = rcas;
+}
+rs.colors = [[0,0,0],[100,100,100],[175,175,175],[250,250,250]];
+
 
 
 
@@ -40,7 +52,8 @@ rs.tfn = (v,vrb) => {
     console.log('v1',v1,'vmod1',vmod1,'tbv1',tbv1);
   }
   //return [tbv0,tbv2,tbv0];
- // return [tbv1,tbv1,tbv1];
+ //return [tbv1,tbv1,tbv1];
+ // return [v0,v1,v2];
   return [v1,v1,v1];
 }
 

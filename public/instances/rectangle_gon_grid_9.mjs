@@ -47,8 +47,10 @@ rs.tfn = (v) => {
 }
 
 rs.onUpdate = function () {
-  let {stepsSoFar:ssf} = this;
-  console.log('steps',ssf);
+  let {stepsSoFar:ssf,stepsPerStage:sps} = this;
+   let stage = Math.floor(ssf/sps);
+  let fr = (ssf%sps)/sps;
+  console.log('steps',ssf,'stage',stage,'fr',fr);
 }
 
 rs.shift = function (colors) {
@@ -99,13 +101,13 @@ rs.updateState = function () {
   let {stepsPerStage:sps,motion,stepsSoFar:ssf,gons,colors,tfn,dfn,verbose} = this;
   
   if (ssf>=31) {
-    this.numSteps = 34;
-    this.getVerbose =1;
+   // this.numSteps = 34;
+   // this.getVerbose =1;
     debugger;
   }
   if (ssf>40) {
  //   debugger;
-    return;
+  //  return;
   }
   let stage = Math.floor(ssf/sps);
   let fr = (ssf%sps)/sps;
