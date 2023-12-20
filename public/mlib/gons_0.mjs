@@ -235,7 +235,13 @@ item.interpolateColors = function (params)  {
     let vValues = isa?cc:[cc.ULC,cc.URC,cc.LRC,cc.LLC];
     let p = this.gonCenter(gon);
     let iv = this.interpolateVectors({vertices,vValues,p,dfn,verbose});
-    let tv = tfn?tfn(iv):iv;
+    if (this.getVerbose) {
+      debugger;
+    }
+    let tv = tfn?tfn(iv,this.getVerbose):iv;
+    if (this.getVerbose&&0) {
+      console.log('isa',isa,'iv',JSON.stringify(iv),'tv',JSON.stringify(tv));
+    }
     let fill = this.arrayToRGB(tv);
     gon.fill = fill;
     gon.update();

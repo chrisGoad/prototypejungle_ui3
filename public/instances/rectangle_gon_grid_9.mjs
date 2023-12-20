@@ -18,10 +18,12 @@ Object.assign(rs,newParams);
 
 
 
+let lowc = 0;
+let highc = 250;
 
-rs.colors =
+rs.colors = [[lowc,lowc,highc],[lowc,highc,lowc],[highc,lowc,lowc],[highc,highc,highc]];
 //[[0,250,0],[250,0,0],[250,0,0],[0,0,250],
-[[0,0,0],[0,250,0],[250,0,0],[250,250,250]];
+//[[0,0,250],[0,250,0],[250,0,0],[250,250,250]];
 //[0,0,250],[0,250,0],[0,0,0],[250,250,250],
 //[0,0,0],[0,250,0],[0,0,0],[0,0,250]];;
 
@@ -63,7 +65,9 @@ rs.buildColorsA = function () {
   for (let i=1;i<4;i++) {
     cla.push(this.shift(cla[i-1]));
   }
-  this.colorsA = cla.reverse();
+  let rcla = cla.reverse();
+  debugger;
+  this.colorsA = rcla;
 }
 rs.initialize = function () {
   debugger;
@@ -92,19 +96,22 @@ rs.initialize = function () {
 
 
 rs.updateState = function () {
-  let {stepsPerStage:sps,motion,stepsSoFar:ssf,gons,colors,tfn,dfn} = this;
-  if (ssf>25) {
+  let {stepsPerStage:sps,motion,stepsSoFar:ssf,gons,colors,tfn,dfn,verbose} = this;
+  
+  if (ssf>=31) {
+    this.numSteps = 34;
+    this.getVerbose =1;
     debugger;
   }
-  if (ssf>30) {
+  if (ssf>40) {
  //   debugger;
-  //  return;
+    return;
   }
   let stage = Math.floor(ssf/sps);
   let fr = (ssf%sps)/sps;
   this.setColors(stage,fr);
   let vertices = motion[ssf].points;
-  let iparams ={gons,vertices,colors,tfn,dfn};
+  let iparams ={gons,vertices,colors,tfn,dfn,verbose};
  // this.interpolateColors(gons,vertices,this.colors,this.tfn,this.dfn);
   this.interpolateColors(iparams);
    let onUp = this.onUpdate;

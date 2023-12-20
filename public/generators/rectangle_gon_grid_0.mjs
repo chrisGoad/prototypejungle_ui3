@@ -135,6 +135,9 @@ rs.setColors= function (stage,fr) {
   let colors0 = this.colorsA[stage];
   let colors1 = this.colorsA[(stage+1)%4];
   let colors = this.interpolate(colors0,colors1,fr);
+  if (this.getVerbose) {
+    console.log('colors',JSON.stringify(colors));
+  }
   this.colors = colors;
 }
 

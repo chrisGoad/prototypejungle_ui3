@@ -803,6 +803,11 @@ item.arrayToGray = function (a) {
   return rgb;
 }
 
+item.sumArray = function (a) { 
+  let sum = 0;
+  a.forEach ( (v) => {sum = sum+v});
+  return sum;
+}  
 item.sumArrays = function (aa) { 
   let a0 = aa[0];
   let iln = a0.length;
@@ -865,21 +870,30 @@ item.arrayReducedPrecision = function (a,pow) {
   let ra = a.map((v) => Math.floor(v*pow)/pow);
   return JSON.stringify(ra);
 }
+
+item.arrayOfArrayReducedPrecision = function (a,pow) {
+  let ra = a.map((v) => this.arrayReducedPrecision(v,pow));
+  return JSON.stringify(ra);
+}
 // vValues specifies a vector (as array) of values at each vertex
 // given a point pt, this interpolates by inverse of distance  among those vectors
-item.interpolateVectors = function (params,pow) {
-  let {vertices,vValues,p,dfn} = params;
-  if (pow) {
-    console.log('p',this.pointReducedPrecision(p));
+item.interpolateVectors = function (params) {
+  let getVerbose = this.getVerbose;
+  let {vertices,vValues,p,dfn,verbose:poww} = params;
+  let pow;
+  let {x,y}=p;
+  if (0) {
+    console.log('p',this.pointReducedPrecision(p,poww));
   }
   let vlen = vValues.length;
   let ds = vertices.map((v) => {
     let d = p.distance(v);
     let dt = dfn?dfn(d):d;
-    return d<0.01?.01:d;
+    //return d<0.001?.001:d;
+    return d<10?10:d;
   });
   if (pow) {
-    console.log('ds',this.arrayReducedPrecision(ds));
+    console.log('ds',this.arrayReducedPrecision(ds,pow));
   }
   let fcs = ds.map((v)=>1/v);//factors
   let sum =0;
@@ -888,7 +902,10 @@ item.interpolateVectors = function (params,pow) {
   });
   let nfcs = fcs.map( (v) => v/sum);//normalized factors
   if (pow) {
-    console.log('nfcs',this.arrayReducedPrecision(nfcs));
+    console.log('nfcs',this.arrayReducedPrecision(nfcs,pow));
+  }
+  if (pow) {
+    console.log('vValues',this.arrayOfArrayReducedPrecision(vValues,pow));
   }
   let wvps = [];// weighted parameters
   for (let j=0;j<vlen;j++) {
@@ -898,15 +915,22 @@ item.interpolateVectors = function (params,pow) {
     wvps.push(wvp);
   }
   if (pow) {
-    console.log('wvps',this.arrayReducedPrecision(wvps));
+    console.log('wvps',this.arrayOfArrayReducedPrecision(wvps,pow));
   }
   let suma= this.sumArrays(wvps);  //sum the weights
   if (pow) {
-    console.log('sumi',this.arrayReducedPrecision(suma));
+    console.log('sumi',this.arrayReducedPrecision(suma,pow));
   }
   let sumi = suma.map((v)=>Math.floor(v));
-   if (pow) {
-    console.log('sumi',JASON.stringify(sumi));
+  let summ = this.sumArray(sumi);
+  if (0 && getVerbose &&  (x<0) && (y>0)) {
+    console.log('p',this.pointReducedPrecision(p,poww));
+        console.log('sumi',this.arrayReducedPrecision(sumi,poww));
+debugger;
+
+  }
+   if (0) {
+    console.log('sumi',JSON.stringify(sumi));
   }
   let sumd = suma[0]<100?[0,0,0]:[250,250,250];
   return sumi;
