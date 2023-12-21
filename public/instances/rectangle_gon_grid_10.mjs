@@ -12,7 +12,7 @@ let ht= 55;
 let nr = 250;
  nr = 100;
 //let cornerColors = {ULC:[10,10,10],URC:[238,105,65],LLC:[238,105,65],LRC:[10,10,10]};
-let newParams = {width:ht,height:ht,numRows:nr,numCols:nr,verbose:100};//50
+let newParams = {width:ht,height:ht,numRows:nr,numCols:nr,verbose:100,scaling:2};//50
 
 Object.assign(rs,newParams);
 

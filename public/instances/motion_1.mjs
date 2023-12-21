@@ -6,7 +6,7 @@ rs.setName('motion_1');
 let ht=50;
 
 let topParams = {width:ht,height:ht,framePadding:0.1*ht,frameStroke:'rgb(2,2,2)',frameStrokeWidth:.2,timePerStep:1,stopTime:256,recordingMotion:1,
-    numShapes:4,circleRadius:1,ringRadius:ht*.8};
+    numShapes:4,circleRadius:1,ringRadius:ht*5};
 
 Object.assign(rs,topParams);
 
@@ -34,6 +34,7 @@ rs.buildShapes = function (params) {
 
 rs. computePosition = function (shape,t) {
   let {ringRadius:rr,numShapes:ns,stopTime} = this;
+  debugger;
   let index = shape.index;
   let frs = index/ns;
   let fr = t/stopTime;
@@ -53,7 +54,7 @@ rs.onUpdate = function () {
 rs.initialize = function () {
    debugger;
   let {timePerStep,stopTime,fills,height:ht,boxD,numParticles:numP} = this;
-  this.numSteps = Math.ceil(stopTime/timePerStep);
+  this.numSteps = Math.floor(stopTime/timePerStep);
   this.initProtos();
   this.addFrame();
   this.set('shapes',arrayShape.mk());

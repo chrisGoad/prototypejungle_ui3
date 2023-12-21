@@ -75,20 +75,20 @@ rs.initialize = function () {
   debugger;
   this.initProtos();
    //let {width:wd,circleP,numRows,numCols,width,height,stepsPerStage:sps,motionHistory:mh} = this;
-   let {circleP,numRows,numCols,stepsPerStage:sps,motionHistory:mh} = this;
+   let {circleP,numRows,numCols,stepsPerStage:sps,motionHistory:mh,scaling} = this;
    
   let motion=this.motion = this.processHistory(mh);
   let numSteps = this.numSteps = motion.length;
   this.stepsPerStage = Math.floor(numSteps/4);
   let hr = this.historyRadius(motion);
-  let nr = 1.1*hr;
+  let nr = scaling*hr;
   let wd = this.width = 2*nr;
   let ht = this.height = 2*nr;
   this.addFrame();
   let lines = this.set('lines',arrayShape.mk());
   let gons = this.set('gons',arrayShape.mk());
   let points = this.set('points',arrayShape.mk());
-  let bbase = this.bbase = 0.9*wd;
+  let bbase = this.bbase = scaling*ht;
   let gg = this.addGonGrid({numRows,numCols,width:wd,height:ht});
   this.buildColorsA();
   this.updateState();
