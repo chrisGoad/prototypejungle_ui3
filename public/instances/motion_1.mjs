@@ -6,7 +6,7 @@ rs.setName('motion_1');
 let ht=50;
 
 let topParams = {width:ht,height:ht,framePadding:0.1*ht,frameStroke:'rgb(2,2,2)',frameStrokeWidth:.2,timePerStep:1,stopTime:256,recordingMotion:1,
-    numShapes:4,circleRadius:1,ringRadius:ht*5};
+    numShapes:4,circleRadius:1,ringRadius:ht*5,toAngle:2*Math.PI,fractionAround:1};
 
 Object.assign(rs,topParams);
 
@@ -33,12 +33,12 @@ rs.buildShapes = function (params) {
 }
 
 rs. computePosition = function (shape,t) {
-  let {ringRadius:rr,numShapes:ns,stopTime} = this;
+  let {ringRadius:rr,numShapes:ns,stopTime,toAngle,fractionAround:fa} = this;
   debugger;
   let index = shape.index;
   let frs = index/ns;
-  let fr = t/stopTime;
-  let a = -((fr+frs) * Math.PI*2);
+  let fr = (t/stopTime)*fa;
+  let a = -((fr+frs) * toAngle);
   let p = Point.mk(Math.cos(a),Math.sin(a)).times(rr);
   return p;
 }

@@ -122,6 +122,7 @@ rs.rotate = function (a) {
   return rv;
 }
 rs.buildColorsA = function () {
+  debugger;
   let {colors}  = this;
   let cla = [colors];
   for (let i=1;i<4;i++) {
@@ -132,8 +133,11 @@ rs.buildColorsA = function () {
 
 
 rs.setColors= function (stage,fr) {
+  debugger;
+  let cla = this.colorsA;
+  let ln = cla.length;
   let colors0 = this.colorsA[stage];
-  let colors1 = this.colorsA[(stage+1)%4];
+  let colors1 = this.colorsA[(stage+1)%ln];
   let colors = this.interpolate(colors0,colors1,fr);
   if (this.getVerbose) {
     console.log('colors',JSON.stringify(colors));

@@ -63,12 +63,13 @@ rs.shift = function (colors) {
 }
 rs.buildColorsA = function () {
   let {colors}  = this;
+  debugger;
   let cla = [colors];
-  for (let i=1;i<4;i++) {
+  let ln = colors.length;
+  for (let i=1;i<ln;i++) {
     cla.push(this.shift(cla[i-1]));
   }
   let rcla = cla.reverse();
-  debugger;
   this.colorsA = rcla;
 }
 rs.initialize = function () {
@@ -103,7 +104,7 @@ rs.updateState = function () {
   if (ssf>=31) {
    // this.numSteps = 34;
    // this.getVerbose =1;
-    debugger;
+   // debugger;
   }
   if (ssf>40) {
  //   debugger;
