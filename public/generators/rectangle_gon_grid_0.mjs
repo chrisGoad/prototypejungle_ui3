@@ -133,10 +133,14 @@ rs.buildColorsA = function () {
 
 
 rs.setColors= function (stage,fr) {
-  debugger;
+  let {stepsSoFar:ssf} =this;
+  if (ssf > 62){
+    debugger;
+  }
+  
   let cla = this.colorsA;
   let ln = cla.length;
-  let colors0 = this.colorsA[stage];
+  let colors0 = this.colorsA[stage%ln];
   let colors1 = this.colorsA[(stage+1)%ln];
   let colors = this.interpolate(colors0,colors1,fr);
   if (this.getVerbose) {

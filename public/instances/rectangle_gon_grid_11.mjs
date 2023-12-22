@@ -1,6 +1,6 @@
 
 import {rs as generatorP} from '/instances/rectangle_gon_grid_9.mjs'
-import {rs as motionHistory} from '/motionHistories/motion_2.mjs';
+import {rs as motionHistory} from '/motionHistories/motion_1.mjs';
 
 let rs = generatorP.instantiate();
 
@@ -10,7 +10,7 @@ rs.setName('rectangle_gon_grid_11');
 
 let ht= 55;
 let nr = 250;
- nr = 200;
+ nr = 300;
 //let cornerColors = {ULC:[10,10,10],URC:[238,105,65],LLC:[238,105,65],LRC:[10,10,10]};
 let newParams = {width:ht,height:ht,numRows:nr,numCols:nr,verbose:100,scaling:2};//50
 
@@ -28,7 +28,7 @@ rs.mkrcas = function  (n)  {
 }
 rs.colors = [[0,0,0],[100,100,100],[175,175,175],[250,250,250]];
 rs.colors = [[0,100,175],[100,175,250],[175,250,0],[250,0,100]];
-rs.colors = [[0,100,175],[100,175,250]];
+//rs.colors = [[0,100,175],[100,175,250]];
 
 
 
@@ -53,10 +53,10 @@ rs.tfn = (v,vrb) => {
   if (vrb&&0) {
     console.log('v1',v1,'vmod1',vmod1,'tbv1',tbv1);
   }
-return [tbv0,tbv1,tbv2];
-return [tbv1,tbv1,tbv1];
+//return [tbv0,tbv1,tbv2];
+//return [tbv1,tbv1,tbv1];
  // return [v0,v1,v2];
-  return [v1,v1,v1];
+  return [tbv1,tbv1,tbv1];
 }
 
 export {rs};

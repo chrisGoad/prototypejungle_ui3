@@ -885,7 +885,8 @@ item.interpolateVectors = function (params) {
   if (0) {
     console.log('p',this.pointReducedPrecision(p,poww));
   }
-  let vlen = vValues.length;
+  let vallen = vValues.length;
+  let vertlen = vertices.length;
   let ds = vertices.map((v) => {
     let d = p.distance(v);
     let dt = dfn?dfn(d):d;
@@ -908,8 +909,8 @@ item.interpolateVectors = function (params) {
     console.log('vValues',this.arrayOfArrayReducedPrecision(vValues,pow));
   }
   let wvps = [];// weighted parameters
-  for (let j=0;j<vlen;j++) {
-    let vp = vValues[j];
+  for (let j=0;j<vertlen;j++) {
+    let vp = vValues[j%vallen];
     let nfc = nfcs[j];
     let wvp = vp.map((v)=>nfc*v);
     wvps.push(wvp);
