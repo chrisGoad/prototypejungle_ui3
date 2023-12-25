@@ -15,11 +15,12 @@ Object.assign(rs,topParams);
 
 
 rs.updatePosition = function (shape,t) {
-  let {currentFrame:cf} = this;
+  let {currentFrame:cf,positions} = this;
   let index = shape.index;
   let pos = this.computePosition(shape,t);
   let pnm = 'p_'+index;
   cf[pnm] = pos;
+  positions.push(pos);
   shape.moveto(pos);
 }
 
@@ -28,7 +29,7 @@ rs.updatePosition = function (shape,t) {
 rs.updatePositions = function () {
   let {timePerStep:tps,stepsSoFar:ssf,motionHistory:mh,recordingMotion:rm,lastTime:lt}=this;
   let t = ssf*tps;
-
+  let positions = this.positions = [];
   this.currentTime = t;
   let {shapes} = this;
   let cf = this.currentFrame = {time:t};
@@ -42,15 +43,16 @@ rs.updatePositions = function () {
     this.lastTime = t;
   }
   let ns =shapes.length;
-  for (let i=0;i<ns;i++)
-  shapes.forEach( (shape) => {
+  for (let i=0;i<ns;i++) {
+    let shape = shapes[i];
     let pos = this.computePosition(shape,t);
     this.updatePosition(shape,t);
-  });
+  }
 }
     
     
 rs.updateState = function () {
+  debugger;
   let onUp = this.onUpdate;
   this.updatePositions();
   if (onUp) {

@@ -252,7 +252,7 @@ c:\ffmpeg\bin\ffmpeg  -framerate 15 -i animations/rectangle_gon_grid_7_f%03d.jpg
 c:\ffmpeg\bin\ffmpeg  -framerate 15 -i animations/rectangle_gon_grid_8_f%03d.jpg -s 500x500  export/rectangle_gon_grid_8.gif
 c:\ffmpeg\bin\ffmpeg  -framerate 15 -i animations/rectangle_gon_grid_9_f%03d.jpg -s 500x500  export/rectangle_gon_grid_9.gif
 c:\ffmpeg\bin\ffmpeg  -framerate 15 -i animations/rectangle_gon_grid_10_f%03d.jpg -s 300x300  export/rectangle_gon_grid_10.gif
-c:\ffmpeg\bin\ffmpeg  -framerate 10 -i animations/rectangle_gon_grid_11_f%03d.jpg -s 500x500  export/rectangle_gon_grid_11.gif
+c:\ffmpeg\bin\ffmpeg  -framerate 20 -i animations/rectangle_gon_grid_11_f%03d.jpg -s 500x500  export/rectangle_gon_grid_11.gif
 c:\ffmpeg\bin\ffmpeg  -framerate 15 -i animations/rectangle_gon_grid_11_f%03d.jpg -s 300x300  export/rectangle_gon_grid_11.mp4
 c:\ffmpeg\bin\ffmpeg  -framerate 1 -i animations/rectangle_gon_grid_9_f%03d.jpg -s 500x500  export/rectangle_gon_grid_9.mp4
 

@@ -3,7 +3,8 @@
 module.exports = {
 sections: 
 
-[     [0,'motion_2','instances',1,'motion 2',{likes:0,posted:0,category:'drop'}], 
+[     [0,'motion_3','instances',1,'motion 3',{likes:0,posted:0,category:'drop'}], 
+      [0,'motion_2','instances',1,'motion 2',{likes:0,posted:0,category:'drop'}], 
       [0,'motion_1','instances',1,'motion 1',{likes:0,posted:0,category:'drop'}], 
       [0,'playRecording','generators',1,'playRecording',{likes:0,posted:0,category:'drop'}], 
       [0,'bounce_19','instances',1,'bounce_19',{likes:0,posted:0,category:'drop'}], 

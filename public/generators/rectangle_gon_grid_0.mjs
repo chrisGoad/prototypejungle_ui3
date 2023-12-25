@@ -1,4 +1,3 @@
-debugger;
 import {rs as gonPP} from '/shape/polygon.mjs';
 import {rs as linePP} from '/shape/line.mjs';
 import {rs as circlePP} from '/shape/circle.mjs';
@@ -9,7 +8,6 @@ import {rs as motionHistory} from '/motionHistories/motion_1.mjs';
 
 let rs = basicP.instantiate();
 rs.motionHistory = motionHistory;
-debugger;
 addGonMethods(rs);
 addAnimation(rs);
 rs.setName('rectangle_gon_grid_0');
@@ -122,7 +120,6 @@ rs.rotate = function (a) {
   return rv;
 }
 rs.buildColorsA = function () {
-  debugger;
   let {colors}  = this;
   let cla = [colors];
   for (let i=1;i<4;i++) {
@@ -135,7 +132,7 @@ rs.buildColorsA = function () {
 rs.setColors= function (stage,fr) {
   let {stepsSoFar:ssf} =this;
   if (ssf > 62){
-    debugger;
+  //  debugger;
   }
   
   let cla = this.colorsA;
@@ -152,10 +149,11 @@ rs.setColors= function (stage,fr) {
 
 
 rs.initialize = function () {
-  debugger;
+  debugger;//keep
   this.initProtos();
-   let {width:wd,circleP,numRows,numCols,width,height,stepsPerStage:sps,tfn,dfn,colors} = this;
+   let {width:wd,circleP,numRows,numCols,width,height,stepsPerStage:sps,tfn,dfn,colors,startAtStep:sas} = this;
    this.numSteps=4*sps;
+   this.stepsSoFar = sas;
    this.addFrame();
   let lines = this.set('lines',arrayShape.mk());
   this.set('gons',arrayShape.mk());
@@ -187,7 +185,6 @@ rs.initialize = function () {
 rs.updateState = function () {
   let {stepsPerStage:sps,stepsSoFar:ssf,gons,vertices,vValues,colors,tfn,dfn,verbose} = this;
   console.log('UPDATE');
-  debugger;	
   let stage = Math.floor(ssf/sps);
   let fr = (ssf%sps)/sps;
   this.setColors(stage,fr);

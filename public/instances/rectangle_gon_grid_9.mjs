@@ -63,7 +63,6 @@ rs.shift = function (colors) {
 }
 rs.buildColorsA = function () {
   let {colors}  = this;
-  debugger;
   let cla = [colors];
   let ln = colors.length;
   for (let i=1;i<ln;i++) {
@@ -73,14 +72,16 @@ rs.buildColorsA = function () {
   this.colorsA = rcla;
 }
 rs.initialize = function () {
-  debugger;
+  debugger;//keep
   this.initProtos();
    //let {width:wd,circleP,numRows,numCols,width,height,stepsPerStage:sps,motionHistory:mh} = this;
-   let {circleP,numRows,numCols,stepsPerStage:sps,motionHistory:mh,scaling} = this;
-   
+   let {circleP,numRows,numCols,stepsPerStage:sps,motionHistory:mh,scaling,startAtStep:sas,lastStep} = this;
+  this.stepsSoFar = sas;
   let motion=this.motion = this.processHistory(mh);
+  
   let numSteps = this.numSteps = motion.length;
   this.stepsPerStage = Math.floor(numSteps/4);
+
   let hr = this.historyRadius(motion);
   let nr = scaling*hr;
   let wd = this.width = 2*nr;

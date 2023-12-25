@@ -23,15 +23,12 @@ item.setName = function (name,variant,jsonName) {
  		
 item.onCompleteAnimation = function (cb) {
   let {motionHistory:mh,whereToSave:wts} = this;
-  debugger;
   console.log('Animation complete');
   if (mh) {
     let  destPath = `/motionHistories/${wts}.mjs`;
     let str = 'let rs = '+JSON.stringify(mh)+'; export {rs};';
    // let str =JSON.stringify(mh);
-    debugger;
      core.httpPost(destPath,str,function (rs) { 
-		   debugger;
 			 if (cb) {
 				 cb();
 			 }
