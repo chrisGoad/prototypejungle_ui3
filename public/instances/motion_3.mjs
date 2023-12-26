@@ -6,8 +6,8 @@ let rs = generatorP.instantiate();
 rs.setName('motion_3');
 let ht=50;
 
-let topParams = {width:ht,height:ht,framePadding:0.1*ht,frameStroke:'rgb(2,2,2)',frameStrokeWidth:.2,timePerStep:1,stopTime:1023,recordingMotion:1,
-    shapesPerRing:40,circleRadius:.2,ringRadii:[.5*ht,.45*ht,.4*ht,.35*ht,.3*ht,.25*ht,.2*ht,.15*ht],speeds:[1,1.1,1.2,1.3,1.4,1.5,1.6,1.7],toAngle:2*Math.PI};
+let topParams = {width:ht,height:ht,framePadding:0.1*ht,frameStroke:'rgb(2,2,2)',frameStrokeWidth:.2,timePerStep:1,stopTime:5023,recordingMotion:1,
+    shapesPerRing:8,circleRadius:.2,ringRadii:[.5*ht,.45*ht,.4*ht,.35*ht,.3*ht,.25*ht,.2*ht,.15*ht],speeds:[1,1.1,1.2,1.3,1.4,1.5,1.6,1.7],toAngle:2*Math.PI};
 
 Object.assign(rs,topParams);
 
@@ -42,10 +42,12 @@ rs.buildShapes = function (params) {
 rs. computePosition = function (shape,t) {
   let {ringRadii:rr,stopTime,toAngle,speeds} = this;
   let {ring,fractionAround:fa,numShapes:ns} = shape;
+  let clockwise = (ring%3)?1:-1;
+  console.log('cw',clockwise);
   let rd = rr[ring];
   let speed = speeds[ring];
   let frt = t*speed/stopTime;
-  let a = ((frt+fa) * toAngle);
+  let a = clockwise*((frt+fa) * toAngle);
   let p = Point.mk(Math.cos(a),Math.sin(a)).times(rd);
   return p;
 }
