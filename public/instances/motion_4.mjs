@@ -7,7 +7,7 @@ rs.setName('motion_4');
 let ht=50;
 
 let topParams = {width:ht,height:ht,framePadding:0.1*ht,frameStroke:'rgb(2,2,2)',frameStrokeWidth:.2,timePerStep:1,stopTime:5023,recordingMotion:1,
-    shapesPerRing:[],circleRadius:.2,
+    shapesPerRing:[],circleRadius:.2,currentTime:0,
     ringRadii:[.5*ht,.45*ht,.4*ht,.35*ht,.3*ht,.25*ht,.2*ht,.15*ht],
     speeds:[[]],masses:[[]],initialAngles:[[]],toAngle:2*Math.PI};
 
@@ -47,7 +47,7 @@ rs.buildParticles = function () {
     let rias = ias[i];
     let radius = ringRadii[i];
     for (let j = 0;j<rnumShapes;j++) {
-      let particle = {index:cindex++,ring:i,radius,indexInRing:j,speed:rspeed[j],mass:rmasses[j],initialAngle:rias[j],initialTime}
+      let particle = {index:cindex++,ring:i,radius,indexInRing:j,speed:rspeeds[j],mass:rmasses[j],initialAngle:rias[j],initialTime:0}
       particles.push(particle);
     }
   }
@@ -76,7 +76,7 @@ rs.buildUniformArrays  = function (params) {
   let spra = [];
   let speeda = [];
   let massa = [];
-  let initialAngles = this.steppedArray(2*Math.Pi,spr);
+  let initialAngles = this.steppedArray(2*Math.PI,spr);
   let speeds = this.uniformArray(speed,spr);
   let masses = this.uniformArray(mass,spr);
   let iaa = [];
@@ -89,12 +89,12 @@ rs.buildUniformArrays  = function (params) {
   this.shapesPerRing = spra;  
   this.speeds = speeda;  
   this.masses = speeda;  
-  this.initalAngles = iaa;
+  this.initialAngles = iaa;
 }
 
    
-rs.buildShapes = function (particles) {
-  let {shapes} = this;
+rs.buildShapes = function () {
+  let {shapes,particles,circleP} = this;
   let np = particles.length;
   for (let i = 0;i<np;i++) {
     let p = particles[i]
@@ -106,10 +106,10 @@ rs.buildShapes = function (particles) {
 }
 
 rs. updateAngle = function (particle,t) {
-  let {initialAngle,initialTime,speed} = shape;
+  let {initialAngle,initialTime,speed} = particle;
   let deltaT = t-initialTime;
   let deltaA = speed*deltaT;
-  this.currentAngle = initialAngle+deltaA;
+  particle.currentAngle = initialAngle+deltaA;
 }
 
 rs.updateAngles = function (t) {
@@ -119,6 +119,7 @@ rs.updateAngles = function (t) {
 
 rs.displayPosition  = function (particle) {
   let {shape,currentAngle:a,radius:r} = particle;
+  debugger;
   let p = Point.mk(r*Math.cos(a),r*Math.sin(a));
   shape.moveto(p);
 }
@@ -139,17 +140,21 @@ rs.onUpdate = function () {
    
 rs.initialize = function () {
    debugger;
+   this.initProtos();
   this.addFrame();
   this.set('shapes',arrayShape.mk());
   this.set('lines',arrayShape.mk());
   this.buildUniformArrays({speed:2,mass:2,shapesPerRing:8});
+  this.particles = this.buildParticles();
+  this.buildShapes();
   //this.updatePositions(0);
 }
 
 
 rs.updateState = function () {
   debugger;
-  let {stepsSoFar:ssf,currentTime:t} = this;
+  let {stepsSoFar:ssf} = this;
+  let t =  this.currentTime = ssf;
   console.log('steps',ssf,'time',t);
   //let nrp = this.computeNearestPositions(positions);
   this.updateAngles(t);
