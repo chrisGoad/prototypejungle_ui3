@@ -52,13 +52,13 @@ rs. computePosition = function (shape,t) {
   return p;
 }
    
-rs.nearestPosition = function (positions,i) {
+rs.nearestPositionExcept = function (positions,i,xc) {
   let p = positions[i];
   let pln = positions.length;
   let mind = Infinity;
   let np;
   for (let j=0;j<pln;j++) {
-    if (j!=i){
+    if ((j!==i)&&(j!==xc)) {
       let pj = positions[j];
       let d =p.distance(pj);
       if (d <mind) {
@@ -75,8 +75,10 @@ rs.nearestPositions = function (positions) {
   let pln = positions.length;
   let nrp =[];
   for (let i=0;i<pln;i++) {
-    let np = this.nearestPosition(positions,i);
-    nrp . push(np);
+    let np = this.nearestPositionExcept(positions,i);
+    let npx = this.nearestPositionExcept(positions,i,np.index)
+    nrp . push([np,npx]);
+    //nrp . push(np);
   }
   return nrp;
 }
@@ -87,20 +89,31 @@ rs.displayNearestPositions = function (positions,) {
   let {lines,lineP} = this;
   debugger;
   let nrps = this.nearestPositions(positions)
-  let ln = nrps.length;
-  for (let i=0;i<ln;i++) {
-    let nrp = nrps[i]
+  let lnp = nrps.length;
+  for (let i=0;i<lnp;i++) {
+    let nrpt = nrps[i]
+    let nrp = nrpt[0];
+    let nrpx = nrpt[1];
     let {index,distance}  = nrp;
+    let {index:indexx,distance:distancex}  = nrpx;
     let e0 = positions[i];
     let e1 = positions[index];
-    let ln = lines[i];
+    let e0x = e0;
+    let e1x = positions[indexx];
+    let ln = lines[2*i];
+    let lnx = lines[2*i+1];
     if (!ln) {
       ln = lineP.instantiate();
       lines.push(ln);
+      lnx = lineP.instantiate();
+      lines.push(lnx);
     }
     ln.show();
+    lnx.show();
     ln.setEnds(e0,e1);
+    lnx.setEnds(e0x,e1x);
     ln.update();
+    lnx.update();
   }
 }
     

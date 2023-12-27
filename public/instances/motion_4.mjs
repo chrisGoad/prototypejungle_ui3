@@ -36,11 +36,12 @@ rs.initProtos = function () {
 }
 
 rs.buildParticles = function () {
-  let {ringRadii,shapesPerRing:spr,speeds,masses,initialAngles:ias} = this;
-  let particles= [];
+  let {ringRadii,shapesPerRing:spr,speeds,masses,initialAngles:ias,particles,particlesByRing:pbr}= this;
   let nr = ringRadii.length;
   let cindex = 0;
   for (let i=0;i<nr;i++) {
+    let ptr = []; // particles this ring
+    pbr[i] = ptr;
     let rspeeds = speeds[i];
     let rmasses = masses[i];
     let rnumShapes = spr[i];
@@ -49,9 +50,10 @@ rs.buildParticles = function () {
     for (let j = 0;j<rnumShapes;j++) {
       let particle = {index:cindex++,ring:i,radius,indexInRing:j,speed:rspeeds[j],mass:rmasses[j],initialAngle:rias[j],initialTime:0}
       particles.push(particle);
+      ptr.push(particle);
     }
   }
-  return particles;
+  //return particles;
 }
 
 rs.uniformArray = function (v,n) {
@@ -77,7 +79,8 @@ rs.buildUniformArrays  = function (params) {
   let speeda = [];
   let massa = [];
   let initialAngles = this.steppedArray(2*Math.PI,spr);
-  let speeds = this.uniformArray(speed,spr);
+  let speeds = this.uniformArray(0,spr);
+  speeds[0] =speed;
   let masses = this.uniformArray(mass,spr);
   let iaa = [];
   for (let i=0;i<nr;i++) {
@@ -129,7 +132,19 @@ rs.displayPositions = function () {
   let {particles} = this;   
   particles.forEach( (p) => this.displayPosition(p));
 }
-  
+
+rs.approaching = function (p0,p1) {
+}
+rs.nextParticleCollision = function (particle) {
+  let {currentTime,shapesPerRing,particles,particlesByRing:pbr}  = this;
+  let {ring,indexInRing:iir,speed,mass,currentAngle:ca} = particle;
+  let str = shapesPerRing[ring];// shapes this ring
+  let ptr = pbr[ring];// particles this ring
+  let nxti = (iir+1)%str;
+  let prvi = iir?iir-1?str-1;
+  nxtp = ptr[nxti];
+  prvp = ptr[prvi];
+}
 rs.onUpdate = function () {
   let {stepsSoFar:ssf,currentTime:t} = this;
   console.log('steps',ssf,'time',t);
@@ -144,8 +159,10 @@ rs.initialize = function () {
   this.addFrame();
   this.set('shapes',arrayShape.mk());
   this.set('lines',arrayShape.mk());
-  this.buildUniformArrays({speed:2,mass:2,shapesPerRing:8});
-  this.particles = this.buildParticles();
+  this.buildUniformArrays({speed:.2,mass:2,shapesPerRing:8});
+  this.particles = [];
+  this.particlesByRing = [];
+  this.buildParticles();
   this.buildShapes();
   //this.updatePositions(0);
 }
