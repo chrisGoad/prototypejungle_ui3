@@ -14,7 +14,7 @@ let topParams = {width:ht,height:ht,framePadding:0.1*ht,frameStroke:'rgb(2,2,2)'
 Object.assign(rs,topParams);
 
 /* particle
-{ring,radius,indexInRing,currentAngle,speed,mass,index,initialAngle}
+{ring,radius,indexInRing,currentAngle,speed,mass,index,initialAngle,initialTime}
 
 for each ring, a nextCollision is maintained of the form
 {index0,index1,time}
@@ -47,8 +47,10 @@ rs.buildParticles = function () {
     let rnumShapes = spr[i];
     let rias = ias[i];
     let radius = ringRadii[i];
+    let colors = ['red','green','blue','yellow','cyan','magenta','white','gray'];
+    
     for (let j = 0;j<rnumShapes;j++) {
-      let particle = {index:cindex++,ring:i,radius,indexInRing:j,speed:rspeeds[j],mass:rmasses[j],initialAngle:rias[j],initialTime:0}
+      let particle = {index:cindex++,ring:i,radius,indexInRing:j,speed:rspeeds[j],mass:rmasses[j],initialAngle:rias[j],initialTime:0,fill:colors[j]}
       particles.push(particle);
       ptr.push(particle);
     }
@@ -103,6 +105,7 @@ rs.buildShapes = function () {
     let p = particles[i]
     let crc = circleP.instantiate();
     crc.particle = p;
+    crc.fill = p.fill;
     p.shape = crc;
     shapes.push(crc);
   }
@@ -122,7 +125,6 @@ rs.updateAngles = function (t) {
 
 rs.displayPosition  = function (particle) {
   let {shape,currentAngle:a,radius:r} = particle;
-  debugger;
   let p = Point.mk(r*Math.cos(a),r*Math.sin(a));
   shape.moveto(p);
 }
@@ -132,27 +134,138 @@ rs.displayPositions = function () {
   let {particles} = this;   
   particles.forEach( (p) => this.displayPosition(p));
 }
-
-rs.approaching = function (p0,p1) {
+rs.angularDistance = function (a0,a1) {
+  let ca = a1 - a0;
+  while (1) {
+    if (ca > Math.PI) {
+      ca = ca - 2*Math.PI;
+    }
+    if (ca < -Math.PI) {
+      ca = ca+2*Math.PI;
+    }
+    return ca;
+  }
 }
-rs.nextParticleCollision = function (particle) {
-  let {currentTime,shapesPerRing,particles,particlesByRing:pbr}  = this;
-  let {ring,indexInRing:iir,speed,mass,currentAngle:ca} = particle;
+rs.timeToCollision  = function (p0,p1) {
+  let {speed:sp0,currentAngle:ca0} = p0;
+  let {speed:sp1,currentAngle:ca1} = p1;
+  let deltaS = sp0-sp1;
+  //let deltaA = ca1-ca0;
+  let deltaA = this.angularDistance(ca0,ca1);
+  let deltaT = deltaA?deltaA/deltaS:undefined;
+  return deltaT;
+}
+/*
+rs.nextParticleCollision = function (ring,indexInRing) {
+  let iir = indexInRing;
+  let {currentTime:t,shapesPerRing,particles,particlesByRing:pbr}  = this;
+  let rps=pbr[ring];
+  let particle = rps[iir];
+  let {speed,mass,currentAngle:ca} = particle;
   let str = shapesPerRing[ring];// shapes this ring
   let ptr = pbr[ring];// particles this ring
   let nxti = (iir+1)%str;
-  let prvi = iir?iir-1?str-1;
-  nxtp = ptr[nxti];
-  prvp = ptr[prvi];
+  //let prvi = iir?iir-1?str-1;
+  let nxtp = ptr[nxti];
+  //prvp = ptr[prvi];
+ // let deltaTprv = this.timeToCollision(particle,prvp);
+  let deltaTnxt = this.timeToCollision(particle,nxtp);
+  if ((deltaTnxt !== undefined)  && (deltaTnxt>0)) {
+    let nextC  = {p0i:iir,p1i:nxti,time:t+deltaTnxt};
+    return nextC;
+  }
 }
+*/
+rs.nextParticleCollision = function (ring,indexInRing) {
+  let iir = indexInRing;
+  let {currentTime:t,shapesPerRing,particles,particlesByRing:pbr}  = this;
+  let rps=pbr[ring];
+  let particle = rps[iir];
+  let {speed,mass,currentAngle:ca} = particle;
+  let str = shapesPerRing[ring];// shapes this ring
+  let ptr = pbr[ring];// particles this ring
+  let minT = Infinity;
+  let nextC;
+  for (let i=0;i<str;i++) {
+    if (i!==iir) {
+      if (i===7) {
+         debugger;
+      }
+      let op = ptr[i];
+      let deltaTop = this.timeToCollision(particle,op);
+      if ((deltaTop !== undefined)  && (deltaTop>0)) {
+        let tm = t+deltaTop;
+        if (tm < minT) {
+          nextC  = {p0i:iir,p1i:i,time:tm};
+          minT = tm;
+        }
+      }
+    }
+  }
+  return nextC;
+}
+
+rs.enactRingCollision = function (ring) {
+  let {shapesPerRing:spr,stepsSoFar:ssf,particlesByRing:pbr}  = this;
+  let pbtr = pbr[ring]; //particles by this ring
+  let nshapes = spr[ring];
+ debugger;
+  let cols = [];
+  let minT = Infinity;
+  let minTcol;
+  for (let i=0;i<nshapes;i++) {
+    let col = this.nextParticleCollision(ring,i);
+    if (col) {
+      let {time} = col;
+      if (time < minT) {
+        minTcol = col;
+        minT = time;
+      }
+    } 
+  }
+  if (minT<=(ssf+1)) {
+    debugger;
+    let p0 = pbtr[minTcol.p0i];
+    let p1 = pbtr[minTcol.p1i];
+    this.updateAngle(p0,minT);
+    this.updateAngle(p1,minT);
+    p0.initialTime = minT;
+    p1.initialTime = minT;
+
+    p0.initialAngle =p0.currentAngle;
+    p1.initialAngle =p1.currentAngle;
+    let sp0 = p0.speed;
+    let sp1 = p1.speed;
+    let m = (sp0 +sp1)/2;
+    let rsp0 = sp0-m;
+    let rsp1 = sp1-m;
+    let nsp0 = m - rsp0;
+    let nsp1 = m - rsp1;
+    p0.speed = nsp0;
+    p1.speed = nsp1;
+    return 1;
+  }
+}
+
+rs.enactRingCollisions = function (ring) {
+  let k = 1; // keep on going
+  while (k) {
+    k = this.enactRingCollision(ring);
+  }
+}
+  
+
+/*
+
 rs.onUpdate = function () {
   let {stepsSoFar:ssf,currentTime:t} = this;
   console.log('steps',ssf,'time',t);
   //let nrp = this.computeNearestPositions(positions);
   this.updateAngles(t);
   this.displayPositions();
+  this.nextParticleCollisions(0);
 }
-   
+  */ 
 rs.initialize = function () {
    debugger;
    this.initProtos();
@@ -164,18 +277,31 @@ rs.initialize = function () {
   this.particlesByRing = [];
   this.buildParticles();
   this.buildShapes();
+  this.colT = Infinity;
   //this.updatePositions(0);
 }
 
 
 rs.updateState = function () {
-  debugger;
-  let {stepsSoFar:ssf} = this;
-  let t =  this.currentTime = ssf;
+//  debugger;
+  let {stepsSoFar:ssf,currentTime:t,colT} = this;
+  
+ // let t =  this.currentTime = ssf;
+ if (t>colT) {
+   return;
+  }
   console.log('steps',ssf,'time',t);
   //let nrp = this.computeNearestPositions(positions);
   this.updateAngles(t);
   this.displayPositions();
+  this.enactRingCollisions(0);
+ /* let {time} = nrc;
+  console.log('next Collision',time);
+  if (time<colT) {
+    this.colT = time;
+  }
+  */
+
 }
 export {rs};
 

@@ -23,13 +23,12 @@ item.setNumSteps = function () {
 
 
 item.oneStep = function (one) {
-  let {paused,numSteps,lastStep,chopOffEnd,chopOffBeginning} = this;
-  debugger;
+  let {paused,numSteps,lastStep,chopOffEnd,chopOffBeginning,timePerStep:tps} = this;
   if (this.paused) {
     return;
   }
   let ns = this.stepsSoFar;	
-  
+  this.currentTime = tps*ns;
        //console.log('ns',ns,'tns',this.numSteps);
   if  (this.stepsSoFar >(Math.min(lastStep+1,numSteps-chopOffEnd))) {
     debugger;
