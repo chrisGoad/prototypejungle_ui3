@@ -3,13 +3,15 @@ import {rs as circlePP} from '/shape/circle.mjs';
 import {rs as generatorP} from '/generators/motion_0.mjs'
 let rs = generatorP.instantiate();
 
-rs.setName('motion_3');
+rs.setName('motion_5');
 let ht=50;
 let stt=5023;
 stt = 4096;
-
-let topParams = {width:ht,height:ht,framePadding:0.1*ht,frameStroke:'rgb(2,2,2)',frameStrokeWidth:.2,timePerStep:1,stopTime:stt,recordingMotion:1,saveAnimation:1,
-    shapesPerRing:8,circleRadius:.2,ringRadii:[.5*ht,.45*ht,.4*ht,.35*ht,.3*ht,.25*ht,.2*ht,.15*ht],speeds:[1,1.1,1.2,1.3,1.4,1.5,1.6,1.7],toAngle:2*Math.PI};
+let ts = 12;
+stt=2;
+let topParams = {width:ht,height:ht,framePadding:0.1*ht,frameStroke:'rgb(2,2,2)',frameStrokeWidth:.2,timePerStep:1/1024,stopTime:stt,recordingMotion:1,saveAnimation:1,
+    shapesPerRing:6,circleRadius:.2,ringRadii:[.5*ht,.45*ht,.4*ht,.35*ht,.3*ht,.25*ht,.2*ht,.15*ht],
+                                       speeds:[ts/6, ts/6,  ts/4, ts/4,  ts/3, ts/3,ts/2,ts/2],toAngle:2*Math.PI};
 
 Object.assign(rs,topParams);
 
@@ -42,6 +44,7 @@ rs.buildShapes = function (params) {
 }
 
 rs. computePosition = function (shape,t) {
+  debugger;
   let {ringRadii:rr,stopTime,toAngle,speeds} = this;
   let {ring,fractionAround:fa,numShapes:ns} = shape;
   let clockwise = (ring%3)?1:-1;

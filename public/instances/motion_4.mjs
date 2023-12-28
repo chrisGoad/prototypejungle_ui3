@@ -65,11 +65,12 @@ rs.uniformArray = function (v,n) {
   }
   return a;
 }
-rs.steppedArray = function (upTo,n) {
+rs.steppedArray = function (upTo,n,angles) {
   let inc = upTo/n;
   let a = [];
   for (let i=0;i<n;i++) {
-    a.push(inc*i);
+    let v = angles?this.toMpiPiRange(inc*i):inc*i
+    a.push(v);
   }
   return a;
 }
@@ -80,8 +81,8 @@ rs.buildUniformArrays  = function (params) {
   let spra = [];
   let speeda = [];
   let massa = [];
-  let initialAngles = this.steppedArray(2*Math.PI,spr);
-  let speeds = this.uniformArray(0,spr);
+  let initialAngles = this.steppedArray(2*Math.PI,spr,1);
+  let speeds = this.uniformArray(.01,spr);
   speeds[0] =speed;
   let masses = this.uniformArray(mass,spr);
   let iaa = [];
@@ -110,12 +111,21 @@ rs.buildShapes = function () {
     shapes.push(crc);
   }
 }
-
+rs.toMpiPiRange = function (a) {
+  if (a > Math.PI) {
+    return a-2*Math.PI;
+  }
+  if (a<-Math.PI) {
+    return a+Math.PI;
+  }
+  return a;
+}
+  
 rs. updateAngle = function (particle,t) {
   let {initialAngle,initialTime,speed} = particle;
   let deltaT = t-initialTime;
   let deltaA = speed*deltaT;
-  particle.currentAngle = initialAngle+deltaA;
+  particle.currentAngle = this.toMpiPiRange(initialAngle+deltaA);
 }
 
 rs.updateAngles = function (t) {
@@ -150,10 +160,11 @@ rs.timeToCollision  = function (p0,p1) {
   let {speed:sp0,currentAngle:ca0} = p0;
   let {speed:sp1,currentAngle:ca1} = p1;
   let deltaS = sp0-sp1;
-  //let deltaA = ca1-ca0;
-  let deltaA = this.angularDistance(ca0,ca1);
+  let deltaA = ca1-ca0;
+ // let deltaA = this.angularDistance(ca0,ca1);
   let deltaT = deltaA?deltaA/deltaS:undefined;
-  return deltaT;
+  let deltaTa = Math.abs(deltaT)>0.001?deltaT:undefined;
+  return deltaTa;
 }
 /*
 rs.nextParticleCollision = function (ring,indexInRing) {
@@ -188,7 +199,7 @@ rs.nextParticleCollision = function (ring,indexInRing) {
   let nextC;
   for (let i=0;i<str;i++) {
     if (i!==iir) {
-      if (i===7) {
+      if ((iir === 5)&&(i===6)) {
          debugger;
       }
       let op = ptr[i];

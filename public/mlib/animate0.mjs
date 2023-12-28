@@ -15,6 +15,7 @@ item.chopOffBeginning = 0; // in steps
 item.chopOffEnd = 0; // in steps
 item.stepInterval = 40;
 item.pauseAt = [];
+item.lastStep = Infinity;
 
 item.setNumSteps = function () {
   let {stopTime,stopStep,timePerStep} = this;
@@ -24,6 +25,7 @@ item.setNumSteps = function () {
 
 item.oneStep = function (one) {
   let {paused,numSteps,lastStep,chopOffEnd,chopOffBeginning,timePerStep:tps} = this;
+  debugger;
   if (this.paused) {
     return;
   }
