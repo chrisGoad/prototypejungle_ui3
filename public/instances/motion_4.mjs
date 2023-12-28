@@ -65,6 +65,17 @@ rs.uniformArray = function (v,n) {
   }
   return a;
 }
+
+
+rs.randomArray = function (lb,ub,n) {
+  let a =  [];
+  let delta = ub-lb;
+  for (let i=0;i<n;i++) {
+    let v = Math.random()*delta + lb;
+    a.push(v);
+  }
+  return a;
+}
 rs.steppedArray = function (upTo,n,angles) {
   let inc = upTo/n;
   let a = [];
@@ -76,17 +87,16 @@ rs.steppedArray = function (upTo,n,angles) {
 }
 rs.buildUniformArrays  = function (params) {
   let {ringRadii} = this;
-  let {speed,mass,shapesPerRing:spr} =params;
+  let {speed,mass,shapesPerRing:spr,randomSpeeds} =params;
   let nr = ringRadii.length;
   let spra = [];
   let speeda = [];
   let massa = [];
   let initialAngles = this.steppedArray(2*Math.PI,spr,1);
-  let speeds = this.uniformArray(.01,spr);
-  speeds[0] =speed;
   let masses = this.uniformArray(mass,spr);
   let iaa = [];
   for (let i=0;i<nr;i++) {
+    let speeds = randomSpeeds?this.randomArray(-speed,speed,spr):this.uniformArray(.01,spr);
     spra.push(spr);
     speeda.push(speeds);
     massa.push(masses);
@@ -283,7 +293,7 @@ rs.initialize = function () {
   this.addFrame();
   this.set('shapes',arrayShape.mk());
   this.set('lines',arrayShape.mk());
-  this.buildUniformArrays({speed:.2,mass:2,shapesPerRing:8});
+  this.buildUniformArrays({speed:.02,mass:2,shapesPerRing:8,randomSpeeds:1});
   this.particles = [];
   this.particlesByRing = [];
   this.buildParticles();

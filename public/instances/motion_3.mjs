@@ -7,8 +7,8 @@ rs.setName('motion_3');
 let ht=50;
 let stt=5023;
 stt = 4096;
-
-let topParams = {width:ht,height:ht,framePadding:0.1*ht,frameStroke:'rgb(2,2,2)',frameStrokeWidth:.2,timePerStep:1,stopTime:stt,recordingMotion:1,saveAnimation:1,
+stt =12;
+let topParams = {width:ht,height:ht,framePadding:0.1*ht,frameStroke:'rgb(2,2,2)',frameStrokeWidth:.2,timePerStep:1/256,stopTime:stt,recordingMotion:1,saveAnimation:1,
     shapesPerRing:8,circleRadius:.2,ringRadii:[.5*ht,.45*ht,.4*ht,.35*ht,.3*ht,.25*ht,.2*ht,.15*ht],speeds:[1,1.1,1.2,1.3,1.4,1.5,1.6,1.7],toAngle:2*Math.PI};
 
 Object.assign(rs,topParams);
