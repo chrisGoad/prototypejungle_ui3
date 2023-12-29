@@ -15,8 +15,9 @@ let topParams = {width:ht,height:ht,framePadding:0.1*ht,frameStroke:'rgb(2,2,2)'
 
 Object.assign(rs,topParams);
 
-
-
+//rs.speeds = [1,1.1,1.2,1.3,1.4,1.5,1.6,1.7];
+rs.ringRadii =[.5*ht,.4*ht,.3*ht,.2*ht,.15*ht]
+rs.ringRadii =[.5*ht,.45*ht,.4*ht,.35*ht,.2*ht,.15*ht,.1*ht];
 rs.initProtos = function () {
   let {circleRadius:cr} =this;
   let circleP = this.circleP = circlePP.instantiate();
@@ -44,11 +45,11 @@ rs.buildShapes = function (params) {
 }
 
 rs. computePosition = function (shape,t) {
-  debugger;
+ // debugger;
   let {ringRadii:rr,stopTime,toAngle,speeds} = this;
   let {ring,fractionAround:fa,numShapes:ns} = shape;
   let clockwise = (ring%3)?1:-1;
-  console.log('cw',clockwise);
+ // console.log('cw',clockwise);
   let rd = rr[ring];
   let speed = speeds[ring];
   let frt = t*speed/stopTime;
@@ -75,50 +76,84 @@ rs.nearestPositionExcept = function (positions,i,xc) {
   return {index:np,distance:mind}
 }
 
-rs.nearestPositions = function (positions) {
-  debugger;
+rs.nearestPositionExcept = function (positions,i,xc) {
+  let p = positions[i];
   let pln = positions.length;
-  let nrp =[];
-  for (let i=0;i<pln;i++) {
-    let np = this.nearestPositionExcept(positions,i);
-    let npx = this.nearestPositionExcept(positions,i,np.index)
-    nrp . push([np,npx]);
-    //nrp . push(np);
+  let xcln = xc.length;
+  let mind = Infinity;
+  let np;
+  for (let j=0;j<pln;j++) {
+    if (j!==i){
+      let jisxc = 0;
+      for (let k=0;k<xcln;k++){
+        let xck = xc[k];
+        if (xck === j) {
+          jisxc = 1;
+          break;
+        }
+      }
+      if (!jisxc) {
+        let pj = positions[j];
+        let d =p.distance(pj);
+        if (d <mind) {
+          np = j;
+          mind =d;
+        }
+      }
+    }
   }
-  return nrp;
+  return {index:np,distance:mind}
+}
+
+  
+  
+rs.nearestPositions = function (positions,n) {
+  let {debug2} = this;
+  if (debug2) {
+    debugger;
+  }
+  let pln = positions.length;
+  let nrps =[];
+  for (let i=0;i<pln;i++) {
+    let nrp = [];
+    let exceptions = [];  
+    for (let j=0;j<n;j++) {
+      let np = this.nearestPositionExcept(positions,i,exceptions);
+      exceptions.push(np.index);
+      nrp.push(np);
+    }
+    nrps.push(nrp);
+  }
+  return nrps;
 }
   
+    
  
 
 rs.displayNearestPositions = function (positions) {
-  let {lines,lineP} = this;
-  debugger;
-  let nrps = this.nearestPositions(positions)
+ let {lines,lineP,debug2} = this;
+   if (debug2) {
+    debugger;
+  }
+  let nrps = this.nearestPositions(positions,3)
   let lnp = nrps.length;
   for (let i=0;i<lnp;i++) {
-    let nrpt = nrps[i]
-    let nrp = nrpt[0];
-    let nrpx = nrpt[1];
-    let {index,distance}  = nrp;
-    let {index:indexx,distance:distancex}  = nrpx;
-    let e0 = positions[i];
-    let e1 = positions[index];
-    let e0x = e0;
-    let e1x = positions[indexx];
-    let ln = lines[2*i];
-    let lnx = lines[2*i+1];
-    if (!ln) {
-      ln = lineP.instantiate();
-      lines.push(ln);
-      lnx = lineP.instantiate();
-      lines.push(lnx);
+    let nrpa = nrps[i];
+    let nrln = nrpa.length;
+    for (let j=0;j<nrln;j++) {
+      let nrp = nrpa[j];
+      let {index,distance}  = nrp;
+      let e0 = positions[i];
+      let e1 = positions[index];
+      let ln = lines[nrln*i+j];
+      if (!ln) {
+        ln = lineP.instantiate();
+        lines.push(ln);
+      }
+      ln.show();
+      ln.setEnds(e0,e1);
+      ln.update();
     }
-    ln.show();
-    lnx.show();
-    ln.setEnds(e0,e1);
-    lnx.setEnds(e0x,e1x);
-    ln.update();
-    lnx.update();
   }
 }
     
@@ -132,6 +167,14 @@ rs.initialize = function () {
    debugger;
   let {timePerStep:tps,stopTime:st,ringRadii:rr,shapesPerRing:spr} = this;
   this.numSteps = Math.floor(st/tps);
+  this.numSteps = 65;
+  this.numSteps = 700;
+ this.numSteps = 348;
+ // this.stepArray = [7,320,321,322,323,324,325,326,327,327,329];
+ // this.stepArray = [7,350,351,352,353,354,355,356,357,358,359];
+  //this.stepArray = [7].concat(this.sequentialArray(350,370));
+ // this.stepArray = [7,630,631,632,633,634,635,636,637,638,639];
+ this.startAtStep = 7;
   this.numShapes =spr*(rr.length);
   this.initProtos();
   this.addFrame();

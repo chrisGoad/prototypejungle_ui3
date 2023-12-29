@@ -52,7 +52,6 @@ rs.updatePositions = function () {
     
     
 rs.updateState = function () {
-  debugger;
   let onUp = this.onUpdate;
   this.updatePositions();
   if (onUp) {

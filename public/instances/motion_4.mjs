@@ -6,10 +6,16 @@ let rs = generatorP.instantiate();
 rs.setName('motion_4');
 let ht=50;
 
-let topParams = {width:ht,height:ht,framePadding:0.1*ht,frameStroke:'rgb(2,2,2)',frameStrokeWidth:.2,timePerStep:1,stopTime:5023,recordingMotion:1,
+let topParamss = {width:ht,height:ht,framePadding:0.1*ht,frameStroke:'rgb(2,2,2)',frameStrokeWidth:.2,timePerStep:1,stopTime:5023,recordingMotion:1,
     shapesPerRing:[],circleRadius:.2,currentTime:0,
     ringRadii:[.5*ht,.45*ht,.4*ht,.35*ht,.3*ht,.25*ht,.2*ht,.15*ht],
     speeds:[[]],masses:[[]],initialAngles:[[]],toAngle:2*Math.PI};
+let topParams = {width:ht,height:ht,framePadding:0.1*ht,frameStroke:'rgb(2,2,2)',frameStrokeWidth:.2,timePerStep:1,stopTime:5023,recordingMotion:1,
+    shapesPerRing:[],circleRadius:2,currentTime:0,
+    ringRadii:[.5*ht],
+    speeds:[[]],masses:[[]],initialAngles:[[]],toAngle:2*Math.PI};
+    
+
 
 Object.assign(rs,topParams);
 
@@ -65,6 +71,16 @@ rs.uniformArray = function (v,n) {
   }
   return a;
 }
+,
+
+rs.arrayFromFunction = function (f,n) {
+  debugger;
+  let a =  [];
+  for (let i=0;i<n;i++) {
+    a.push(f(i));
+  }
+  return a;
+}
 
 
 rs.randomArray = function (lb,ub,n) {
@@ -87,7 +103,8 @@ rs.steppedArray = function (upTo,n,angles) {
 }
 rs.buildUniformArrays  = function (params) {
   let {ringRadii} = this;
-  let {speed,mass,shapesPerRing:spr,randomSpeeds} =params;
+  debugger;
+  let {speed,mass,shapesPerRing:spr,randomSpeeds,speedFunction} =params;
   let nr = ringRadii.length;
   let spra = [];
   let speeda = [];
@@ -95,8 +112,10 @@ rs.buildUniformArrays  = function (params) {
   let initialAngles = this.steppedArray(2*Math.PI,spr,1);
   let masses = this.uniformArray(mass,spr);
   let iaa = [];
+  //let fn = (i) => i?speed:-speed;
   for (let i=0;i<nr;i++) {
-    let speeds = randomSpeeds?this.randomArray(-speed,speed,spr):this.uniformArray(.01,spr);
+  //  let speeds = randomSpeeds?this.randomArray(-speed,speed,spr):this.uniformArray(.01,spr);
+    let speeds = speedFunction?this.arrayFromFunction(speedFunction,spr):this.uniformArray(.01,spr);
     spra.push(spr);
     speeda.push(speeds);
     massa.push(masses);
@@ -227,10 +246,12 @@ rs.nextParticleCollision = function (ring,indexInRing) {
 }
 
 rs.enactRingCollision = function (ring) {
-  let {shapesPerRing:spr,stepsSoFar:ssf,particlesByRing:pbr}  = this;
+  let {shapesPerRing:spr,stepsSoFar:ssf,particlesByRing:pbr,debug1}  = this;
   let pbtr = pbr[ring]; //particles by this ring
   let nshapes = spr[ring];
- debugger;
+  if (debug1) {
+    debugger;
+  }
   let cols = [];
   let minT = Infinity;
   let minTcol;
@@ -289,11 +310,16 @@ rs.onUpdate = function () {
   */ 
 rs.initialize = function () {
    debugger;
+   let {stopTime:stp,timePerStep:tps} = this;
    this.initProtos();
   this.addFrame();
+  this.numSteps =stp/tps;
   this.set('shapes',arrayShape.mk());
   this.set('lines',arrayShape.mk());
-  this.buildUniformArrays({speed:.02,mass:2,shapesPerRing:8,randomSpeeds:1});
+ // this.buildUniformArrays({speed:.02,mass:2,shapesPerRing:8,randomSpeeds:1});
+  let spr = 2;
+  let speed =.2;
+  this.buildUniformArrays({speed,mass:2,shapesPerRing:spr,randomSpeeds:6,speedFunction:(i) => i?Math.random()*speed:-Math.random()*speed});
   this.particles = [];
   this.particlesByRing = [];
   this.buildParticles();

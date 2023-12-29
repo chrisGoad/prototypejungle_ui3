@@ -16,6 +16,7 @@ item.chopOffEnd = 0; // in steps
 item.stepInterval = 40;
 item.pauseAt = [];
 item.lastStep = Infinity;
+item.stepArrayStep = 0;
 
 item.setNumSteps = function () {
   let {stopTime,stopStep,timePerStep} = this;
@@ -24,15 +25,19 @@ item.setNumSteps = function () {
 
 
 item.oneStep = function (one) {
-  let {paused,numSteps,lastStep,chopOffEnd,chopOffBeginning,timePerStep:tps} = this;
-  debugger;
+  let {paused,numSteps,lastStep,chopOffEnd,chopOffBeginning,timePerStep:tps,stepsSoFar:issf,startAtStep,stepArray,stepArrayStep:sars} = this;
+ debugger;
+  let ssf = this.stepsSoFar = stepArray?stepArray[sars]:issf;
+    
+  if ((!stepArray)&&(ssf < startAtStep)) {
+    ssf = this.stepsSoFar = startAtStep;
+  }
   if (this.paused) {
     return;
   }
-  let ns = this.stepsSoFar;	
-  this.currentTime = tps*ns;
+  this.currentTime = tps*ssf;
        //console.log('ns',ns,'tns',this.numSteps);
-  if  (this.stepsSoFar >(Math.min(lastStep+1,numSteps-chopOffEnd))) {
+  if  (ssf >(Math.min(lastStep+1,numSteps-chopOffEnd))) {
     debugger;
     if (this.escapesFrame) {
       console.log('FRAME ESCAPED!');
@@ -46,15 +51,18 @@ item.oneStep = function (one) {
     return;
   }
     this.updateState();
-
-  if (ns&&this.saveAnimation&&(ns>chopOffBeginning)) { // for some reason, the first frame is corrupted 
-    draw.saveFrame(ns-Math.max(chopOffBeginning+1,1));
+  let frnum = ssf- Math.max(startAtStep,1);
+  if (ssf&&this.saveAnimation&&(!stepArray)) { // for some reason, the first frame is corrupted 
+    draw.saveFrame(frnum);
   }
    //   this.updateState();
-
+  if (stepArray) {
+    this.stepArrayStep++;
+  } else {
     this.stepsSoFar++;
+  }
   let pauseAt = this.pauseAt;
-  if (pauseAt && (pauseAt.indexOf(ns)>=0)) {
+  if (pauseAt && (pauseAt.indexOf(ssf)>=0)) {
     this.paused = 1;
     return;
   }

@@ -64,7 +64,6 @@ item.processHistory = function (h) {
 
 
 item.getMotionHistory = function (nm,cb) {
-  debugger;
   let url = '/motionHistories/'+nm+'.mjs';
   core.httpGet(url,(err,mh) => {
     let prs = JSON.parse(mh);
@@ -284,7 +283,7 @@ Polygon.toCircleShape = function (circleP,scale=1) {
 LineSegment.toShape = function (lineP,scale=1) {
   let {end0,end1} = this;
   if (!lineP) {
-    debugger;
+    debugger;//keep
   }
   if (scale!==1) {
     let vec = end1.difference(end0);
@@ -296,7 +295,7 @@ LineSegment.toShape = function (lineP,scale=1) {
   }
   let line = lineP.instantiate();
   if (!line.setEnds) {
-    debugger;
+    debugger;//keep
   }
   if (this.genPoint3d) {
     let e03d = this.via3d(end0);
@@ -380,9 +379,7 @@ item.getTheState = function (cb) {
   let {path:ipath} = this;
   let idx = ipath.indexOf('_i_');
   let path = (idx>0)? ipath.substring(0,idx)+'.json':ipath;
-  debugger;
   core.httpGet(path, (error,json) => {
-    debugger;
     let state = JSON.parse(json);
     this.assignValues(state);
     if (cb) {
@@ -662,7 +659,6 @@ item.collides0 = function (point1,radius1,point2,radius2) {
   let d= point1.distance(point2);
   return minDist >= d;
 }
-debugger;
 item.collides = function (npoint,nradius,circleDs) {
   let n = circleDs.length;
   for (let i=0;i<n;i++) {
@@ -924,8 +920,6 @@ item.interpolateVectors = function (params) {
   if (0 && getVerbose &&  (x<0) && (y>0)) {
     console.log('p',this.pointReducedPrecision(p,poww));
         console.log('sumi',this.arrayReducedPrecision(sumi,poww));
-debugger;
-
   }
    if (0) {
     console.log('sumi',JSON.stringify(sumi));
@@ -942,6 +936,25 @@ item.randomColorArray = function (lb,ub,ia) {
 item.randomRGB = function (lb,ub,ia) {
   let a =ia?ia:3;
   return this.arrayToRGB(this.randomColorArray(lb,ub,a));
+}
+
+
+item.sequentialArray = function (lb,ub) {
+  let a =[];
+  for (let i=lb;i<=ub;i++) {
+    a.push(i);
+  }
+  return a;
+}
+
+
+item.arrayFromFunction = function (f,n) {
+  debugger;
+  let a =  [];
+  for (let i=0;i<n;i++) {
+    a.push(f(i));
+  }
+  return a;
 }
 }
 export {rs};
