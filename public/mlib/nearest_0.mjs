@@ -75,12 +75,12 @@ item.nearestPositions = function (positions,n) {
     
  
 
-item.displayNearestPositions = function (positions) {
+item.displayNearestPositions = function (positions,n) {
  let {lines,lineP,debug2} = this;
    if (debug2) {
     debugger;
   }
-  let nrps = this.nearestPositions(positions,3)
+  let nrps = this.nearestPositions(positions,n)
   let lnp = nrps.length;
   for (let i=0;i<lnp;i++) {
     let nrpa = nrps[i];

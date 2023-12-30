@@ -1,23 +1,23 @@
 import {rs as linePP} from '/shape/line.mjs';
 import {rs as circlePP} from '/shape/circle.mjs';
 import {rs as basicP} from '/generators/basics.mjs';
-import {rs as addNearestMethods} from '/mlib/nearest_0.mjs';
-import {rs as generatorP} from '/generators/motion_1.mjs'
+import {rs as addAnimationMethods} from '/mlib/animate0.mjs';
 
-let rs = generatorP.instantiate();
-addNearestMethods(rs);
+let rs = basicP.instantiate();
 
-rs.setName('motion_6');
+addAnimationMethods(rs);
+//import {rs as generatorP} from '/generators/motion_0.mjs'
+//let rs = generatorP.instantiate();
+
+rs.setName('motion_1');
 let ht=50;
 let stt=5023;
 stt = 4096;
 let ts = 12;
 stt=2;
-let topParamss = {width:ht,height:ht,framePadding:0.1*ht,frameStroke:'rgb(2,2,2)',frameStrokeWidth:.2,timePerStep:1/1024,stopTime:stt,recordingMotion:1,saveAnimation:1,
-    shapesPerRing:6,circleRadius:.2,ringRadii:[.5*ht,.45*ht,.4*ht,.35*ht,.3*ht,.25*ht,.2*ht,.15*ht],
-                                       speeds:[ts/6, ts/6,  ts/4, ts/4,  ts/3, ts/3,ts/2,ts/2],toAngle:2*Math.PI};
-let topParams = {width:ht,height:ht,framePadding:0.1*ht,frameStroke:'rgb(2,2,2)',frameStrokeWidth:.2,timePerStep:1/512,stopTime:stt,recordingMotion:1,saveAnimation:1,
-    shapesPerRing:6,circleRadius:.2,ringRadii:[.5*ht,.45*ht,.4*ht,.35*ht,.3*ht,.25*ht,.2*ht,.15*ht],
+
+let topParams = {width:ht,height:ht,framePadding:0.1*ht,frameStroke:'rgb(2,2,2)',frameStrokeWidth:.2,timePerStep:1/1024,stopTime:stt,recordingMotion:1,saveAnimation:1,
+    shapesPerRing:6,circleRadius:.2,ringRadii:[.5*ht,.45*ht,.4*ht,.35*ht,.3*ht,.25*ht,.2*ht,.15*ht],ringCenters:[],
                                        speeds:[ts/6, ts/6,  ts/4, ts/4,  ts/3, ts/3,ts/2,ts/2],toAngle:2*Math.PI};
 
 Object.assign(rs,topParams);
@@ -32,10 +32,6 @@ let subParams ={speed:2,shapesPerRing:6};
 //rs.speeds = [1,1.1,1.2,1.3,1.4,1.5,1.6,1.7];
 rs.ringRadii =[.5*ht,.4*ht]
 rs.ringRadii =[.5*ht,.45*ht,.4*ht,.35*ht,.2*ht,.15*ht,.1*ht];
-let c0 = Point.mk(-.3*ht,0);
-let c1 = Point.mk(.3*ht,0);
-rs.ringCenters = [c0,c1,c0,c1,c0];
-
 rs.initProtos = function () {
   let {circleRadius:cr} =this;
   let circleP = this.circleP = circlePP.instantiate();
@@ -46,10 +42,10 @@ rs.initProtos = function () {
   lineP.stroke = 'white';
   lineP['stroke-width'] = .2; 
 }
-/*
+
 
 rs.buildParticles = function () {
-  let {ringRadii,shapesPerRing:spr,speeds,masses,initialAngles:ias,particles,particlesByRing:pbr}= this;
+  let {ringRadii,ringCenters,shapesPerRing:spr,speeds,masses,initialAngles:ias,particles,particlesByRing:pbr}= this;
   let nr = ringRadii.length;
   let cindex = 0;
   for (let i=0;i<nr;i++) {
@@ -59,10 +55,11 @@ rs.buildParticles = function () {
     let rnumShapes = spr[i];
     let rias = ias[i];
     let radius = ringRadii[i];
+    let center = ringCenters[i];
     let colors = ['red','green','blue','yellow','cyan','magenta','white','gray'];
     
     for (let j = 0;j<rnumShapes;j++) {
-      let particle = {index:cindex++,ring:i,radius,indexInRing:j,speed:rspeeds[j],initialAngle:rias[j],initialTime:0,fill:colors[j]}
+      let particle = {index:cindex++,ring:i,radius,center,indexInRing:j,speed:rspeeds[j],initialAngle:rias[j],initialTime:0,fill:colors[j]}
       particles.push(particle);
       ptr.push(particle);
     }
@@ -122,10 +119,11 @@ rs.updateAngles = function (t) {
 }
 
 rs.displayPosition  = function (particle) {
-  let {shape,currentAngle:a,radius:r} = particle;
-  let p = Point.mk(r*Math.cos(a),r*Math.sin(a));
-  this.positions.push(p);
-  shape.moveto(p);
+  let {shape,currentAngle:a,radius:r,center} = particle;
+  let p0 = Point.mk(r*Math.cos(a),r*Math.sin(a));
+  let p1 = center?p0.plus(center):p0;
+  this.positions.push(p1);
+  shape.moveto(p1);
 }
 
 
@@ -133,44 +131,6 @@ rs.displayPositions = function () {
   let {particles} = this;   
   particles.forEach( (p) => this.displayPosition(p));
 }
-*/
-rs.initialize = function () {
-   debugger;
-   let {stopTime:stp,timePerStep:tps} = this;
-   this.initProtos();
-  this.addFrame();
-  this.numSteps =stp/tps;
-  this.set('shapes',arrayShape.mk());
-  this.set('lines',arrayShape.mk());
- // this.buildUniformArrays({speed:.02,mass:2,shapesPerRing:8,randomSpeeds:1});
-  let spr = 6;
-  let speed =2;
- // this.buildUniformArrays({speed,mass:2,shapesPerRing:spr,randomSpeeds:6,speedFunction:(i) => i?speed:-speed});
- // this.buildUniformArrays({speed,mass:2,shapesPerRing:spr});
-  this.buildUniformArrays(subParams);
-  this.particles = [];
-  this.particlesByRing = [];
-  this.buildParticles();
-  this.buildShapes();
-  this.colT = Infinity;
-  //this.updatePositions(0);
-}
-
-
-
-rs.updateState = function () {
-  debugger;
-  let {stepsSoFar:ssf,currentTime:t} = this;
-  let positions = this.positions = [];
-  console.log('steps',ssf,'time',t);
-  //let nrp = this.computeNearestPositions(positions);
-  this.updateAngles(t);
-  this.displayPositions();
-  this.displayNearestPositions(positions,3);
- // this.enactRingCollisions(0);
- 
-}
-
 
 
 
