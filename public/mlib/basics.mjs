@@ -949,11 +949,14 @@ item.sequentialArray = function (lb,ub) {
 
 
 item.arrayFromFunction = function (f,n) {
-  debugger;
   let a =  [];
   for (let i=0;i<n;i++) {
     a.push(f(i));
   }
+  return a;
+}
+item.uniformArray = function (v,n) {
+  let a = this.arrayFromFunction (()=>v,n);
   return a;
 }
 }

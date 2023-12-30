@@ -71,16 +71,7 @@ rs.uniformArray = function (v,n) {
   }
   return a;
 }
-,
 
-rs.arrayFromFunction = function (f,n) {
-  debugger;
-  let a =  [];
-  for (let i=0;i<n;i++) {
-    a.push(f(i));
-  }
-  return a;
-}
 
 
 rs.randomArray = function (lb,ub,n) {

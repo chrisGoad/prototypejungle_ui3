@@ -169,11 +169,8 @@ rs.initialize = function () {
   this.numSteps = Math.floor(st/tps);
   this.numSteps = 65;
   this.numSteps = 700;
- this.numSteps = 348;
- // this.stepArray = [7,320,321,322,323,324,325,326,327,327,329];
- // this.stepArray = [7,350,351,352,353,354,355,356,357,358,359];
-  //this.stepArray = [7].concat(this.sequentialArray(350,370));
- // this.stepArray = [7,630,631,632,633,634,635,636,637,638,639];
+ this.numSteps = 347;
+ // this.stepArray = [7].concat(this.sequentialArray(351,370));
  this.startAtStep = 7;
   this.numShapes =spr*(rr.length);
   this.initProtos();

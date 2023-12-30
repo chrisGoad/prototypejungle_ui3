@@ -28,7 +28,9 @@ item.oneStep = function (one) {
   let {paused,numSteps,lastStep,chopOffEnd,chopOffBeginning,timePerStep:tps,stepsSoFar:issf,startAtStep,stepArray,stepArrayStep:sars} = this;
  debugger;
   let ssf = this.stepsSoFar = stepArray?stepArray[sars]:issf;
-    
+  if (stepArray)  {
+    this.numSteps = Infinity;
+  }
   if ((!stepArray)&&(ssf < startAtStep)) {
     ssf = this.stepsSoFar = startAtStep;
   }
