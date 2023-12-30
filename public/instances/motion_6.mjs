@@ -69,7 +69,7 @@ rs.buildParticles = function () {
   }
   //return particles;
 }
-rs.steppedArray = function (upTo,n,angles) {
+rs.steppedArrayy = function (upTo,n,angles) {
   let inc = upTo/n;
   let a = [];
   for (let i=0;i<n;i++) {
@@ -80,12 +80,12 @@ rs.steppedArray = function (upTo,n,angles) {
 }
 rs.buildUniformArrays  = function (params) {
   let {ringRadii} = this;
-  //debugger;
+  debugger;
   let {speed,mass,shapesPerRing:spr,randomSpeeds,speedFunction} =params;
   let nr = ringRadii.length;
   let spra = [];
   let speeda = [];
-  let initialAngles = this.steppedArray(2*Math.PI,spr,1);
+  let initialAngles = this.steppedArray(0,2*Math.PI,spr,1);
   //let masses = this.uniformArray(mass,spr);
   let iaa = [];
   //let fn = (i) => i?speed:-speed;
@@ -114,23 +114,8 @@ rs.buildShapes = function () {
     shapes.push(crc);
   }
 }  
- /*  
-rs.buildShapes = function (params) {
-  let {ringRadii:rr,shapesPerRing:spr,circleP,shapes}= this;
-  let nr = rr.length;
-  for (let i = 0;i<nr;i++) {
-    let str = spr[i];
-    for (let j=0;j<str;j++) {
-      let crc = circleP.instantiate();
-      crc.ring = i;
-      crc.fractionAround = j/spr;
-      crc.show();
-      shapes.push(crc);
-    }
-  }
-}
-*/
- rs.toMpiPiRange = function (a) {
+
+ rs.toMpiPiRangee = function (a) {
   if (a > Math.PI) {
     return a-2*Math.PI;
   }
@@ -144,7 +129,8 @@ rs. updateAngle = function (particle,t) {
   let {initialAngle,initialTime,speed} = particle;
   let deltaT = t-initialTime;
   let deltaA = speed*deltaT;
-  particle.currentAngle = this.toMpiPiRange(initialAngle+deltaA);
+  let ra = this.toMpiPiRange(initialAngle+deltaA);
+  particle.currentAngle = ra;
 }
 
 rs.updateAngles = function (t) {

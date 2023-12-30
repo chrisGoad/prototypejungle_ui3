@@ -959,6 +959,28 @@ item.uniformArray = function (v,n) {
   let a = this.arrayFromFunction (()=>v,n);
   return a;
 }
+
+item.toMpiPiRange = function (a) {
+  if (a > Math.PI) {
+    return a-2*Math.PI;
+  }
+  if (a<-Math.PI) {
+    return a+2*Math.PI;
+  }
+  return a;
+}
+  
+item.steppedArray = function (lb,ub,n,angles) {
+  let delta = ub-lb;
+  let inc = delta/n;
+  let im = angles?n:n+1;
+  let a = this.arrayFromFunction ((i) => angles?this.toMpiPiRange(lb+inc*i):lb+inc*i,im);
+  /*for (let i=0;i<=im;i++) {
+    let v = angles?this.toMpiPiRange(lb+inc*i):lb+inc*i
+    a.push(v);
+  }*/
+  return a;
+}
 }
 export {rs};
  
