@@ -13,10 +13,12 @@ let stt=5023;
 stt = 4096;
 let ts = 12;
 stt=2;
-let topParamss = {width:ht,height:ht,framePadding:0.1*ht,frameStroke:'rgb(2,2,2)',frameStrokeWidth:.2,timePerStep:1/1024,stopTime:stt,recordingMotion:1,saveAnimation:1,
+let topParamss = {width:ht,height:ht,framePadding:0.15*ht,frameStroke:'white',frameStrokeWidth:.2,timePerStep:1/102,stopTime:stt,recordingMotion:1,saveAnimation:1,
     shapesPerRing:6,circleRadius:.2,ringRadii:[.5*ht,.45*ht,.4*ht,.35*ht,.3*ht,.25*ht,.2*ht,.15*ht],
                                        speeds:[ts/6, ts/6,  ts/4, ts/4,  ts/3, ts/3,ts/2,ts/2],toAngle:2*Math.PI};
-let topParams = {width:ht,height:ht,framePadding:0.1*ht,frameStroke:'rgb(2,2,2)',frameStrokeWidth:.2,timePerStep:1/512,stopTime:stt,recordingMotion:1,saveAnimation:1,
+
+
+let topParams = {width:ht,height:ht,framePadding:0.3*ht,frameStrokee:'white',frameStrokeWidth:.2,timePerStep:1/512,stopTime:stt,recordingMotion:1,saveAnimation:1,
     shapesPerRing:2,circleRadius:.2,ringRadii:[.5*ht,.45*ht,.4*ht,.35*ht,.3*ht,.25*ht,.2*ht,.15*ht],
                                        speeds:[ts/6, ts/6,  ts/4, ts/4,  ts/3, ts/3,ts/2,ts/2],toAngle:2*Math.PI};
 
@@ -41,17 +43,19 @@ const generateGrid = function (nppr,wd) {
   }
   return a;
 }
-let pointsPerRow = 10;
+let pointsPerRow = 5;
 debugger;
 rs.ringCenters = generateGrid(pointsPerRow,0.8*ht).concat([Point.mk(0,0)]);
 
 let numPoints = pointsPerRow*pointsPerRow+1;
 
 rs.ringRadii = rs.uniformArray(.04*ht,numPoints);
-rs.ringRadii = rs.uniformArray(.02*ht,numPoints-1).concat([0.2*ht]);
+rs.ringRadii = rs.uniformArray(.04*ht,numPoints);
+rs.ringRadii = rs.uniformArray(.2*ht,numPoints-1).concat([0.3*ht]);
 rs.speedPerRing = rs.steppedArray(10,20,numPoints);
-//rs.shapesPerRing = rs.uniformArray(4,numPoints-1).concat([4]);
-rs.shapesPerRing = rs.uniformArray(2,numPoints);
+rs.speedPerRing = rs.steppedArray(16,16,numPoints);
+rs.shapesPerRing = rs.uniformArray(2,numPoints-1).concat([4]);
+//rs.shapesPerRing = rs.uniformArray(2,numPoints);
 
   
 rs.initProtos = function () {
@@ -68,22 +72,24 @@ rs.initProtos = function () {
 
 
 rs.buildParameterArrays  = function (params) {
-  let {ringRadii,speedPerRing} = this;
+  let {ringRadii,speedPerRing,shapesPerRing} = this;
   debugger;
-  let {speed,mass,shapesPerRing:spr,randomSpeeds,speedFunction} =params;
+  let {speed,mass,randomSpeeds,speedFunction} =params;
   let nr = ringRadii.length;
  // let speedPerRing = this.speedPerRing = this.arrayFromFunction((i)=>i%2?speed:-speed,nr);
   let spra = [];
   let speeda = [];
   let tpi = 2*Math.PI;
-  let initialAngles =  this.steppedArray(0,tpi - tpi/spr,spr,1);
   //let masses = this.uniformArray(mass,spr);
   let iaa = [];
   //let fn = (i) => i?speed:-speed;
   for (let i=0;i<nr;i++) {
+    let str =  shapesPerRing[i]; //shapes this ring
+    let initialAngles =  this.steppedArray(0,tpi - tpi/str,str,1);
+
   //  let speeds = speedFunction?this.arrayFromFunction(speedFunction,spr):this.uniformArray(spr,.01);
     let sptr = speedPerRing[i]; //speed this ring
-    let speeds = speedFunction?this.arrayFromFunction(speedFunction,spr):this.uniformArray(sptr,spr);
+    let speeds = speedFunction?this.arrayFromFunction(speedFunction,str):this.uniformArray(sptr,str);
   //  spra.push(spr);
     speeda.push(speeds);
     iaa.push(initialAngles);
@@ -100,6 +106,9 @@ rs.initialize = function () {
    this.initProtos();
   this.addFrame();
   this.numSteps =stp/tps;
+  this.numSteps = 101;
+  let cs=100;
+  this.stepArrayy = [0].concat(this.sequentialArray(102,120));
   this.set('shapes',arrayShape.mk());
   this.set('lines',arrayShape.mk());
  // this.buildUniformArrays({speed:.02,mass:2,shapesPerRing:8,randomSpeeds:1});
