@@ -17,8 +17,9 @@ let topParamss = {width:ht,height:ht,framePadding:0.1*ht,frameStroke:'rgb(2,2,2)
     shapesPerRing:6,circleRadius:.2,ringRadii:[.5*ht,.45*ht,.4*ht,.35*ht,.3*ht,.25*ht,.2*ht,.15*ht],
                                        speeds:[ts/6, ts/6,  ts/4, ts/4,  ts/3, ts/3,ts/2,ts/2],toAngle:2*Math.PI};
 let topParams = {width:ht,height:ht,framePadding:0.1*ht,frameStroke:'rgb(2,2,2)',frameStrokeWidth:.2,timePerStep:1/512,stopTime:stt,recordingMotion:1,saveAnimation:1,
-    shapesPerRing:6,circleRadius:.2,ringRadii:[.5*ht,.45*ht,.4*ht,.35*ht,.3*ht,.25*ht,.2*ht,.15*ht],
-                                       speeds:[ts/6, ts/6,  ts/4, ts/4,  ts/3, ts/3,ts/2,ts/2],toAngle:2*Math.PI};
+    shapesPerRing:6,circleRadius:.5,ringRadii:[],nearestCount:6,nearestFadeFactor:40};
+ //   shapesPerRing:6,circleRadius:.5,ringRadii:[],nearestCount:6,nearestFadeFactor:40};
+ //                                      speedss:[ts/6, ts/6,  ts/4, ts/4,  ts/3, ts/3,ts/2,ts/2],toAngle:2*Math.PI};
 
 Object.assign(rs,topParams);
 let subParams ={speed:2,shapesPerRing:6};
@@ -34,7 +35,7 @@ rs.ringRadii =[.5*ht,.4*ht]
 rs.ringRadii =[.5*ht,.45*ht,.4*ht,.35*ht,.2*ht,.15*ht,.1*ht];
 let c0 = Point.mk(-.3*ht,0);
 let c1 = Point.mk(.3*ht,0);
-rs.ringCenters = [c0,c1,c0,c1,c0];
+rs.ringCenterss = [c0,c1,c0,c1,c0];
 
 rs.initProtos = function () {
   let {circleRadius:cr} =this;
@@ -81,6 +82,7 @@ rs.initialize = function () {
    this.initProtos();
   this.addFrame();
   this.numSteps =stp/tps;
+  this.numSteps =159;
   this.set('shapes',arrayShape.mk());
   this.set('lines',arrayShape.mk());
  // this.buildUniformArrays({speed:.02,mass:2,shapesPerRing:8,randomSpeeds:1});
@@ -101,13 +103,13 @@ rs.initialize = function () {
 
 rs.updateState = function () {
   debugger;
-  let {stepsSoFar:ssf,currentTime:t} = this;
+  let {stepsSoFar:ssf,currentTime:t,nearestCount,nearestFadeFactor:nff} = this;
   let positions = this.positions = [];
   console.log('steps',ssf,'time',t);
   //let nrp = this.computeNearestPositions(positions);
   this.updateAngles(t);
   this.displayPositions();
-  this.displayNearestPositions(positions,3);
+  this.displayNearestPositions(positions,nearestCount,nff);
  // this.enactRingCollisions(0);
  
 }

@@ -19,8 +19,7 @@ let topParamss = {width:ht,height:ht,framePadding:0.15*ht,frameStroke:'white',fr
 
 
 let topParams = {width:ht,height:ht,framePadding:0.3*ht,frameStrokee:'white',frameStrokeWidth:.2,timePerStep:1/512,stopTime:stt,recordingMotion:1,saveAnimation:1,
-    shapesPerRing:2,circleRadius:.2,ringRadii:[.5*ht,.45*ht,.4*ht,.35*ht,.3*ht,.25*ht,.2*ht,.15*ht],
-                                       speeds:[ts/6, ts/6,  ts/4, ts/4,  ts/3, ts/3,ts/2,ts/2],toAngle:2*Math.PI};
+    circleRadius:.2,ringRadii:[],nearestCount:10,nearestFadeFactor:20,toAngle:2*Math.PI};
 
 Object.assign(rs,topParams);
 let subParams ={speed:10,shapesPerRing:2};
@@ -129,13 +128,13 @@ rs.initialize = function () {
 
 rs.updateState = function () {
   debugger;
-  let {stepsSoFar:ssf,currentTime:t} = this;
+  let {stepsSoFar:ssf,currentTime:t,nearestCount,nearestFadeFactor:nff} = this;
   let positions = this.positions = [];
   console.log('steps',ssf,'time',t);
   //let nrp = this.computeNearestPositions(positions);
   this.updateAngles(t);
   this.displayPositions();
-  this.displayNearestPositions(positions,5);
+  this.displayNearestPositions(positions,nearestCount,nff);
  // this.enactRingCollisions(0);
  
 }

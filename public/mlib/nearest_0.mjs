@@ -75,7 +75,7 @@ item.nearestPositions = function (positions,n) {
     
  
 
-item.displayNearestPositions = function (positions,n) {
+item.displayNearestPositions = function (positions,n,nff) {
  let {lines,lineP,debug2} = this;
    if (debug2) {
     debugger;
@@ -86,6 +86,8 @@ item.displayNearestPositions = function (positions,n) {
     let nrpa = nrps[i];
     let nrln = nrpa.length;
     for (let j=0;j<nrln;j++) {
+      let strokev = Math.max(250 - nff*j,0);
+      let stroke = `rgb(${strokev},${strokev},${strokev})`;
       let nrp = nrpa[j];
       let {index,distance}  = nrp;
       let e0 = positions[i];
@@ -95,6 +97,7 @@ item.displayNearestPositions = function (positions,n) {
         ln = lineP.instantiate();
         lines.push(ln);
       }
+      ln.stroke = stroke;
       ln.show();
       ln.setEnds(e0,e1);
       ln.update();
