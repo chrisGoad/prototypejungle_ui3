@@ -59,7 +59,7 @@ rs.buildParticles = function () {
     let colors = ['red','green','blue','yellow','cyan','magenta','white','gray'];
     
     for (let j = 0;j<rnumShapes;j++) {
-      let particle = {index:cindex++,ring:i,radius,center,indexInRing:j,speed:rspeeds[j],initialAngle:rias[j],initialTime:0,fill:colors[j]}
+      let particle = {index:cindex++,ring:i,radius,center,indexInRing:j,speed:rspeeds[j],initialAngle:rias[j],initialTime:0,fill:colors[i]}
       particles.push(particle);
       ptr.push(particle);
     }

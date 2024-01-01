@@ -82,7 +82,7 @@ rs.initialize = function () {
    this.initProtos();
   this.addFrame();
   this.numSteps =stp/tps;
-  this.numSteps =159;
+  this.numSteps =2*159+3;
   this.set('shapes',arrayShape.mk());
   this.set('lines',arrayShape.mk());
  // this.buildUniformArrays({speed:.02,mass:2,shapesPerRing:8,randomSpeeds:1});
