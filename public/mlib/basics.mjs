@@ -959,6 +959,12 @@ item.uniformArray = function (v,n) {
   let a = this.arrayFromFunction (()=>v,n);
   return a;
 }
+item.cyclingArray = function (vs,n) {
+  let period = vs.length;
+  
+  let a = this.arrayFromFunction ((i)=>vs[i%period],n);
+  return a;
+}
 
 item.toMpiPiRange = function (a) {
   if (a > Math.PI) {
@@ -969,13 +975,13 @@ item.toMpiPiRange = function (a) {
   }
   return a;
 }
-  
-item.steppedArray = function (lb,ub,n,angles) {
+// proceed in n steps from lb to ub; lb is step 1; omit last step means that ub is not included
+item.steppedArray = function (lb,ub,n,omitLastStep) {
   let delta = ub-lb;
+  let im = omitLastStep?n-1:n;
   let inc = delta/(n-1);
-//  let im = angles?n:n+1;
 //  let a = this.arrayFromFunction ((i) => angles?this.toMpiPiRange(lb+inc*i):lb+inc*i,im);
-  let a = this.arrayFromFunction ((i) => angles?this.toMpiPiRange(lb+inc*i):lb+inc*i,n);
+  let a = this.arrayFromFunction ((i) => lb+inc*i,im);
   return a;
 }
 

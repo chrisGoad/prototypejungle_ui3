@@ -19,7 +19,7 @@ let topParamss = {width:ht,height:ht,framePadding:0.15*ht,frameStroke:'white',fr
 
 
 let topParams = {width:ht,height:ht,framePadding:0.3*ht,frameStrokee:'white',frameStrokeWidth:.2,timePerStep:1/512,stopTime:stt,recordingMotion:1,saveAnimation:1,
-    circleRadius:.2,ringRadii:[],nearestCount:10,nearestFadeFactor:20,toAngle:2*Math.PI};
+    circleRadius:.2,ringRadii:[],nearestCount:6,nearestFadeFactor:20,toAngle:2*Math.PI};
 
 Object.assign(rs,topParams);
 let subParams ={speed:10,shapesPerRing:2};

@@ -48,6 +48,7 @@ rs.buildParticles = function () {
   let {ringRadii,ringCenters,shapesPerRing:spr,speeds,masses,initialAngles:ias,particles,particlesByRing:pbr}= this;
   let nr = ringRadii.length;
   let cindex = 0;
+  debugger;
   for (let i=0;i<nr;i++) {
     let ptr = []; // particles this ring
     pbr[i] = ptr;
@@ -56,10 +57,11 @@ rs.buildParticles = function () {
     let rias = ias[i];
     let radius = ringRadii[i];
     let center = ringCenters[i];
-    let colors = ['red','green','blue','yellow','cyan','magenta','white','gray'];
+   // let particleColors = ['red','green','blue','yellow','cyan','magenta','white','gray'];
+    let particleColors = this.uniformArray('blue',nr);
     
     for (let j = 0;j<rnumShapes;j++) {
-      let particle = {index:cindex++,ring:i,radius,center,indexInRing:j,speed:rspeeds[j],initialAngle:rias[j],initialTime:0,fill:colors[i]}
+      let particle = {index:cindex++,ring:i,radius,center,indexInRing:j,speed:rspeeds[j],initialAngle:rias[j],initialTime:0,fill:particleColors[i]}
       particles.push(particle);
       ptr.push(particle);
     }

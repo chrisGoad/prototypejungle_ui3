@@ -83,13 +83,15 @@ item.displayNearestPositions = function (positions,n,nff) {
   let nrps = this.nearestPositions(positions,n)
   let lnp = nrps.length;
  // let colors = ['red','green','blue','yellow','cyan','magenta','white','gray'];
-  let colors = [[250,0,0],[250,0],[0,0,250],[250,250,0],[0,250,250],[250,0,250],[250,250,250],[150,150,150]];// ','green','blue','yellow','cyan','magenta','white','gray'];
+//  let colors = [[250,0,0],[250,0],[0,0,250],[250,250,0],[0,250,250],[250,0,250],[250,250,250],[150,150,150]];// ','green','blue','yellow','cyan','magenta','white','gray'];
+  let lineColors = this.cyclingArray([[255,95,0],[255,0,0]],n);// ','green','blue','yellow','cyan','magenta','white','gray'];
+  debugger;
   for (let i=0;i<lnp;i++) {
     let nrpa = nrps[i];
     let nrln = nrpa.length;
     for (let j=0;j<nrln;j++) {
       let strokev = Math.max((250 - nff*j)/250,0);
-      let color = colors[j];
+      let color = lineColors[j];
       let stroker = color[0]*strokev;
       let strokeg = color[1]*strokev;
       let strokeb = color[2]*strokev;
