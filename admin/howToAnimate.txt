@@ -251,14 +251,17 @@ c:\ffmpeg\bin\ffmpeg  -framerate 20 -i animations/triangle_1_f%03d.jpg -s 500x50
 c:\ffmpeg\bin\ffmpeg  -framerate 15 -i animations/rectangle_gon_grid_7_f%03d.jpg -s 500x500  export/rectangle_gon_grid_7.gif
 c:\ffmpeg\bin\ffmpeg  -framerate 15 -i animations/rectangle_gon_grid_8_f%03d.jpg -s 500x500  export/rectangle_gon_grid_8.gif
 c:\ffmpeg\bin\ffmpeg  -framerate 15 -i animations/rectangle_gon_grid_9_f%03d.jpg -s 500x500  export/rectangle_gon_grid_9.gif
+c:\ffmpeg\bin\ffmpeg  -framerate 15 -i animations/rectangle_gon_grid_9_f%03d.jpg -s 500x500  export/rectangle_gon_grid_9.gif
 c:\ffmpeg\bin\ffmpeg  -framerate 15 -i animations/rectangle_gon_grid_10_f%03d.jpg -s 300x300  export/rectangle_gon_grid_10.gif
 c:\ffmpeg\bin\ffmpeg  -framerate 15 -i animations/rectangle_gon_grid_11_f%03d.jpg -s 500x500  export/rectangle_gon_grid_11.gif
 c:\ffmpeg\bin\ffmpeg  -framerate 15 -i animations/rectangle_gon_grid_11_f%03d.jpg -s 300x300  export/rectangle_gon_grid_11.mp4
 c:\ffmpeg\bin\ffmpeg  -framerate 1 -i animations/rectangle_gon_grid_9_f%03d.jpg -s 500x500  export/rectangle_gon_grid_9.mp4
 c:\ffmpeg\bin\ffmpeg  -framerate 15 -i animations/motion_3_f%03d.jpg -s 500x500  export/motion_3.mp4
 c:\ffmpeg\bin\ffmpeg  -framerate 15 -i animations/motion_5_f%03d.jpg -s 500x500  export/motion_5.gif
+c:\ffmpeg\bin\ffmpeg  -framerate 15 -i animations/motion_6_f%03d.jpg -s 700x700  export/motion_6.gif
 c:\ffmpeg\bin\ffmpeg  -framerate 10 -i animations/motion_5_f%03d.jpg -s 500x500  export/motion_5.mp4
-
+c:\ffmpeg\bin\ffmpeg  -framerate 15 -i animations/motion_7_f%03d.jpg -s 500x500  export/motion_7.gif
+7
 c:\ffmpeg\bin\ffmpeg -i export/bounce_12.mp4 -i export/bounce_12.wav -c:v copy -c:a aac -map 0:v -map 1:a export/blend_test.mp4
 rm animations/spatter0_7*
 c:\ffmpeg\bin\ffmpeg  -framerate 10 -i animations/spatter0_6_f%03d.jpg -s 1000x1000  export/spatter0_6_1.mp4

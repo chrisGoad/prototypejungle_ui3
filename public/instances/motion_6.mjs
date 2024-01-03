@@ -17,7 +17,7 @@ let topParamss = {width:ht,height:ht,framePadding:0.1*ht,frameStroke:'rgb(2,2,2)
     shapesPerRing:6,circleRadius:.2,ringRadii:[.5*ht,.45*ht,.4*ht,.35*ht,.3*ht,.25*ht,.2*ht,.15*ht],
                                        speeds:[ts/6, ts/6,  ts/4, ts/4,  ts/3, ts/3,ts/2,ts/2],toAngle:2*Math.PI};
 let topParams = {width:ht,height:ht,framePadding:0.1*ht,frameStroke:'rgb(2,2,2)',frameStrokeWidth:.2,timePerStep:1/512,stopTime:stt,recordingMotion:1,saveAnimation:1,
-    shapesPerRing:4,circleRadius:.3,ringRadii:[],nearestCount:2,nearestFadeFactor:40};
+    shapesPerRing:4,circleRadius:.3,ringRadii:[],nearestCount:4,nearestFadeFactor:40};
     
     
  //   shapesPerRing:6,circleRadius:.5,ringRadii:[],nearestCount:3,nearestFadeFactor:40};
@@ -77,6 +77,7 @@ rs.initialize = function () {
   this.addFrame();
   this.numSteps =stp/tps;
   this.numSteps =2*159+3;
+  this.numSteps =265;
   this.set('shapes',arrayShape.mk());
   this.set('lines',arrayShape.mk());
  // this.buildUniformArrays({speed:.02,mass:2,shapesPerRing:8,randomSpeeds:1});
@@ -93,14 +94,8 @@ rs.initialize = function () {
     particles[k].fill = 'red';
   }
   */
-  particles[0].fill = 'red'
-  particles[1].fill = 'red'
-  particles[2].fill = 'red'
-  particles[3].fill = 'red'
- // particles[4].fill = 'red'
- // particles[5].fill = 'red'
-  particles[6].fill = 'cyan'
-  particles[7].fill = 'yellow'
+ // particles[0].fill = 'red'
+
   this.buildShapes();
   this.colT = Infinity;
   //this.updatePositions(0);

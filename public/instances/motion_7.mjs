@@ -99,6 +99,28 @@ rs.buildParameterArrays  = function (params) {
 }
 
 
+rs.buildParameterArrays  = function () {
+  this.ringRadii = rs.uniformArray(.2*ht,numPoints-1).concat([0.3*ht]);
+
+//  this.ringRadii =[.5*ht,.45*ht,.4*ht,.35*ht,.2*ht,.15*ht,.1*ht];
+  this.ringRadii =[.5*ht,.45*ht,.4*ht,.2*ht,.15*ht,.1*ht];
+  let nr = this.ringRadii.length;
+  let spr = 2;
+  let rspeed = 16;
+  this.shapesPerRing = this.uniformArray(spr,nr);
+  //this.ringCenters = rs.uniformArray(Point.mk(0,0),nr);
+  this.ringCenters = generateGrid(pointsPerRow,0.8*ht).concat([Point.mk(0,0)]);
+
+  //let ringSpeeds = rs.cyclingArray([rspeed,-rspeed],spr);
+  let speeds = rs.uniformArray(rspeed,spr);
+  //let speeds1 = rs.uniformArray(-rspeed,spr);
+  this.speeds = rs.uniformArray(speeds,nr);
+  debugger;
+  let iar =  this.steppedArray(0,2*Math.PI,spr+1,1);//initial angles per ring
+  this.initialAngles = this.uniformArray(iar,nr);
+}
+
+
 rs.initialize = function () {
    debugger;
    let {stopTime:stp,timePerStep:tps} = this;
