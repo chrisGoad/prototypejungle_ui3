@@ -9,13 +9,7 @@ addNearestMethods(rs);
 
 rs.setName('motion_8');
 let ht=50;
-let stt=5023;
-stt = 4096;
-let ts = 12;
-stt=2;
-let topParamss = {width:ht,height:ht,framePadding:0.15*ht,frameStroke:'white',frameStrokeWidth:.2,timePerStep:1/102,stopTime:stt,recordingMotion:1,saveAnimation:1,
-    shapesPerRing:6,circleRadius:.2,ringRadii:[.5*ht,.45*ht,.4*ht,.35*ht,.3*ht,.25*ht,.2*ht,.15*ht],
-                                       speeds:[ts/6, ts/6,  ts/4, ts/4,  ts/3, ts/3,ts/2,ts/2],toAngle:2*Math.PI};
+let stt=2;
 
 
 let topParams = {width:ht,height:ht,framePadding:0.3*ht,frameStrokee:'white',frameStrokeWidth:.2,timePerStep:1/512,stopTime:stt,recordingMotion:1,saveAnimation:1,
@@ -70,50 +64,15 @@ rs.initProtos = function () {
 
 
 
-rs.buildParameterArrays  = function (params) {
-  let {ringRadii,speedPerRing,shapesPerRing} = this;
-  debugger;
-  let {speed,mass,randomSpeeds,speedFunction} =params;
-  let nr = ringRadii.length;
- // let speedPerRing = this.speedPerRing = this.arrayFromFunction((i)=>i%2?speed:-speed,nr);
-  let spra = [];
-  let speeda = [];
-  let tpi = 2*Math.PI;
-  //let masses = this.uniformArray(mass,spr);
-  let iaa = [];
-  //let fn = (i) => i?speed:-speed;
-  for (let i=0;i<nr;i++) {
-    let str =  shapesPerRing[i]; //shapes this ring
-    let initialAngles =  this.steppedArray(0,tpi - tpi/str,str,1);
-
-  //  let speeds = speedFunction?this.arrayFromFunction(speedFunction,spr):this.uniformArray(spr,.01);
-    let sptr = speedPerRing[i]; //speed this ring
-    let speeds = speedFunction?this.arrayFromFunction(speedFunction,str):this.uniformArray(sptr,str);
-  //  spra.push(spr);
-    speeda.push(speeds);
-    iaa.push(initialAngles);
-  }
- // this.shapesPerRing = spra;  
-  this.speeds = speeda;  
-  this.initialAngles = iaa;
-}
-
-
 rs.buildParameterArrays  = function () {
   this.ringRadii = rs.uniformArray(.2*ht,numPoints-1).concat([0.3*ht]);
-
-//  this.ringRadii =[.5*ht,.45*ht,.4*ht,.35*ht,.2*ht,.15*ht,.1*ht];
   let nr = this.ringRadii.length;
   let spr = 2;
   let rspeed = 16;
   this.shapesPerRing = this.uniformArray(spr,nr);
-  //this.ringCenters = rs.uniformArray(Point.mk(0,0),nr);
   this.ringCenters = generateGrid(pointsPerRow,0.8*ht).concat([Point.mk(0,0)]);
-
-  //let ringSpeeds = rs.cyclingArray([rspeed,-rspeed],spr);
-  let speeds = rs.uniformArray(rspeed,spr);
-  //let speeds1 = rs.uniformArray(-rspeed,spr);
-  this.speeds = rs.uniformArray(speeds,nr);
+  let ringSpeeds = rs.uniformArray(rspeed,spr);
+  this.speeds = rs.uniformArray(ringSpeeds,nr);
   debugger;
   let iar =  this.steppedArray(0,2*Math.PI,spr+1,1);//initial angles per ring
   this.initialAngles = this.uniformArray(iar,nr);
@@ -131,11 +90,8 @@ rs.initialize = function () {
   this.stepArrayy = [0].concat(this.sequentialArray(102,120));
   this.set('shapes',arrayShape.mk());
   this.set('lines',arrayShape.mk());
- // this.buildUniformArrays({speed:.02,mass:2,shapesPerRing:8,randomSpeeds:1});
   let spr = 6;
   let speed =2;
- // this.buildUniformArrays({speed,mass:2,shapesPerRing:spr,randomSpeeds:6,speedFunction:(i) => i?speed:-speed});
- // this.buildUniformArrays({speed,mass:2,shapesPerRing:spr});
   this.buildParameterArrays(subParams);
   this.particles = [];
   this.particlesByRing = [];
@@ -152,12 +108,9 @@ rs.updateState = function () {
   let {stepsSoFar:ssf,currentTime:t,nearestCount,nearestFadeFactor:nff} = this;
   let positions = this.positions = [];
   console.log('steps',ssf,'time',t);
-  //let nrp = this.computeNearestPositions(positions);
   this.updateAngles(t);
   this.displayPositions();
-  this.displayNearestPositions(positions,nearestCount,nff);
- // this.enactRingCollisions(0);
- 
+  this.displayNearestPositions(positions,nearestCount,nff); 
 }
 
 
