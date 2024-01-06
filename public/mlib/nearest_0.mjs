@@ -75,17 +75,31 @@ item.nearestPositions = function (positions,n) {
     
  
 
-item.displayNearestPositions = function (positions,n,nff) {
- let {lines,lineP,debug2} = this;
+item.displayNearestPositions = function (positions,n,nff,ad) {// ad = attack decay parameters
+  let {lines,lineP,debug2,lineColors} = this;
+ 
    if (debug2) {
     debugger;
+  }
+  let aparams;
+  if (ad) {
+    let {attackDuration} = ad;
+    let applicator = (shape,value) => {
+      let stroke = this.arrayToRGB(value);
+      shape.stroke = stroke;
+      shape.show();
+      shape.update();
+    }
+    let zeroValue = [0,0,0];
+    aparams = {attackDuration,zeroValue,applicator};
   }
   let nrps = this.nearestPositions(positions,n)
   let lnp = nrps.length;
  // let colors = ['red','green','blue','yellow','cyan','magenta','white','gray'];
-//  let colors = [[250,0,0],[250,0],[0,0,250],[250,250,0],[0,250,250],[250,0,250],[250,250,250],[150,150,150]];// ','green','blue','yellow','cyan','magenta','white','gray'];
-  let lineColors = this.cyclingArray([[255,95,0],[255,0,0]],n);// ','green','blue','yellow','cyan','magenta','white','gray'];
-  debugger;
+//  let colors = [[250,0,0],[250,0],[0,0,250],[250,250,0],[0,250,250],[250,0,250],[250,250,250],[150,150,150]];
+// ','green','blue','yellow','cyan','magenta','white','gray'];
+ //let lineColors = this.cyclingArray([[255,95,0],[255,0,0]],n);// ','green','blue','yellow','cyan','magenta','white','gray'];
+ // lines.forEach((ln) => ln.hide());
   for (let i=0;i<lnp;i++) {
     let nrpa = nrps[i];
     let nrln = nrpa.length;
@@ -103,12 +117,20 @@ item.displayNearestPositions = function (positions,n,nff) {
       let ln = lines[nrln*i+j];
       if (!ln) {
         ln = lineP.instantiate();
+        let lln = lines.length;
+        ln.index = lln;
         lines.push(ln);
       }
-      ln.stroke = stroke;
       ln.show();
       ln.setEnds(e0,e1);
-      ln.update();
+      if (aparams) {
+        aparams.value = [stroker,strokeg,strokeb];
+        aparams.shape = ln;
+        this.startAttack(aparams);
+      } else {
+        ln.stroke = stroke;
+        ln.update();
+      }
     }
   }
 }

@@ -839,7 +839,7 @@ item.interpolate = function (a0,a1,fr) {
   }
   return ar;
 }	
-
+/*
 item.interpolateArrayss	 = function(a0,a1,fr) {
   let ln = a0.length; //a1 must have the same length
   let ar = [];
@@ -851,7 +851,7 @@ item.interpolateArrayss	 = function(a0,a1,fr) {
   }
   return ar;
 }
-
+*/
 item.pointReducedPrecision = function (p,pow) {
   let {x,y} = p;
   let rx = Math.floor(x*pow)/pow;
@@ -985,6 +985,68 @@ item.steppedArray = function (lb,ub,n,omitLastStep) {
   return a;
 }
 
+
+
+/* 
+
+ATTACK/DECAY
+
+state = {shape,startAttack,attackDuration,value,zeroValue,applicator} or {shape,startDecay,decayDuration,value,zeroValue,applicator} 
+fn is the application function: fn(shape,interpolatedVal) 
+*/
+item.execAD = function (state) {
+  let {lines,ADpool,currentTime:t} = this;
+  let {shape,startAttack:sta,startDecay:std,attackDuration:iad,decayDuration:idd,value,zeroValue,applicator}  = state;
+  debugger;
+  let ad = iad?iad:0;
+  let dd = idd?idd:0;
+  let fr;
+  let iv; //interpolated value
+  if ((sta< t)&&(t<=(sta+ad))) {
+    fr = ad?(t-sta)/ad:1;
+    iv = this.interpolate(zeroValue,value,fr);
+  } else if ((std<=t)&&(t<(std+dd))) {
+    fr = dd?(t-std)/dd:1;
+    iv = this.interpolate(value,zeroValue,fr);
+  } else if (t>=(std + dd)) {
+    shape.hide();
+    ADpool.push(shape);
+    return;
+  }
+  if (iv) {
+    let iiv = iv.map((v)=>Math.floor(v));
+    applicator(shape,iiv);
+  }
+}
+
+item.execADs = function () {
+  let {ADstates} = this
+  ADstates.forEach((st) => this.execAD(st));
+}
+
+
+item.startAttack = function (params)  {
+  let {shape,attackDuration,applicator,value,zeroValue} = params;
+  let {ADstates,currentTime} = this;
+  if (attackDuration) {
+    let state = {shape,startAttack:currentTime,attackDuration,value,zeroValue,applicator};
+    ADstates.push(state);
+  }
+  applicator(shape,zeroValue);
+}
+ 
+
+item.startDecay = function (params)  {
+  let {shape,attackDuration,applicator,value,zeroValue} = params;
+  let {ADstates,currentTime} = this;
+  if (decayDuration) {
+    let state = {shape,startDecay:currentTime,decayDuration,value,zeroValue,applicator};
+    ADstates.push(state);
+  }
+  applicator(shape,value);
+}   
+  
+  
 }
 export {rs};
  

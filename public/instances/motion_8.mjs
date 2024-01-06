@@ -65,6 +65,7 @@ rs.initProtos = function () {
 
 
 rs.buildParameterArrays  = function () {
+  let {nearestCount:nc} = this;
   this.ringRadii = rs.uniformArray(.2*ht,numPoints-1).concat([0.3*ht]);
   let nr = this.ringRadii.length;
   let spr = 2;
@@ -76,6 +77,7 @@ rs.buildParameterArrays  = function () {
   debugger;
   let iar =  this.steppedArray(0,2*Math.PI,spr+1,1);//initial angles per ring
   this.initialAngles = this.uniformArray(iar,nr);
+  this.lineColors = this.cyclingArray([[255,95,0],[255,0,0]],nc);
 }
 
 
@@ -98,6 +100,8 @@ rs.initialize = function () {
   this.buildParticles();
   this.buildShapes();
   this.colT = Infinity;
+  this.ADstates =[];
+  this.ADpool =[];
   //this.updatePositions(0);
 }
 
@@ -110,7 +114,8 @@ rs.updateState = function () {
   console.log('steps',ssf,'time',t);
   this.updateAngles(t);
   this.displayPositions();
-  this.displayNearestPositions(positions,nearestCount,nff); 
+  this.execADs();
+  this.displayNearestPositions(positions,nearestCount,nff,{attackDuration:0.05}); 
 }
 
 
