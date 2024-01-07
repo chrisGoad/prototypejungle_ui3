@@ -1,13 +1,13 @@
 import {rs as linePP} from '/shape/line.mjs';
 import {rs as circlePP} from '/shape/circle.mjs';
 import {rs as basicP} from '/generators/basics.mjs';
-import {rs as addNearestMethods} from '/mlib/nearest_0.mjs';
+import {rs as addDistanceMethods} from '/mlib/by_distance.mjs';
 import {rs as generatorP} from '/generators/motion_1.mjs'
 
 let rs = generatorP.instantiate();
-addNearestMethods(rs);
+addDistanceMethods(rs);
 
-rs.setName('motion_8');
+rs.setName('motion_9');
 let ht=50;
 let stt=2;
 
@@ -42,6 +42,7 @@ rs.ringCenters = generateGrid(pointsPerRow,0.8*ht).concat([Point.mk(0,0)]);
 
 let numPoints = pointsPerRow*pointsPerRow+1;
 
+  
 rs.initProtos = function () {
   let {circleRadius:cr} =this;
   let circleP = this.circleP = circlePP.instantiate();
@@ -50,7 +51,7 @@ rs.initProtos = function () {
   circleP['stroke-width'] = 0;
   let lineP = this.lineP = linePP.instantiate();
   lineP.stroke = 'white';
-  lineP['stroke-width'] = .4; 
+  lineP['stroke-width'] = .05; 
 }
 
 
@@ -74,8 +75,8 @@ rs.buildParameterArrays  = function () {
 
 rs.initialize = function () {
    debugger;
-   let {stopTime:stp,timePerStep:tps} = this;
    this.initProtos();
+   let {stopTime:stp,timePerStep:tps,lineP} = this;
   this.addFrame();
   this.numSteps =stp/tps;
   this.numSteps = 101;
@@ -87,23 +88,41 @@ rs.initialize = function () {
   let speed =2;
   this.buildParameterArrays(subParams);
   this.particles = [];
-  this.positions = [];
+  let positions = this.positions = [];
   this.particlesByRing = [];
   this.buildParticles();
   this.buildShapes();
+  this.addLinesBetweenPositions(positions,lineP);
+  this.mind = Infinity;
+  this.maxd = -Infinity;
 }
 
 
 
 rs.updateState = function () {
   debugger;
-  let {stepsSoFar:ssf,currentTime:t,nearestCount,nearestFadeFactor:nff} = this;
-  let positions = this.positions = [];
+  let {stepsSoFar:ssf,currentTime:t,linesAdded:la,positions,mind,maxd} = this;
+  const fn = (line,dist) => {
+    //console.log('DIST',dist);
+    if (dist<20) {
+      line.show();
+    } else {
+      line.hide();
+    }
+  }
   console.log('steps',ssf,'time',t);
   this.updateAngles(t);
   this.displayPositions();
-  //this.execADs();
-  this.displayNearestPositions(positions,nearestCount,nff); 
+  let dists = this.updateLines(positions,fn);
+  let {mind:tmin,maxd:tmax} = dists;
+  if (tmin < mind) {
+    this.mind = tmin;
+  }
+  if (tmax > maxd) {
+    this.maxd = tmax;
+  }
+  
+  console.log('cmin',this.mind,'cmax',this.maxd);
  // this.displayNearestPositions(positions,nearestCount,nff,{attackDuration:0.05}); 
 }
 

@@ -72,8 +72,15 @@ item.nearestPositions = function (positions,n) {
   return nrps;
 }
   
-    
- 
+item.sameLine = function (line0,line1) {
+  let l0e0 = line0.e0index;
+  let l0e1 = line0.e1index; 
+  let l1e0 = line1.e0index;
+  let l1e1 = line1.e1index;
+  let same = ((l0e0 === l1e0) && (l0e1 === l1e1))||((l0e0 === l1e1) && (l0e1 === l1e0));
+  return same;
+}
+  
 
 item.displayNearestPositions = function (positions,n,nff,ad) {// ad = attack decay parameters
   let {lines,lineP,debug2,lineColors} = this;
@@ -123,6 +130,8 @@ item.displayNearestPositions = function (positions,n,nff,ad) {// ad = attack dec
       }
       ln.show();
       ln.setEnds(e0,e1);
+      ln.e0index = i;
+      ln.e1index = i;
       if (aparams) {
         aparams.value = [stroker,strokeg,strokeb];
         aparams.shape = ln;

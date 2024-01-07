@@ -12,7 +12,7 @@ let ht=50;
 let stt=2;
 
 
-let topParams = {width:ht,height:ht,framePadding:0.3*ht,frameStrokee:'white',frameStrokeWidth:.2,timePerStep:1/4,stopTime:stt,recordingMotion:1,saveAnimation:1,
+let topParams = {width:ht,height:ht,framePadding:0.3*ht,frameStrokee:'white',frameStrokeWidth:.2,timePerStep:1/16,stopTime:stt,recordingMotion:1,saveAnimation:1,
     circleRadius:.2,ringRadii:[],nearestCount:6,nearestFadeFactor:20,toAngle:2*Math.PI};
 
 Object.assign(rs,topParams);
@@ -49,7 +49,7 @@ rs.initialize = function () {
 
   this.addFrame();
   this.numSteps =stp/tps;
-  this.numSteps = 101;
+  this.numSteps = 1010;
   let lines = this.set('lines',arrayShape.mk());
   let line  = lineP.instantiate();
   line.setEnds(Point.mk(-10,0),Point.mk(10,0));
@@ -66,16 +66,18 @@ rs.initialize = function () {
   let zeroValue = [0,0,0];
   let value = [200,0,200]
   this.aparams = {attackDuration:1,zeroValue,applicator,shape:line,value};
+  this.dparams = {decayDuration:2,zeroValue,applicator,shape:line,value,startDecay:4};
 }
 
 
 
 rs.updateState = function () {
   debugger;
-  let {stepsSoFar:ssf,currentTime:t,nearestCount,nearestFadeFactor:nff,aparams,attackStarted:ast} = this;
+  let {stepsSoFar:ssf,currentTime:t,nearestCount,nearestFadeFactor:nff,aparams,dparams,attackStarted:ast} = this;
   console.log('steps',ssf,'time',t);
   if (!ast) {
     this.startAttack(aparams);
+    this.startDecay(dparams);
     this.attackStarted =1;
   }
   this.execADs();

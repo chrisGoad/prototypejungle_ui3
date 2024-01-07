@@ -24,7 +24,7 @@ Object.assign(rs,topParams);
 let subParams ={speed:2,shapesPerRing:6};
 
 /* particle
-{ring,radius,indexInRing,currentAngle,speed,index,initialAngle,initialTime}
+{ring,radius,indexInRing,currentAngle,speed,index,initialAngle,initialTime,position}
 
 // and maybe mass
 */
@@ -94,10 +94,13 @@ rs.buildUniformArrays  = function (params) {
 
 
 rs.buildShapes = function () {
-  let {shapes,particles,circleP} = this;
+  let {shapes,particles,circleP,positions} = this;
   let np = particles.length;
   for (let i = 0;i<np;i++) {
-    let p = particles[i]
+    let p = particles[i];
+    let pos = Point.mk(0,0);
+    p.position = pos;
+    positions.push(pos);
     let crc = circleP.instantiate();
     crc.particle = p;
     crc.fill = p.fill;
@@ -121,10 +124,11 @@ rs.updateAngles = function (t) {
 }
 
 rs.displayPosition  = function (particle) {
-  let {shape,currentAngle:a,radius:r,center} = particle;
+  let pos = particle.position;
+  let {shape,currentAngle:a,radius:r,center,position} = particle;
   let p0 = Point.mk(r*Math.cos(a),r*Math.sin(a));
   let p1 = center?p0.plus(center):p0;
-  this.positions.push(p1);
+  pos.copyto(p1);
   shape.moveto(p1);
 }
 

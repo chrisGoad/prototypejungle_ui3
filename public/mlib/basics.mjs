@@ -1037,10 +1037,11 @@ item.startAttack = function (params)  {
  
 
 item.startDecay = function (params)  {
-  let {shape,attackDuration,applicator,value,zeroValue} = params;
+  let {shape,decayDuration,applicator,value,zeroValue,startDecay:sdc} = params;
   let {ADstates,currentTime} = this;
+  let startDecay = sdc?sdc:currentTime;
   if (decayDuration) {
-    let state = {shape,startDecay:currentTime,decayDuration,value,zeroValue,applicator};
+    let state = {shape,startDecay,decayDuration,value,zeroValue,applicator};
     ADstates.push(state);
   }
   applicator(shape,value);
