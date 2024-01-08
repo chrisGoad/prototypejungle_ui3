@@ -12,8 +12,8 @@ let ht=50;
 let stt=2;
 
 
-let topParams = {width:ht,height:ht,framePadding:0.3*ht,frameStrokee:'white',frameStrokeWidth:.2,timePerStep:1/128,stopTime:12,recordingMotion:1,saveAnimation:1,
-    circleRadius:.2,ringRadii:[],nearestCount:6,nearestFadeFactor:20,toAngle:2*Math.PI};
+let topParams = {width:ht,height:ht,framePadding:0.3*ht,frameStrokee:'white',frameStrokeWidth:.2,timePerStep:1/50,stopTime:12,recordingMotion:1,saveAnimation:1,
+    circleRadius:.4,ringRadii:[],nearestCount:6,nearestFadeFactor:20,toAngle:2*Math.PI,particleColor:'blue'};
 
 Object.assign(rs,topParams);
 let subParams ={speed:10,shapesPerRing:2};
@@ -23,24 +23,7 @@ let subParams ={speed:10,shapesPerRing:2};
 
 // and maybe mass
 */
-const generateGrid = function (nppr,wd) {
-  let inc = wd/(nppr-1);
-  let a = [];
-  let lvl = -wd/2;
-  for (let i = 0;i<nppr;i++) {
-    let x = lvl+inc*i
-    for (let j =0 ;j<nppr;j++) {
-      let p = Point.mk(x,lvl+inc*j);
-      a.push(p);
-    }
-  }
-  return a;
-}
-let pointsPerRow = 5;
-debugger;
-rs.ringCenters = generateGrid(pointsPerRow,0.8*ht).concat([Point.mk(0,0)]);
 
-let numPoints = pointsPerRow*pointsPerRow+1;
 
   
 rs.initProtos = function () {
@@ -67,16 +50,24 @@ rs.buildParameterArrays  = function () {
   //let ringSpeeds = this.arrayFromFunction ((i)=>rspeed*Math.random(),spr);
  // let divisors = [2,3,4,5];
   let divisors = [2,3,4];
-  let mdivs = divisors.concat(divisors).concat(divisors).concat(divisors);
-  let fc = 1;
+  //let mdivs = divisors.concat(divisors).concat(divisors).concat(divisors);
+  let mdivs = this.repeatArray(divisors,4);
+  let fc = 2*Math.PI;
   //let ringSpeeds = mdivs.map((v) => (fc*60)/v)
-  let ringSpeeds = mdivs.map((v) => (fc*12)/v)
+  let ringSpeeds = mdivs.map((v) => fc/v)
  //let ringSpeeds = this.arrayFromFunction ((i)=>rspeed*Math.random(),spr);
   this.speeds = rs.uniformArray(ringSpeeds,nr);
   debugger;
   let iar =  this.steppedArray(0,2*Math.PI,spr+1,1);//initial angles per ring
   this.initialAngles = this.uniformArray(iar,nr);
   this.lineColors = this.cyclingArray([[255,95,0],[255,0,0]],nc);
+  return;
+  let colors = ['red','green','blue'];
+  for (let i=0;i<9;i++) {
+    colors.push('gray');
+  }
+  //this.particleColors = this.repeatArray(colors,4);
+  this.particleColors = colors;
 }
 
 

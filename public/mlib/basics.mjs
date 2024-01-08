@@ -966,6 +966,11 @@ item.cyclingArray = function (vs,n) {
   return a;
 }
 
+item.repeatArray = function (vs,n) {
+  let ln = vs.length;
+  return this.cyclingArray(vs,n*ln);
+}
+
 item.toMpiPiRange = function (a) {
   if (a > Math.PI) {
     return a-2*Math.PI;

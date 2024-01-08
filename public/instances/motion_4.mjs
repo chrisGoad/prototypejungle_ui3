@@ -42,7 +42,7 @@ rs.initProtos = function () {
 }
 
 rs.buildParticles = function () {
-  let {ringRadii,shapesPerRing:spr,speeds,masses,initialAngles:ias,particles,particlesByRing:pbr}= this;
+  let {ringRadii,shapesPerRing:spr,speeds,masses,initialAngles:ias,particles,particlesByRing:pbr,particleColors:pc}= this;
   let nr = ringRadii.length;
   let cindex = 0;
   for (let i=0;i<nr;i++) {
@@ -56,7 +56,8 @@ rs.buildParticles = function () {
     let colors = ['red','green','blue','yellow','cyan','magenta','white','gray'];
     
     for (let j = 0;j<rnumShapes;j++) {
-      let particle = {index:cindex++,ring:i,radius,indexInRing:j,speed:rspeeds[j],mass:rmasses[j],initialAngle:rias[j],initialTime:0,fill:colors[j]}
+      let particle = {index:cindex++,ring:i,radius,indexInRing:j,speed:rspeeds[j],mass:rmasses[j],initialAngle:rias[j],initialTime:0,
+                  fill:pc?pc[j]:undefined}
       particles.push(particle);
       ptr.push(particle);
     }
