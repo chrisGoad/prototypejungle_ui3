@@ -1046,6 +1046,59 @@ item.startDecay = function (params)  {
   }
   applicator(shape,value);
 }   
+
+/* interpolation path 
+First, interpolation  point
+{time,value}
+
+Interpolateion path :array of interpolation points
+
+interpolation state:
+{time,index,value} // index is the array index of the path point immediately preceding
+
+
+active interpolation path {state,path}
+*/
+item.initializeAIP = function (path) {
+  let p0 = path[0];
+  let {time,value} = p0;
+  let state = {time,index:0,value}
+}
+
+item.advanceAIP = function (aip,t) {
+  let {state,path} = aip;
+  let {index,time} = state;
+  let pln = path.length;
+  if (index === (pln-1)) { // end of path reached
+    return;
+  }
+  let cindex = index;
+  let cps = path[index];
+  let cpe = path[index+1];
+  let endTime = cpe.time;;
+  while (t > endTime) {
+    cindex++;
+    if (cindex === (pln-1)) { //end of path
+      return;
+    }
+    cps = cpe;
+    cpe = path[cindex];
+    endTime = cpe.time;
+  }
+  let startTime = cps.time;
+  let startValue = cps.value;
+  let endValue = cpe.value;
+  let dTime = endTime-startTime;
+  let fr = (t-startTime)/dTime;
+  let v = this.interpolate(startValue,endValue,fr);
+  state.time = t;
+  state.value = v;
+  return v;
+}
+
+   
+    
+    
   
   
 }

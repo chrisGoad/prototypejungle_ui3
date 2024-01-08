@@ -7,12 +7,12 @@ import {rs as generatorP} from '/generators/motion_1.mjs'
 let rs = generatorP.instantiate();
 addDistanceMethods(rs);
 
-rs.setName('motion_9');
+rs.setName('motion_10');
 let ht=50;
 let stt=2;
 
 
-let topParams = {width:ht,height:ht,framePadding:0.3*ht,frameStrokee:'white',frameStrokeWidth:.2,timePerStep:1/512,stopTime:stt,recordingMotion:1,saveAnimation:1,
+let topParams = {width:ht,height:ht,framePadding:0.3*ht,frameStrokee:'white',frameStrokeWidth:.2,timePerStep:1/128,stopTime:12,recordingMotion:1,saveAnimation:1,
     circleRadius:.2,ringRadii:[],nearestCount:6,nearestFadeFactor:20,toAngle:2*Math.PI};
 
 Object.assign(rs,topParams);
@@ -58,13 +58,20 @@ rs.initProtos = function () {
 
 rs.buildParameterArrays  = function () {
   let {nearestCount:nc} = this;
-  this.ringRadii = rs.uniformArray(.2*ht,numPoints-1).concat([0.3*ht]);
+  this.ringRadii = [.4*ht];
   let nr = this.ringRadii.length;
-  let spr = 2;
-  let rspeed = 16;
+  let spr = 12;// shapesPerRing
+  let rspeed = 32;
   this.shapesPerRing = this.uniformArray(spr,nr);
-  this.ringCenters = generateGrid(pointsPerRow,0.8*ht).concat([Point.mk(0,0)]);
-  let ringSpeeds = rs.uniformArray(rspeed,spr);
+  this.ringCenters = [Point.mk(0,0)];
+  //let ringSpeeds = this.arrayFromFunction ((i)=>rspeed*Math.random(),spr);
+ // let divisors = [2,3,4,5];
+  let divisors = [2,3,4];
+  let mdivs = divisors.concat(divisors).concat(divisors).concat(divisors);
+  let fc = 1;
+  //let ringSpeeds = mdivs.map((v) => (fc*60)/v)
+  let ringSpeeds = mdivs.map((v) => (fc*12)/v)
+ //let ringSpeeds = this.arrayFromFunction ((i)=>rspeed*Math.random(),spr);
   this.speeds = rs.uniformArray(ringSpeeds,nr);
   debugger;
   let iar =  this.steppedArray(0,2*Math.PI,spr+1,1);//initial angles per ring
@@ -79,7 +86,7 @@ rs.initialize = function () {
    let {stopTime:stp,timePerStep:tps,lineP} = this;
   this.addFrame();
   this.numSteps =stp/tps;
-  this.numSteps = 101;
+ // this.numSteps = 1010;
   let cs=100;
   this.stepArrayy = [0].concat(this.sequentialArray(102,120));
   this.set('shapes',arrayShape.mk());
@@ -113,11 +120,11 @@ rs.updateState = function () {
    // console.log('fr',fr,'pfr',pfr,'pfrpow',pfrpow);
     console.log('fr',fr,'pfr',pfr);
     let icolor = this.interpolate(black,color,pfr);
-    let sw = 0.8;
+    let sw = .8;
     let stroke = this.arrayToRGB(color);
     if (line) {
       line.stroke = stroke;
-      line['stroke-width'] = sw*Math.pow(pfr,2);
+      line['stroke-width'] = sw*Math.pow(pfr,1);
       line.update();
     }
   }
