@@ -7,12 +7,12 @@ import {rs as generatorP} from '/generators/motion_1.mjs'
 let rs = generatorP.instantiate();
 addDistanceMethods(rs);
 
-rs.setName('motion_10');
+rs.setName('motion_11');
 let ht=50;
 let stt=2;
 
 
-let topParams = {width:ht,height:ht,framePadding:0.3*ht,frameStroke:'white',frameStrokeWidth:.2,timePerStep:1/80,stopTime:12,recordingMotion:1,saveAnimation:1,
+let topParams = {width:ht,height:ht,framePadding:0.3*ht,frameStroke:'white',frameStrokeWidth:.2,timePerStep:1/50,stopTime:12,recordingMotion:1,saveAnimation:1,
     circleRadius:.4,ringRadii:[],nearestCount:6,nearestFadeFactor:20,toAngle:2*Math.PI,particleColor:'blue'};
 
 Object.assign(rs,topParams);
@@ -41,12 +41,12 @@ rs.initProtos = function () {
 
 rs.buildParameterArrays  = function () {
   let {nearestCount:nc} = this;
-  this.ringRadii = [.6*ht];
+  this.ringRadii = [.6*ht,.6*ht];
   let nr = this.ringRadii.length;
   let spr = 12;// shapesPerRing
   let rspeed = 32;
   this.shapesPerRing = this.uniformArray(spr,nr);
-  this.ringCenters = [Point.mk(0,0)];
+  this.ringCenters = [Point.mk(-1,0),Point.mk(1,0)];
   //let ringSpeeds = this.arrayFromFunction ((i)=>rspeed*Math.random(),spr);
  // let divisors = [2,3,4,5];
   let divisors = [2,3,4];
@@ -54,9 +54,10 @@ rs.buildParameterArrays  = function () {
   let mdivs = this.repeatArray(divisors,4);
   let fc = 2*Math.PI;
   //let ringSpeeds = mdivs.map((v) => (fc*60)/v)
-  let ringSpeeds = mdivs.map((v) => fc/v)
+  let ringSpeed0 = mdivs.map((v) => fc/v)
+  let ringSpeed1 = mdivs.map((v) => -fc/v)
  //let ringSpeeds = this.arrayFromFunction ((i)=>rspeed*Math.random(),spr);
-  this.speeds = rs.uniformArray(ringSpeeds,nr);
+  this.speeds = [ringSpeed0,ringSpeed1];
   debugger;
   let iar =  this.steppedArray(0,2*Math.PI,spr+1,1);//initial angles per ring
   this.initialAngles = this.uniformArray(iar,nr);
@@ -110,16 +111,12 @@ rs.updateState = function () {
     //let pfrpow = Math.pow(pfr,1/pow);
    // console.log('fr',fr,'pfr',pfr,'pfrpow',pfrpow);
     console.log('fr',fr,'pfr',pfr);
-  //  let icolor = this.interpolate(black,color,pfr);
-    let icolor = this.interpolate(color,black,pfr);
+    let icolor = this.interpolate(black,color,pfr);
     let sw = .8;
     let stroke = this.arrayToRGB(color);
     if (line) {
       line.stroke = stroke;
-      let pfrp = Math.pow(pfr,.15);
-      console.log('pfrp',pfrp,'stroke-widthh',pfrp);
-      line['stroke-width'] = sw*pfrp;;
-    //  line['stroke-width'] = sw*(.8-pfrp);
+      line['stroke-width'] = sw*Math.pow(pfr,.2);
       line.update();
     }
   }

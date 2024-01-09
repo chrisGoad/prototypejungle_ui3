@@ -7,13 +7,13 @@ import {rs as generatorP} from '/generators/motion_1.mjs'
 let rs = generatorP.instantiate();
 addDistanceMethods(rs);
 
-rs.setName('motion_10');
+rs.setName('motion_12');
 let ht=50;
 let stt=2;
 
 
-let topParams = {width:ht,height:ht,framePadding:0.3*ht,frameStroke:'white',frameStrokeWidth:.2,timePerStep:1/80,stopTime:12,recordingMotion:1,saveAnimation:1,
-    circleRadius:.4,ringRadii:[],nearestCount:6,nearestFadeFactor:20,toAngle:2*Math.PI,particleColor:'blue'};
+let topParams = {width:ht,height:ht,framePadding:0.3*ht,frameStrokee:'white',frameStrokeWidth:.2,timePerStep:1/80,stopTime:12,recordingMotion:1,saveAnimation:1,
+    circleRadius:.2,ringRadii:[],nearestCount:6,nearestFadeFactor:20,toAngle:2*Math.PI,particleColor:'blue'};
 
 Object.assign(rs,topParams);
 let subParams ={speed:10,shapesPerRing:2};
@@ -34,7 +34,7 @@ rs.initProtos = function () {
   circleP['stroke-width'] = 0;
   let lineP = this.lineP = linePP.instantiate();
   lineP.stroke = 'white';
-  lineP['stroke-width'] = .15; 
+  lineP['stroke-width'] = .05; 
 }
 
 
@@ -74,14 +74,16 @@ rs.buildParameterArrays  = function () {
 rs.initialize = function () {
    debugger;
    this.initProtos();
-   let {stopTime:stp,timePerStep:tps,lineP} = this;
+   let {stopTime:stp,timePerStep:tps,lineP,circleP} = this;
   this.addFrame();
   this.numSteps =stp/tps;
  // this.numSteps = 1010;
   let cs=100;
   this.stepArrayy = [0].concat(this.sequentialArray(102,120));
   this.set('shapes',arrayShape.mk());
-  this.set('lines',arrayShape.mk());
+  let lines = this.set('lines',arrayShape.mk());
+  let segs = this.segs = [];
+  let ints = this.set('ints',arrayShape.mk());
   let spr = 6;
   let speed =2;
   this.buildParameterArrays(subParams);
@@ -91,6 +93,13 @@ rs.initialize = function () {
   this.buildParticles();
   this.buildShapes();
   this.addLinesBetweenPositions(positions,lineP);
+  let nln = lines.length;
+  let nints = nln*nln;
+  for (let i =0;i<nints;i++) {
+    let crc = circleP.instantiate();
+    crc.hide();
+    ints.push(crc);
+  }
   this.mind = Infinity;
   this.maxd = -Infinity;
 }
@@ -99,47 +108,51 @@ rs.initialize = function () {
 
 rs.updateState = function () {
   debugger;
-  let {stepsSoFar:ssf,currentTime:t,linesAdded:la,positions,mind,maxd} = this;
+  let {stepsSoFar:ssf,currentTime:t,linesAdded:la,positions,mind,maxd,lines,ints,segs} = this;
   let color = [255,95,0];
   let black = [0,0,0];
   const fn = (line,dist) => {
-    //console.log('DIST',dist);
     let fr = dist/60;
     let pow = 4;
     let pfr = Math.pow(1-fr,pow);
-    //let pfrpow = Math.pow(pfr,1/pow);
-   // console.log('fr',fr,'pfr',pfr,'pfrpow',pfrpow);
     console.log('fr',fr,'pfr',pfr);
-  //  let icolor = this.interpolate(black,color,pfr);
-    let icolor = this.interpolate(color,black,pfr);
-    let sw = .8;
+    let icolor = this.interpolate(black,color,pfr);
+    let bsw = .4;
     let stroke = this.arrayToRGB(color);
     if (line) {
       line.stroke = stroke;
-      let pfrp = Math.pow(pfr,.15);
-      console.log('pfrp',pfrp,'stroke-widthh',pfrp);
-      line['stroke-width'] = sw*pfrp;;
-    //  line['stroke-width'] = sw*(.8-pfrp);
-      line.update();
+      let swfc = Math.pow(pfr,.2);
+      console.log('sw fc',swfc);
+      if (swfc < .4) {
+        line.hide();
+      } else {
+        line.show();
+        line['stroke-width'] = bsw*swfc;
+        line.update();
+      }
     }
   }
-  let ns = 20;
-  for (let i=0;i<ns;i++) {
-    let d = (i/ns)*77;
-    fn(null,d);
-  } 
   //return;
   console.log('steps',ssf,'time',t);
   this.updateAngles(t);
   this.displayPositions();
-  let dists = this.updateLines(positions,fn);
-  let {mind:tmin,maxd:tmax} = dists;
-  if (tmin < mind) {
-    this.mind = tmin;
+  this.updateLines(positions,fn); //update segments
+  let intps = allSegmentIntersections(segs);
+  let nints = ints.length;
+  for (let i=0;i<nints;i++) {
+    let crc = ints[i];
+    crc.hide();
+    crc.update();
   }
-  if (tmax > maxd) {
-    this.maxd = tmax;
+  let nintps = intps.length;
+  for (let i=0;i<nintps;i++) {
+    let crc = ints[i];
+    let p = intps[i];
+    crc.show();
+    crc.moveto(p);
+    //crc.update();
   }
+  
   
   console.log('cmin',this.mind,'cmax',this.maxd);
  // this.displayNearestPositions(positions,nearestCount,nff,{attackDuration:0.05}); 

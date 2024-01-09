@@ -264,6 +264,9 @@ c:\ffmpeg\bin\ffmpeg  -framerate 15 -i animations/motion_7_f%03d.jpg -s 500x500 
 c:\ffmpeg\bin\ffmpeg  -framerate 15 -i animations/motion_8_f%03d.jpg -s 500x500  export/motion_8.gif
 c:\ffmpeg\bin\ffmpeg  -framerate 15 -i animations/motion_9_f%03d.jpg -s 500x500  export/motion_9.gif
 c:\ffmpeg\bin\ffmpeg  -framerate 15 -i animations/motion_10_f%03d.jpg -s 500x500  export/motion_10.gif
+c:\ffmpeg\bin\ffmpeg  -framerate 15 -i animations/motion_11_f%03d.jpg -s 500x500  export/motion_11.gif
+c:\ffmpeg\bin\ffmpeg  -framerate 15 -i animations/motion_12_f%03d.jpg -s 500x500  export/motion_12.gif
+c:\ffmpeg\bin\ffmpeg  -framerate 15 -i animations/motion_13_f%03d.jpg -s 500x500  export/motion_13.gif
 7
 c:\ffmpeg\bin\ffmpeg -i export/bounce_12.mp4 -i export/bounce_12.wav -c:v copy -c:a aac -map 0:v -map 1:a export/blend_test.mp4
 rm animations/spatter0_7*

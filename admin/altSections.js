@@ -4,6 +4,9 @@ module.exports = {
 sections: 
 
 [     [0,'test_ad','instances',1,'test attack',{likes:0,posted:0,category:'drop'}], 
+      [0,'motion_13','instances',1,'motion 13',{likes:0,posted:0,category:'drop'}], 
+      [0,'motion_12','instances',1,'motion 12',{likes:0,posted:0,category:'drop'}], 
+      [0,'motion_11','instances',1,'motion 11',{likes:0,posted:0,category:'drop'}], 
       [0,'motion_10','instances',1,'motion 10',{likes:0,posted:0,category:'drop'}], 
       [0,'motion_9','instances',1,'motion 9',{likes:0,posted:0,category:'drop'}], 
       [0,'motion_8','instances',1,'motion 8',{likes:0,posted:0,category:'drop'}], 

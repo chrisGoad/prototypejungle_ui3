@@ -4,21 +4,29 @@
 let rs = function (item) {
 
 item.addLinesBetweenPositions = function (positions,lineP) {
-  let {lines} = this;
+  let {lines,segs} = this;
   let np = positions.length;
   for (let i=0;i<np;i++) {
     let psi = positions[i]
     psi.firstLine = lines.length;
+    let line;
     for (let j = i+1;j<np;j++) {
-      let line = lineP.instantiate();
-      line.show();
-      lines.push(line);
+      if (segs) {
+        let seg= LineSegment.mk(Point.mk(0,0),Point.mk(0,0));
+        segs.push(seg);
+      } 
+      if (lines) {
+        line = lineP.instantiate();
+        line.show();
+        lines.push(line);
+      }
+
     }
   }
 }
 
 item.updateLines = function (positions,fn) {
-  let {lines} = this;
+  let {lines,segs} = this;
   let nl = lines.length;
   let np = positions.length;
   let maxd = -Infinity;
@@ -29,10 +37,16 @@ item.updateLines = function (positions,fn) {
     let fl = psi.firstLine;
     let cnt = 0;
     for (let j = i+1;j<np;j++) {
-      let line = lines[fl+cnt];
+      let line = lines?lines[fl+cnt]:undefined;
+      let seg = segs?segs[fl+cnt]:undefined;
       cnt++;
       let psj = positions[j];
-      line.setEnds(psi,psj);
+      if (line) {
+        line.setEnds(psi,psj);
+      }
+      if (seg) {
+        seg.setEnds(psi,psj);
+      }
       let dist = psi.distance(psj);
       if (dist > maxd) {
         maxd = dist;
@@ -43,8 +57,10 @@ item.updateLines = function (positions,fn) {
       }
       
      // console.log('dist',dist);
-      fn(line,dist);
-      line.update();
+      if (line) {
+        fn(line,dist);
+        line.update();
+      }
     }
   } 
   return {mind,maxd}
