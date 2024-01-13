@@ -70,6 +70,22 @@ item.runActivePaths  = function () {
     }
   });
 }
+
+item.circleToPath = function (circle,numSegs) {
+  let {center,radius} = circle;
+  let inc = (2*Math.PI)/numSegs;
+  let path=[];
+  for (let i=0;i<=numSegs;i++) {
+    let a = i*inc;
+    let x = Math.cos(a);
+    let y = Math.sin(a);
+    let p = Point.mk(x,y).times(radius);
+    let t = i/numSegs;
+    let pe = {pathTime:t,value:p};
+    path.push(pe);
+  }
+  return path;
+}
  
   
 }
