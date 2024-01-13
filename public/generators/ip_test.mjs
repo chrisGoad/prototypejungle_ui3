@@ -22,11 +22,11 @@ let UR = Point.mk(pv,-pv);
 let LR = Point.mk(pv,pv);
 let LL = Point.mk(-pv,pv);
 
-let p = [{time:0,value:UL},{time:1,value:UR},{time:2,value:LR},{time:3,value:LL},{time:4,value:UL}];
-let np = this.normalizePath(p);
-let ap = this.mkActivePath(0,1/10,np);
-this.activePaths = [ap];
-}
+let p = [{pathTime:0,value:UL},{pathTime:1,value:UR},{pathTime:2,value:LR},{pathTime:3,value:LL},{pathTime:4,value:UL}];
+let np = rs.normalizePath(p);
+let ap = rs.mkActivePath(0,1/10,np);
+rs.activePaths = [ap];
+
 
 
 rs.initialize = function () {
@@ -37,12 +37,12 @@ rs.initialize = function () {
   this.numSteps =stp/tps;
 }    
 rs.updateState = function () {
-  let onUp = this.onUpdate;
-  this.updatePositions();
-  if (onUp) {
-    this.onUpdate();
-    
-  }
+  let {currentTime:ct,activePaths} = this;
+  let ap = this.activePaths[0]
+  debugger;
+  this.runActivePaths();
+  console.log('time',ct,'value',ap.value);
+  debugger;
 }
 
 

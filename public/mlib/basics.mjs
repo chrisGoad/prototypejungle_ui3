@@ -838,16 +838,16 @@ item.interpolate = function (a0,a1,fr) {
     let delta = a1-a0;
     iv = a0+fr*delta;
   } else {
-    let props = a0.getOwnPropertyNames();
+    let props = Object.getOwnPropertyNames(a0);
     let proto = Object.getPrototypeOf(a0);
-    let iv = Object.create(proto);
+    iv = Object.create(proto);
     props.forEach( (p) => {
       let v0 = a0[p];
       let v1 = a1[p];
       let v = this.interpolate(v0,v1,fr);
       iv[p] = v;
     });
-      
+  }    
     
   return iv;
 }	

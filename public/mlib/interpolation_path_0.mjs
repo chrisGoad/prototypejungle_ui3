@@ -10,20 +10,20 @@ which is active at pathTime. pathTime is path relative.  globalTime = startTime+
 pathTimes are normalized to [0,1];;
 */
 
-rs.updateActivePath = function (ap,gt) { // global time; t is relative  time
+item.updateActivePath = function (ap,gt) { // global time; t is relative  time
   let {startTime,speed,path,activeElementIndex:aei,cycle} = ap;
-  let pt = (gt-startTime)/speed - cycle;//pathTime
+  let pt = (gt-startTime)*speed - cycle;//pathTime
   let pln = path.length;
   while (1) {
     let sae = path[aei]; //sae = start active element
-    let {time:st,value:sv} = sae; // st= start time, sv = start value
-    if (pt < 0) || (pt>1)){ //  not started or over
+    let {pathTime:st,value:sv} = sae; // st= start time, sv = start value
+    if ((pt < 0) || (pt>1)){ //  not started or over
       return 0;
     }
-    eaei = aei + 1;; //end active element index
+    let eaei = aei + 1;; //end active element index
     if (eaei < pln) { 
       let eae = path[eaei];
-      let {time:et,value:ev} = eae;
+      let {pathTime:et,value:ev} = eae;
       if (pt<=et) { // t is within the active element
         let iv = this.interpolate(sv,ev,(pt-st)/(et-st));
         ap.value = iv;
@@ -42,27 +42,29 @@ rs.updateActivePath = function (ap,gt) { // global time; t is relative  time
   }
 }
     
-rs.normalizePath = function (p) {
+item.normalizePath = function (p) {
+  debugger;
   let pln = p.length;
   let last = p[pln-1];
   let dur = last.pathTime;
-  p.forEach(((pe) => {
-    let pt = pe.pathTime;
-    pe.pathTime = pt/dur;
+  let np = p.map((pe) => {
+    let {pathTime:pt,value} =  pe;
+    return {pathTime:pt/dur,value};
+    
   })
+  return np;
 }
 
-rs.mkActivePath = function (startTime,speed,path) {
-  let ap = {startTime,speed,path,activeElementIndex:0};
+item.mkActivePath = function (startTime,speed,path) {
+  let ap = {startTime,speed,path,activeElementIndex:0,cycle:0};
   return ap;
 }
 
-rs.runActivePaths  = function () {
+item.runActivePaths  = function () {
   let {currentTime:gt,activePaths:aps} = this;
-  let 
   aps.forEach( (ap) => {
     let {action} = ap;
-    let active = this.updateActivePath(p,gt);
+    let active = this.updateActivePath(ap,gt);
     if (active && action) {
       action.call(this,ap);
     }
