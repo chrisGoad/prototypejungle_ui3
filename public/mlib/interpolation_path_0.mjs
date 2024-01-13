@@ -12,12 +12,13 @@ pathTimes are normalized to [0,1];;
 
 item.updateActivePath = function (ap,gt) { // global time; t is relative  time
   let {startTime,speed,path,activeElementIndex:aei,cycle} = ap;
-  let pt = (gt-startTime)*speed - cycle;//pathTime
   let pln = path.length;
   while (1) {
+    debugger;
+    let pt = (gt-startTime)*speed - cycle;//pathTime
     let sae = path[aei]; //sae = start active element
     let {pathTime:st,value:sv} = sae; // st= start time, sv = start value
-    if ((pt < 0) || (pt>1)){ //  not started or over
+    if (pt < 0){ //  not started or over
       return 0;
     }
     let eaei = aei + 1;; //end active element index
@@ -34,7 +35,8 @@ item.updateActivePath = function (ap,gt) { // global time; t is relative  time
         aei = aei+1;
       }
     } else {
-      ap.cycle = cycle+1;
+      debugger;
+      cycle = ap.cycle = cycle+1;
       pt = pt-1;
       aei = 0;
     }
