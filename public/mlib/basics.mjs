@@ -823,21 +823,33 @@ item.arrayTimes = function (a,x) {
 //
 item.interpolate = function (a0,a1,fr) {
   let isa = Array.isArray(a0);
-  let ar;
+  let isn = typeof a0 === 'number';
+  let iv;
   if (isa) {
     let ln = a0.length; //a1 must have the same length
-    ar = [];
+    iv = [];
     for (let i=0;i<ln;i++) {
       let a0e = a0[i];
       let a1e = a1[i];
       let v = this.interpolate(a0e,a1e,fr);
-      ar.push(v);
+      iv.push(v);
     }
-  } else {
+  } else if (isn) {
     let delta = a1-a0;
-    ar = a0+fr*delta;
-  }
-  return ar;
+    iv = a0+fr*delta;
+  } else {
+    let props = a0.getOwnPropertyNames();
+    let proto = Object.getPrototypeOf(a0);
+    let iv = Object.create(proto);
+    props.forEach( (p) => {
+      let v0 = a0[p];
+      let v1 = a1[p];
+      let v = this.interpolate(v0,v1,fr);
+      iv[p] = v;
+    });
+      
+    
+  return iv;
 }	
 /*
 item.interpolateArrayss	 = function(a0,a1,fr) {

@@ -104,12 +104,9 @@ rs.updateState = function () {
   let color = [255,95,0];
   let black = [0,0,0];
   const fn = (line,dist) => {
-    //console.log('DIST',dist);
     let fr = dist/60;
     let pow = 4;
     let pfr = Math.pow(1-fr,pow);
-    //let pfrpow = Math.pow(pfr,1/pow);
-   // console.log('fr',fr,'pfr',pfr,'pfrpow',pfrpow);
     console.log('fr',fr,'pfr',pfr);
     let icolor = this.interpolate(black,color,pfr);
     let sw = .8;

@@ -55,7 +55,7 @@ rs.onUpdate = function () {
 }
 
 rs.initialize = function () {
-  debugger;
+  debugger;//keep
   this.initProtos();
    let {width:wd,circleP,numRows,numCols,width,height,stepsPerStage:sps,motionHistory:mh} = this;
    this.addFrame();

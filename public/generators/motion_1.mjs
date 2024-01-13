@@ -70,30 +70,6 @@ rs.buildParticles = function () {
   //return particles;
 }
 
-rs.buildUniformArrays  = function (params) {
-  let {ringRadii} = this;
-  debugger;
-  let {speed,mass,shapesPerRing:spr,randomSpeeds,speedFunction} =params;
-  let nr = ringRadii.length;
-  let spra = [];
-  let speeda = [];
-  let initialAngles = this.steppedArray(0,2*Math.PI,spr,1);
-  //let masses = this.uniformArray(mass,spr);
-  let iaa = [];
-  //let fn = (i) => i?speed:-speed;
-  for (let i=0;i<nr;i++) {
-  //  let speeds = speedFunction?this.arrayFromFunction(speedFunction,spr):this.uniformArray(spr,.01);
-    let speeds = speedFunction?this.arrayFromFunction(speedFunction,spr):this.uniformArray(i%2?speed:-speed,spr);
-    spra.push(spr);
-    speeda.push(speeds);
-    iaa.push(initialAngles);
-  }
-  this.shapesPerRing = spra;  
-  this.speeds = speeda;  
-  this.initialAngles = iaa;
-}
-
-
 rs.buildShapes = function () {
   let {shapes,particles,circleP,positions} = this;
   let np = particles.length;
