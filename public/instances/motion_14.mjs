@@ -9,20 +9,14 @@ addDistanceMethods(rs);
 
 rs.setName('motion_14');
 let ht=50;
-let stt=2;
 
 
 let topParams = {width:ht,height:ht,framePadding:0.3*ht,frameStrokee:'white',frameStrokeWidth:.2,timePerStep:1/80,stopTime:12,recordingMotion:1,saveAnimation:1,
-    circleRadius:.2,ringRadii:[],nearestCount:6,nearestFadeFactor:20,toAngle:2*Math.PI,particleColor:'blue'};
+    circleRadius:.2,ringRadii:[],nearestCount:6,nearestFadeFactor:20,toAngle:2*Math.PI,particleColor:'blue',segsPerCircle:6};
 
 Object.assign(rs,topParams);
 let subParams ={speed:10,shapesPerRing:2};
 
-/* particle
-{ring,radius,indexInRing,currentAngle,speed,index,initialAngle,initialTime}
-
-// and maybe mass
-*/
 
 
   
@@ -49,10 +43,9 @@ rs.buildParameterArrays  = function () {
   this.ringCenters = [Point.mk(0,0)];
   let divisors = [2,3,4];
   let mdivs = this.repeatArray(divisors,4);
-  let fc = 2*Math.PI;
+  let fc = 1;//2*Math.PI;
   let ringSpeeds = mdivs.map((v) => fc/v)
   this.speeds = rs.uniformArray(ringSpeeds,nr);
-  debugger;
   let iar =  this.steppedArray(0,2*Math.PI,spr+1,1);//initial angles per ring
   this.initialAngles = this.uniformArray(iar,nr);
   this.lineColors = this.cyclingArray([[255,95,0],[255,0,0]],nc);
@@ -72,24 +65,16 @@ rs.initialize = function () {
    let {stopTime:stp,timePerStep:tps,lineP,circleP} = this;
   this.addFrame();
   this.numSteps =stp/tps;
- // this.numSteps = 1010;
-  let cs=100;
-  this.stepArrayy = [0].concat(this.sequentialArray(102,120));
+ // this.stepArrayy = [0].concat(this.sequentialArray(102,120));
   this.set('shapes',arrayShape.mk());
   let lines = this.set('lines',arrayShape.mk());
   let segs = this.segs = [];
   let ints = this.set('ints',arrayShape.mk());
-  let spr = 6;
-  let speed =2;
   this.buildParameterArrays(subParams);
-  //this.particles = [];
-  //let positions = this.positions = [];
-  //this.particlesByRing = [];
-  //this.buildParticles();
- // this.buildShapes();
   this.buildPaths();
+  let av = this.allValues();
+  this.addLinesBetweenPositions(av,lineP);
   return;
-  this.addLinesBetweenPositions(positions,lineP);
   let nln = lines.length;
   let nints = nln*nln;
   for (let i =0;i<nints;i++) {
@@ -102,10 +87,12 @@ rs.initialize = function () {
 }
 
 rs.updateState = function () {
-  let {currentTime:ct,activePaths,circ} = this;
+  let {currentTime:ct,activePaths,circ,lineP} = this;
   //let ap = this.activePaths[0]
   debugger;
   this.runActivePaths();
+   let av = this.allValues();
+  this.updateLines(av);
 }
 rs.updateStatee = function () {
   debugger;

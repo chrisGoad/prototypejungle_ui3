@@ -14,7 +14,6 @@ item.updateActivePath = function (ap,gt) { // global time; t is relative  time
   let {startTime,startOffset,speed,path,activeElementIndex:aei,cycle} = ap;
   let pln = path.length;
   while (1) {
-    debugger;
     let pt = startOffset + (gt-startTime)*speed - cycle;//pathTime
     let sae = path[aei]; //sae = start active element
     let {pathTime:st,value:sv} = sae; // st= start time, sv = start value
@@ -27,7 +26,7 @@ item.updateActivePath = function (ap,gt) { // global time; t is relative  time
       let {pathTime:et,value:ev} = eae;
       if (pt<=et) { // t is within the active element
         let iv = this.interpolate(sv,ev,(pt-st)/(et-st));
-        ap.value = iv;
+        this.copyTo(ap.value,iv);
         ap.pathTime = pt;
         ap.activeElementIndex =aei;
         return 1;
@@ -59,8 +58,8 @@ item.normalizePath = function (p) {
 
 //item.mkActivePath = function (startTime,startOffset,speed,path) {
 item.mkActivePath = function (params) {
-  let {startTime:st,startOffset:soff,speed,path} = params;
-  let ap = {startTime:st?st:0,startOffset:soff?soff:0,speed,path,activeElementIndex:0,cycle:0};
+  let {startTime:st,startOffset:soff,speed,path,value} = params; //value is an object for interpolated values to be copied into
+  let ap = {startTime:st?st:0,startOffset:soff?soff:0,speed,path,activeElementIndex:0,cycle:0,value};
   return ap;
 }
 
@@ -74,6 +73,17 @@ item.runActivePaths  = function () {
     }
   });
 }
+
+item.allValues = function () {
+  let {activePaths} = this;
+  let av = activePaths.map((ap) => ap.value);
+  return av;
+}
+ 
+  
+  
+  
+
 
 item.circleToPath = function (circle,numSegs) {
   let {center,radius} = circle;

@@ -820,7 +820,7 @@ item.arrayTimes = function (a,x) {
 }
  
     
-//
+// interpolate and copyTo assume that their arguments have matching "shapes"
 item.interpolate = function (a0,a1,fr) {
   let isa = Array.isArray(a0);
   let isn = typeof a0 === 'number';
@@ -850,6 +850,44 @@ item.interpolate = function (a0,a1,fr) {
   }    
     
   return iv;
+}	
+
+item.copyTo = function (dest,src) {
+  debugger;
+  let kind;
+  if (!src || (typeof src === 'number')) {
+    kind = 'primitive';
+  }  else if (Array.isArray(dest)) {
+    kind = 'array';
+  } else {
+    kind = 'object';
+  }
+  
+  if (kind == 'array') {
+    let ln = dest.length; //src must have the same length
+    for (let i=0;i<ln;i++) {
+      let deste = dest[i];
+      let srce = src[i];
+      let ekind = this.copyTo(deste,srce);
+      if (ekind === 'primitive') {
+        dest[i] = src[i];
+      }
+    }
+    return kind;
+  } else if (kind === 'primitive') {
+    return kind;
+  } else {
+    let props = Object.getOwnPropertyNames(src);
+    props.forEach( (p) => {
+      let deste = dest[p];
+      let srce = src[p];
+      let kind = this.copyTo(deste,srce);
+      if (kind === 'primitive') {
+        dest[p] = src[p];
+      }
+      return kind;
+    });
+  }    
 }	
 /*
 item.interpolateArrayss	 = function(a0,a1,fr) {

@@ -58,7 +58,9 @@ item.updateLines = function (positions,fn) {
       
      // console.log('dist',dist);
       if (line) {
-        fn(line,dist);
+        if (fn) {
+          fn(line,dist);
+        }
         line.update();
       }
     }
