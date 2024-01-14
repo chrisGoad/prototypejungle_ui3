@@ -12,7 +12,7 @@ let ht=50;
 
 
 let topParams = {width:ht,height:ht,framePadding:0.3*ht,frameStrokee:'white',frameStrokeWidth:.2,timePerStep:1/80,stopTime:12,recordingMotion:1,saveAnimation:1,
-    circleRadius:.2,ringRadii:[],nearestCount:6,nearestFadeFactor:20,toAngle:2*Math.PI,particleColor:'blue',segsPerCircle:6};
+    circleRadius:.2,ringRadii:[],nearestCount:6,nearestFadeFactor:20,toAngle:2*Math.PI,particleColor:'blue',segsPerCircle:3};
 
 Object.assign(rs,topParams);
 let subParams ={speed:10,shapesPerRing:2};
@@ -74,7 +74,7 @@ rs.initialize = function () {
   this.buildPaths();
   let av = this.allValues();
   this.addLinesBetweenPositions(av,lineP);
-  return;
+  //return;
   let nln = lines.length;
   let nints = nln*nln;
   for (let i =0;i<nints;i++) {
@@ -87,12 +87,28 @@ rs.initialize = function () {
 }
 
 rs.updateState = function () {
-  let {currentTime:ct,activePaths,circ,lineP} = this;
+  let {currentTime:ct,activePaths,circ,lineP,segs,ints} = this;
   //let ap = this.activePaths[0]
   debugger;
   this.runActivePaths();
    let av = this.allValues();
   this.updateLines(av);
+  let intps = allSegmentIntersections(segs);
+  let nints = ints.length;
+  for (let i=0;i<nints;i++) {
+    let crc = ints[i];
+    crc.hide();
+    crc.update();
+  }
+  let nintps = intps.length;
+  for (let i=0;i<nintps;i++) {
+    let crc = ints[i];
+    let p = intps[i];
+    crc.show();
+    crc.moveto(p);
+    //crc.update();
+  }
+  
 }
 rs.updateStatee = function () {
   debugger;
