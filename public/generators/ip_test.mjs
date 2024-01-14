@@ -55,8 +55,8 @@ rs.initialize = function () {
   let circ = Circle.mk(Point.mk(0,0),0.4*ht);
   let p = this.circleToPath(circ,40);
   let np = rs.normalizePath(p);
-  let ap0 = rs.mkActivePath(0,1/10,np);
-  let ap1 = rs.mkActivePath(2,1/20,np);
+  let ap0 = rs.mkActivePath({speed:1/10,path:np});
+  let ap1 = rs.mkActivePath({startOffset:1/2,speed:1/10,path:np});
   ap0.shape = circ0Shape;
   ap1.shape = circ1Shape;
   let action =(ap) => {

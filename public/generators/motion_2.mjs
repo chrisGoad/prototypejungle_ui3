@@ -2,10 +2,12 @@ import {rs as linePP} from '/shape/line.mjs';
 import {rs as circlePP} from '/shape/circle.mjs';
 import {rs as basicP} from '/generators/basics.mjs';
 import {rs as addAnimationMethods} from '/mlib/animate0.mjs';
+import {rs as addIPmethods} from '/mlib/interpolation_path_0.mjs';
 
 let rs = basicP.instantiate();
 
 addAnimationMethods(rs);
+addIPmethods(rs);
 //import {rs as generatorP} from '/generators/motion_0.mjs'
 //let rs = generatorP.instantiate();
 
@@ -69,6 +71,39 @@ rs.buildParticles = function () {
   }
   //return particles;
 }
+
+rs.buildPaths = function () {
+  let {ringRadii,ringCenters,shapesPerRing,speeds,segsPerCircle,shapes,circleP} = this;
+  let ringPaths = this.ringPaths = [];
+  let ringActivePaths = this.ringActivePaths = [];
+  let activePaths = this.activePaths = [];
+  let nr = ringRadii.length;
+  let action =(ap) => {
+    let {shape:sh,value:vl} = ap;
+    sh.moveto(vl);
+  }
+  for (let i=0;i<nr;i++) {
+    let rap = [];
+    ringActivePaths.push(rap);
+    let radius = ringRadii[i]
+    let center = ringCenters[i];
+    let circle = Circle.mk(center,radius);
+    let path = this.circleToPath(circle,segsPerCircle);
+    ringPaths.push(path);
+    let rspeeds = speeds[i];
+    let spr = shapesPerRing[i];
+    for (let j=0;j<spr;j++) {
+       let crc = circleP.instantiate();
+      let ap = this.mkActivePath({startOffset:j/spr,speed:rspeeds[j],path});
+      ap.shape = crc;
+      ap.action = action;
+      shapes.push(crc)
+      activePaths.push(ap);
+    }
+  }
+}
+    
+
 
 rs.buildShapes = function () {
   let {shapes,particles,circleP,positions} = this;
