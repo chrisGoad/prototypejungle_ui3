@@ -44,7 +44,6 @@ item.updateActivePath = function (ap,gt) { // global time; t is relative  time
 }
     
 item.normalizePath = function (p) {
-  debugger;
   let pln = p.length;
   let last = p[pln-1];
   let dur = last.pathTime;
