@@ -11,8 +11,9 @@ rs.setName('motion_15');
 let ht=50;
 
 
-let topParams = {width:ht,height:ht,framePadding:0.3*ht,frameStrokee:'white',frameStrokeWidth:.2,timePerStep:1/80,stopTime:12,recordingMotion:1,saveAnimation:1,
-    circleRadius:.05,ringRadii:[],nearestCount:6,nearestFadeFactor:20,toAngle:2*Math.PI,particleColor:'blue',shapesPerPath:4,speed:1}
+let topParams = {width:ht,height:ht,framePadding:0.3*ht,frameStrokee:'white',frameStrokeWidth:.2,timePerStep:1/80,stopTime:6,recordingMotion:1,saveAnimation:1,
+  //  circleRadius:.1,ringRadii:[],nearestCount:6,nearestFadeFactor:20,toAngle:2*Math.PI,particleColor:'blue',shapesPerPath:4,speed:1}
+    circleRadius:.1,ringRadii:[],nearestCount:6,nearestFadeFactor:0,toAngle:2*Math.PI,particleColor:'blue',shapesPerPath:4,speed:1}
 
 Object.assign(rs,topParams);
 let subParams ={speed:10,shapesPerRing:2};
@@ -24,12 +25,12 @@ debugger;
 rs.initProtos = function () {
   let {circleRadius:cr} =this;
   let circleP = this.circleP = circlePP.instantiate();
-  circleP.fill = 'white';
+  circleP.fill = 'orange';
   circleP.radius = cr;
   circleP['stroke-width'] = 0;
   let lineP = this.lineP = linePP.instantiate();
   lineP.stroke = 'white';
-  lineP['stroke-width'] = .02; 
+  lineP['stroke-width'] = .0; 
 }
 
 rs.buildGrid = function (params) {
@@ -64,12 +65,12 @@ rs.pointsAroundCell = function (params,x,y) {
    return [UL,UR,LR,LL,UL];
 }
 
-rs.pathAroundCell = function (params,x,y) {
+rs.pathAroundCell = function (params,x,y,offset) {
   let pnts = this.pointsAroundCell(params,x,y);
   let path = [];
   let ln = pnts.length;
   for (let i=0;i<ln;i++) {
-    let pel = {pathTime:i,value:pnts[i]};
+    let pel = {pathTime:i,value:offset.plus(pnts[i])};
     path.push(pel);
   }
   return this.normalizePath(path);
@@ -89,10 +90,29 @@ rs.buildIpaths = function (numrows,numcols) {
   let ipath2 = [{pathTime:0,value:p01},{pathTime:1,value:p11},{pathTime:2,value:p12},{pathTime:3,value:p02},{pathTime:4,value:p01}];
   let ipath3 = [{pathTime:0,value:p11},{pathTime:1,value:p21},{pathTime:2,value:p22},{pathTime:3,value:p12},{pathTime:4,value:p11}];*/
   let ipaths = [];
+  
+  let ov0=0;//40;
+  let ov1=0;/////
   for (let i=0;i<numcols;i++) {
     for (let j=0;j<numrows;j++) {
-      let path = this.pathAroundCell(params,i,j);
-      ipaths.push(path);
+      if (((i===1)||(j===1))&&!((i==1) && (j===1))) {
+       
+        let offset;
+        if (i===0) {
+          offset = Point.mk(-ov0,0);
+        } 
+        if (i===2) {
+          offset = Point.mk(ov0,0);
+        } 
+         if (j===0) {
+          offset = Point.mk(0,-ov1);
+        } 
+         if (j===2) {
+          offset = Point.mk(0,ov1);
+        } 
+        let path = this.pathAroundCell(params,i,j,offset);
+        ipaths.push(path);
+      }
     }
   }
  
@@ -104,7 +124,10 @@ rs.buildParameterArrays  = function () {
   let {nearestCount:nc,ipaths,speed,shapesPerPath:spp} = this;
   let np = ipaths.length;
   this.shapesPerPath = this.uniformArray(spp,np);
-  let speedsEachPath = this.uniformArray(speed,spp);
+  let divisors = [2,3];
+  let mdivs = this.repeatArray(divisors,6);
+  let speedsEachPath = mdivs.map((v) => speed/v);
+  //let speedsEachPath = this.uniformArray(speed,spp);
   this.speedsPerPath = rs.uniformArray(speedsEachPath,np);
   let soffEachPath =  this.steppedArray(0,1,spp+1,1);//start offset each path
   this.soffsPerPath = this.uniformArray(soffEachPath,np);
@@ -117,6 +140,7 @@ rs.initialize = function () {
    let {stopTime:stp,timePerStep:tps,lineP,circleP} = this;
   this.addFrame();
   this.numSteps =stp/tps;
+ // this.numSteps =80;
  // this.stepArrayy = [0].concat(this.sequentialArray(102,120));
   this.set('shapes',arrayShape.mk());
   let lines = this.set('lines',arrayShape.mk());
@@ -147,7 +171,7 @@ rs.updateState = function () {
   //return;
    let av = this.allValues();
   this.updateLines(av);
-  //return;
+ //return;
   let intps = allSegmentIntersections(segs);
   let nints = ints.length;
   for (let i=0;i<nints;i++) {

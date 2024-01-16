@@ -853,7 +853,6 @@ item.interpolate = function (a0,a1,fr) {
 }	
 
 item.copyTo = function (dest,src) {
-  debugger;
   let kind;
   if (!src || (typeof src === 'number')) {
     kind = 'primitive';

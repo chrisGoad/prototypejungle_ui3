@@ -5,6 +5,8 @@ sections:
 
 [     [0,'test_ad','generators',1,'test attack',{likes:0,posted:0,category:'drop'}], 
       [0,'ip_test','generators',1,'interpolation test',{likes:0,posted:0,category:'drop'}], 
+      [0,'motion_17','instances',1,'motion 17',{likes:0,posted:0,category:'drop'}], 
+      [0,'motion_16','instances',1,'motion 16',{likes:0,posted:0,category:'drop'}], 
       [0,'motion_15','instances',1,'motion 15',{likes:0,posted:0,category:'drop'}], 
       [0,'motion_14','instances',1,'motion 14',{likes:0,posted:0,category:'drop'}], 
       [0,'motion_13','instances',1,'motion 13',{likes:0,posted:0,category:'drop'}], 

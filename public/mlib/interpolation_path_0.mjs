@@ -64,12 +64,14 @@ item.mkActivePath = function (params) {
 
 item.runActivePaths  = function () {
   let {currentTime:gt,activePaths:aps} = this;
+  let cnt = 0;
   aps.forEach( (ap) => {
     let {action} = ap;
     let active = this.updateActivePath(ap,gt);
     if (active && action) {
       action.call(this,ap);
     }
+    cnt++;
   });
 }
 
@@ -100,6 +102,30 @@ item.circleToPath = function (circle,numSegs) {
   return path;
 }
  
+ 
+item.bumpyCircleToPath = function (params) {
+  let {icenter,innerRadius:ird,outerRadius:ord,numBumps,numSegs} = params;
+  let center=icenter?icenter:Point.mk(0,0);
+  let delta = ord-ird;
+  let radius = ird+0.5*delta;
+  let do2 = delta/2;
+  let inc = (2*Math.PI)/numSegs;
+  let bumpL = (2*Math.PI)/numBumps;
+  let path=[];
+  for (let i=0;i<=numSegs;i++) {
+    let a = i*inc;
+    let wib = (a%bumpL)/bumpL;//whereInBump
+    let bv = Math.sin(wib*2*Math.PI);
+   // console.log('wib',wib,'bv',bv);
+    let x = Math.cos(a);
+    let y = Math.sin(a);
+    let p = Point.mk(x,y).times(radius+bv*do2);
+    let t = i/numSegs;
+    let pe = {pathTime:t,value:p};
+    path.push(pe);
+  }
+  return path;
+}
   
 }
 
