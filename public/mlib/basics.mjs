@@ -888,6 +888,32 @@ item.copyTo = function (dest,src) {
     });
   }    
 }	
+
+
+item.deepCopy = function (src) {
+  let kind;
+  if (!src || (typeof src === 'number')) {
+    kind = 'primitive';
+  }  else if (Array.isArray(src)) {
+    kind = 'array';
+  } else {
+    kind = 'object';
+  }
+  let copy;
+  if (kind == 'array') {
+    copy = src.map((v) => this.deepCopy(v));
+  } else if (kind === 'primitive') {
+    copy = src;
+  } else {
+    copy = {};
+    let props = Object.getOwnPropertyNames(src);
+    props.forEach( (p) => {
+      let npv = this.deepCopy(src[p]);
+      copy[p] = npv;
+    });
+  }
+  return copy;  
+}	
 /*
 item.interpolateArrayss	 = function(a0,a1,fr) {
   let ln = a0.length; //a1 must have the same length
@@ -1151,7 +1177,40 @@ item.advanceAIP = function (aip,t) {
 }
 
    
-    
+  
+item.buildGrid = function (params) {
+  let {width:wd,height:ht,numrows:nr,numcols:nc} = params;
+  let grid = [];
+  let bx = -wd/2;
+  let by = -ht/2;
+  let deltax = wd/nr;
+  let deltay = ht/nc;
+  for (let i=0;i<=nr;i++) {
+    let cx = bx+deltax*i;
+    for (let j=0;j<=nr;j++) {
+      let cy = by+deltay*j;
+      let p = Point.mk(cx,cy);
+      grid.push(p);
+    }
+  }
+  params.grid = grid;
+}
+
+item.accessGrid = function (params,x,y) {
+  let {numrows:nr,numcols:nc,grid} = params;
+  let index = x*(nc+1)+y;
+  return grid[index];
+}  
+
+
+rs.pointsAroundCell = function (params,x,y) {
+   let UL = this.accessGrid(params,x,y);
+   let UR = this.accessGrid(params,x+1,y);
+   let LR = this.accessGrid(params,x+1,y+1);
+   let LL = this.accessGrid(params,x,y+1);
+   return [UL,UR,LR,LL,UL];
+}
+
     
   
   

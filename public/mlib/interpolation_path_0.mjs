@@ -1,7 +1,7 @@
 
 
 const rs = function (item) {
-/* an  interpolation_path is an array of timeStamped values [{time:time0,value:val0,},{time:time1,value:val1} ....]
+/* an  interpolation_path is an array of timeStamped values [{pathTime:time0,value:val0,},{pathTime:time1,value:val1} ....]
 
 the values are hereditary arrays for which the interpolate function in basics.mjs works.
 
@@ -57,8 +57,8 @@ item.normalizePath = function (p) {
 
 //item.mkActivePath = function (startTime,startOffset,speed,path) {
 item.mkActivePath = function (params) {
-  let {startTime:st,startOffset:soff,speed,path,value} = params; //value is an object for interpolated values to be copied into
-  let ap = {startTime:st?st:0,startOffset:soff?soff:0,speed,path,activeElementIndex:0,cycle:0,value};
+  let {startTime:st,startOffset:soff,speed,path,value,shape,action} = params; //value is an object for interpolated values to be copied into
+  let ap = {startTime:st?st:0,startOffset:soff?soff:0,speed,path,activeElementIndex:0,cycle:0,value,shape,action};
   return ap;
 }
 
@@ -81,8 +81,24 @@ item.allValues = function () {
   return av;
 }
  
+ // uniform timing; also adds elements[0] as last path element
   
-  
+ item.mkUniformPath = function (elements) {
+  let ln = elements.length;
+  let ipath = [];
+  for (let i=0;i<ln;i++) {
+    let e = elements[i]
+    let pel = {pathTime:i,value:e};
+    ipath.push(pel);
+  }
+  let e0 = elements[0];
+  let pel = {pathTime:ln,value:e0};
+  ipath.push(pel);
+  let npath = this.normalizePath(ipath);
+  return npath;
+}
+    
+     
   
 
 
@@ -126,6 +142,34 @@ item.bumpyCircleToPath = function (params) {
   }
   return path;
 }
+
+item.mkColorApath = function (colorArrays,shape,speed) {
+  let path = this.mkUniformPath(colorArrays);
+  let action =(ap) => {
+    let {shape:sh,value:vl} = ap;
+    let fill = this.arrayToRGB(vl);
+    sh.fill = fill;
+    sh.update();
+  }
+  let value = this.deepCopy(colorArrays[0]);
+  let params = {path,speed,shape,value,action};
+  let ap = this.mkActivePath(params);
+  return ap;
+}
+ 
+ 
+ 
+rs.pathAroundCell = function (params,x,y,offset) {
+  let pnts = this.pointsAroundCell(params,x,y);
+  let path = [];
+  let ln = pnts.length;
+  for (let i=0;i<ln;i++) {
+    let pel = {pathTime:i,value:offset.plus(pnts[i])};
+    path.push(pel);
+  }
+  return this.normalizePath(path);
+}
+
   
 }
 
