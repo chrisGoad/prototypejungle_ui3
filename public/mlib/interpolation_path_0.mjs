@@ -57,8 +57,8 @@ item.normalizePath = function (p) {
 
 //item.mkActivePath = function (startTime,startOffset,speed,path) {
 item.mkActivePath = function (params) {
-  let {startTime:st,startOffset:soff,speed,path,value,shape,action} = params; //value is an object for interpolated values to be copied into
-  let ap = {startTime:st?st:0,startOffset:soff?soff:0,speed,path,activeElementIndex:0,cycle:0,value,shape,action};
+  let {startTime:st,startOffset:soff,speed,path,value,shape,shapes,action} = params; //value is an object for interpolated values to be copied into
+  let ap = {startTime:st?st:0,startOffset:soff?soff:0,speed,path,activeElementIndex:0,cycle:0,value,shape,shapes,action};
   return ap;
 }
 
@@ -143,16 +143,32 @@ item.bumpyCircleToPath = function (params) {
   return path;
 }
 
-item.mkColorApath = function (colorArrays,shape,speed) {
+item.mkColorApath = function (colorArrays,shapes,speed) { //shapes might be an array or a single shape
   let path = this.mkUniformPath(colorArrays);
   let action =(ap) => {
-    let {shape:sh,value:vl} = ap;
+    let {value:vl,shapes,shape} = ap;
+    debugger;
     let fill = this.arrayToRGB(vl);
-    sh.fill = fill;
-    sh.update();
+    if (shapes) {
+      shapes.forEach((sh) => {
+        sh.fill = fill;
+        sh.stroke = fill;
+        sh.update();
+      });
+    } else {
+      shape.fill = fill;
+      shape.stroke = fill;
+      shape.update();
+    }
   }
+  
   let value = this.deepCopy(colorArrays[0]);
-  let params = {path,speed,shape,value,action};
+  let params = {path,speed,value,action};
+  if (Array.isArray(shapes)) {
+    params.shapes = shapes;
+  } else {
+    params.shape = shapes;
+  }
   let ap = this.mkActivePath(params);
   return ap;
 }

@@ -1008,6 +1008,17 @@ item.randomColorArray = function (lb,ub,ia) {
    let cra = ra.map(Math.floor);
    return cra;
 }
+item.randomGrayArray = function (lb,ub) {
+   let rv = Math.floor(lb+Math.random()*(ub-lb));
+   let ga = this.uniformArray(rv,3);
+   return ga;
+}
+item.randomYellowArray = function (lb,ub,b) {
+   let r = Math.floor(lb+Math.random()*(ub-lb));
+   let g = Math.floor(lb+Math.random()*(ub-lb));
+   let ga = [r,g,b];
+   return ga;
+}
 item.randomRGB = function (lb,ub,ia) {
   let a =ia?ia:3;
   return this.arrayToRGB(this.randomColorArray(lb,ub,a));
