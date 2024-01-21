@@ -1,11 +1,11 @@
 import {rs as linePP} from '/shape/line.mjs';
 import {rs as circlePP} from '/shape/circle.mjs';
 import {rs as basicP} from '/generators/basics.mjs';
-import {rs as addNearestMethods} from '/mlib/nearest_0.mjs';
+//import {rs as addNearestMethods} from '/mlib/nearest_0.mjs';
 import {rs as generatorP} from '/generators/motion_1.mjs'
 
 let rs = generatorP.instantiate();
-addNearestMethods(rs);
+//addNearestMethods(rs);
 
 rs.setName('motion_8');
 let ht=50;

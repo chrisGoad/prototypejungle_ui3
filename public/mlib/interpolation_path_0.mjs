@@ -164,7 +164,7 @@ item.mkColorApath = function (colorArrays,shapes,speed) { //shapes might be an a
   
   let value = this.deepCopy(colorArrays[0]);
   let params = {path,speed,value,action};
-  if (Array.isArray(shapes)) {
+  if (Array.isArray(shapes)||Array.isArray(Object.getPrototypeOf(shapes))) {
     params.shapes = shapes;
   } else {
     params.shape = shapes;

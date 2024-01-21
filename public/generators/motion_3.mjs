@@ -3,11 +3,13 @@ import {rs as circlePP} from '/shape/circle.mjs';
 import {rs as basicP} from '/generators/basics.mjs';
 import {rs as addAnimationMethods} from '/mlib/animate0.mjs';
 import {rs as addIPmethods} from '/mlib/interpolation_path_0.mjs';
+import {rs as addDistanceMethods} from '/mlib/by_distance.mjs';
 
 let rs = basicP.instantiate();
 
 addAnimationMethods(rs);
 addIPmethods(rs);
+addDistanceMethods(rs);
 
 rs.setPathParams = function () {
   let {ipaths,shapesPerPath,speedsPerPath,soffsPerPath,circleP,shapes} = this;

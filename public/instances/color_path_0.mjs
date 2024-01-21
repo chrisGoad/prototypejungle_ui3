@@ -16,7 +16,7 @@ rs.setName('color_path_0');
 let ht=50;
 
 
-let topParams = {width:ht,height:ht,framePadding:1.85*ht,frameStrokek:'white',frameStrokeWidth:.25,timePerStep:1/(3*180),stopTime:1,recordingMotion:1,saveAnimation:1,
+let topParams = {width:ht,height:ht,framePadding:1.85*ht,frameStrokee:'white',frameStrokeWidth:.25,timePerStep:1/(3*180),stopTime:1,recordingMotion:1,saveAnimation:1,
     circleRadius:20,ringRadii:[],nearestCount:6,nearestFadeFactor:0,toAngle:2*Math.PI,particleColor:'blue',shapesPerPath:4,speed:1}
 
 Object.assign(rs,topParams);
@@ -43,8 +43,9 @@ rs.initProtos = function () {
 
 
 rs.circleCount = 0;      
-rs.addAcircle = function (radius,speed,left) {
+rs.addAcircle = function (radius,speed,left,vdisplacement) {
   let {circleCount:cc,circleP,width:wd} = this; 
+  let v = vdisplacement;
     
   let nm = 'circle'+cc;
   let circle,colors
@@ -62,10 +63,11 @@ rs.addAcircle = function (radius,speed,left) {
   }
   this.set(nm,circle);
   let d = 0.75*wd;
-  let dest = Point.mk(left?-d:d,0);
+  let dest = Point.mk(left?-d:d,v);
   if (left) {
-    colors=colors.reverse();
+    colors.reverse();
   }
+  colors.unshift([250,95,0]);
   circle.moveto(dest);
  // let colors = [[250,0,0],[250,250,0],[0,250,0],[0,250,250],[0,0,250],[100,100,250],[250,250,250],[250,100,100]];
   //let colors = [[250,0,0],[250,250,0],[0,250,0],[0,250,250],[0,0,250],[100,100,250],[250,250,250],[100,100,100],[0,0,0],[100,0,0]];
@@ -80,11 +82,11 @@ rs.addAcircle = function (radius,speed,left) {
   this.activePaths.push(apath);
   this.circleCount=cc+1;
 }
-rs.addNose = function () {
+rs.addNose = function (v) {
   let {width:wd,polygonP,lineP} = this;
-  let noseHWD=0.2*wd;
-  let noseHt = 0.8*wd;
-  let noseD = .1*wd;
+  let noseHWD=0.3*wd;
+  let noseHt = .8*wd;
+  let noseD = .2*wd;
   let noseTop = Point.mk(0,noseD);
   let noseBot = Point.mk(0,noseD+noseHt);
   let noseLp = Point.mk(-noseHWD,noseD+noseHt);
@@ -95,9 +97,14 @@ rs.addNose = function () {
   noseR.corners = [noseTop,noseBot,noseRp,noseTop];
   this.set('noseL',noseL);
   this.set('noseR',noseR);
+  let dest = Point.mk(0,v);
+  noseL.moveto(dest);
+  noseR.moveto(dest);
   let RNcolors = [[0,0,250],[0,0,250],[250,0,250],[250,0,0],[250,250,0],[0,250,0],[100,250,100],[250,250,250],[100,100,100],[70,70,70],[0,0,100]];
   let LNcolors = [...RNcolors];
   LNcolors.reverse();
+  RNcolors.unshift([250,95,0]);
+  LNcolors.unshift([250,95,0]);
   let npathL = this.mkColorApath(LNcolors,noseL,2);
   let npathR = this.mkColorApath(RNcolors,noseR,2);
    this.activePaths.push(npathL);
@@ -134,13 +141,14 @@ rs.initialize = function () {
   this.addFrame();
   this.numSteps =stp/tps;
  this.activePaths =[];
- this.addAcircle(30,1,1);
- this.addAcircle(10,2,1);
- this.addAcircle(5,4,1);
- this.addAcircle(30,1,0);
- this.addAcircle(10,2,0);
- this.addAcircle(5,4,0);
- this.addNose();
+ let vd = -30;
+ this.addAcircle(30,1,1,vd);
+ this.addAcircle(10,2,1,vd);
+ this.addAcircle(5,4,1,vd);
+ this.addAcircle(30,1,0,vd);
+ this.addAcircle(10,2,0,vd);
+ this.addAcircle(5,4,0,vd);
+ this.addNose(vd);
 }
 
 rs.updateState = function () {

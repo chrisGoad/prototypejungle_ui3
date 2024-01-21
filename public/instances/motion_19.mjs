@@ -12,7 +12,7 @@ let ht=50;
 
 
 let topParams = {width:ht,height:ht,angleOffset:0*Math.PI/10,framePadding:-0.1*ht,frameStrokee:'white',frameStrokeWidth:.2,timePerStep:1/(8*32),stopTime:1,recordingMotion:1,saveAnimation:1,
-    circleRadius:.2,nearestFadeFactor:20,shapesPerPath:2,speed:1,segsPerCircle:4,radius:.4*ht,numSlices:4};
+    circleRadius:.00002,nearestFadeFactor:20,shapesPerPath:2,speed:1,segsPerCircle:4,radius:.4*ht,numSlices:4};
 
 Object.assign(rs,topParams);
 let subParams ={speed:10,shapesPerRing:2};
@@ -101,14 +101,21 @@ rs.initialize = function () {
 }
 
 rs.updateState = function () {
-  let {currentTime:ct,activePaths,circ,lineP,segs,ints,stepsSoFar:ssf} = this;
+  let {currentTime:ct,activePaths,circ,lineP,segs,ints,stepsSoFar:ssf,radius} = this;
   //let ap = this.activePaths[0]
   console.log('ssf',ssf,'ct',ct);
   debugger;
   this.runActivePaths();
    let av = this.allValues();
    let apnts = av.filter( (v) => !Array.isArray(v));
-  this.updateLines(apnts);
+   let npnts = this.normalizePoints(apnts,radius);
+   let ln = npnts.length;
+   for (let i=0;i<ln;i++) {
+     let pa = apnts[i];
+     let pn = npnts[i];
+     pn.firstLine = pa.firstLine;
+   }
+  this.updateLines(npnts);
  return;
   let intps = allSegmentIntersections(segs);
   let nints = ints.length;

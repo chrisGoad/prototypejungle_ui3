@@ -25,6 +25,19 @@ item.addLinesBetweenPositions = function (positions,lineP) {
   }
 }
 
+item.normalizePoints= function(pnts,radius) {
+  let dfz = 0; //distance from origin
+  pnts.forEach( (p) =>{
+    let d = p.length();
+    if (d>dfz) {
+      dfz = d;
+    }
+  });
+  let sc = radius/dfz;
+  let npnts = pnts.map( (p) => p.times(sc));
+  return npnts;
+}
+
 item.updateLines = function (positions,fn) {
   let {lines,segs} = this;
   let nl = lines.length;

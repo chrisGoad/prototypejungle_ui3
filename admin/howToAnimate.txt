@@ -270,6 +270,10 @@ c:\ffmpeg\bin\ffmpeg  -framerate 15 -i animations/motion_13_f%03d.jpg -s 500x500
 c:\ffmpeg\bin\ffmpeg  -framerate 15 -i animations/motion_15_f%03d.jpg -s 500x500  export/motion_15.gif
 c:\ffmpeg\bin\ffmpeg  -framerate 15 -i animations/motion_17_f%03d.jpg -s 500x500  export/motion_17.gif
 c:\ffmpeg\bin\ffmpeg  -framerate 15 -i animations/motion_18_f%03d.jpg -s 500x500  export/motion_18.gif
+c:\ffmpeg\bin\ffmpeg  -framerate 15 -i animations/motion_18_4_f%03d.jpg -s 500x500  export/motion_18_4.gif
+c:\ffmpeg\bin\ffmpeg  -framerate 15 -i animations/motion_18_8_f%03d.jpg -s 500x500  export/motion_18_8.gif
+c:\ffmpeg\bin\ffmpeg  -framerate 15 -i animations/motion_18_16_f%03d.jpg -s 500x500  export/motion_18_16.gif
+c:\ffmpeg\bin\ffmpeg  -framerate 15 -i animations/motion_18_32_f%03d.jpg -s 500x500  export/motion_18_32.gif
 c:\ffmpeg\bin\ffmpeg  -framerate 15 -i animations/motion_19_f%03d.jpg -s 500x500  export/motion_19.gif
 c:\ffmpeg\bin\ffmpeg  -framerate 15 -i animations/color_path_0_f%03d.jpg -s 500x500  export/color_path_0.gif
 
