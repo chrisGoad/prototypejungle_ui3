@@ -55,6 +55,17 @@ item.normalizePath = function (p) {
   return np;
 }
 
+
+item.mapPath = function (p,f) {
+  let pln = p.length;
+  let np = p.map((pe) => {
+    let {pathTime,value} =  pe;
+    return {pathTime,value:f(value)};
+    
+  })
+  return np;
+}
+
 //item.mkActivePath = function (startTime,startOffset,speed,path) {
 item.mkActivePath = function (params) {
   let {startTime:st,startOffset:soff,speed,path,value,shape,shapes,action} = params; //value is an object for interpolated values to be copied into
@@ -102,7 +113,18 @@ item.allValues = function () {
   
 
 
-item.circleToPath = function (circle,numSegs) {
+item.scale2dPath = function (path,scale) {
+  let {x:xs,y:ys} = scale;
+  let f = (p) => {
+    let {x,y} = p;
+    let np = Point.mk(xs*x,ys*y);
+    return np;
+  }
+  let rp=this.mapPath(path,f);
+  return rp;
+}
+ 
+ item.circleToPath = function (circle,numSegs) {
   let {center,radius} = circle;
   let inc = (2*Math.PI)/numSegs;
   let path=[];
@@ -117,7 +139,6 @@ item.circleToPath = function (circle,numSegs) {
   }
   return path;
 }
- 
  
 item.bumpyCircleToPath = function (params) {
   let {icenter,innerRadius:ird,outerRadius:ord,numBumps,numSegs} = params;
@@ -175,7 +196,7 @@ item.mkColorApath = function (colorArrays,shapes,speed) { //shapes might be an a
  
  
  
-rs.pathAroundCell = function (params,x,y,offset) {
+item.pathAroundCell = function (params,x,y,offset) {
   let pnts = this.pointsAroundCell(params,x,y);
   let path = [];
   let ln = pnts.length;
@@ -186,7 +207,17 @@ rs.pathAroundCell = function (params,x,y,offset) {
   return this.normalizePath(path);
 }
 
-  
+
+ item.show2dPath = function (path) {
+  let {polylineP,polylines} = this;
+  let poly = polylineP.instantiate();
+  let points = path.map((el) => el.value);
+  poly.wayPoints = points;
+  polylines.push(poly);
+  poly.show();
+  poly.update();
+}
+
 }
 
 export {rs};

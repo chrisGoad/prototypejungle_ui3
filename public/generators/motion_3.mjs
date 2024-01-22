@@ -36,5 +36,32 @@ rs.setPathParams = function () {
   }
 }
     
+rs.buildApaths = function () {
+  let {paths,shapesPerPath:spp,speedFun,shapes,circleP} = this;
+  let apaths = [];
+  let action =(ap) => {
+    let {shape:sh,value:vl} = ap;
+    sh.moveto(vl);
+  }  
+  let np = paths.length;
+  for (let i = 0;i<np;i++) {
+    let path = paths[i];
+    for (let j=0;j<spp;j++) {
+      let jodd = j%2;
+      let soff = j/spp;
+      let shape = circleP.instantiate();
+      shapes.push(shape);   
+      let params = {speed:speedFun(j),path,shape,action,startOffset:soff,value:Point.mk(0,0)};
+      let ap = this.mkActivePath(params);
+      apaths.push(ap);
+    }
+  }
+  return apaths;
+}
 
+
+rs.addColorPath = function (colors,speed,shapes) {
+  let apath = this.mkColorApath(colors,shapes,speed);
+  this.activePaths.push(apath);
+}
 export {rs};
