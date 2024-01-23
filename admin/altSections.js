@@ -7,6 +7,7 @@ sections:
       [0,'test_eye','generators',1,'test eye',{likes:0,posted:0,category:'drop'}], 
       [0,'ip_test','generators',1,'interpolation test',{likes:0,posted:0,category:'drop'}], 
       [0,'color_path_0','instances',1,'color path 0',{likes:0,posted:0,category:'drop'}], 
+      [0,'motion_21','instances',1,'motion 21',{likes:0,posted:0,category:'drop'}], 
       [0,'motion_20','instances',1,'motion 20',{likes:0,posted:0,category:'drop'}], 
       [0,'motion_19','instances',1,'motion 19',{likes:0,posted:0,category:'drop'}], 
       [0,'motion_18_4','instances',1,'motion 18 4',{likes:0,posted:0,category:'drop'}], 

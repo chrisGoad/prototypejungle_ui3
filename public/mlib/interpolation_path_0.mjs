@@ -164,6 +164,29 @@ item.bumpyCircleToPath = function (params) {
   return path;
 }
 
+ item.spiralToPath = function (params) {
+  let {radius,numTurns:nt,segsPerTurn:spt} = params;
+  let ns = Math.floor(nt*spt);
+  let inca = (nt*2*Math.PI)/ns
+  let incd = radius/ns;
+  let path=[];
+  let a;
+  for (let i=0;i<ns;i++) {
+    let cr = i*incd;
+    a = i*inca;
+    let x = Math.cos(a);
+    let y = Math.sin(a);
+    let p = Point.mk(x,y).times(cr);
+    let t = i/ns;
+    let pe = {pathTime:t,value:p};
+    console.log('i',i,'cr',cr);
+    path.push(pe);
+  }
+  let pe = {pathTime:1,value:Point.mk(0,0)};
+  path.push(pe);
+  return path;
+}
+
 item.mkColorApath = function (colorArrays,shapes,speed) { //shapes might be an array or a single shape
   let path = this.mkUniformPath(colorArrays);
   let action =(ap) => {
