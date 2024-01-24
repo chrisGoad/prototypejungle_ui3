@@ -1,0 +1,1 @@
+let partitionPages= ["part2_0_1.jpg","part2_0_2.jpg","part2_0_25.jpg","part2_0_7.jpg","quad_9_3.jpg","quad_9_6.jpg","quad_11.jpg","part2_0_19.jpg","part2_0_3.jpg","quad_15_1.jpg","part2_0_6.jpg","part2_0_27.jpg"];

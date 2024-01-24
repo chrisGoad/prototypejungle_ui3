@@ -1,0 +1,1 @@
+let gridTitles = ["Fade","Void","Comet","Vortex","Ramp","Enigma","Cloudy Sky","Bump","Sphere","Distortion Field","Waves","Code","Quilt 1","Shield","Mat","Smoke 1","Cloth","Two Quilts","Quilt 3","Metal","Grid 1","Droplets","Maze","Grid 3","Atlas","Book","Signals","Beacons","Star Maps","Grid 4"];

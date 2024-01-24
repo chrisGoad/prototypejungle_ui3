@@ -1,0 +1,1 @@
+let dropPages= ["web_random_radius_v_3.jpg","drop_light.jpg","drop_dandelion.jpg","drop_circles_23.jpg","drop_ice.jpg","drop_iris.jpg","drop_night.jpg","drop_arrows.jpg","drop_clouds.jpg","drop_metal_2.jpg","drop_space_junk.jpg","drop_all_0.jpg","drop_circles_14.jpg","drop_circles_3.jpg","drop_circles_10.jpg","drop_rects_1.jpg"];

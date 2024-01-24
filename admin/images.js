@@ -5,6 +5,7 @@ sections:
 
 [
  //anim
+  [0,'rectangle_gon_grid_7','instances',1,'Clockwise',{video:'gif',noTitle:0,likes:0,posted:0,category:'anim'}],
   [0,'bounce_1','instances',1,'Bounce 2',{video:'mp4',noTitle:0,likes:0,posted:0,category:'anim'}],
 
  //[0,'part2_0_43','instances',1,'You are getting very sleepy...',{video:'gif',likes:0,posted:0,category:'anim'}],

@@ -31,7 +31,7 @@ git remote -v
 shows the remote URLs
 
 every time
-cd c:\prototypejungle_ui2
+cd c:\prototypejungle_ui3
 git add admin public 
 git commit -m "misc"
 git push origin master
