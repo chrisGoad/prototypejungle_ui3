@@ -1,15 +1,18 @@
 
 
-import {rs as rectPP} from '/shape/rectangle.mjs';
+import {rs as linePP} from '/shape/line.mjs';
 import {rs as polylinePP} from '/shape/polyline.mjs';
 import {rs as basicsP} from '/generators/basics.mjs';
 //import {rs as addGridMethods} from '/mlib/grid.mjs';
 import {rs as addSphereMethods} from '/mlib/sphere.mjs';
 //import {rs as addPowerGridMethods} from '/mlib/powerGrid.mjs';
+import {rs as addAnimationMethods} from '/mlib/animate0.mjs';
+
 let rs = basicsP.instantiate();
 
 //addGridMethods(rs);
 addSphereMethods(rs);
+addAnimationMethods(rs);
 //addPowerGridMethods(rs);
 	
 rs.setName('CMB');
@@ -21,8 +24,10 @@ let b = 255;
 
 
 let ht=50;
-let topParams = {width:ht,height:ht,framePadding:-0.1*ht,frameStroke:'white',frameStrokeWidth:.2,timePerStep:1/(8*32),stopTime:1,saveAnimation:1,
-  sphereCenter:Point3d.mk(0,0,-20),sphereDiameter:35,focalPoint:Point3d.mk(0,0,5000),focalLength:1000,cameraScaling:10,numSegs:40
+let topParams = {width:ht,height:ht,framePadding:-0.1*ht,frameStrokee:'white',frameStrokeWidth:.2,timePerStep:1/(8*32),stopTime:1,saveAnimation:1,
+  sphereCenter:Point3d.mk(0,0,-20),sphereDiameter:35,focalPoint:Point3d.mk(0,0,5000),focalLength:1000,cameraScaling:10,numSegs:40,
+  circleRadius:1,circleRadiusIncrement:.05
+ // sphereCenter:Point3d.mk(0,0,-20),sphereDiameter:35,focalPoint:Point3d.mk(5000,5000,5000),focalLength:1000,cameraScaling:10,numSegs:40
 }
 Object.assign(rs,topParams);
 
@@ -30,34 +35,64 @@ rs.initProtos = function () {
   let polylineP = this.set('polylineP',polylinePP.instantiate()).hide();
   polylineP['stroke-width'] = 0.05;
   polylineP.stroke  = 'white';
+  let lineP = this.set('lineP',linePP.instantiate()).hide();
+  lineP['stroke-width'] = 0.05;
+  lineP.stroke  = 'white';
 }
 
+rs.updateCircles = function () {
+  let {directions:dirs,circleRadius} = this;
+  let ln = dirs.length;
+  for (let i=0;i<ln;i++) {
+    let dir = dirs[i];
+    let wayPoints  = this.wayPoints({dir,circleRadius});
+    let poly = this['poly'+i];
+    poly.show();
+    poly.wayPoints = wayPoints;
+    poly.update();
+  }
+}
 
 rs.initialize = function () {
- let {focalPoint,focalLength,cameraScaling} = this;
- debugger;
- this.initProtos();
- this.addFrame();
- this.camera = geom.Camera.mk(focalPoint,focalLength,cameraScaling,'z');
- let xy =.4;
- let dir0 = Point3d.mk(xy,0,1).normalize();
- let dir1 = Point3d.mk(0,xy,1).normalize();
- let dir2 = Point3d.mk(-xy,0,1).normalize();
- let dir3 = Point3d.mk(0,-xy,1).normalize();
- let poly0 = this.circleAtDir({dir:dir0,circleRadius:1});
- this.set('poly0',poly0);
- let poly1 = this.circleAtDir({dir:dir1,circleRadius:1});
- this.set('poly1',poly1);
- let poly2 = this.circleAtDir({dir:dir2,circleRadius:1});
- this.set('poly2',poly2);
- let poly3 = this.circleAtDir({dir:dir3,circleRadius:1});
- this.set('poly3',poly3);
- let d2r = Math.PI/180;
- for (let i=0;i<9;i++) {
+  this.initProtos();
+  let {focalPoint,focalLength,cameraScaling,polylineP} = this;
+  debugger;
+  this.addFrame();
+  this.camera = geom.Camera.mk(focalPoint,focalLength,cameraScaling,'z');
+  let xy =.4;
+  let dir0 = Point3d.mk(xy,0,1).normalize();
+  let dir1 = Point3d.mk(0,xy,1).normalize();
+  let dir2 = Point3d.mk(-xy,0,1).normalize();
+  let dir3 = Point3d.mk(0,-xy,1).normalize();
+  let dirs =this.directions = [dir0,dir1,dir2,dir3];
+  let ln = dirs.length;
+  for (let i=0;i<ln;i++) {
+    let poly = this.set('poly'+i,polylineP.instantiate());
+    poly.show();
+  }
+  this.updateCircles();
+  
+  let d2r = Math.PI/180;
+  for (let i=0;i<9;i++) {
    let nm = 'lat'+i+'0';
    let lat = this.latitudeLine(i*10*d2r);
    this.set(nm,lat);
+  }
+  return;
+  for (let i=0;i<18;i++) {
+   let nm = 'long'+i+'0';
+   let longLine = this.longitudeLine(i*20*d2r);
+   this.set(nm,longLine);
  }
+}
+
+
+rs.updateState = function () {
+  let {currentTime:ct,stepsSoFar:ssf,circleRadius:cr,circleRadiusIncrement:cri} = this;
+  console.log('ssf',ssf,'ct',ct);
+  debugger;
+  this.updateCircles();
+  this.circleRadius = cr+cri;
 }
 
 /* a normal to x,y,z is <-(y+z)/x,1,1>
@@ -132,13 +167,6 @@ rs.coordinateSystemAtDir = function (zdir) {
   return cs;
 }
 
-rs.getOrigin = function (dir) {
-  let  {sphereDiameter:sd,polylineP,numSegs:ns} = this;
-  let sr = sd/2;
-  let o = dir.times(sr*fr);
-  let p = this.camera.project(p3d)
-  return p;
-}
 rs.circleAtDir = function (params) {
   let {circleRadius:cr,dir} = params;
   let {sphereDiameter:sd,polylineP,numSegs:ns} = this;
@@ -167,6 +195,33 @@ rs.circleAtDir = function (params) {
   return poly;
 }
 
+
+rs.wayPoints = function (params) {
+  let {circleRadius:cr,dir} = params;
+  let {sphereDiameter:sd,polylineP,numSegs:ns} = this;
+  let sr = sd/2;
+  let fr = this.circleRadiusToFr(cr);
+ // fr=1;
+  let cs = this.coordinateSystemAtDir(dir);
+  let {xdir,ydir,zdir} = cs;
+  let o = zdir.times(sr*fr);
+  let inc = (2*Math.PI)/ns;
+  let wps = [];
+  for (let i=0;i<ns;i++) {
+    let x = Math.cos(i*inc);
+    let y = Math.sin(i*inc);
+    let ofs =  xdir.times(cr*x);
+    ofs = ofs.plus(ydir.times(cr*y));
+    let p3d = o.plus(ofs);
+    let p = this.camera.project(p3d)
+    wps.push(p);
+  }
+  wps.push(wps[0]);
+  return wps;
+}
+
+
+
 rs.latitudeLine = function (lat) {
   let {sphereDiameter:sd,numSegs} = this;
   let sr = sd/2;
@@ -189,6 +244,22 @@ rs.latitudeLine = function (lat) {
   poly.update();
   return poly;
 }
+
+
+rs.longitudeLine = function (lon) {
+  let {sphereDiameter:sd,numSegs} = this;
+  let sr = sd/2;
+  let x = sr*Math.cos(lon);
+  let y = sr*Math.sin(lon);
+  let p3d = Point3d.mk(x,y,0);
+  let p = this.camera.project(p3d);
+  let line = this.lineP.instantiate();
+  line.setEnds(Point.mk(0,0),p);
+  line.show();
+  line.update();
+  return line;
+}
+    
     
   
   
