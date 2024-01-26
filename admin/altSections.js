@@ -3,7 +3,8 @@
 module.exports = {
 sections: 
 
-[     [0,'test_ad','generators',1,'test attack',{likes:0,posted:0,category:'drop'}], 
+[     [0,'CMB','generators',1,'CMB',{likes:0,posted:0,category:'drop'}], 
+      [0,'test_ad','generators',1,'test attack',{likes:0,posted:0,category:'drop'}], 
       [0,'test_eye','generators',1,'test eye',{likes:0,posted:0,category:'drop'}], 
       [0,'ip_test','generators',1,'interpolation test',{likes:0,posted:0,category:'drop'}], 
       [0,'color_path_0','instances',1,'color path 0',{likes:0,posted:0,category:'drop'}], 

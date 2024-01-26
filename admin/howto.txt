@@ -34,7 +34,7 @@ every time
 cd c:\prototypejungle_ui3
 git add admin public 
 git commit -m "misc"
-git push origin master
+git push origin main
 
 
 or 

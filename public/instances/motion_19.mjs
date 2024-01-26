@@ -12,7 +12,7 @@ let ht=50;
 
 
 let topParams = {width:ht,height:ht,angleOffset:0*Math.PI/10,framePadding:-0.1*ht,frameStrokee:'white',frameStrokeWidth:.2,timePerStep:1/(8*32),stopTime:1,recordingMotion:1,saveAnimation:1,
-    circleRadius:.00002,nearestFadeFactor:20,shapesPerPath:2,speed:1,segsPerCircle:4,radius:.4*ht,numSlices:4};
+    circleRadius:.0002,nearestFadeFactor:20,shapesPerPath:2,speed:1,segsPerCircle:4,radius:.4*ht,numSlices:4};
 
 Object.assign(rs,topParams);
 let subParams ={speed:10,shapesPerRing:2};

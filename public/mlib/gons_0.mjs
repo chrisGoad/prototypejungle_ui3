@@ -155,7 +155,6 @@ item.addRow =  function (pal,sbase,j) {
 
 
 item.addGonTriangle = function (bbase,n) {
-  debugger;
   let a2r = Math.PI/180;
   let tht = bbase*Math.sin(60*a2r);
   let trisegs =  this.mkTriangleSegs(bbase);
@@ -236,7 +235,7 @@ item.interpolateColors = function (params)  {
     let p = this.gonCenter(gon);
     let iv = this.interpolateVectors({vertices,vValues,p,dfn,verbose});
     if (this.getVerbose) {
-      debugger;
+      debugger;//keep
     }
     let tv = tfn?tfn(iv,this.getVerbose):iv;
     if (this.getVerbose&&0) {
@@ -267,7 +266,7 @@ item.addGonsForSubgrid = function (params) {
   let yavg = (yLow+yHigh)/2;
   let center = Point.mk(xavg,yavg);
   
-  debugger;
+  debugger;//keep
   let gg = this.addGonGrid({numRows:ydiff,numCols:xdiff,width:subwd,height:subht,center});
   return gg;
 }
