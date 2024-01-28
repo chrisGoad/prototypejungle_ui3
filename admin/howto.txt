@@ -31,6 +31,7 @@ git remote -v
 shows the remote URLs
 
 every time
+
 cd c:\prototypejungle_ui3
 git add admin public 
 git commit -m "misc"
@@ -54,7 +55,10 @@ upload it to the prototypejungle bucket at aws
 cd c:\prototypejungle_clone
 git clone https://github.com/chrisGoad/prototypejungle.git
 
-to deploy to kop
+To edit the content of kop, start by editing c:\prototypejungle_ui3\admin\images.js
+then run c:\prototypejungle_ui3\admin\update
+
+to deploy to kop run the following for galleries that have changes in images.js
 cd c:\prototypejungle
 node admin/genGalleries top 1
 node admin/genGalleries web 1
@@ -68,6 +72,9 @@ node admin/imagesToKop
 
 drop the 1s for local use with source
 
+copy images by hand from c:/pj/public/images/std_size  to c:/kop/public/images/std_size
+copy thumbs by hand from c:/pj/public/images/thumbs  to c:/kop/public/images/thumbs
+copy animations by hand from c:/pj/public/export  to c:/kop/public/images/std_size
 copy the jpgs by hand from public/doc from prototypejungle to kop
 
 cd c:\kop

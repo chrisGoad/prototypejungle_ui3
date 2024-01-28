@@ -73,7 +73,9 @@ rs.initialize = function () {
   let {vertices,gons} = gg;
 
  // let vertices = this.mkRectangleVertices({width,height,center});
-  this.interpolateColors(gons,vertices,cc);
+    let iparams = {gons,vertices,colors:cc};
+  this.interpolateColors(iparams);
+  //this.interpolateColors(gons,vertices,cc);
   
 
   for (let i=0;i<ln;i++) {

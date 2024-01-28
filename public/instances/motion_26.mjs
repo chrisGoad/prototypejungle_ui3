@@ -8,12 +8,12 @@ import {rs as generatorP} from '/generators/motion_3.mjs'
 let rs = generatorP.instantiate();
 //addDistanceMethods(rs);
 
-rs.setName('motion_21');
+rs.setName('motion_26');
 let ht=50;
 
 
-let topParams = {width:ht,height:ht,angleOffset:0*Math.PI/10,framePadding:-0.1*ht,frameStroke:'white',frameStrokeWidth:.2,timePerStep:1/(16*32),stopTime:1,recordingMotion:1,saveAnimation:1,
-    circleRadius:.2,nearestFadeFactor:20,shapesPerPath:50,speed:1,segsPerCircle:20,radius:.4*ht,numSlices:8};
+let topParams = {width:ht,height:ht,angleOffset:0*Math.PI/10,framePadding:-0.1*ht,frameStrokee:'white',frameStrokeWidth:.2,timePerStep:1/(64*32),stopTime:1,recordingMotion:1,saveAnimation:1,
+    circleRadius:.2,nearestFadeFactor:20,shapesPerPath:64,speed:1,segsPerCircle:6,radius:.4*ht,numSlices:8,distanceThreshold:6};
 
 Object.assign(rs,topParams);
 let subParams ={speed:10,shapesPerRing:2};
@@ -29,16 +29,23 @@ rs.initProtos = function () {
   circleP['stroke-width'] = 0;
   let lineP = this.lineP = linePP.instantiate();
   lineP.stroke = 'white';
-  lineP['stroke-width'] = .05; 
+  lineP['stroke-width'] = .06; 
    let polylineP = this.polylineP = polylinePP.instantiate();
   polylineP.stroke = 'white';
-  polylineP['stroke-width'] = .5; 
+  polylineP['stroke-width'] = .2; 
 }
 
 
 
 
-
+rs.buildPath = function (params) {
+  let {radius,scaleX,scaleY,numSegs} = params;
+  let circle = Circle.mk(Point.mk(0,0),radius);
+  let cpath = this.circleToPath(circle,numSegs);
+  let scale = {x:scaleX,y:scaleY};
+  let path = this.scale2dPath(cpath,scale);
+  return path;
+}
 
 
 rs.initialize = function () {
@@ -47,19 +54,18 @@ rs.initialize = function () {
    let {stopTime:stp,timePerStep:tps,lineP,circleP,radius} = this;
   this.addFrame();
   this.numSteps =stp/tps;
- // this.numSteps =100;
+  this.numSteps =256;
+  //this.numSteps =128;
   this.set('shapes',arrayShape.mk());
   let lines = this.set('lines',arrayShape.mk());
-  let polylines = this.set('polylines',arrayShape.mk());
-  let path = this.spiralToPath({radius,numTurns:2,segsPerTurn:20});
-  //this.show2dPath(path);
-  this.paths = [path];
+  let path0 = this.buildPath({radius,scaleX:.3,scaleY:1,numSegs:40});
+  let path1 = this.buildPath({radius,scaleX:1,scaleY:.3,numSegs:40});
+  this.paths = [path0,path1];
   this.speedFun = (j) => {
     let jodd = j%2;
-    return jodd?2:1;
+    return jodd?3:2;
   }
   this.activePaths = this.buildApaths();
- // return;
   let av = this.allValues();
   this.addLinesBetweenPositions(av,lineP);
   let colors = [[250,250,0],[0,250,0],[0,250,250],[100,250,250],[250,250,250],[250,250,100]];
@@ -67,21 +73,33 @@ rs.initialize = function () {
 }
 
 rs.updateState = function () {
-  let {currentTime:ct,activePaths,circ,lineP,segs,ints,stepsSoFar:ssf,radius} = this;
+  let {currentTime:ct,activePaths,circ,lineP,segs,ints,stepsSoFar:ssf,radius,distanceThreshold:th} = this;
   console.log('ssf',ssf,'ct',ct);
   debugger;
   this.runActivePaths();
- // return;
   let av = this.allValues();
   let apnts = av.filter( (v) => !Array.isArray(v));
-  const fn = (line,dist) => {
-    if (dist>8) {
+   const fn = (line,dist) => {
+   let v = dist/th;
+    let c = Math.floor(v*250);
+    if (dist>th) {
       line.hide();
     } else {
       line.show();
+      let stroke =`rgb(${c},${c},${c})`;
+     // console.log('stroke',stroke);
+      
+      line.stroke = `rgb(${c},${c},${c})`;
+      line.stroke = 'white';
+      line.stroke = stroke;
     }
   }
+  console.log('th',th);
   this.updateLines(apnts,fn);
+  //return;
+  let goingUp = ssf<=128;
+  let inc=0.015;
+  this.distanceThreshold = th+(goingUp?inc:-inc);
 }
 
 

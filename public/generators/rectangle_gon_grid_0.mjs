@@ -4,10 +4,10 @@ import {rs as circlePP} from '/shape/circle.mjs';
 import {rs as basicP} from '/generators/basics.mjs';
 import {rs as addGonMethods} from '/mlib/gons_0.mjs';
 import {rs as addAnimation} from '/mlib/animate0.mjs';
-import {rs as motionHistory} from '/motionHistories/motion_1.mjs';
+//import {rs as motionHistory} from '/motionHistories/motion_1.mjs';
 
 let rs = basicP.instantiate();
-rs.motionHistory = motionHistory;
+//rs.motionHistory = motionHistory;
 addGonMethods(rs);
 addAnimation(rs);
 rs.setName('rectangle_gon_grid_0');

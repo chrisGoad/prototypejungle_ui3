@@ -51,7 +51,7 @@ rs.buildApaths = function () {
       let soff = j/spp;
       let shape = circleP.instantiate();
       shapes.push(shape);   
-      let params = {speed:speedFun(j),path,shape,action,startOffset:soff,value:Point.mk(0,0)};
+      let params = {speed:speedFun(j,i),path,shape,action,startOffset:soff,value:Point.mk(0,0)};
       let ap = this.mkActivePath(params);
       apaths.push(ap);
     }
