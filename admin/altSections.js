@@ -8,6 +8,8 @@ sections:
       [0,'test_eye','generators',1,'test eye',{likes:0,posted:0,category:'drop'}], 
       [0,'ip_test','generators',1,'interpolation test',{likes:0,posted:0,category:'drop'}], 
       [0,'color_path_0','instances',1,'color path 0',{likes:0,posted:0,category:'drop'}], 
+      [0,'motion_29','instances',1,'motion 29',{likes:0,posted:0,category:'drop'}], 
+      [0,'motion_28','instances',1,'motion 28',{likes:0,posted:0,category:'drop'}], 
       [0,'motion_27','instances',1,'motion 27',{likes:0,posted:0,category:'drop'}], 
       [0,'motion_26','instances',1,'motion 26',{likes:0,posted:0,category:'drop'}], 
       [0,'motion_25','instances',1,'motion 25',{likes:0,posted:0,category:'drop'}], 

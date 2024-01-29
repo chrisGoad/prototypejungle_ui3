@@ -36,13 +36,14 @@ rs.setPathParams = function () {
   }
 }
     
-rs.buildApaths = function () {
+rs.buildApaths = function (iaction) {
   let {paths,shapesPerPath:spp,speedFun,shapes,circleP} = this;
   let apaths = [];
-  let action =(ap) => {
+  let action = iaction?iaction:
+  (ap) => {
     let {shape:sh,value:vl} = ap;
     sh.moveto(vl);
-  }  
+  };
   let np = paths.length;
   for (let i = 0;i<np;i++) {
     let path = paths[i];

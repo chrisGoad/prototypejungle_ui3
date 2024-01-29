@@ -1,10 +1,10 @@
 
 
 const rs = function (item) {
-/* an  interpolation_path is an array of timeStamped values [{pathTime:time0,value:val0,},{pathTime:time1,value:val1} ....]
-
+/* an  interpolation_path is  array of timeStamped values [{pathTime:time0,value:val0,},{pathTime:time1,value:val1} ....]
 the values are hereditary arrays for which the interpolate function in basics.mjs works.
 
+ 
 an active interpolation path is {cyclic,startTime,speed,pathTime,cycle:integer,path:p,activeElementIndex:integer,value,action} where the activeElementIndex is the index of  the path element 
 which is active at pathTime. pathTime is path relative.  globalTime = startTime+ pathTime/speed. pathTime = (globalTime-startTime)/speed
 pathTimes are normalized to [0,1];;
@@ -124,6 +124,12 @@ item.scale2dPath = function (path,scale) {
   return rp;
 }
  
+item.straightPath = function (p0,p1) {
+  let pe0 = {pathTime:0,value:p0};
+  let pe1 = {pathTime:1,value:p1};
+  let path =[pe0,pe1];
+  return path;
+}
  item.circleToPath = function (circle,numSegs) {
   let {center,radius} = circle;
   let inc = (2*Math.PI)/numSegs;
