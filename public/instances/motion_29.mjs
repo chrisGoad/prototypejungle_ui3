@@ -23,7 +23,7 @@ let ht=50;
 9106*.5 = 13/4553
 */
 let topParams = {width:ht,height:ht,angleOffset:0*Math.PI/10,framePadding:-0.1*ht,frameStrokee:'white',frameStrokeWidth:.2,timePerStep:1/(32*32),stopTime:1,recordingMotion:1,saveAnimation:1,numSegs:30,
-    circleRadius:.2,nearestFadeFactor:20,shapesPerPath:4,speed:1,segsPerCircle:6,radius:.15*ht,numSlices:8,distanceThreshold:15};
+    circleRadius:.2,nearestFadeFactor:20,shapesPerPath:32,speedd:1,segsPerCircle:6,radius:.15*ht,numSlices:8,distanceThreshold:15};
 
 Object.assign(rs,topParams);
 let subParams ={speed:10,shapesPerRing:2};
@@ -39,7 +39,7 @@ rs.initProtos = function () {
   circleP['stroke-width'] = 0;
   let lineP = this.lineP = linePP.instantiate();
   lineP.stroke = 'white';
-  lineP['stroke-width'] = .06; 
+  lineP['stroke-width'] = .02; 
    let polylineP = this.polylineP = polylinePP.instantiate();
   polylineP.stroke = 'white';
   polylineP['stroke-width'] = .2; 
@@ -64,14 +64,20 @@ rs.initialize = function () {
   let cpath = this.circleToPath(circle,numSegs);
   let mpath0 = this.mkUniformPath([Point.mk(-dim,0),Point.mk(dim,0)]);
   let mpath1 = this.mkUniformPath([Point.mk(dim,0),Point.mk(-dim,0)]);
+  let mpath2 = this.mkUniformPath([Point.mk(0,dim),Point.mk(0,-dim)]);
+  let mpath3 = this.mkUniformPath([Point.mk(0,-dim),Point.mk(0,dim)]);
  // let path0 = this.mkUniformPath([Point.mk(-dim,-dim),Point.mk(dim,-dim),Point.mk(dim,dim),Point.mk(-dim,dim),Point.mk(-dim,-dim)]);
   //let path0 = this.mkUniformPath([Point.mk(fr*ht,-10),Point.mk(-fr*ht,-5)]);
   //let path1 = this.mkUniformPath([Point.mk(-fr*ht,5),Point.mk(fr*ht,10)]);
-  this.paths = [cpath];
+ // this.paths = [cpath];
   let params0 = {speed:2,path:mpath0,startOffset:0,value:Point.mk(0,0)};
   let mp0 = this.mkActivePath(params0)
   let params1 = {speed:2,path:mpath1,startOffset:0,value:Point.mk(0,0)};
   let mp1 = this.mkActivePath(params1);;
+  let params2 = {speed:2,path:mpath2,startOffset:0,value:Point.mk(0,0)};
+  let mp2 = this.mkActivePath(params2)
+  let params3 = {speed:2,path:mpath3,startOffset:0,value:Point.mk(0,0)};
+  let mp3 = this.mkActivePath(params3);;
   //this.mapath0 = mp0;
   //this.mapath1 = mp1;
   let action =(ap) => {
@@ -82,15 +88,19 @@ rs.initialize = function () {
   this.speedFun = (j,i) => {
     let iodd = i%2;
     let jodd = j%2;
-    let sp0 = jodd?3:2;
+    let sp0 = jodd?1:2;
     return iodd?2*sp0:sp0;
   }
-  let activePaths = this.activePaths = [mp0,mp1];
-  let leftApaths = this.buildApaths([cpath],action);
-  let rightApaths = this.buildApaths([cpath],action);
-  leftApaths.forEach((ap) => {ap.offsetPath = mp0;ap.connectMe = 1});
-  rightApaths.forEach((ap) => {ap.offsetPath = mp1;ap.connectMe = 1});
-  activePaths = this.activePaths = activePaths.concat(leftApaths,rightApaths);
+  let activePaths = this.activePaths = [mp0,mp1,mp2,mp3];
+  let Apaths0 = this.buildApaths([cpath],action);
+  let Apaths1 = this.buildApaths([cpath],action);
+  let Apaths2 = this.buildApaths([cpath],action);
+  let Apaths3 = this.buildApaths([cpath],action);
+  Apaths0.forEach((ap) => {ap.offsetPath = mp0;ap.connectMe = 1});
+  Apaths1.forEach((ap) => {ap.offsetPath = mp1;ap.connectMe = 1});
+  Apaths2.forEach((ap) => {ap.offsetPath = mp2;ap.connectMe = 1});
+  Apaths3.forEach((ap) => {ap.offsetPath = mp3;ap.connectMe = 1});
+  activePaths = this.activePaths = activePaths.concat(Apaths0,Apaths1,Apaths2,Apaths3);
   let av = this.allValuesToConnect();
   this.addLinesBetweenPositions(av,lineP);
   return;
