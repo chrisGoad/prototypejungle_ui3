@@ -60,14 +60,14 @@ rs.initialize = function () {
   let lines = this.set('lines',arrayShape.mk());
   let path0 = this.buildPath({radius,scaleX:1,scaleY:1,numSegs:40});
   let path1 = this.buildPath({radius:1.2*radius,scaleX:1,scaleY:1,numSegs:40});
-  this.paths = [path0,path1];
+  //this.paths = [path0,path1];
   this.speedFun = (j,i) => {
     let iodd = i%2;
     let jodd = j%2;
     let sp0 = jodd?3:2;
     return iodd?2*sp0:sp0;
   }
-  this.activePaths = this.buildApaths();
+  this.activePaths = this.buildApaths([path0,path1]);
   let av = this.allValues();
   this.addLinesBetweenPositions(av,lineP);
   let colors = [[250,250,0],[0,250,0],[0,250,250],[100,250,250],[250,250,250],[250,250,100]];

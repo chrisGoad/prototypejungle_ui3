@@ -23,7 +23,7 @@ let ht=50;
 9106*.5 = 13/4553
 */
 let topParams = {width:ht,height:ht,angleOffset:0*Math.PI/10,framePadding:-0.1*ht,frameStrokee:'white',frameStrokeWidth:.2,timePerStep:1/(32*32),stopTime:1,recordingMotion:1,saveAnimation:1,numSegs:30,
-    circleRadius:.2,nearestFadeFactor:20,shapesPerPath:8,speed:1,segsPerCircle:6,radius:.4*ht,numSlices:8,distanceThreshold:40};
+    circleRadius:.2,nearestFadeFactor:20,shapesPerPath:4,speed:1,segsPerCircle:6,radius:.15*ht,numSlices:8,distanceThreshold:15};
 
 Object.assign(rs,topParams);
 let subParams ={speed:10,shapesPerRing:2};
@@ -62,18 +62,21 @@ rs.initialize = function () {
   let dim = fr*ht;
   let circle = Circle.mk(Point.mk(0,0),radius);
   let cpath = this.circleToPath(circle,numSegs);
-  let mpath = this.mkUniformPath([Point.mk(-dim,0),Point.mk(dim,0)]);
+  let mpath0 = this.mkUniformPath([Point.mk(-dim,0),Point.mk(dim,0)]);
+  let mpath1 = this.mkUniformPath([Point.mk(dim,0),Point.mk(-dim,0)]);
  // let path0 = this.mkUniformPath([Point.mk(-dim,-dim),Point.mk(dim,-dim),Point.mk(dim,dim),Point.mk(-dim,dim),Point.mk(-dim,-dim)]);
   //let path0 = this.mkUniformPath([Point.mk(fr*ht,-10),Point.mk(-fr*ht,-5)]);
   //let path1 = this.mkUniformPath([Point.mk(-fr*ht,5),Point.mk(fr*ht,10)]);
   this.paths = [cpath];
-  let params = {speed:2,path:mpath,startOffset:0,value:Point.mk(0,0)};
-  let mp = this.mkActivePath(params);
-  this.mapath = mp;
+  let params0 = {speed:2,path:mpath0,startOffset:0,value:Point.mk(0,0)};
+  let mp0 = this.mkActivePath(params0)
+  let params1 = {speed:2,path:mpath1,startOffset:0,value:Point.mk(0,0)};
+  let mp1 = this.mkActivePath(params1);;
+  //this.mapath0 = mp0;
+  //this.mapath1 = mp1;
   let action =(ap) => {
-    let {mapath} = this;
-    let offset = mapath.value;
-    let {shape:sh,value:vl} = ap;
+    let {shape:sh,value:vl,offsetPath} = ap;
+    let offset = offsetPath.value;
     sh.moveto(vl.plus(offset));
   }  
   this.speedFun = (j,i) => {
@@ -82,10 +85,13 @@ rs.initialize = function () {
     let sp0 = jodd?3:2;
     return iodd?2*sp0:sp0;
   }
-  let activePaths = this.activePaths = this.buildApaths(action);
-  activePaths.push(mp);
-  
-  let av = this.allValues();
+  let activePaths = this.activePaths = [mp0,mp1];
+  let leftApaths = this.buildApaths([cpath],action);
+  let rightApaths = this.buildApaths([cpath],action);
+  leftApaths.forEach((ap) => {ap.offsetPath = mp0;ap.connectMe = 1});
+  rightApaths.forEach((ap) => {ap.offsetPath = mp1;ap.connectMe = 1});
+  activePaths = this.activePaths = activePaths.concat(leftApaths,rightApaths);
+  let av = this.allValuesToConnect();
   this.addLinesBetweenPositions(av,lineP);
   return;
   let colors = [[250,250,0],[0,250,0],[0,250,250],[100,250,250],[250,250,250],[250,250,100]];
@@ -98,13 +104,12 @@ rs.updateState = function () {
   debugger;
   this.runActivePaths();
   //return;
-  let av = this.allValues();
-  let {mapath} = this;
-  let offset = mapath.value;
-  let apnts = av.filter( (v) => !Array.isArray(v));
-   let mpnts = apnts.map((p) => {
-     let np =p.plus(offset);
-     np.firstLine = p.firstLine;
+  let aps = activePaths.filter((ap) => ap.connectMe);
+   let mpnts = aps.map((ap) => {
+     let {offsetPath,value} = ap;
+     let offset = offsetPath.value;
+     let np =value.plus(offset);
+     np.firstLine = value.firstLine;
      return np;
     });
    const fn = (line,dist) => {

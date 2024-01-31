@@ -12,7 +12,7 @@ rs.setName('motion_24');
 let ht=50;
 
 
-let topParams = {width:ht,height:ht,angleOffset:0*Math.PI/10,framePadding:-0.1*ht,frameStrokee:'white',frameStrokeWidth:.2,timePerStep:1/(32*32),stopTime:1,recordingMotion:1,saveAnimation:1,
+let topParams = {width:ht,height:ht,angleOffset:0*Math.PI/10,framePadding:-0.1*ht,frameStrokee:'white',frameStrokeWidth:.2,timePerStep:1/(32*32),stopTime:1,recordingMotion:1,saveAnimation:1,distanceThreshold:10,
     circleRadius:.2,nearestFadeFactor:20,shapesPerPath:64,speed:1,segsPerCircle:6,radius:.4*ht,numSlices:8};
 
 Object.assign(rs,topParams);
@@ -59,27 +59,28 @@ rs.initialize = function () {
   let lines = this.set('lines',arrayShape.mk());
   let path0 = this.buildPath({radius,scaleX:.3,scaleY:1,numSegs:40});
   let path1 = this.buildPath({radius,scaleX:1,scaleY:.3,numSegs:40});
-  this.paths = [path0,path1];
+  //this.paths = [path0,path1];
   this.speedFun = (j) => {
     let jodd = j%2;
     return jodd?3:2;
   }
-  this.activePaths = this.buildApaths();
+  let activePaths = this.activePaths = this.buildApaths([path0,path1]);
+ // activePaths.forEach((ap)=>ap.connectMe = 1);
   let av = this.allValues();
- // this.addLinesBetweenPositions(av,lineP);
+  this.addLinesBetweenPositions(av,lineP);
   let colors = [[250,250,0],[0,250,0],[0,250,250],[100,250,250],[250,250,250],[250,250,100]];
   this.addColorPath(colors,1,lines);
 }
 
 rs.updateState = function () {
-  let {currentTime:ct,activePaths,circ,lineP,segs,ints,stepsSoFar:ssf,radius} = this;
+  let {currentTime:ct,activePaths,circ,lineP,segs,ints,stepsSoFar:ssf,radius,distanceThreshold:th} = this;
   console.log('ssf',ssf,'ct',ct);
   debugger;
   this.runActivePaths();
   let av = this.allValues();
   let apnts = av.filter( (v) => !Array.isArray(v));
    const fn = (line,dist) => {
-   let th = 10;
+   //let th = 10;
    let v = (th-dist)/dist;
     let c = Math.floor(v*250);
     if (dist>th) {
@@ -89,7 +90,7 @@ rs.updateState = function () {
       line.stroke = `rgb(${c},${c},${c})`;
     }
   }
-  //this.updateLines(apnts,fn);
+  this.updateLines(apnts,fn);
 }
 
 

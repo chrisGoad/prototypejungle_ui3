@@ -8,7 +8,7 @@ import {rs as generatorP} from '/generators/motion_3.mjs'
 let rs = generatorP.instantiate();
 //addDistanceMethods(rs);
 
-rs.setName('motion_27');
+rs.setName('motion_28');
 let ht=50;
 /*
 25inches = 63.5 cm
@@ -67,14 +67,14 @@ rs.initialize = function () {
  // let path0 = this.mkUniformPath([Point.mk(-dim,-dim),Point.mk(dim,-dim),Point.mk(dim,dim),Point.mk(-dim,dim),Point.mk(-dim,-dim)]);
   //let path0 = this.mkUniformPath([Point.mk(fr*ht,-10),Point.mk(-fr*ht,-5)]);
   //let path1 = this.mkUniformPath([Point.mk(-fr*ht,5),Point.mk(fr*ht,10)]);
-  this.paths = [cpath];
+  //this.paths = [cpath];
   this.speedFun = (j,i) => {
     let iodd = i%2;
     let jodd = j%2;
     let sp0 = jodd?3:2;
     return iodd?2*sp0:sp0;
   }
-  this.activePaths = this.buildApaths();
+  this.activePaths = this.buildApaths([cpath]);
   let av = this.allValues();
   this.addLinesBetweenPositions(av,lineP);
   return;

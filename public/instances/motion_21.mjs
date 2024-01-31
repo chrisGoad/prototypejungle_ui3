@@ -53,12 +53,12 @@ rs.initialize = function () {
   let polylines = this.set('polylines',arrayShape.mk());
   let path = this.spiralToPath({radius,numTurns:2,segsPerTurn:20});
   //this.show2dPath(path);
-  this.paths = [path];
+//  this.paths = [path];
   this.speedFun = (j) => {
     let jodd = j%2;
     return jodd?2:1;
   }
-  this.activePaths = this.buildApaths();
+  this.activePaths = this.buildApaths([path]);
  // return;
   let av = this.allValues();
   this.addLinesBetweenPositions(av,lineP);

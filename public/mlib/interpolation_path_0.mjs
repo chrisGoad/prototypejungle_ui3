@@ -34,7 +34,6 @@ item.updateActivePath = function (ap,gt) { // global time; t is relative  time
         aei = aei+1;
       }
     } else {
-      debugger;
       cycle = ap.cycle = cycle+1;
       pt = pt-1;
       aei = 0;
@@ -91,6 +90,18 @@ item.allValues = function () {
   let av = activePaths.map((ap) => ap.value);
   return av;
 }
+
+item.allValuesToConnect = function () {
+  let {activePaths} = this;
+  let av =[];
+  activePaths.forEach((ap) => {
+    if (ap.connectMe) {
+     av.push(ap.value);
+    }
+  });
+  return av;
+}
+ 
  
  // uniform timing; also adds elements[0] as last path element
   
@@ -197,7 +208,6 @@ item.mkColorApath = function (colorArrays,shapes,speed) { //shapes might be an a
   let path = this.mkUniformPath(colorArrays);
   let action =(ap) => {
     let {value:vl,shapes,shape} = ap;
-    debugger;
     let fill = this.arrayToRGB(vl);
     if (shapes) {
       shapes.forEach((sh) => {
