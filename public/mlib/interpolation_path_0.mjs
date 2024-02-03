@@ -1,15 +1,33 @@
 
 
 const rs = function (item) {
-/* an  interpolation_path is  array of timeStamped values [{pathTime:time0,value:val0,},{pathTime:time1,value:val1} ....]
+/* an  interpolation_path is  array of timeStamped values [{pathTime:time0,value:val0,pathFunction:pf0},{pathTime:time1,value:val1,pathFunction:pf1} ....]
 the values are hereditary arrays for which the interpolate function in basics.mjs works.
+the pathFunctions are optional. If abscent the interpolation function is used.
+each pathFunction pf takes as input the current value cv, the next value nv, and the fraction along the current path element as input and returns a value.
 
  
 an active interpolation path is {cyclic,startTime,speed,pathTime,cycle:integer,path:p,activeElementIndex:integer,value,action} where the activeElementIndex is the index of  the path element 
 which is active at pathTime. pathTime is path relative.  globalTime = startTime+ pathTime/speed. pathTime = (globalTime-startTime)/speed
 pathTimes are normalized to [0,1];;
 */
-
+item.pointAlongPath = function (path,fr) {
+  let pln = path.length;
+  let idx = 0;
+  while (idx < (pln-1)) {
+    let pe = path[idx];
+    let npe = path[idx+1];
+    let {pathTime:st,value:sv,pathFunction:pf} = pe;
+    let {pathTime:et,value:ev} = npe;
+    if (fr<=et) {
+      let ifr = (fr-st)/(et-st);
+      let v=pf?pf(fr,sv,ev):this.interpolate(sv,ev,ifr);
+      return v;
+    }
+    idx++;
+  }
+}
+    
 item.updateActivePath = function (ap,gt) { // global time; t is relative  time
   let {startTime,startOffset,speed,path,activeElementIndex:aei,cycle} = ap;
   let pln = path.length;
@@ -23,9 +41,10 @@ item.updateActivePath = function (ap,gt) { // global time; t is relative  time
     let eaei = aei + 1;; //end active element index
     if (eaei < pln) { 
       let eae = path[eaei];
-      let {pathTime:et,value:ev} = eae;
+      let {pathTime:et,value:ev,pathFunction:pf} = eae;
       if (pt<=et) { // t is within the active element
-        let iv = this.interpolate(sv,ev,(pt-st)/(et-st));
+        let fr = (pt-st)/(et-st);
+        let iv=pf?pf(fr,sv,ev):this.interpolate(sv,ev,fr);
         this.copyTo(ap.value,iv);
         ap.pathTime = pt;
         ap.activeElementIndex =aei;
@@ -141,6 +160,7 @@ item.straightPath = function (p0,p1) {
   let path =[pe0,pe1];
   return path;
 }
+/*
  item.circleToPath = function (circle,numSegs) {
   let {center,radius} = circle;
   let inc = (2*Math.PI)/numSegs;
@@ -156,7 +176,180 @@ item.straightPath = function (p0,p1) {
   }
   return path;
 }
+*/
+ item.circleToPath = function (circle) {
+  let {center,radius} = circle;
+  debugger;
+  let sv = Point.mk(center.plus(radius,0));
+  let pf = (fr) => {
+    let a = fr * 2 * Math.PI;
+    let x = Math.cos(a);
+    let y = Math.sin(a);
+    let p = Point.mk(x,y).times(radius).plus(center);
+    return p;
+  }
+  let pe0 = {pathTime:0,value:sv,pathFunction:pf};
+  let pe1 = {pathTime:1,value:sv,pathFunction:pf};
+  let path=[pe0,pe1];
+  return path;
+}
  
+ item.arcToPath = function (arc) {
+ // let {center,radius} = circle;
+  debugger;
+  let sv = arc.pointAlong(0);
+  let ev = arc.pointAlong(1);
+  let pf = (fr) => arc.pointAlong(fr);
+  let pe0 = {pathTime:0,value:sv,pathFunction:pf};
+  let pe1 = {pathTime:1,value:ev,pathFunction:pf};
+  let path=[pe0,pe1];
+  return path;
+}
+item.bendToPath = function (params) {
+  let {bendKind:bk,startPoint:sp,direction:dir,radius} = params;
+  /* bend kinds are UL UR
+                    LL LR
+  */
+  let center,a0,a1;
+  if (bk === 'UL') {
+     center = sp.plus(Point.mk(0,radius));
+     a0 = -Math.PI/2;
+     a1 = -Math.PI;
+   } else if (bk === 'UR') {
+      center = sp.plus(Point.mk(0,radius));
+     a0 = -Math.PI/2;
+     a1 = 0;
+  } else if (bk === 'LL') {
+     center = sp.plus(Point.mk(0,-radius));
+     a0 = Math.PI/2;
+     a1 = Math.PI; 
+  } else if (bk === 'LR') {
+      center = sp.plus(Point.mk(0,-radius));
+     a0 = Math.PI/2;
+     a1 = 0;    
+  }   
+  let arc = dir==='clockwise'? Arc.mk(center,a0,a1,radius):Arc.mk(center,a1,a0,radius);
+  let path = this.arcToPath(arc);
+  return path;
+}
+
+
+item.uturnToPath = function (params) {
+  let {startPoint:sp,fromDir,dirChange:dc,radius} = params;
+  console.log('fromDir',fromDir,'dc',dc);
+  /* dirChange is clockwise or counterclockwise
+  fromDir is left right up down
+  */
+  let center,a0,a1;
+  if (fromDir === 'left') {
+    if (dc === 'clockwise') {
+      center = sp.plus(Point.mk(0,-radius));
+      a0 = Math.PI/2;
+      a1 = 3*Math.PI/2;
+    }  else {
+      center = sp.plus(Point.mk(0,radius));
+      a0 = Math.PI/2;
+      a1 = 3*Math.PI/2;
+    }
+  }
+  if (fromDir === 'right') {
+    if (dc === 'clockwise') {
+      center = sp.plus(Point.mk(0,radius));
+      a0 = -Math.PI/2;
+      a1 = Math.PI/2;
+    }  else {
+      center = sp.plus(Point.mk(0,-radius));
+      a0 = Math.PI/2;
+      a1 = -Math.PI/2;
+    }
+  }
+   if (fromDir === 'up') {
+    if (dc === 'clockwise') {
+      center = sp.plus(Point.mk(radius,0));
+      a0 = -Math.PI;
+      a1 = 0;
+    }  else {
+      center = sp.plus(Point.mk(-radius,0));
+      a0 = 0;
+      a1 = -Math.PI;
+    }
+  }
+  if (fromDir === 'down') {//uturn
+    if (dc === 'clockwise') {
+      center = sp.plus(Point.mk(-radius,0));
+      a0 = 0;
+      a1 = Math.PI;
+    }  else {
+      center = sp.plus(Point.mk(radius,0));
+      a0 = Math.PI;
+      a1 = 0;
+    }
+  }
+  let arc =  Arc.mk(center,a0,a1,radius);
+  let path = this.arcToPath(arc);
+  return path;
+}
+
+
+item.bendToPath = function (params) {
+  let {startPoint:sp,fromDir,dirChange:dc,radius} = params;
+    console.log('fromDir',fromDir,'dc',dc);
+
+  /* dirChange is clockwise or counterclockwise
+  fromDir is left right up down
+  */
+  let center,a0,a1;
+  if (fromDir === 'left') {
+    if (dc === 'clockwise') {
+      center = sp.plus(Point.mk(0,-radius));
+      a0 = Math.PI/2;
+      a1 = Math.PI;
+    }  else {
+      center = sp.plus(Point.mk(0,radius));
+      a0 = -Math.PI/2;
+      a1 = -Math.PI;
+    }
+  }
+  if (fromDir === 'right') {
+    if (dc === 'clockwise') {
+      center = sp.plus(Point.mk(0,radius));
+      a0 = -Math.PI/2;
+      a1 = 0;
+    }  else {
+      center = sp.plus(Point.mk(0,-radius));
+      a0 = Math.PI/2;
+      a1 = 0;
+    }
+  }
+   if (fromDir === 'up') {
+    if (dc === 'clockwise') {
+      center = sp.plus(Point.mk(radius,0));
+      a0 = -Math.PI;
+      a1 = -Math.PI/2;
+    }  else {
+      center = sp.plus(Point.mk(-radius,0));
+      a0 = 0;
+      a1 = -Math.PI/2;
+    }
+  }
+  if (fromDir === 'down') {
+    if (dc === 'clockwise') {
+      center = sp.plus(Point.mk(-radius,0));
+      a0 = 0;
+      a1 = Math.PI/2;
+    }  else {
+      center = sp.plus(Point.mk(radius,0));
+      a0 = Math.PI;
+      a1 = Math.PI/2;
+    }
+  }
+  let arc =  Arc.mk(center,a0,a1,radius);
+  let path = this.arcToPath(arc);
+  return path;
+}
+   
+  
+  
 item.bumpyCircleToPath = function (params) {
   let {icenter,innerRadius:ird,outerRadius:ord,numBumps,numSegs} = params;
   let center=icenter?icenter:Point.mk(0,0);
@@ -181,6 +374,27 @@ item.bumpyCircleToPath = function (params) {
   return path;
 }
 
+
+
+item.bendPath = function (params) {
+ let {radius,startPosition:sp,bendCenter:bc,bendBy:bb,numSegs} = params;
+}
+ 
+item.snakePath = function (params) {
+ let {height:ht,width:wd,numBends,numSegs} = params;
+ let rowht = ht/numBends;
+ let bendRadius = rowht/2;
+ let straightDist = wd - 4*bendRadius;
+ let turnLength = Math.PI*bendRadius;
+ let totalLength = numBends * straighDist + turnLength;
+ let segLength = totalLength/numSegs;
+ let lengthPerBend = straightDist+turnLength;
+ const whichBend = (x) => Math.floor(x/lengthPerBend);
+ const bendStart = (x) => whichBend*lengthPerBend;
+ }
+   
+   
+  
  item.spiralToPath = function (params) {
   let {radius,numTurns:nt,segsPerTurn:spt} = params;
   let ns = Math.floor(nt*spt);
@@ -247,10 +461,27 @@ item.pathAroundCell = function (params,x,y,offset) {
 }
 
 
- item.show2dPath = function (path) {
+ item.show2dPathWaypoints = function (path) {
   let {polylineP,polylines} = this;
   let poly = polylineP.instantiate();
   let points = path.map((el) => el.value);
+  poly.wayPoints = points;
+  polylines.push(poly);
+  poly.show();
+  poly.update();
+}
+
+
+item.show2dPath = function (path,numSegs) {
+  let {polylineP,polylines} = this;
+  debugger;
+  let poly = polylineP.instantiate();
+  let points = [];
+  for (let i=0;i<=numSegs;i++) {
+    let fr = i/numSegs;
+    let p = this.pointAlongPath(path,fr);
+    points.push(p);
+  }
   poly.wayPoints = points;
   polylines.push(poly);
   poly.show();

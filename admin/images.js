@@ -5,6 +5,7 @@ sections:
 
 [
  //anim
+  [0,'motion_24','instances',1,'Colliding Orbits',{video:'gif',noTitle:0,likes:0,posted:0,category:'anim'}],
   [0,'rectangle_gon_grid_7','instances',1,'Clockwise',{video:'gif',noTitle:0,likes:0,posted:0,category:'anim'}],
   [0,'bounce_1','instances',1,'Bounce 2',{video:'mp4',noTitle:0,likes:0,posted:0,category:'anim'}],
 
@@ -22,6 +23,7 @@ sections:
    [0,'curves_9','instances',1,'Wave Functions 2',{video:'gif',likes:0,posted:0,category:'anim'}], 
    [0,'bounce_4','instances',1,'Symmetry Breaking 1',{video:'mp4',likes:0,posted:0,category:'anim'}], 
    [0,'bounce_13','instances',1,'Symmetry Breaking 2',{video:'mp4',likes:0,posted:0,category:'anim'}], 
+   [0,'bounce_12','instances',1,'Elastic Collisions',{video:'gif',likes:0,posted:0,category:'anim'}], 
     [0,'line_path_2_11','instances',1,'Bounce 1',{video:'gif',likes:0,posted:0,category:'anim'}], 
    //[0,'drop_circles_20','generators',1,'Necker Distortion',{video:'gif',likes:0,posted:0,category:'anim'}], 
    [0,'paths_10','instances',1,'Tower',{video:'gif',likes:0,posted:0,category:'anim'}], 

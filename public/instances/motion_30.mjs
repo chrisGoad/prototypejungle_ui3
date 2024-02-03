@@ -22,7 +22,7 @@ let ht=50;
 23 = 58 cm
 9106*.5 = 13/4553
 */
-let topParams = {width:ht,height:ht,angleOffset:0*Math.PI/10,framePadding:0.2*ht,frameStrokee:'white',frameStrokeWidth:.2,timePerStep:1/(32*32),stopTime:1,recordingMotion:1,saveAnimation:1,numSegs:30,
+let topParams = {width:ht,height:ht,angleOffset:0*Math.PI/10,framePadding:0.2*ht,frameStroke:'white',frameStrokeWidth:.2,timePerStep:1/(32*32),stopTime:1,recordingMotion:1,saveAnimation:1,numSegs:30,
     circleRadius:.2,nearestFadeFactor:20,shapesPerPath:32,speedd:1,segsPerCircle:6,radius:.15*ht,numSlices:8,distanceThreshold:15};
 
 Object.assign(rs,topParams);
@@ -70,7 +70,7 @@ rs.initialize = function () {
   //let path0 = this.mkUniformPath([Point.mk(fr*ht,-10),Point.mk(-fr*ht,-5)]);
   //let path1 = this.mkUniformPath([Point.mk(-fr*ht,5),Point.mk(fr*ht,10)]);
  // this.paths = [cpath];
-  let speed = 2;
+  let speed = 0;
   //let spd = 2;
   let params0 = {speed,path:mpath0,startOffset:0,value:Point.mk(0,0)};
   let mp0 = this.mkActivePath(params0)

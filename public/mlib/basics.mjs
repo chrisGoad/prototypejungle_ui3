@@ -847,10 +847,11 @@ item.interpolate = function (a0,a1,fr) {
       let v = this.interpolate(v0,v1,fr);
       iv[p] = v;
     });
-  }    
-    
+  }   
   return iv;
 }	
+
+    
 
 item.copyTo = function (dest,src) {
   let kind;
