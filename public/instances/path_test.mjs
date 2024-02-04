@@ -41,10 +41,25 @@ rs.initProtos = function () {
 
 
 
-
-
-
 rs.initialize = function () {
+   debugger;
+   this.initProtos();
+   let {radius} = this;
+  this.addFrame();
+  let polylines = this.set('polylines',arrayShape.mk());
+  let path0 = this.mkUniformPath([Point.mk(0,0),Point.mk(10,0)]);
+  let params = {fromDir:'right',startPoint:Point.mk(10,0),radius:4,dirChange:'clockwise'};
+  let path1 = this.uturnToPath(params);
+  let path2 = this.concatTwoPaths(path0,path1);
+  //this.show2dPath(path0,30);
+  //this.show2dPath(path1,30);
+  this.show2dPath(path2,30);
+
+}
+
+
+
+rs.initialize1 = function () {
    debugger;
    this.initProtos();
    let {stopTime:stp,timePerStep:tps,lineP,circleP,radius} = this;

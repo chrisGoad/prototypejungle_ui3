@@ -1,15 +1,16 @@
 
 
 const rs = function (item) {
-/* an  interpolation_path is  array of timeStamped values [{pathTime:time0,value:val0,pathFunction:pf0},{pathTime:time1,value:val1,pathFunction:pf1} ....]
+/* an  interpolation_path is  array of timeStamped values 
+[{pathTime:time0,value:val0,pathFunction:pf0},{pathTime:time1,value:val1,pathFunction:pf1} ....]
 the values are hereditary arrays for which the interpolate function in basics.mjs works.
-the pathFunctions are optional. If abscent the interpolation function is used.
-each pathFunction pf takes as input the current value cv, the next value nv, and the fraction along the current path element as input and returns a value.
-
+the pathFunctions are optional. If absent the interpolation function is used.
+Each pathFunction pf takes as input the current value cv, the next value nv, and the fraction along the current path element as input and returns a value.
+pathTimes are normalized  so that the first is 0 and the last is 1
+The first element of the path may assert other attributes of the path as a whole, such as length, used for appending paths
  
 an active interpolation path is {cyclic,startTime,speed,pathTime,cycle:integer,path:p,activeElementIndex:integer,value,action} where the activeElementIndex is the index of  the path element 
 which is active at pathTime. pathTime is path relative.  globalTime = startTime+ pathTime/speed. pathTime = (globalTime-startTime)/speed
-pathTimes are normalized to [0,1];;
 */
 item.pointAlongPath = function (path,fr) {
   let pln = path.length;
@@ -60,6 +61,13 @@ item.updateActivePath = function (ap,gt) { // global time; t is relative  time
    
   }
 }
+
+item.xferOtherProperties = function (np,p) {
+  let ln = p[0].length;
+  if (ln) {
+    np[0].length = ln;
+  }
+}
     
 item.normalizePath = function (p) {
   let pln = p.length;
@@ -69,7 +77,8 @@ item.normalizePath = function (p) {
     let {pathTime:pt,value} =  pe;
     return {pathTime:pt/dur,value};
     
-  })
+  });
+  this.xferOtherProperties(np,p);
   return np;
 }
 
@@ -81,6 +90,8 @@ item.mapPath = function (p,f) {
     return {pathTime,value:f(value)};
     
   })
+  this.xferOtherProperties(np,p);
+
   return np;
 }
 
@@ -121,10 +132,34 @@ item.allValuesToConnect = function () {
   return av;
 }
  
- 
- // uniform timing; also adds elements[0] as last path element
+ // assumes all path elements have a Point as value
+ item.pathLength  = function (path) {
+ // debugger;
+  let ln = path.length;
+  let pln = 0;
+  let pe0 = path[0];
+  let lastwp;
+  for (let i=0;i<ln;i++) {
+    let pe = path[i];
+    let wp = pe.value;
+    let isp = Point.isPrototypeOf(wp);
+    if (isp) {
+      if (lastwp) {
+        let peln = wp.distance(lastwp);
+        pln = pln+peln;
+        lastwp = wp;
+      } else {
+        lastwp = wp;
+      }
+    }
+  }
+  return pln;
+}
+    
+     
+ // uniform timing; adds elements[0] as last path element if wrap 
   
- item.mkUniformPath = function (elements) {
+ item.mkUniformPath = function (elements,wrap) {
   let ln = elements.length;
   let ipath = [];
   for (let i=0;i<ln;i++) {
@@ -133,9 +168,13 @@ item.allValuesToConnect = function () {
     ipath.push(pel);
   }
   let e0 = elements[0];
-  let pel = {pathTime:ln,value:e0};
-  ipath.push(pel);
+  if (wrap) {
+    let pel = {pathTime:ln,value:e0};
+    ipath.push(pel);
+  }
   let npath = this.normalizePath(ipath);
+  let pln = this.pathLength(npath);
+  npath[0].length = pln;
   return npath;
 }
     
@@ -189,20 +228,25 @@ item.straightPath = function (p0,p1) {
     return p;
   }
   let pe0 = {pathTime:0,value:sv,pathFunction:pf};
-  let pe1 = {pathTime:1,value:sv,pathFunction:pf};
+  let pe1 = {pathTime:1,value:sv};
+  pe0.length = 2*Math.PI.radius;
   let path=[pe0,pe1];
   return path;
 }
  
  item.arcToPath = function (arc) {
- // let {center,radius} = circle;
-  debugger;
+//  debugger;
+  let radius = arc.radius;
+  let a0 = arc.angle0;
+  let a1 = arc.angle1;
+  let aln = Math.abs(a1-a0);
   let sv = arc.pointAlong(0);
   let ev = arc.pointAlong(1);
   let pf = (fr) => arc.pointAlong(fr);
   let pe0 = {pathTime:0,value:sv,pathFunction:pf};
   let pe1 = {pathTime:1,value:ev,pathFunction:pf};
   let path=[pe0,pe1];
+  pe0.length = aln*radius;
   return path;
 }
 item.bendToPath = function (params) {
@@ -486,6 +530,32 @@ item.show2dPath = function (path,numSegs) {
   polylines.push(poly);
   poly.show();
   poly.update();
+}
+
+item.concatTwoPaths = function (path0,path1) {
+  let pln0 = this.pathLength(path0);
+  let pln1 = this.pathLength(path1);
+  let ln0= path0.length;
+  let ln1= path1.length;
+  let np =[];
+  let npln = pln0+pln1;
+  let tsc0 = pln0/npln;
+  let tsc1 = pln1/npln;
+  for (let i=0;i<ln0-1;i++) {
+    let pe = path0[i];
+    let pt = pe.pathTime;
+    pe.pathTime =  tsc0*pt;
+    np.push(pe);
+  }
+  for (let i=0;i<ln1;i++) {
+    let pe = path1[i];
+    let pt = pe.pathTime;
+    pe.pathTime =  tsc0+tsc1*pt;
+    np.push(pe);
+  }
+  let pe0 = np[0];
+  pe0.length=npln;
+  return np;
 }
 
 }
