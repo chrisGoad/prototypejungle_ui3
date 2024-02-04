@@ -35,7 +35,7 @@ item.updateActivePath = function (ap,gt) { // global time; t is relative  time
   while (1) {
     let pt = startOffset + (gt-startTime)*speed - cycle;//pathTime
     let sae = path[aei]; //sae = start active element
-    let {pathTime:st,value:sv} = sae; // st= start time, sv = start value
+    let {pathTime:st,value:sv,pathFunction:lastpf} = sae; // st= start time, sv = start value
     if (pt < 0){ //  not started or over
       return 0;
     }
@@ -45,7 +45,11 @@ item.updateActivePath = function (ap,gt) { // global time; t is relative  time
       let {pathTime:et,value:ev,pathFunction:pf} = eae;
       if (pt<=et) { // t is within the active element
         let fr = (pt-st)/(et-st);
-        let iv=pf?pf(fr,sv,ev):this.interpolate(sv,ev,fr);
+        if (pf) {
+          debugger;
+        }
+        let iv=lastpf?lastpf(fr,sv,ev):this.interpolate(sv,ev,fr);
+        lastpf = pf;
         this.copyTo(ap.value,iv);
         ap.pathTime = pt;
         ap.activeElementIndex =aei;
