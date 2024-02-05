@@ -22,7 +22,7 @@ item.pointAlongPath = function (path,fr) {
     let {pathTime:et,value:ev} = npe;
     if (fr<=et) {
       let ifr = (fr-st)/(et-st);
-      let v=pf?pf(fr,sv,ev):this.interpolate(sv,ev,ifr);
+      let v=pf?pf(ifr,sv,ev):this.interpolate(sv,ev,ifr);
       return v;
     }
     idx++;
@@ -46,7 +46,7 @@ item.updateActivePath = function (ap,gt) { // global time; t is relative  time
       if (pt<=et) { // t is within the active element
         let fr = (pt-st)/(et-st);
         if (pf) {
-          debugger;
+         // debugger;
         }
         let iv=lastpf?lastpf(fr,sv,ev):this.interpolate(sv,ev,fr);
         lastpf = pf;
@@ -248,12 +248,12 @@ item.straightPath = function (p0,p1) {
   let ev = arc.pointAlong(1);
   let pf = (fr) => arc.pointAlong(fr);
   let pe0 = {pathTime:0,value:sv,pathFunction:pf};
-  let pe1 = {pathTime:1,value:ev,pathFunction:pf};
+  let pe1 = {pathTime:1,value:ev};
   let path=[pe0,pe1];
   pe0.length = aln*radius;
   return path;
 }
-item.bendToPath = function (params) {
+item.bendToPathh = function (params) {
   let {bendKind:bk,startPoint:sp,direction:dir,radius} = params;
   /* bend kinds are UL UR
                     LL LR
@@ -296,8 +296,8 @@ item.uturnToPath = function (params) {
       a1 = 3*Math.PI/2;
     }  else {
       center = sp.plus(Point.mk(0,radius));
-      a0 = Math.PI/2;
-      a1 = 3*Math.PI/2;
+      a0 = -Math.PI/2;
+      a1 = -3*Math.PI/2;
     }
   }
   if (fromDir === 'right') {
@@ -560,6 +560,15 @@ item.concatTwoPaths = function (path0,path1) {
   let pe0 = np[0];
   pe0.length=npln;
   return np;
+}
+
+item.concatPaths = function (paths) {
+  let np = paths.length;
+  let cp = paths[0];
+  for (let i=1;i<np;i++) {
+    cp = this.concatTwoPaths(cp,paths[i]);
+  }
+  return cp;
 }
 
 }

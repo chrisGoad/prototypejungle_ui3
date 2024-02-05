@@ -48,12 +48,15 @@ rs.initialize = function () {
   this.addFrame();
   let polylines = this.set('polylines',arrayShape.mk());
   let path0 = this.mkUniformPath([Point.mk(0,0),Point.mk(10,0)]);
-  let params = {fromDir:'right',startPoint:Point.mk(10,0),radius:4,dirChange:'clockwise'};
-  let path1 = this.uturnToPath(params);
-  let path2 = this.concatTwoPaths(path0,path1);
+  let params1 = {fromDir:'right',startPoint:Point.mk(10,0),radius:4,dirChange:'clockwise'};
+  let path1 = this.uturnToPath(params1);
+  let path2 = this.mkUniformPath([Point.mk(10,8),Point.mk(0,8)])
+  let params3 = {fromDir:'left',startPoint:Point.mk(0,8),radius:4,dirChange:'clockwise'};
+  let path3 = this.uturnToPath(params3);;
+  let path = this.concatPaths([path0,path1,path2,path3]);
   //this.show2dPath(path0,30);
   //this.show2dPath(path1,30);
-  this.show2dPath(path2,30);
+  this.show2dPath(path,30);
 
 }
 
