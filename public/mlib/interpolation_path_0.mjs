@@ -166,13 +166,21 @@ item.allValuesToConnect = function () {
  item.mkUniformPath = function (elements,wrap) {
   let ln = elements.length;
   let ipath = [];
-  for (let i=0;i<ln;i++) {
-    let e = elements[i]
-    let pel = {pathTime:i,value:e};
-    ipath.push(pel);
+  let lastEl = elements[0];
+  let idx = 1;
+  ipath.push({pathTime:0,value:lastEl});
+  for (let i=1;i<ln;i++) {
+    let e = elements[i];
+    if (e!==lastEl) {
+      let pel = {pathTime:idx,value:e};
+      ipath.push(pel);
+      lastEl = e;
+      idx++
+    }
+    
   }
   let e0 = elements[0];
-  if (wrap) {
+  if (wrap && (e0 !== lastEl)) {
     let pel = {pathTime:ln,value:e0};
     ipath.push(pel);
   }

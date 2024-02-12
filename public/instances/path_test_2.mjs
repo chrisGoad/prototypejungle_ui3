@@ -67,20 +67,20 @@ rs.addE = function (paths,params) {
   let bparams = {startPoint:sp,radius,rightFacing:rf,straightLength:sln};
   let bendend = this.addBend(paths,bparams);
   bparams.startPoint = bendend;
-  for (let i=0;i<3;i++) {
+  for (let i=0;i<4;i++) {
     bendend = this.addBend(paths,bparams);
     bparams.startPoint = bendend;
   }
   bparams.lastLength =lln;
   bendend = this.addBend(paths,bparams);
-  bparams = {fromDir:rf?'left':'right',startPoint:bendend,radius,dirChange:'clockwise',radius};
+  bparams = {fromDir:rf?'left':'right',startPoint:bendend,radius,dirChange:rf?'clockwise':'counterclockwise',radius};
   let bend0 = this.bendToPath(bparams);
   paths.push(bend0);
   bendend = bend0[1].value;
   let returnEnd = Point.mk(bendend.x,sp.y+radius);
   let returnPath = this.mkUniformPath([bendend,returnEnd]);
   paths.push(returnPath);
-  bparams = {fromDir:'up',startPoint:returnEnd,dirChange:rf?'clockwise':'counterclockwise',radius};
+  bparams = {fromDir:rf?'up':'up',startPoint:returnEnd,dirChange:rf?'clockwise':'counterclockwise',radius};
   let bend1 = this.bendToPath(bparams);
   bendend  =bend1[1].value;
   paths.push(bend1);
@@ -93,14 +93,16 @@ rs.initialize = function () {
    let {radius,lineP,bendRadius} = this;
   this.addFrame();
   this.set('shapes',arrayShape.mk());
-  this.numSteps = 100;
+  this.numSteps = 5;
   let lines = this.set('lines',arrayShape.mk());
   let polylines = this.set('polylines',arrayShape.mk());
   let paths0 = [];
   let paths1 = [];
-  let sp = Point.mk(-5,-10);
-  this.addE(paths0,{startPoint:sp,straightLength:10,radius:bendRadius,lastLength:14,rightFacing:0});
-  this.addE(paths1,{startPoint:sp,straightLength:10,radius:bendRadius,lastLength:14,rightFacing:1});  
+  let spy = -17;
+  let sp0 = Point.mk(-9,spy);
+  let sp1 = Point.mk(9,spy);
+  this.addE(paths0,{startPoint:sp0,straightLength:10,radius:bendRadius,lastLength:14,rightFacing:0});
+  this.addE(paths1,{startPoint:sp1,straightLength:10,radius:bendRadius,lastLength:14,rightFacing:1});  
   let path0  = this.concatPaths(paths0);
   let path1  = this.concatPaths(paths1);
 

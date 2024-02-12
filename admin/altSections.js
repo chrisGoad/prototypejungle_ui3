@@ -10,6 +10,7 @@ sections:
       [0,'path_test_2','instances',1,'path test 2',{likes:0,posted:0,category:'drop'}], 
       [0,'path_test','instances',1,'path test',{likes:0,posted:0,category:'drop'}], 
       [0,'color_path_0','instances',1,'color path 0',{likes:0,posted:0,category:'drop'}], 
+      [0,'motion_32','instances',1,'motion 32',{likes:0,posted:0,category:'drop'}], 
       [0,'motion_31','instances',1,'motion 31',{likes:0,posted:0,category:'drop'}], 
       [0,'motion_29','instances',1,'motion 29',{likes:0,posted:0,category:'drop'}], 
       [0,'motion_28','instances',1,'motion 28',{likes:0,posted:0,category:'drop'}], 
