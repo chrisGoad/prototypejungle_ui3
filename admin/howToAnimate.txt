@@ -282,7 +282,8 @@ c:\ffmpeg\bin\ffmpeg  -framerate 15  -i animations/motion_24_f%03d.jpg -s 500x50
 c:\ffmpeg\bin\ffmpeg  -framerate 15  -i animations/motion_25_f%03d.jpg -s 500x500  export/motion_25.gif
 c:\ffmpeg\bin\ffmpeg  -framerate 15  -i animations/motion_26_f%03d.jpg -s 500x500  export/motion_26.gif
 c:\ffmpeg\bin\ffmpeg  -framerate 2  -i animations/motion_22_f%03d.jpg -s 500x500  export/motion_22.gif
-c:\ffmpeg\bin\ffmpeg  -framerate 15  -i animations/path_test_2_f%03d.jpg -s 500x500  export/path_test_2.mp4
+c:\ffmpeg\bin\ffmpeg  -framerate 15  -i animations/motion_32_f%03d.jpg -s 500x500  export/motion_32.gif
+c:\ffmpeg\bin\ffmpeg  -framerate 15  -i animations/path_test_2_f%03d.jpg -s 500x500  export/path_test_2.gif
 c:\ffmpeg\bin\ffmpeg  -framerate 15 -i animations/color_path_0_f%03d.jpg -s 500x500  export/color_path_0.gif
 
 c:\ffmpeg\bin\ffmpeg -i export/bounce_12.mp4 -i export/bounce_12.wav -c:v copy -c:a aac -map 0:v -map 1:a export/blend_test.mp4

@@ -1223,7 +1223,7 @@ rs.pointsAroundCell = function (params,x,y) {
    return [UL,UR,LR,LL,UL];
 }
 
-    
+  
   
   
 }

@@ -22,8 +22,8 @@ let ht=50;
 23 = 58 cm
 9106*.5 = 13/4553
 */
-let topParams = {width:ht,height:ht,angleOffset:0*Math.PI/10,framePadding:0.2*ht,frameStrokee:'white',frameStrokeWidth:.2,timePerStep:1/(32*32),stopTime:1,recordingMotion:1,saveAnimation:1,numSegs:30,
-    circleRadius:.2,nearestFadeFactor:20,shapesPerPath:8,speedd:1,segsPerCircle:6,radius:.15*ht,numSlices:8,distanceThreshold:20};
+let topParams = {width:ht,height:ht,angleOffset:0*Math.PI/10,framePadding:0.2*ht,frameStrokee:'white',frameStrokeWidth:.2,timePerStep:1/(3*32*32),stopTime:1,recordingMotion:1,saveAnimation:1,numSegs:30,
+    circleRadius:.2,nearestFadeFactor:20,shapesPerPath:16,speedd:1,segsPerCircle:6,radius:.15*ht,numSlices:8,distanceThreshold:7};
 
 Object.assign(rs,topParams);
 let subParams ={speed:10,shapesPerRing:2};
@@ -54,8 +54,9 @@ rs.initialize = function () {
    let {stopTime:stp,timePerStep:tps,lineP,circleP,radius,height:ht,numSegs} = this;
   this.addFrame();
   this.numSteps =stp/tps;
-  this.numSteps =512;
-  //this.numSteps =128;
+  this.numSteps =3*512;
+  this.numSteps =3*512;
+  this.numSteps =384;
   this.set('shapes',arrayShape.mk());
   let lines = this.set('lines',arrayShape.mk());
   let fr =0.5;
@@ -68,8 +69,12 @@ rs.initialize = function () {
   let UR = Point.mk(dim,-dim);
   let LL = Point.mk(-dim,dim);
   let LR = Point.mk(dim,dim);
+  let CNT = Point.mk(0,0);
   const twoWayPath = (p0,p1)=> {
     return this.mkUniformPath([p0,p1,p1,p0]);
+  }
+  const twoWayPath2 = (p0,p1,p2)=> {
+    return this.mkUniformPath([p0,p1,p2,p2,p1,p0]);
   }
   //let circle = Circle.mk(Point.mk(0,0),radius);
   //let cpath = this.circleToPath(circle,numSegs);
@@ -79,13 +84,15 @@ rs.initialize = function () {
   let TOP2RHT  =twoWayPath(TOP,RHT);
   let LFT2BOT  =twoWayPath(LFT,BOT);
   let RHT2BOT  =twoWayPath(RHT,BOT);
-  let UL2LR  =twoWayPath(UL,LR);
-  let UR2LL =twoWayPath(UR,LL);
+  //let UL2LR  =twoWayPath(UL,LR);
+  let UL2LR  =twoWayPath2(UL,CNT,LR);
+  //let UR2LL =twoWayPath(UR,LL);
+  let UR2LL =twoWayPath2(UR,CNT,LL);
 
   this.speedFun = (j,i) => {
     let iodd = i%2;
     let jodd = j%2;
-    let sp0 = jodd?1:2;
+    let sp0 = jodd?2:3;
     return iodd?2*sp0:sp0;
   }
   let activePaths = [];
@@ -105,7 +112,10 @@ rs.initialize = function () {
 rs.updateState = function () {
   let {currentTime:ct,activePaths,circ,lineP,segs,ints,stepsSoFar:ssf,radius,distanceThreshold:th} = this;
   console.log('ssf',ssf,'ct',ct);
-  debugger;
+ // debugger;
+  if (ssf ===384) {
+    this.paused = 1;
+  }
   this.runActivePaths();
   //return;
   let aps = activePaths.filter((ap) => ap.connectMe);

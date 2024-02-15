@@ -101,7 +101,8 @@ sections:
    [25,'web_thing_0','generators',1,'Web Thing',{likes:0,posted:0,category:'web'}], 
 
    
- [0,'lines_chaos_within_order','generators','wide2','Chaos Within Order',{likes:152,posted:1,category:'lines'}],
+ [0,'motion_29','instances',1,'Connectome',{likes:152,posted:1,category:'lines'}],
+ [5,'lines_chaos_within_order','generators','wide2','Chaos Within Order',{likes:152,posted:1,category:'lines'}],
 		 //	 [0,'lines_1','generators','square','Lines 1',{likes:31,posted:1,category:'lines',sources:1}],
 	[30,'lines_2','instances','wide2','Lines 2',{likes:0,posted:0,category:'lines',sources:1}],
    [20,'lines_bugeyes','generators','square','Bug Eyes',{likes:6,posted:1,category:'lines',sources:1}],

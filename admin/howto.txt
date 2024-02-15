@@ -68,6 +68,8 @@ node admin/genGalleries lines 1
 node admin/genGalleries anim 1
 node admin/genGalleries grid 1
 node admin/updateKOP
+
+not this:
 node admin/imagesToKop
 
 drop the 1s for local use with source
