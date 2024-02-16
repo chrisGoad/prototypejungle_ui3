@@ -19,7 +19,8 @@ let notOk = [s0n,s1n,s2n,s3n,s4n];
 */
 
 item.wOk = function (str) {
-  if (str === 'tacos') {
+  let dps = this.dprohibs;
+  if (str.indexOf('staa')===0) {
     debugger;
   }
   let prohibs = this.prohibs;
@@ -35,6 +36,14 @@ item.wOk = function (str) {
       return 0;
     }
   }
+  let dln = dps.length;
+  for (let i=0;i<dln;i++) {
+    let dp = dps[i];
+    if (str.indexOf(dp) > -1) {
+      return 0;
+    }
+  }
+  
   return 1;
 }
  
@@ -42,6 +51,7 @@ item.wgenAll = function (sofar) {
   if (this.acount > 100000) {
     return;
   }
+  let noDups = this.noDups;
   let plets = this.plets;
   let pln = plets.length;
   let ln = sofar.length;
@@ -52,6 +62,7 @@ item.wgenAll = function (sofar) {
     }
     if (this.wOk(sofar)) {
       console.log(this.acount,'ok',sofar);
+      this.possibles.push(sofar);
       this.wcount++;
     }
     return;
@@ -60,7 +71,7 @@ item.wgenAll = function (sofar) {
    // console.log(this.acount,'sfln',sfln,'i',i);
     this.acount++;
     let plet = plets[i];
-    if (sofar.indexOf(plet) > -1) {
+    if (noDups && (sofar.indexOf(plet) > -1)) {
       continue;
     }
     let nxt = sofar+plet;
@@ -71,8 +82,12 @@ item.wgenAll = function (sofar) {
 item.wgenTop = function () {
   this.wcount = 0;
   this.acount = 0;
+  let pln = this.plets.length;
+  this.noDups = (pln === 5);
+  let possibles = this.possibles = [];
   this.wgenAll('');
-  console.log('count',this.wcount);
+  console.log('possibles',possibles);
+  console.log('count',possibles.length);
 }
 
 
