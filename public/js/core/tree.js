@@ -571,9 +571,9 @@ let setNameInArray = function (array,child,n) { //called after the push
    if (isNode(child)) {
      child.__name = n;
      child.__parent = array;
-  } else if (child && (typeof child==='object')) {
+  } /*else if (child && (typeof child==='object')) {
     error('Attempt to add non-node object to an Array');
-  }
+  }*/
 };
 
 ArrayNode.push = function (element) {

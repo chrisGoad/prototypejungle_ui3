@@ -32,7 +32,7 @@ rs.generateCircleDrop= function (p) {
   f = 2;
   let cf = 1.1;
   cf=2;
-  let drop = {collideRadius:1.1*r*f*cf,dimension:r*f*2,fill:'red'};
+  let drop = {collideRadius:1.1*r*f*cf,dimension:r*f*2,fill:'white'};
   return drop;
 }
 
@@ -47,7 +47,8 @@ rs.initialize = function () {
  
   
   let A =  this.generateCircleDrops(dropParams);
-  let B =  this.generateCircleDrops(dropParams);
+ // let B =  this.generateCircleDrops(dropParams);
+  let B = A; 
   let Ax = this.dropsFlipX(A);
   let Ay = this.dropsFlipY(A);
   let Axy = this.dropsFlipXY(A);
