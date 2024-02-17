@@ -48,6 +48,11 @@ const onFull = function () {
   debugger;
 	window.location.href = imurl;
 }
+
+const onHigh = function () {
+  debugger;
+	window.location.href = hiurl;
+}
 const onTop = function () {
   debugger;
   let dst = imKind + 'Images.html';
@@ -62,7 +67,7 @@ const onTop = function () {
 	window.location.href = './'+dst;
 }
 
-let imKind,imLocalS,thePages,theTitles,theLocals,imurl,noTitle;
+let imKind,imLocalS,thePages,theTitles,theLocals,imurl,hiurl,noTitle;
 document.addEventListener('DOMContentLoaded', () => {
   debugger;
 	let cWidth =document.documentElement.clientWidth;
@@ -129,6 +134,7 @@ document.addEventListener('DOMContentLoaded', () => {
 	let nextDiv = document.getElementById('nextDiv');
 //	let fullDiv = document.getElementById('fullDiv');
 	let fullDiv = document.getElementById('full');
+	let highDiv = document.getElementById('highDiv');
 	let topDiv = document.getElementById('topDiv');
 	let titleDiv = document.getElementById('titleDiv');
 	let imageDiv = document.getElementById('imageDiv');
@@ -136,6 +142,9 @@ document.addEventListener('DOMContentLoaded', () => {
 	let imageEl =  document.getElementById('theImage');
 	let videoEl =  document.getElementById('theVideo');
 	let lastPage = cPage === (thePages.length-1);
+  if (imKind === 'anim') {
+    highDiv.style.visibility = "hidden";
+  }
 	if (cPage === 0) {
 	 prevDiv.style.visibility = "hidden";
 	}
@@ -146,6 +155,7 @@ document.addEventListener('DOMContentLoaded', () => {
 	nextDiv.addEventListener('click',onNext);
 	topDiv.addEventListener('click',onTop);
 	fullDiv.addEventListener('click',onFull);
+	highDiv.addEventListener('click',onHigh);
 	if (title) {
     if (noTitle) {
      // titleDiv.hide();
@@ -160,7 +170,9 @@ document.addEventListener('DOMContentLoaded', () => {
 	let ext = extension(im);
 	//let dir = (ext==='jpg')?'images/':'videos/';
 	let dir = imLocal?'./images/std_size/':'https://kingdomofpattern.com/images/std_size/';
+	let hdir = imLocal?'./images/hi_res/':'https://kingdomofpattern.com/images/hi_res/';
    imurl = dir+'/'+im;
+   hiurl = hdir+'/'+im;
  debugger;
   //console.log('DIR ',dir);
 	if (ext === 'mp4') {
