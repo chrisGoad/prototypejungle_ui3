@@ -8,7 +8,7 @@ import {rs as basicP} from '/generators/basics.mjs';
 let item = basicP.instantiate();
 item.setName('lines_bugeyes');
 let ht= 235;
-let topParams = {width:ht*1.5,height:ht,frameWidth:1.5*1.12*ht,frameHeight:1.12*ht};
+let topParams = {width:ht*1.5,height:ht,frameWidth:1.5*1.12*ht,frameHeight:1.12*ht,frameStroke:'white',frameStrokeWidth:.2};
 Object.assign(item,topParams);
 
 item.initialize = function () {
