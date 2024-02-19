@@ -1,4 +1,5 @@
 debugger;
+const include_hi_res = 1;
 const afterLastChar = function (string,chr,strict) {
   let idx = string.lastIndexOf(chr);
   if (idx < 0) {
@@ -142,7 +143,7 @@ document.addEventListener('DOMContentLoaded', () => {
 	let imageEl =  document.getElementById('theImage');
 	let videoEl =  document.getElementById('theVideo');
 	let lastPage = cPage === (thePages.length-1);
-  if (imKind === 'anim') {
+  if ((imKind === 'anim') || (!include_hi_res)) {
     highDiv.style.visibility = "hidden";
   }
 	if (cPage === 0) {

@@ -19,6 +19,38 @@ let notOk = [s0n,s1n,s2n,s3n,s4n];
 */
 
 
+item.vowels = 'aeiouy';
+
+item.blend3 = function (str) {
+  let vowels = 'aeiouy';
+  for (let i=0;i<3;i++) {
+    let bl = str.substring(i,i+3);
+    let allC = 1;
+    for (let j=0;j<3;j++) {
+      let lt = bl[j];
+      if (vowels.indexOf(lt) > -1) {
+        allC = 0;
+        break;
+      }
+    }
+    if (allC) {
+      return bl;
+    }
+  }
+}
+
+item.badBlend = function (str) {
+  debugger;
+  let bl = this.blend3(str);
+  let okblends = ['thr','scr','spr','shr','spl','str'];
+  if (okblends.indexOf(bl) > -1) {
+    console.log('okblend',bl);
+  } else {
+    console.log('badblend',bl);
+    return 1;
+  }
+}    
+    
 item.alphabetize =function (str) {
   let abet = 'abcdefghijklmnopqrstuvwxyz';
   let abz = '';
@@ -66,6 +98,9 @@ item.removeLetters = function (str,lets) {
   return cm;
 }
 item.wOk = function (str) {
+  if (this.badBlend(str)) {
+    return 0;
+  }
   let dps = this.dprohibs;
   if (str==='aiaaa') {
     debugger;

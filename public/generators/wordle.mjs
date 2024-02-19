@@ -17,82 +17,17 @@ timePerStep:1/(16*32),stopTime:1,recordingMotion:1,saveAnimation:1,distanceThres
 
 Object.assign(rs,topParams);
 
-rs.initializee = function () {
-  debugger;
-  let s0n = '';
-  let s1n = 'o';
-  let s2n = '';
-  let s3n = 'nal';
-  let s4n = 't';
-  this.prohibs = [s0n,s1n,s2n,s3n,s4n];
-  this.plets = 'onalt';
-
-  this.addFrame();
-  this.wgenTop();
-}
-
-
-rs.initialize = function () {
-  debugger;
-  let s0n = 's';
-  let s1n = 'o';
-  let s2n = '';
-  let s3n = 'a';
-  let s4n = '';
-  this.prohibs = [s0n,s1n,s2n,s3n,s4n];
-  let k0 = null;
-  let k1 = null;
-  let k2 = 'c';
-  let k3 = null;
-  let k4 = 't';
-  this.known = [k0,k1,k2,k3,k4];
-  this.plets = 'qtyasofghjkzxcbm';
-  this.plets = 'tyasofghjkcbm';
-  this.plets = 'socat';
-
-  this.addFrame();
-  this.wgenTop();
-}
 
 
 
 
-rs.alphabetize =function (str) {
-  let abet = 'abcdefghijklmnopqrstuvwxyz';
-  let abz = '';
-  for (let i=0;i<26;i++) {
-    let x = abet[i];
-    if (str.indexOf(x)>-1) {
-      abz = abz+x;
-    }
-  }
-  return abz;
-}
-
-rs.removeLetters = function (str,lets) {
-  let rstr = '';
-  if (typeof lets=== 'string') {
-    let ln = str.length;;
-    for (let i=0;i<ln;i++) {
-      let etr = str[i];
-      if (!(lets.indexOf(etr)>-1)) {
-        rstr = rstr+etr;
-      }
-    }
-  } else {
-    rstr = str;
-    let aln = lets.length;
-    for (let i=0;i<aln;i++) {
-      rstr = this.removeLetters(rstr,lets[i]);
-    }
-  }     
-  return rstr;
-}
 
 
   
   rs.initialize = function () {
   debugger;
+  this.tries();
+  return;
   // prohibited letters at each position
   let s0n = '';
   let s1n = '';
@@ -142,7 +77,20 @@ rs.tries = function () {
     let rm = this.removeLetters(abet,iput);
     console.log('iput',JSON.stringify(iput),'rm',rm);;
   }
+  const checkBlend = (str) => {
+    let bl = this.blend3(str);
+    if (bl) {
+     console.log('BLEND',bl);
+    } else {
+     console.log('NO BLEND');
+    }
+  }
+  this.wOk('astry');
+ 
+  //checkBlend('aibfo');
+  //checkBlend('aibfd');
 }
+       
 
  
 export {rs};
