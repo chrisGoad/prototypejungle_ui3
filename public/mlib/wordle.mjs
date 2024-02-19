@@ -20,7 +20,7 @@ let notOk = [s0n,s1n,s2n,s3n,s4n];
 
 item.wOk = function (str) {
   let dps = this.dprohibs;
-  if (str.indexOf('staa')===0) {
+  if (str==='aiaaa') {
     debugger;
   }
   let prohibs = this.prohibs;
@@ -48,7 +48,7 @@ item.wOk = function (str) {
 }
  
 item.wgenAll = function (sofar) {
-  if (this.acount > 100000) {
+  if (this.acount > 10000000) {
     return;
   }
   let noDups = this.noDups;
@@ -79,7 +79,8 @@ item.wgenAll = function (sofar) {
   }
 }
 
-item.wgenTop = function () {
+item.wgenTop = function (lt,k) {
+  this.plets = lt?k+lt:this.possLets;
   this.wcount = 0;
   this.acount = 0;
   let pln = this.plets.length;
@@ -88,6 +89,17 @@ item.wgenTop = function () {
   this.wgenAll('');
   console.log('possibles',possibles);
   console.log('count',possibles.length);
+}
+
+item.wgen4known = function (k) {
+ 
+  let {possLets} = this;
+  let ln = possLets.length;
+  for (let i=0;i<ln;i++) {
+   let lt = possLets[i];
+   console.log('CHECK',lt);
+   this.wgenTop(lt,k);
+  }
 }
 
 

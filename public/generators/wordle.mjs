@@ -145,48 +145,74 @@ rs.removeLetters = function (str,lets) {
 }
 
 
-     
+ rs.complement = function (letset) {
+   let abet = 'abcdefghijklmnopqrstuvwxyz';
+   let cm = '';
+   let ln = abet.length;
+  for (let i=0;i<ln;i++) {
+    let lt = abet[i];
+    if (letset.indexOf(lt) === -1) {
+      cm = cm+lt;
+    }
+  }
+  return cm;
+}
   
   rs.initialize = function () {
   debugger;
-  let s0n = 's';
-  let s1n = 'p';
-  let s2n = 'l';
-  let s3n = '';
+  let s0n = '';
+  let s1n = '';
+  let s2n = 'gr';
+  let s3n = 'd';
   let s4n = '';
   this.dprohibs  = ['jk','kj','bk','kb','jh','hj','mk','bj','jb','qq','qk','kq','kh','fz','qp','pq','jl','lj'];
   //this.dprohibs  = [];
   this.prohibs = [s0n,s1n,s2n,s3n,s4n];
   let k0 = null;
-  let k1 = null;
+  let k1 = 'r';
   let k2 = null;
-  let k3 = 'l';
-  let k4 = null;
+  let k3 = 'c';
+  let k4 = 'e';
   this.known = [k0,k1,k2,k3,k4];
   let row0 = 'qwertyuiop';
-  row0 = 'qp';
+  row0 = 'qeryuip';
   let row1 = 'asdfghjkl'
-  row1 = 'asfghjl';
+  row1 = 'adfgjkl'
   let row2 = 'zxcvbnm';
-  row2 = 'zxbm';
-  row2 = 'm';
-  //this.plets = this.alphabetize(row0+row1+row2);
-  let plets = 'spalm';
-  this.plets = this.alphabetize(plets);
+  row2 = 'zxcvbn';
+ // this.possLets = this.alphabetize(row0+row1+row2);
+  this.possLets = this.alphabetize('abcdefghijklmnopqrstuvwxyz');
+  let cm = this.complement('mghtwodsflukba');
+  this.possLets = this.alphabetize(cm);
+ // this.iplets = this.alphabetize('irce');
   this.addFrame();
-  this.wgenTop();
+  //this.wgenTop('b');
+  this.wgen4known('irce');
+  this.tries();
 }
 
 
-rs.initialize = function () {
+rs.tries = function () {
   let abet = 'abcdefghijklmnopqrstuvwxyz';
   debugger;
   //let rbet = this.removeLetters(abet,['stank','would','vicar','grime']);
   //let rbet = this.removeLetters(abet,['stank','would','vicar','beget']);
-  let rbet0 = this.removeLetters(abet,['stank','would','vicar','flesh']);
-  let rbet1 = this.removeLetters(abet,['stank','would','vicar','flesh','blame']);
   this.addFrame();
-  console.log('rbet0',rbet0,'rbet1',rbet1);
+  let rbets = [];
+  let iputs = [];
+  iputs.push(['spent','would','vicar']);
+  iputs.push(['stank','would','vicar']);
+  iputs.push(['stank','would','vicar','flesh']);
+  iputs.push(['stank','would','vicar','flesh','blame']);
+  iputs.push(['might','words','fluke']);
+  iputs.push(['might','words','fluke','brace']);
+  iputs.push(['spent','would','vicar']);
+  let ln = iputs.length;
+  for (let i=0;i<ln;i++) {
+    let iput = iputs[i];
+    let rm = this.removeLetters(abet,iput);
+    console.log('iput',JSON.stringify(iput),'rm',rm);;
+  }
 }
 
  
