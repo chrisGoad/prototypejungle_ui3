@@ -55,61 +55,6 @@ rs.initialize = function () {
 }
 
 
-rs.initialize = function () {
-  debugger;
-  let s0n = 's';
-  let s1n = '';
-  let s2n = '';
-  let s3n = 'a';
-  let s4n = '';
-  this.prohibs = [s0n,s1n,s2n,s3n,s4n];
-  let k0 = null;
-  let k1 = null;
-  let k2 = 'c';
-  let k3 = null;
-  let k4 = null;
-  this.known = [k0,k1,k2,k3,k4];
-  this.plets = 'qtyasofghjkzxcbm';
- // this.plets = 'tyasofghjkcbm';
- // this.plets = 'socat';
-
-  this.addFrame();
-  this.wgenTop();
-}
-
-
-rs.initialize = function () {
-  debugger;
-  let s0n = '';
-  let s1n = 'h';
-  let s2n = '';
-  let s3n = 'a';
-  let s4n = 't';
-  this.dprohibs  = ['jk','kj','bk','kb','jh','hj','mk','bj','jb','qq','qk','kq'];
-  //this.dprohibs  = [];
-  this.prohibs = [s0n,s1n,s2n,s3n,s4n];
-  let k0 = 's';
-  let k1 = null;
-  let k2 = 'a';
-  let k3 = null;
-  let k4 = null;
-  this.known = [k0,k1,k2,k3,k4];
-  /*
-  let row0 = 'qwertyuiop';
-  let row1 = 'asdfghjkl';
-  let row2 = 'zxcvbnm';
-  */
-  let row0 = 't';
-  let row1 = 'ashjk';
- // let row2 = 'zxb';
-  let row2 = 'bxz';
- this.plets = row0+row1+row2
- this.plets = 'abcdefghijklmnopqrstuvwxyz';
- this.plets = 'abhjkqstxz';
-
-  this.addFrame();
-  this.wgenTop();
-}
 
 
 rs.alphabetize =function (str) {
@@ -145,49 +90,33 @@ rs.removeLetters = function (str,lets) {
 }
 
 
- rs.complement = function (letset) {
-   let abet = 'abcdefghijklmnopqrstuvwxyz';
-   let cm = '';
-   let ln = abet.length;
-  for (let i=0;i<ln;i++) {
-    let lt = abet[i];
-    if (letset.indexOf(lt) === -1) {
-      cm = cm+lt;
-    }
-  }
-  return cm;
-}
   
   rs.initialize = function () {
   debugger;
+  // prohibited letters at each position
   let s0n = '';
   let s1n = '';
   let s2n = 'gr';
   let s3n = 'd';
   let s4n = '';
-  this.dprohibs  = ['jk','kj','bk','kb','jh','hj','mk','bj','jb','qq','qk','kq','kh','fz','qp','pq','jl','lj'];
-  //this.dprohibs  = [];
   this.prohibs = [s0n,s1n,s2n,s3n,s4n];
-  let k0 = null;
+
+  // prohibited dipthongs
+  this.dprohibs  = ['jk','kj','bk','kb','jh','hj','mk','bj','jb','qq','qk','kq','kh','fz','qp','pq','jl','lj'];
+  // known letters
+  let k0 = '';
   let k1 = 'r';
-  let k2 = null;
+  let k2 = '';
   let k3 = 'c';
   let k4 = 'e';
   this.known = [k0,k1,k2,k3,k4];
-  let row0 = 'qwertyuiop';
-  row0 = 'qeryuip';
-  let row1 = 'asdfghjkl'
-  row1 = 'adfgjkl'
-  let row2 = 'zxcvbnm';
-  row2 = 'zxcvbn';
- // this.possLets = this.alphabetize(row0+row1+row2);
-  this.possLets = this.alphabetize('abcdefghijklmnopqrstuvwxyz');
   let cm = this.complement('mghtwodsflukba');
+  // possible letters
   this.possLets = this.alphabetize(cm);
- // this.iplets = this.alphabetize('irce');
   this.addFrame();
-  //this.wgenTop('b');
+  //this.wgenTop();
   this.wgen4known('irce');
+ // this.wgenAllknown('ircep');
   this.tries();
 }
 

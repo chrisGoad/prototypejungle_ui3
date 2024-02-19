@@ -18,6 +18,53 @@ let plets = 'onalt';
 let notOk = [s0n,s1n,s2n,s3n,s4n];
 */
 
+
+item.alphabetize =function (str) {
+  let abet = 'abcdefghijklmnopqrstuvwxyz';
+  let abz = '';
+  for (let i=0;i<26;i++) {
+    let x = abet[i];
+    if (str.indexOf(x)>-1) {
+      abz = abz+x;
+    }
+  }
+  return abz;
+}
+
+item.removeLetters = function (str,lets) {
+  let rstr = '';
+  if (typeof lets=== 'string') {
+    let ln = str.length;;
+    for (let i=0;i<ln;i++) {
+      let etr = str[i];
+      if (!(lets.indexOf(etr)>-1)) {
+        rstr = rstr+etr;
+      }
+    }
+  } else {
+    rstr = str;
+    let aln = lets.length;
+    for (let i=0;i<aln;i++) {
+      rstr = this.removeLetters(rstr,lets[i]);
+    }
+  }     
+  return rstr;
+}
+
+ item.complement = function (letset) {
+   let abet = 'abcdefghijklmnopqrstuvwxyz';
+   let cm = this.removeLetters(abet,letset);
+   return cm;
+  // let cm = '';
+   let ln = abet.length;
+  for (let i=0;i<ln;i++) {
+    let lt = abet[i];
+    if (letset.indexOf(lt) === -1) {
+      cm = cm+lt;
+    }
+  }
+  return cm;
+}
 item.wOk = function (str) {
   let dps = this.dprohibs;
   if (str==='aiaaa') {
@@ -78,9 +125,9 @@ item.wgenAll = function (sofar) {
     this.wgenAll(nxt);
   }
 }
-
-item.wgenTop = function (lt,k) {
-  this.plets = lt?k+lt:this.possLets;
+// ak = all known
+item.wgenTop = function (ak,lt,k) {
+  this.plets = ak?k:(lt?k+lt:this.possLets);
   this.wcount = 0;
   this.acount = 0;
   let pln = this.plets.length;
@@ -98,9 +145,15 @@ item.wgen4known = function (k) {
   for (let i=0;i<ln;i++) {
    let lt = possLets[i];
    console.log('CHECK',lt);
-   this.wgenTop(lt,k);
+   this.wgenTop(0,lt,k);
   }
 }
+
+
+item.wgenAllknown = function (k) {
+   this.wgenTop(1,null,k);
+}
+
 
 
 
