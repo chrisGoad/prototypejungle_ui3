@@ -40,9 +40,10 @@ item.blend3 = function (str) {
 }
 
 item.badBlend = function (str) {
-  debugger;
+//  debugger;
+ // return 0;
   let bl = this.blend3(str);
-  let okblends = ['thr','scr','spr','shr','spl','str'];
+  let okblends = ['thr','scr','spr','shr','spl','str','tch'];
   if (okblends.indexOf(bl) > -1) {
     console.log('okblend',bl);
   } else {

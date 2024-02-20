@@ -3,7 +3,8 @@
 module.exports = {
 sections: 
 
-[     [0,'wordle','generators',1,'Wordle',{likes:0,posted:0,category:'drop'}], 
+[     [0,'mutate','generators',1,'mutate',{likes:0,posted:0,category:'drop'}], 
+      [0,'wordle','generators',1,'Wordle',{likes:0,posted:0,category:'drop'}], 
       [0,'CMB','generators',1,'CMB',{likes:0,posted:0,category:'drop'}], 
       [0,'test_ad','generators',1,'test attack',{likes:0,posted:0,category:'drop'}], 
       [0,'test_eye','generators',1,'test eye',{likes:0,posted:0,category:'drop'}], 
