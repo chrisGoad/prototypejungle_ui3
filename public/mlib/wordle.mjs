@@ -43,6 +43,9 @@ item.badBlend = function (str) {
 //  debugger;
  // return 0;
   let bl = this.blend3(str);
+  if (!bl) {
+    return 0;
+  }
   let okblends = ['thr','scr','spr','shr','spl','str','tch'];
   if (okblends.indexOf(bl) > -1) {
     console.log('okblend',bl);
@@ -99,7 +102,7 @@ item.removeLetters = function (str,lets) {
   return cm;
 }
 item.wOk = function (str) {
-  if (this.badBlend(str)) {
+  if (1 && this.badBlend(str)) {
     return 0;
   }
   let dps = this.dprohibs;

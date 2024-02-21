@@ -39,21 +39,21 @@ Object.assign(rs,topParams);
   // prohibited dipthongs
   this.dprohibs  = ['jk','kj','bk','kb','jh','hj','mk','bj','jb','qq','qk','kq','kh','fz','qp','pq','jl','lj'];
   // known letters
-  let k0 = 'm';
+  let k0 = 'b';
   let k1 = '';
   let k2 = '';
-  let k3 = 'c';
+  let k3 = '';
   let k4 = '';
   this.known = [k0,k1,k2,k3,k4];
- // let cm = this.complement('abcdefghijklmnopqrstuvwxyz');
-  let cm = this.complement('achjmnpqtvxyz');
+ //let cm = 'abcdefghijklmnopqrstuvwxyz';
+ let cm = 'bdfijklnpquvy'; // not needed if all 5 letters are known
   // possible letters
   this.possLets = this.alphabetize(cm);
   this.addFrame();
   //this.wgenTop();
-  //this.wgen4known('macht');
-  this.wgenAllknown('macht');
- // this.tries();
+  //this.wgen4known('bidlu');
+  this.wgenAllknown('bidlu');
+  this.tries();
 }
 
 
@@ -71,6 +71,8 @@ rs.tries = function () {
   iputs.push(['stank','would','vicar','flesh','blame']);
   iputs.push(['might','words','fluke']);
   iputs.push(['might','words','fluke','brace']);
+  iputs.push(['crane','sloth','fluid']);
+  iputs.push(['crane','sloth','fluid','bagle']);
   iputs.push(['spent','would','vicar']);
   let ln = iputs.length;
   for (let i=0;i<ln;i++) {
@@ -94,7 +96,7 @@ rs.tries = function () {
 
 /* the data structure
 {segs0,segs1,ints, intsBySeg0,intsBySeg1 } where each int has the form has the form {point,segNum0,segNum1} where the point is the intersection
-*/ of the two given segs, one from pgon0 the other from pgon1
+of the two given segs, one from pgon0 the other from pgon1 */
 rs.lineSegsOfPgon = function (pgon) {
   let ln = pgon.length;
   let segs = [];
@@ -150,7 +152,7 @@ rs.insidePgon = function (p,segs) {
     }
   }
   return 1;
-    
+}   
     
 
   
@@ -167,7 +169,6 @@ rs.intersectionsOfSegsWithSegs = function (segs0,segs1) {
     
       
 rs.intersectPolygons = function (pgon0,pgon1) {
-  let ln0=pgon0.length;
   let segs0 = this.lineSegsOfPgon(pgon0);
   let segs1 = this.lineSegsOfPgon(pgon1);
   let ln0 = segs0.length;

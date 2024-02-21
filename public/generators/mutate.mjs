@@ -58,37 +58,37 @@ rs.configureLines = function (params) {
     let left = -right;
     let e0,e1;
     
-    let ul = lines[0];
+    let ul = lines[index+0];
     e0 = Point.mk(left,top);
     e1 = Point.mk(-hsep,top);
     ul.setEnds(e0,e1);
     ul.update();
     
-    let ur = lines[1];
+    let ur = lines[index+1];
     e0 = Point.mk(hsep,top);
     e1 = Point.mk(right,top);
     ur.setEnds(e0,e1);
     ur.update();
      
-    let ml = lines[2];
+    let ml = lines[index+2];
     e0 = Point.mk(left,0);
     e1 = Point.mk(-hsep,0);
     ml.setEnds(e0,e1);
     ml.update();
     
-    let mr = lines[3];
+    let mr = lines[index+3];
     e0 = Point.mk(hsep,0);
     e1 = Point.mk(right,0);
     mr.setEnds(e0,e1);
     mr.update(); 
     
-    let ll = lines[4];
+    let ll = lines[index+4];
     e0 = Point.mk(left,bot);
     e1 = Point.mk(-hsep,bot);
     ll.setEnds(e0,e1);
     ll.update();
     
-    let lr = lines[5];
+    let lr = lines[index+5];
     e0 = Point.mk(hsep,bot);
     e1 = Point.mk(right,bot);
     lr.setEnds(e0,e1);
@@ -101,34 +101,34 @@ rs.configureLines = function (params) {
     let left = -d;
     let right = d;
     let e0,e1;
-    let ul = lines[0];
+    let ul = lines[index+0];
     let ule0 = Point.mk(left,top);
     let ule1 = Point.mk(left,-hsep);
     ul.setEnds(ule0,ule1);
     ul.update();
-    let um = lines[1];
+    let um = lines[index+1];
     let ume0 = Point.mk(0,top);
     let ume1 = Point.mk(0,-hsep);
     um.setEnds(ume0,ume1);
     um.update();
-    let ur = lines[2];
+    let ur = lines[index+2];
     let ure0 = Point.mk(right,top);
     let ure1 = Point.mk(right,-hsep);
     ur.setEnds(ure0,ure1);
     ur.update();
     
     
-    let ll = lines[3];
+    let ll = lines[index+3];
     let lle0 = Point.mk(left,hsep);
     let lle1 = Point.mk(left,bot);
     ll.setEnds(lle0,lle1);
     ul.update();
-    let lm = lines[4];
+    let lm = lines[index+4];
     let lme0 = Point.mk(0,hsep);
     let lme1 = Point.mk(0,bot);
     lm.setEnds(lme0,lme1);
     lm.update();
-    let lr = lines[5];
+    let lr = lines[index+5];
     let lre0 = Point.mk(right,hsep);
     let lre1 = Point.mk(right,bot);
     lr.setEnds(lre0,lre1);
@@ -142,11 +142,19 @@ rs.initialize = function () {
   this.initProtos();
   let lines = this.set('lines',arrayShape.mk());
   this.addLines(12);
-  let params0= {index:0,center:Point.mk(0,0),horizontal:0,lineLength:10,lineSep:2,lineDist:5};
-  this.configureLines(params0);
-  let params1= {index:6,center:Point.mk(0,0),horizontal:1,lineLength:10,lineSep:2,lineDist:5};
-  this.configureLines(params0);
- 
+  let params0,params1;
+  const clines  = ()=>{
+    this.configureLines(params0);
+    this.configureLines(params1);
+  }
+  params0= {index:0,center:Point.mk(0,0),horizontal:0,lineLength:10,lineSep:2,lineDist:5};
+  params1= {index:6,center:Point.mk(0,0),horizontal:1,lineLength:10,lineSep:0,lineDist:12};
+  clines();
+  
+  params0= {index:0,center:Point.mk(0,0),horizontal:0,lineLength:10,lineSep:0,lineDist:12};
+  params1= {index:6,center:Point.mk(0,0),horizontal:1,lineLength:10,lineSep:2,lineDist:6};
+  //clines();
+
 }
 
 
