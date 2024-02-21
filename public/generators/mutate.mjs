@@ -9,10 +9,10 @@ addAnimationMethods(rs);
 
 
 rs.setName('mutate');
-let ht=50;
+let ht=25;
 
 
-let topParams = {width:ht,height:ht,angleOffset:0*Math.PI/10,framePadding:-0.1*ht,frameStroke:'white',frameStrokeWidth:.2,
+let topParams = {width:ht,height:ht,angleOffset:0*Math.PI/10,framePadding:.1*ht,frameStroke:'white',frameStrokeWidth:.2,
 timePerStep:1/(16*32),stopTime:1,recordingMotion:1,saveAnimation:1,distanceThreshold:3,
     circleRadius:.2,nearestFadeFactor:20,shapesPerPath:200,speed:1,segsPerCircle:20,radius:.4*ht,numSlices:8,bendRadius:1.5};
 
@@ -155,6 +155,7 @@ rs.initialize = function () {
   let numSteps = this.numSteps = 128;
   this.pauseSteps = numSteps/2;
   this.initProtos();
+  this.addFrame();
   let lines = this.set('lines',arrayShape.mk());
   this.addLines(12);
   let paramsv = this.paramsv=[];
@@ -167,7 +168,8 @@ rs.initialize = function () {
   paramsh.push({index:6,center:Point.mk(0,0),horizontal:1,lineLength:8,lineSep:4,lineDist:12});
   
   paramsv.push({index:0,center:Point.mk(0,0),horizontal:0,lineLength:10,lineSep:0,lineDist:12});
-  paramsh.push({index:6,center:Point.mk(0,0),horizontal:1,lineLength:8,lineSep:4,lineDist:6});
+ // paramsh.push({index:6,center:Point.mk(0,0),horizontal:1,lineLength:8,lineSep:4,lineDist:6});
+  paramsh.push({index:6,center:Point.mk(0,0),horizontal:1,lineLength:10,lineSep:2,lineDist:5});
   this.clines(0,1,0);
 
 }
