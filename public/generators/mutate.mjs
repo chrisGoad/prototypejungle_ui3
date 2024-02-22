@@ -251,7 +251,64 @@ rs.clinesForGrid = function (fromKey,toKey,fr) {
     }
   }
  }
-      
+
+rs.setCellState = function (i,j) {
+  let {gridParamsArrays:gpa,numSteps,stepsSoFar:issf,pauseSteps:ps} = this;
+  let oi = (i)%2;
+ // let ssf = oi?issf:(issf+64)%numSteps;
+  let cycleSteps = numSteps;
+  let ssf = (issf+i+j)%numSteps;
+  let idx = this.gridCellIndex(i,j);
+  let paramsA = gpa[idx];
+  let cyssf = ssf%cycleSteps;
+  if (ssf === 10) {
+    //this.paused = 1;
+  }
+ // let ups = numSteps-ps;
+  let ups = cycleSteps;
+  let hups = ups/2;
+  let hps = ps/2;
+  let iv0 = [0,hps];//pause
+  let iv1 = [hps,hps+hups]; 
+  let iv2 = [hps+hups,ps+hups];//pause
+  let iv3 = [ps+hups,ps+ups];
+  const inInterval = (v,iv) => {
+    return (iv[0]<=v) && (v <= iv[1]);
+  }
+   const fractionThruInterval = (v,iv) => {
+    return (v-iv[0])/(iv[1]-iv[0]);
+  }
+ /* if (inInterval(ssf,iv0) || inInterval(ssf,iv2)) {
+    return;
+  }*/
+  if (inInterval(cyssf,iv1)) {
+    let fr = fractionThruInterval(cyssf,iv1);
+    console.log('iv1','fr',fr);
+    if (fr <0.5) {
+      this.clines(paramsA,'initial','middle',2*fr);
+    } else {
+      this.clines(paramsA,'middle','final',2*(fr-0.5));
+    }    
+  }
+  if (inInterval(ssf,iv3)) {
+    let fr = fractionThruInterval(cyssf,iv3);
+    if (fr <0.5) {
+      this.clines(paramsA,'final','middle',2*fr);
+    } else {
+      this.clines(paramsA,'middle','initial',2*(fr-0.5));
+    }    
+   
+  }
+}
+
+rs.setCellStates = function () {
+  let {numRows:nr,numCols:nc} = this;
+  for (let i=0;i<nr;i++) {
+    for (let j=0;j<nr;j++) {
+      this.setCellState(i,j);
+    }
+  }
+}
 
 rs.initialize = function () {
   debugger; 
@@ -288,13 +345,16 @@ rs.initialize = function () {
   paramsh.push({index:6,center:Point.mk(0,0),horizontal:1,lineLength:10,lineSep:2,lineDist:5});
   this.clines(0,1,0);*/
   //this.clines(paramsA,'initial','middle',0);
-  this.clinesForGrid('initial','middle',0);
+  this.setCellStates();
+ //this.clinesForGrid('initial','middle',0);
 
 }
 
-
-
 rs.updateState = function () {
+  this.setCellStates();
+}
+
+rs.updateStatee = function () {
   let {numSteps,stepsSoFar:ssf,pauseSteps:ps,paramsA} = this;
 //  debugger;
   console.log('ssf',ssf);
@@ -309,13 +369,11 @@ rs.updateState = function () {
   let iv2 = [hps+hups,ps+hups];//pause
   let iv3 = [ps+hups,ps+ups];
   const inInterval = (v,iv) => {
-    return (iv[0]<v) && (v <= iv[1]);
+    return (iv[0]<=v) && (v <= iv[1]);
   }
    const fractionThruInterval = (v,iv) => {
     return (v-iv[0])/(iv[1]-iv[0]);
   }
-  
-  
   if (inInterval(ssf,iv0) || inInterval(ssf,iv2)) {
     return;
   }
@@ -346,23 +404,7 @@ rs.updateState = function () {
    
   }
 }
-/*
-  if  ((ssf>(hups+hps))&& (ssf < (ups + hps))) {
-    return;
-  }    
-  if (fr<0.25) {
-    
-    this.clines(0,1,fr*4);
-  } else if (fr<.5) {
-    this.clines(1,2,(fr-0.25)*4);
-  } else if (fr<0.75) {
-    this.clines(2,1,(fr-0.5)*4);
-  } else  {
-    this.clines(1,0,(fr-0.75)*4);
-  }
-}
-  
-*/
+
 
  
 export {rs};
