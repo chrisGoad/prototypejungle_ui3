@@ -50,7 +50,7 @@ item.badBlend = function (str) {
   if (okblends.indexOf(bl) > -1) {
     console.log('okblend',bl);
   } else {
-    console.log('badblend',bl);
+   // console.log('badblend',bl);
     return 1;
   }
 }    
@@ -178,7 +178,6 @@ item.wgenTop = function (ak,lt,k) {
 }
 
 item.wgen4known = function (k) {
- 
   let {possLets} = this;
   let ln = possLets.length;
   for (let i=0;i<ln;i++) {
@@ -187,6 +186,18 @@ item.wgen4known = function (k) {
    this.wgenTop(0,lt,k);
   }
 }
+
+item.wgen3known = function (k) {
+  let {possLets:plets} = this;
+  let ln = plets.length;
+  for (let i=0;i<ln;i++) {
+    let v = plets[i];
+    console.log('PLET '+v+v+v);
+    this.wgen4known(v+k);
+  };
+  console.log(this.possibles);
+}
+  
 
 
 item.wgenAllknown = function (k) {

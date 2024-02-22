@@ -39,21 +39,26 @@ Object.assign(rs,topParams);
   // prohibited dipthongs
   this.dprohibs  = ['jk','kj','bk','kb','jh','hj','mk','bj','jb','qq','qk','kq','kh','fz','qp','pq','jl','lj'];
   // known letters
-  let k0 = 'b';
+  let k0 = '';
   let k1 = '';
-  let k2 = '';
+  let k2 = 'a';
   let k3 = '';
   let k4 = '';
   this.known = [k0,k1,k2,k3,k4];
  //let cm = 'abcdefghijklmnopqrstuvwxyz';
- let cm = 'bdfijklnpquvy'; // not needed if all 5 letters are known
+ let cm = 'ehjnpqvxyz';
+ cm = 'ehjnpqvy';
+ //let cm = 'aehjnpqvxyz';
+ //let cm = 'aehjnp';
+ //let cm = 'aeh';
   // possible letters
   this.possLets = this.alphabetize(cm);
   this.addFrame();
   //this.wgenTop();
-  //this.wgen4known('bidlu');
-  this.wgenAllknown('bidlu');
-  this.tries();
+  //this.wgen3known('ahe');
+  this.wgen4known('vahe');
+ // this.wgenAllknown('bidlu');
+  //this.tries();
 }
 
 
