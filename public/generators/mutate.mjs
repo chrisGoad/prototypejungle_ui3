@@ -10,7 +10,8 @@ addAnimationMethods(rs);
 
 rs.setName('mutate');
 let ht=25;
-let nr = 2;
+ht=100;;
+let nr = 8;
 
 let topParams = {numRows:nr,numCols:nr,width:ht,height:ht,angleOffset:0*Math.PI/10,framePadding:.1*ht,frameStroke:'white',frameStrokeWidth:.2,
 timePerStep:1/(16*32),stopTime:1,recordingMotion:1,saveAnimation:1,distanceThreshold:3,
@@ -25,7 +26,7 @@ Object.assign(rs,topParams);
 rs.initProtos = function () {
   let lineP = this.lineP = linePP.instantiate();
   lineP.stroke = 'white';
-  lineP['stroke-width'] = .1;
+  lineP['stroke-width'] = .2;
   let polylineP = this.polylineP = polylinePP.instantiate();
   polylineP.stroke = 'white';
   polylineP['stroke-width'] = .4; 
@@ -43,8 +44,8 @@ rs.addLines = function (n) {
 
 rs.addLinesForGrid = function (n) {
   let {numRows:nr,numCols:nc} = this;
-  for (i=0;i<nr;i++) {
-    for (j=0;j<nc;j++){
+  for (let i=0;i<nr;i++) {
+    for (let j=0;j<nc;j++){
       this.addLines(n);
     }
   }
@@ -54,8 +55,8 @@ rs.gridCellCenter = function (i,j) {
   let {width:wd,height:ht,numRows:nr,numCols:nc} = this;
   let deltaX = wd/nr;
   let deltaY = ht/nc;
-  let minX = -wd/2;
-  let minY = -ht/2;
+  let minX = deltaX/2-wd/2;
+  let minY = deltaY/2-ht/2;
   let x = minX+i*deltaX;
   let y = minY+j*deltaY;
   let c = Point.mk(x,y);
@@ -68,15 +69,50 @@ rs.gridCellIndex = function (i,j) {
   return idx;
 }
 
-//The params array (paramsA) is of length 6 and contains initial params h and v, middle params h and v, end params h and v
-rs.buildParamsArraysForGridCell = function (i,j,paramsA) {
+//The params arra (paramsA) is of length 6 and contains initial params h and v, middle params h and v, final params h and v
+rs.adjustParamsAforGridCell = function (i,j,paramsA) {
   let c = this.gridCellCenter(i,j);
-  let idx = this.gridCellIndex(i,j)*6;
+  let idx = this.gridCellIndex(i,j)*12;
   paramsA.forEach((pa) => {
+    let h =pa.horizontal;
     pa.center = c;
-    pa.index = idx;
+    pa.index = idx+(h?0:6);
   });
+  return paramsA;
 }
+
+// each
+rs.buildParamsAforGrid = function (paramsAtemplate) {
+  let {numRows:nr,numCols:nc} = this;
+  let gpa = this.gridParamsArrays = [];
+  for (let i=0;i<nc;i++) {
+    for (let j=0;j<nr;j++) {
+      let paramsA = [];
+      for (let k=0;k<6;k++) {
+        let params = paramsAtemplate[k];
+        let nparams = {};
+        Object.assign(nparams,params);
+        paramsA.push(nparams);
+      }
+      this.adjustParamsAforGridCell(i,j,paramsA)
+      gpa.push(paramsA);
+    }
+  }
+  return gpa;
+}
+
+rs.paramsAselect = function (paramsA,k) {
+  if (k==='initial') {
+    return [paramsA[0],paramsA[1]];
+  }
+  if (k==='middle') {
+    return [paramsA[2],paramsA[3]];
+  }
+  if (k==='final') {
+    return [paramsA[4],paramsA[5]];
+  }
+}
+
   
   
   
@@ -138,6 +174,9 @@ rs.configureLines = function (params) {
     let e0,e1;
     
     let ul = lines[index+0];
+    if (!ul) {
+      debugger;
+    }
     e0 = Point.mk(left,top).plus(center);
     e1 = Point.mk(left,-hsep).plus(center);
     ul.setEnds(e0,e1);
@@ -178,8 +217,9 @@ rs.configureLines = function (params) {
 
 rs.clines =  function (n0,n1,fr) {
   let {paramsv,paramsh} = this;
+  let paramshi = this.interpolate(paramsA[n0],paramsA[n1],fr);
   let paramsvi = this.interpolate(paramsv[n0],paramsv[n1],fr);
-  let paramshi = this.interpolate(paramsh[n0],paramsh[n1],fr);
+
   paramsvi.index=0;
   paramshi.index=6;
   this.configureLines(paramsvi);
@@ -187,17 +227,56 @@ rs.clines =  function (n0,n1,fr) {
   }
 
 
+rs.clines =  function (paramsA,fromKey,toKey,fr) {
+  let fromParams = this.paramsAselect(paramsA,fromKey);
+  let toParams = this.paramsAselect(paramsA,toKey);
+  let indh  =  fromParams[0].index;
+  let indv  =  fromParams[1].index;
+  let paramshi = this.interpolate(fromParams[0],toParams[0],fr);
+  let paramsvi = this.interpolate(fromParams[1],toParams[1],fr);
+
+  paramshi.index=indh;
+  paramsvi.index=indv;
+  this.configureLines(paramsvi);
+  this.configureLines(paramshi);
+}
+
+rs.clinesForGrid = function (fromKey,toKey,fr) {
+  let {numRows:nr,numCols:nc,gridParamsArrays:gps} = this;
+  for (let i=0;i<nr;i++) {
+    for (let j=0;j<nc;j++) {
+      let idx = this.gridCellIndex(i,j);
+      let paramsA = gps[idx];
+      this.clines(paramsA,fromKey,toKey,fr);
+    }
+  }
+ }
+      
+
 rs.initialize = function () {
   debugger; 
   let numSteps = this.numSteps = 128;
-  this.pauseSteps = numSteps/2;
+  this.pauseSteps = 0;//numSteps/8;
   this.initProtos();
   this.addFrame();
   let lines = this.set('lines',arrayShape.mk());
-  this.addLines(12);
+  //this.addLines(12);
+  this.addLinesForGrid(12);
+  let paramsA =this.paramsA =[];
+   paramsA.push({index:6,center:Point.mk(0,0),horizontal:1,lineLength:10,lineSep:0,lineDist:12});
+   paramsA.push({index:0,center:Point.mk(0,0),horizontal:0,lineLength:10,lineSep:2,lineDist:5});;
+ 
+  paramsA.push({index:6,center:Point.mk(0,0),horizontal:1,lineLength:8,lineSep:4,lineDist:12});
+  paramsA.push({index:0,center:Point.mk(0,0),horizontal:0,lineLength:10,lineSep:0,lineDist:12});
+  
+ 
+  paramsA.push({index:6,center:Point.mk(0,0),horizontal:1,lineLength:10,lineSep:2,lineDist:5}); 
+  paramsA.push({index:0,center:Point.mk(0,0),horizontal:0,lineLength:10,lineSep:0,lineDist:12});
+  this.buildParamsAforGrid(paramsA);
+  /*
   let paramsv = this.paramsv=[];
   let paramsh = this.paramsh=[];
-  //0
+ 
   paramsv.push({index:0,center:Point.mk(0,0),horizontal:0,lineLength:10,lineSep:2,lineDist:5});;
   paramsh.push({index:6,center:Point.mk(0,0),horizontal:1,lineLength:10,lineSep:0,lineDist:12});
   
@@ -207,13 +286,17 @@ rs.initialize = function () {
   paramsv.push({index:0,center:Point.mk(0,0),horizontal:0,lineLength:10,lineSep:0,lineDist:12});
  // paramsh.push({index:6,center:Point.mk(0,0),horizontal:1,lineLength:8,lineSep:4,lineDist:6});
   paramsh.push({index:6,center:Point.mk(0,0),horizontal:1,lineLength:10,lineSep:2,lineDist:5});
-  this.clines(0,1,0);
+  this.clines(0,1,0);*/
+  //this.clines(paramsA,'initial','middle',0);
+  this.clinesForGrid('initial','middle',0);
 
 }
 
+
+
 rs.updateState = function () {
-  let {numSteps,stepsSoFar:ssf,pauseSteps:ps} = this;
-  debugger;
+  let {numSteps,stepsSoFar:ssf,pauseSteps:ps,paramsA} = this;
+//  debugger;
   console.log('ssf',ssf);
   if (ssf === 10) {
     //this.paused = 1;
@@ -240,17 +323,25 @@ rs.updateState = function () {
     let fr = fractionThruInterval(ssf,iv1);
     console.log('iv1','fr',fr);
     if (fr <0.5) {
-      this.clines(0,1,2*fr);
+      //this.clines(0,1,2*fr);
+      this.clines(paramsA,'initial','middle',2*fr);
+      this.clinesForGrid('initial','middle',2*fr);
     } else {
-      this.clines(1,2,2*(fr-0.5));
+     // this.clines(1,2,2*(fr-0.5));
+      //this.clines(paramsA,'middle','final',2*(fr-0.5));
+      this.clinesForGrid('middle','final',2*(fr-0.5));
     }    
   }
   if (inInterval(ssf,iv3)) {
     let fr = fractionThruInterval(ssf,iv3);
     if (fr <0.5) {
-      this.clines(2,1,2*fr);
+      //this.clines(2,1,2*fr);
+     // this.clines(paramsA,'final','middle',2*fr);
+      this.clinesForGrid('final','middle',2*fr);
     } else {
-      this.clines(1,0,2*(fr-0.5));
+     // this.clines(1,0,2*(fr-0.5));
+      //this.clines(paramsA,'middle','initial',2*(fr-0.5));
+      this.clinesForGrid('middle','initial',2*(fr-0.5));
     }    
    
   }
