@@ -21,6 +21,18 @@ let notOk = [s0n,s1n,s2n,s3n,s4n];
 
 item.vowels = 'aeiouy';
 
+item.removeDups = function (str) {
+  let rd = '';
+  let ln = str.length;
+  for (let i=0;i<ln;i++) {
+    let lt = str[i];
+    if (rd.indexOf(lt)===-1) {
+      rd = rd+lt;
+    }
+  }
+  return rd;
+}
+
 item.blend3 = function (str) {
   let vowels = 'aeiouy';
   for (let i=0;i<3;i++) {
@@ -48,7 +60,8 @@ item.badBlend = function (str) {
   }
   let okblends = ['thr','scr','spr','shr','spl','str','tch'];
   if (okblends.indexOf(bl) > -1) {
-    console.log('okblend',bl);
+   // console.log('okblend',bl);
+   
   } else {
    // console.log('badblend',bl);
     return 1;
@@ -105,6 +118,19 @@ item.wOk = function (str) {
   if (1 && this.badBlend(str)) {
     return 0;
   }
+  let ln = str.length;
+  if (ln === 5) {
+    let mlets = this.mandatory;
+    if (mlets) {
+      let mln = mlets.length;
+      for (let i=0;i<mln;i++) {
+        let lt = mlets[i];
+        if (str.indexOf(lt) === -1) {
+          return 0;
+        }
+      }
+    }
+  }
   let dps = this.dprohibs;
   if (str==='aiaaa') {
     debugger;
@@ -137,65 +163,82 @@ item.wgenAll = function (sofar) {
   if (this.acount > 10000000) {
     return;
   }
-  let noDups = this.noDups;
-  let plets = this.plets;
-  let pln = plets.length;
+  let {noDups,plets,dupsRemoved:dr} = this;
+ 
+  let drln = dr.length;
   let ln = sofar.length;
   if (ln === 5) {
    //console.log('check',sofar);
-    if (sofar === 'ascot') {
+    if (sofar === 'apart') {
        debugger;
     }
     if (this.wOk(sofar)) {
-      console.log(this.acount,'ok',sofar);
+     // console.log(this.acount,'ok',sofar);
       this.possibles.push(sofar);
       this.wcount++;
     }
     return;
   }
-  for (let i=0;i<pln;i++) {
+  for (let i=0;i<drln;i++) {
    // console.log(this.acount,'sfln',sfln,'i',i);
     this.acount++;
-    let plet = plets[i];
-    if (noDups && (sofar.indexOf(plet) > -1)) {
+    let lt = dr[i];
+    if (noDups && (sofar.indexOf(lt) > -1)) {
       continue;
     }
-    let nxt = sofar+plet;
+    let nxt = sofar+lt;
     this.wgenAll(nxt);
   }
 }
 // ak = all known
 item.wgenTop = function (ak,lt,k) {
-  this.plets = ak?k:(lt?k+lt:this.possLets);
+  let plets = this.plets = ak?k:(lt?k+lt:this.possLets);
+ // debugger;
   this.wcount = 0;
   this.acount = 0;
-  let pln = this.plets.length;
-  this.noDups = (pln === 5);
+  let rd = this.removeDups(plets);
+  this.dupsRemoved = rd;
+  let pln = plets.length;
+  if (pln === 5) {
+    this.mandatory = rd;
+  }
+  //this.noDups = (pln === 5);
+  this.noDups = 0;
   let possibles = this.possibles = [];
   this.wgenAll('');
-  console.log('possibles',possibles);
-  console.log('count',possibles.length);
+  //console.log('possibles',possibles);
+  //console.log('count',possibles.length);
 }
 
 item.wgen4known = function (k) {
   let {possLets} = this;
+  console.log('possLets',possLets);
   let ln = possLets.length;
   for (let i=0;i<ln;i++) {
-   let lt = possLets[i];
-   console.log('CHECK',lt);
-   this.wgenTop(0,lt,k);
+    let lt = possLets[i];
+    if (lt === 'p') {
+      debugger;
+    }
+    console.log('CHECK',lt);
+ //   this.known[0] = lt;
+    this.wgenTop(0,lt,k);
+    let posb=this.possibles;
+    if (posb.length) {
+      console.log(posb);
+    }
   }
 }
 
 item.wgen3known = function (k) {
   let {possLets:plets} = this;
+  console.log('possLets',plets);
   let ln = plets.length;
   for (let i=0;i<ln;i++) {
     let v = plets[i];
-    console.log('PLET '+v+v+v);
+    console.log('TOP CHECK',v);
     this.wgen4known(v+k);
   };
-  console.log(this.possibles);
+ // console.log(this.possibles);
 }
   
 

@@ -37,17 +37,18 @@ Object.assign(rs,topParams);
   this.prohibs = [s0n,s1n,s2n,s3n,s4n];
 
   // prohibited dipthongs
-  this.dprohibs  = ['jk','kj','bk','kb','jh','hj','mk','bj','jb','qq','qk','kq','kh','fz','qp','pq','jl','lj'];
+  this.dprohibs  = [];// ['jk','kj','bk','kb','jh','hj','mk','bj','jb','qq','qk','kq','kh','fz','qp','pq','jl','lj'];
   // known letters
   let k0 = '';
   let k1 = '';
   let k2 = 'a';
   let k3 = '';
-  let k4 = '';
+  let k4 = 't';
   this.known = [k0,k1,k2,k3,k4];
- //let cm = 'abcdefghijklmnopqrstuvwxyz';
- let cm = 'ehjnpqvxyz';
- cm = 'ehjnpqvy';
+  //let cm= 'abcdefghijklmnopqrstuvwxyz';
+  let cm = this.complement('mighwodsflukebc');
+// let cm = 'ehjnpqvxyz';
+ // cm = 'ehjnpqvy';
  //let cm = 'aehjnpqvxyz';
  //let cm = 'aehjnp';
  //let cm = 'aeh';
@@ -55,8 +56,11 @@ Object.assign(rs,topParams);
   this.possLets = this.alphabetize(cm);
   this.addFrame();
   //this.wgenTop();
-  //this.wgen3known('ahe');
-  this.wgen4known('vahe');
+  this.wgen3known('art');
+ // return;
+ // let tc = cm[4];
+ // console.log('TOP CHECK',tc);
+ //this.wgen4known('part');
  // this.wgenAllknown('bidlu');
   //this.tries();
 }

@@ -11,7 +11,7 @@ addAnimationMethods(rs);
 rs.setName('mutate');
 let ht=25;
 ht=100;;
-let nr = 8;
+let nr = 16;
 
 let topParams = {numRows:nr,numCols:nr,width:ht,height:ht,angleOffset:0*Math.PI/10,framePadding:.1*ht,frameStroke:'white',frameStrokeWidth:.2,
 timePerStep:1/(16*32),stopTime:1,recordingMotion:1,saveAnimation:1,distanceThreshold:3,
