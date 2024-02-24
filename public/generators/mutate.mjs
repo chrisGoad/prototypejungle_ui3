@@ -12,7 +12,7 @@ rs.setName('mutate');
 let ht=25;
 ht=100;;
 let nr = 16;
-
+//nr=8;
 let topParams = {numRows:nr,numCols:nr,width:ht,height:ht,angleOffset:0*Math.PI/10,framePadding:.1*ht,frameStroke:'white',frameStrokeWidth:.2,
 timePerStep:1/(16*32),stopTime:1,recordingMotion:1,saveAnimation:1,distanceThreshold:3,
     circleRadius:.2,nearestFadeFactor:20,shapesPerPath:200,speed:1,segsPerCircle:20,radius:.4*ht,numSlices:8,bendRadius:1.5};
@@ -57,8 +57,8 @@ rs.gridCellCenter = function (i,j) {
   let deltaY = ht/nc;
   let minX = deltaX/2-wd/2;
   let minY = deltaY/2-ht/2;
-  let x = minX+i*deltaX;
-  let y = minY+j*deltaY;
+  let y = minX+i*deltaX;
+  let x = minY+j*deltaY;
   let c = Point.mk(x,y);
   return c;
 }
@@ -214,7 +214,7 @@ rs.configureLines = function (params) {
     lr.update();
   }
 }
-
+/*
 rs.clines =  function (n0,n1,fr) {
   let {paramsv,paramsh} = this;
   let paramshi = this.interpolate(paramsA[n0],paramsA[n1],fr);
@@ -225,7 +225,7 @@ rs.clines =  function (n0,n1,fr) {
   this.configureLines(paramsvi);
   this.configureLines(paramshi);
   }
-
+*/
 
 rs.clines =  function (paramsA,fromKey,toKey,fr) {
   let fromParams = this.paramsAselect(paramsA,fromKey);
@@ -240,7 +240,7 @@ rs.clines =  function (paramsA,fromKey,toKey,fr) {
   this.configureLines(paramsvi);
   this.configureLines(paramshi);
 }
-
+/*
 rs.clinesForGrid = function (fromKey,toKey,fr) {
   let {numRows:nr,numCols:nc,gridParamsArrays:gps} = this;
   for (let i=0;i<nr;i++) {
@@ -251,13 +251,33 @@ rs.clinesForGrid = function (fromKey,toKey,fr) {
     }
   }
  }
+*/
+rs.speedFun = function (i,j,issf) {
+  let {numSteps,stepsSoFar:ssf} = this;
+  let mssf = Math.floor(.5+(i+j)/nr)*ssf%numSteps;
+  return mssf;
+}
+rs.speedFun = function (i,j,issf) {
+  let {numSteps,stepsSoFar:ssf} = this;
+  let mssf = (issf+i+j)%numSteps;
+  return mssf;
+}
 
 rs.setCellState = function (i,j) {
-  let {gridParamsArrays:gpa,numSteps,stepsSoFar:issf,pauseSteps:ps} = this;
+  let {gridParamsArrays:gpa,numSteps,stepsSoFar:issf,pauseSteps:ps,numRows:nr} = this;
+ 
   let oi = (i)%2;
+  oi = (i)>8;
  // let ssf = oi?issf:(issf+64)%numSteps;
   let cycleSteps = numSteps;
-  let ssf = (issf+i+j)%numSteps;
+  //let ssf = (issf+i+j)%numSteps;
+  //let ssf = (oi?Math.floor(issf*.5):issf)%numSteps;
+ // let ssf = Math.floor(.5+(i+j)/nr)*issf%numSteps;
+  let ssf = this.speedFun(i,j);
+   if ((j===0)&&(i<2)) {
+    console.log('oi',oi,'issf',issf,'ssf',ssf);
+    debugger;
+  }
   let idx = this.gridCellIndex(i,j);
   let paramsA = gpa[idx];
   let cyssf = ssf%cycleSteps;
@@ -283,14 +303,14 @@ rs.setCellState = function (i,j) {
   }*/
   if (inInterval(cyssf,iv1)) {
     let fr = fractionThruInterval(cyssf,iv1);
-    console.log('iv1','fr',fr);
+    //console.log('iv1','fr',fr);
     if (fr <0.5) {
       this.clines(paramsA,'initial','middle',2*fr);
     } else {
       this.clines(paramsA,'middle','final',2*(fr-0.5));
     }    
   }
-  if (inInterval(ssf,iv3)) {
+  if (inInterval(cyssf,iv3)) {
     let fr = fractionThruInterval(cyssf,iv3);
     if (fr <0.5) {
       this.clines(paramsA,'final','middle',2*fr);
