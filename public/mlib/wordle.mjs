@@ -163,7 +163,12 @@ item.wgenAll = function (sofar) {
   if (this.acount > 10000000) {
     return;
   }
-  let {noDups,plets,dupsRemoved:dr} = this;
+  if (sofar === 'pipe') {
+    debugger;
+  }
+  //let {noDups,possLets:plets,dupsRemoved:dr} = this;
+  let {noDups,possLets:plets,possibles5:p5} = this;
+  let dr = this.removeDups(plets);
  
   let drln = dr.length;
   let ln = sofar.length;
@@ -174,11 +179,12 @@ item.wgenAll = function (sofar) {
     }
     if (this.wOk(sofar)) {
      // console.log(this.acount,'ok',sofar);
-      this.possibles.push(sofar);
+      this.possibles5.push(sofar);
       this.wcount++;
     }
     return;
   }
+  let lnp5 = p5.length;
   for (let i=0;i<drln;i++) {
    // console.log(this.acount,'sfln',sfln,'i',i);
     this.acount++;
@@ -189,9 +195,14 @@ item.wgenAll = function (sofar) {
     let nxt = sofar+lt;
     this.wgenAll(nxt);
   }
+  let nlnp5 = p5.length;
+  if ((ln === 4) && (nlnp5>lnp5)) {
+    this.possibles4.push(sofar);
+  }
 }
 // ak = all known
 item.wgenTop = function (ak,lt,k) {
+  let {showPossibles4:p4} = this;
   let plets = this.plets = ak?k:(lt?k+lt:this.possLets);
  // debugger;
   this.wcount = 0;
@@ -204,28 +215,48 @@ item.wgenTop = function (ak,lt,k) {
   }
   //this.noDups = (pln === 5);
   this.noDups = 0;
-  let possibles = this.possibles = [];
+  let possibles4 = this.possibles4 = [];
+  let possibles5 = this.possibles5 = [];
+  debugger;
   this.wgenAll('');
+  let posb=p4?this.possibles4:possibles5;
+  if (posb.length===1) {
+    debugger;
+  }
+  if (posb.length>0) {
+    console.log(this.checkStr);
+    console.log('posb',posb);
+    debugger;
+  }
   //console.log('possibles',possibles);
   //console.log('count',possibles.length);
 }
 
+item.wgenffk = function (f4) {//first four known
+  let {possLets} = this;
+  let ln = possLets.length;
+  for (let i=0;i<ln;i++) { 
+    let lt = possLets[i];
+    let pw = f4+lt;
+    if (this.wOk(pw)) {
+      console.log('pw',pw);
+    }
+  }
+}
 item.wgen4known = function (k) {
   let {possLets} = this;
   console.log('possLets',possLets);
+ 
   let ln = possLets.length;
   for (let i=0;i<ln;i++) {
     let lt = possLets[i];
     if (lt === 'p') {
-      debugger;
+     // debugger;
     }
-    console.log('CHECK',lt);
+    this.checkStr = 'CHECK '+lt;
+    //console.log('CHECK',lt);
  //   this.known[0] = lt;
     this.wgenTop(0,lt,k);
-    let posb=this.possibles;
-    if (posb.length) {
-      console.log(posb);
-    }
   }
 }
 
@@ -233,6 +264,7 @@ item.wgen3known = function (k) {
   let {possLets:plets} = this;
   console.log('possLets',plets);
   let ln = plets.length;
+  
   for (let i=0;i<ln;i++) {
     let v = plets[i];
     console.log('TOP CHECK',v);
