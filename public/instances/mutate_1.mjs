@@ -3,19 +3,18 @@ import {rs as linePP} from '/shape/line.mjs';
 import {rs as polylinePP} from '/shape/polyline.mjs';
 //import {rs as basicP} from '/generators/basics.mjs';
 //import {rs as addDistanceMethods} from '/mlib/by_distance.mjs';
-import {rs as generatorP} from '/generators/mutate_1.mjs'
+import {rs as generatorP} from '/generators/mutate.mjs'
 
 let rs = generatorP.instantiate();
 
-rs.setName('mutate_0');
+rs.setName('mutate_1');
 
 
-rs.setName('mutate');
 let ht=25;
 ht=100;;
-let nr = 16;
-//nr=8;
-let topParams = {numRows:nr,numCols:nr,width:ht,height:ht,angleOffset:0*Math.PI/10,framePadding:.1*ht,frameStroke:'white',frameStrokeWidth:.2,
+let nr = 32;
+nr=8;
+let topParams = {numRows:nr,numCols:nr,width:ht,height:ht,angleOffset:0*Math.PI/10,framePadding:.1*ht,frameStrokee:'white',frameStrokeWidth:.2,
 timePerStep:1/(16*32),stopTime:1,recordingMotion:1,saveAnimation:1,distanceThreshold:3,
     circleRadius:.2,nearestFadeFactor:20,shapesPerPath:200,speed:1,segsPerCircle:20,radius:.4*ht,numSlices:8,bendRadius:1.5};
 

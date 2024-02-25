@@ -72,11 +72,10 @@ rs.gridCellIndex = function (i,j) {
 //The params arra (paramsA) is of length 6 and contains initial params h and v, middle params h and v, final params h and v
 rs.adjustParamsAforGridCell = function (i,j,paramsA) {
   let c = this.gridCellCenter(i,j);
-  let idx = this.gridCellIndex(i,j)*12;
+  let idx = this.gridCellIndex(i,j)*6;
   paramsA.forEach((pa) => {
-    let h =pa.horizontal;
     pa.center = c;
-    pa.index = idx+(h?0:6);
+    pa.index = idx;
   });
   return paramsA;
 }
@@ -84,11 +83,12 @@ rs.adjustParamsAforGridCell = function (i,j,paramsA) {
 // each
 rs.buildParamsAforGrid = function (paramsAtemplate) {
   let {numRows:nr,numCols:nc} = this;
+  let pln = paramsAtemplate.length;
   let gpa = this.gridParamsArrays = [];
   for (let i=0;i<nc;i++) {
     for (let j=0;j<nr;j++) {
       let paramsA = [];
-      for (let k=0;k<6;k++) {
+      for (let k=0;k<pln;k++) {
         let params = paramsAtemplate[k];
         let nparams = {};
         Object.assign(nparams,params);
@@ -213,31 +213,20 @@ rs.configureLinesV = function(params) {
   lr.setEnds(e0,e1);
   lr.update();
 }
-/*
-rs.clines =  function (n0,n1,fr) {
-  let {paramsv,paramsh} = this;
-  let paramshi = this.interpolate(paramsA[n0],paramsA[n1],fr);
-  let paramsvi = this.interpolate(paramsv[n0],paramsv[n1],fr);
 
-  paramsvi.index=0;
-  paramshi.index=6;
-  this.configureLines(paramsvi);
-  this.configureLines(paramshi);
-  }
-*/
+rs.configureLines(params) {
+  this.configureLinesH(params);
+  this.configureLinesV(params);
+}
 
-rs.clines =  function (paramsA,fromKey,toKey,fr) {
-  let fromParams = this.paramsAselect(paramsA,fromKey);
-  let toParams = this.paramsAselect(paramsA,toKey);
-  let indh  =  fromParams[0].index;
+rs.clines =  function (paramsA,fromKey,fr) {
+  let fromParams = paramsA[fromKey];
+  let toParams = paramsA[fromKey+1);
+  let index  =  fromParams[0].index;
   let indv  =  fromParams[1].index;
-  let paramshi = this.interpolate(fromParams[0],toParams[0],fr);
-  let paramsvi = this.interpolate(fromParams[1],toParams[1],fr);
-
-  paramshi.index=indh;
+  let params = this.interpolate(fromParams[0],toParams[0],fr);
   paramsvi.index=indv;
-  this.configureLines(paramsvi);
-  this.configureLines(paramshi);
+  this.configureLines(params);
 }
 /*
 rs.clinesForGrid = function (fromKey,toKey,fr) {
@@ -345,21 +334,13 @@ rs.initialize = function () {
   
  
   paramsA.push({index:0,center:Point.mk(0,0),lineLengthH:10,lineSepH:2,lineDistH:5,lineLengthV:10,lineSepV:0,lineDistV:12});
-  this.buildParamsAforGrid(paramsA);
-  /*
-  let paramsv = this.paramsv=[];
-  let paramsh = this.paramsh=[];
+  
+    paramsA.push({index:0,center:Point.mk(0,0),lineLengthH:8,lineSepH:4,lineDistH:12,lineLengthV:10,lineSepV:0,lineDistV:12});
+  
+  paramsA.push({index:0,center:Point.mk(0,0),lineLengthH:10,lineSepH:0,lineDistH:12,lineLengthV:10,lineSepV:2,lineDistV:5});
 
-  paramsh.push({index:6,center:Point.mk(0,0),horizontal:1,lineLength:10,lineSep:0,lineDist:12});
-  paramsv.push({index:0,center:Point.mk(0,0),horizontal:0,lineLength:10,lineSep:2,lineDist:5});;
+  this.buildParamsAforGrid(paramsA);
   
-  paramsv.push({index:0,center:Point.mk(0,0),horizontal:0,lineLength:10,lineSep:0,lineDist:12});
-  paramsh.push({index:6,center:Point.mk(0,0),horizontal:1,lineLength:8,lineSep:4,lineDist:12});
-  
-  paramsv.push({index:0,center:Point.mk(0,0),horizontal:0,lineLength:10,lineSep:0,lineDist:12});
- // paramsh.push({index:6,center:Point.mk(0,0),horizontal:1,lineLength:8,lineSep:4,lineDist:6});
-  paramsh.push({index:6,center:Point.mk(0,0),horizontal:1,lineLength:10,lineSep:2,lineDist:5});
-  this.clines(0,1,0);*/
   //this.clines(paramsA,'initial','middle',0);
   this.setCellStates();
  //this.clinesForGrid('initial','middle',0);

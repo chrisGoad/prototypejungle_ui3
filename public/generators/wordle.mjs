@@ -40,31 +40,29 @@ Object.assign(rs,topParams);
   this.dprohibs  = [];// ['jk','kj','bk','kb','jh','hj','mk','bj','jb','qq','qk','kq','kh','fz','qp','pq','jl','lj'];
   // known letters
   let k0 = '';
-  let k1 = 'i';
+  let k1 = '';
   let k2 = '';
-  let k3 = 'e';
+  let k3 = '';
   let k4 = '';
   this.known = [k0,k1,k2,k3,k4];
-  //let cm= 'abcdefghijklmnopqrstuvwxyz';
-  let cm = this.complement('mghtwodsflukbacnv');
-// let cm = 'ehjnpqvxyz';
- // cm = 'ehjnpqvy';
- //let cm = 'aehjnpqvxyz';
- //let cm = 'aehjnp';
- //let cm = 'aeh';
+  let abet= 'abcdefghijklmnopqrstuvwxyz';
+  let cm = abet;
+  //let cm = this.complement('mghtwodsflukbacnv');
   // possible letters
   this.possLets = this.alphabetize(cm);
   this.addFrame();
   //this.wgenffk('pipe');
   //this.first4 = 'pipe';
   //this.wgenTop();
-   this.showPossibles4 = 1;
-  this.wgen3known('ire');
+  // this.showPossibles4 = 1;
+ // this.wgen3known('ire');
  // return;
  // let tc = cm[4];
  // console.log('TOP CHECK',tc);
- //this.wgen4known('part');
- // this.wgenAllknown('bidlu');
+ debugger;
+ //this.wgen4known('miht');
+ //this.tryFirsts('miht');
+  this.wgenAllknown('mihts');
   //this.tries();
 }
 
