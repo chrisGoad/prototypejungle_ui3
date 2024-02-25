@@ -285,11 +285,12 @@ rs.setCellState = function (i,j) {
   let idx = this.gridCellIndex(i,j);
   let paramsA = gpa[idx];
   let pln = paramsA.length/2;
-  const inInterval = (v,iv) => {
-    return (iv[0]<=v) && (v <= iv[1]);
+  let stepLn = numSteps/(pln-1);
+  const inInterval = (v,n) => {
+    return (n*stepLn<=v) && (v <= (n+1)*stepLn);
   }
    const fractionThruInterval = (v,iv) => {
-    return (v-iv[0])/(iv[1]-iv[0]);
+    return (v-n*stepLn)/stepLn;
   }
   let cyssf = ssf%cycleSteps;
   if (ssf === 10) {

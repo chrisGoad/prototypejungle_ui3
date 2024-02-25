@@ -3,7 +3,7 @@ import {rs as linePP} from '/shape/line.mjs';
 import {rs as polylinePP} from '/shape/polyline.mjs';
 //import {rs as basicP} from '/generators/basics.mjs';
 //import {rs as addDistanceMethods} from '/mlib/by_distance.mjs';
-import {rs as generatorP} from '/generators/mutate.mjs'
+import {rs as generatorP} from '/generators/mutate_2.mjs'
 
 let rs = generatorP.instantiate();
 
@@ -29,7 +29,7 @@ rs.initProtos = function () {
   polylineP.stroke = 'white';
   polylineP['stroke-width'] = .4; 
 }
-rs.speedFun = function (i,j,issf) {
+rs.speedFun = function (i,j) {
   let {numSteps,stepsSoFar:ssf} = this;
   let mssf = Math.floor(.5+(i+j)/nr)*ssf%numSteps;
   return mssf;

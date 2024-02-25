@@ -72,7 +72,7 @@ rs.gridCellIndex = function (i,j) {
 //The params arra (paramsA) is of length 6 and contains initial params h and v, middle params h and v, final params h and v
 rs.adjustParamsAforGridCell = function (i,j,paramsA) {
   let c = this.gridCellCenter(i,j);
-  let idx = this.gridCellIndex(i,j)*6;
+  let idx = this.gridCellIndex(i,j)*12;
   paramsA.forEach((pa) => {
     pa.center = c;
     pa.index = idx;
@@ -118,16 +118,16 @@ rs.paramsAselect = function (paramsA,k) {
   
 
 rs.configureLinesH = function (params) {
-  let {index,center,lineLength:ln,lineSep:sep,lineDist:d} = params;
+  let {index,center,lineLengthH:ln,lineSepH:sep,lineDistH:d} = params;
+  //console.log('H index',index,'center',JSON.stringify(center));
+   debugger;
   let {lines} = this;
-  let line;
   let hsep = 0.5*sep
   let bot = d;
   let top = -bot;
   let right = hsep+ln;
   let left = -right;
   let e0,e1;
-  
   let ul = lines[index+0];
   e0 = Point.mk(left,top).plus(center);
   e1 = Point.mk(-hsep,top).plus(center);
@@ -166,7 +166,12 @@ rs.configureLinesH = function (params) {
 }
 
 rs.configureLinesV = function(params) {
-  let {index,center,lineLength:ln,lineSep:sep,lineDist:d} = params;   
+  let {index:idx,center,lineLengthV:ln,lineSepV:sep,lineDistV:d} = params;
+  let {lines} = this;
+  let index = idx+6;
+  //console.log('V index',index,'center',JSON.stringify(center));
+  debugger;
+  let hsep = 0.5*sep  
   let bot = hsep+ln;
   let top = -bot;
   let left = -d;
@@ -214,18 +219,17 @@ rs.configureLinesV = function(params) {
   lr.update();
 }
 
-rs.configureLines(params) {
+rs.configureLines= function(params) {
   this.configureLinesH(params);
   this.configureLinesV(params);
 }
 
 rs.clines =  function (paramsA,fromKey,fr) {
   let fromParams = paramsA[fromKey];
-  let toParams = paramsA[fromKey+1);
-  let index  =  fromParams[0].index;
-  let indv  =  fromParams[1].index;
-  let params = this.interpolate(fromParams[0],toParams[0],fr);
-  paramsvi.index=indv;
+  let toParams = paramsA[fromKey+1];
+  let index  =  fromParams.index;
+  let params = this.interpolate(fromParams,toParams,fr);
+  params.index=index;
   this.configureLines(params);
 }
 /*
@@ -253,7 +257,7 @@ rs.speedFun = function (i,j,issf) {
 
 rs.setCellState = function (i,j) {
   let {gridParamsArrays:gpa,numSteps,stepsSoFar:issf,pauseSteps:ps,numRows:nr} = this;
- 
+  debugger;
   let oi = (i)%2;
   oi = (i)>8;
  // let ssf = oi?issf:(issf+64)%numSteps;
@@ -266,47 +270,28 @@ rs.setCellState = function (i,j) {
     console.log('oi',oi,'issf',issf,'ssf',ssf);
     debugger;
   }
-  let idx = this.gridCellIndex(i,j);
+   let idx = this.gridCellIndex(i,j);
   let paramsA = gpa[idx];
+  let pln = paramsA.length;
+  let stepLn = numSteps/(pln-1);
+  const inInterval = (v,n) => {
+    return (n*stepLn<=v) && (v <= (n+1)*stepLn);
+  }
+   const fractionThruInterval = (v,n) => {
+    return (v-n*stepLn)/stepLn;
+  }
   let cyssf = ssf%cycleSteps;
   if (ssf === 10) {
     //this.paused = 1;
   }
- // let ups = numSteps-ps;
-  let ups = cycleSteps;
-  let hups = ups/2;
-  let hps = ps/2;
-  let iv0 = [0,hps];//pause
-  let iv1 = [hps,hps+hups]; 
-  let iv2 = [hps+hups,ps+hups];//pause
-  let iv3 = [ps+hups,ps+ups];
-  const inInterval = (v,iv) => {
-    return (iv[0]<=v) && (v <= iv[1]);
-  }
-   const fractionThruInterval = (v,iv) => {
-    return (v-iv[0])/(iv[1]-iv[0]);
-  }
- /* if (inInterval(ssf,iv0) || inInterval(ssf,iv2)) {
-    return;
-  }*/
-  if (inInterval(cyssf,iv1)) {
-    let fr = fractionThruInterval(cyssf,iv1);
-    //console.log('iv1','fr',fr);
-    if (fr <0.5) {
-      this.clines(paramsA,'initial','middle',2*fr);
-    } else {
-      this.clines(paramsA,'middle','final',2*(fr-0.5));
-    }    
-  }
-  if (inInterval(cyssf,iv3)) {
-    let fr = fractionThruInterval(cyssf,iv3);
-    if (fr <0.5) {
-      this.clines(paramsA,'final','middle',2*fr);
-    } else {
-      this.clines(paramsA,'middle','initial',2*(fr-0.5));
-    }    
-   
-  }
+ for (let n=0;n<pln;n++) {
+    if (inInterval(ssf,n)) {
+      let fr = fractionThruInterval(ssf,n); 
+      console.log('ssf',ssf,'n',n,'stepLn',stepLn,'lb',n*stepLn,'ub',(n+1)*stepLn,'fr',fr);
+      debugger;
+      this.clines(paramsA,n,fr);
+    }
+  }   
 }
 
 rs.setCellStates = function () {
@@ -349,57 +334,6 @@ rs.initialize = function () {
 
 rs.updateState = function () {
   this.setCellStates();
-}
-
-rs.updateStatee = function () {
-  let {numSteps,stepsSoFar:ssf,pauseSteps:ps,paramsA} = this;
-//  debugger;
-  console.log('ssf',ssf);
-  if (ssf === 10) {
-    //this.paused = 1;
-  }
-  let ups = numSteps-ps;
-  let hups = ups/2;
-  let hps = ps/2;
-  let iv0 = [0,hps];//pause
-  let iv1 = [hps,hps+hups]; 
-  let iv2 = [hps+hups,ps+hups];//pause
-  let iv3 = [ps+hups,ps+ups];
-  const inInterval = (v,iv) => {
-    return (iv[0]<=v) && (v <= iv[1]);
-  }
-   const fractionThruInterval = (v,iv) => {
-    return (v-iv[0])/(iv[1]-iv[0]);
-  }
-  if (inInterval(ssf,iv0) || inInterval(ssf,iv2)) {
-    return;
-  }
-  if (inInterval(ssf,iv1)) {
-    let fr = fractionThruInterval(ssf,iv1);
-    console.log('iv1','fr',fr);
-    if (fr <0.5) {
-      //this.clines(0,1,2*fr);
-      this.clines(paramsA,'initial','middle',2*fr);
-      this.clinesForGrid('initial','middle',2*fr);
-    } else {
-     // this.clines(1,2,2*(fr-0.5));
-      //this.clines(paramsA,'middle','final',2*(fr-0.5));
-      this.clinesForGrid('middle','final',2*(fr-0.5));
-    }    
-  }
-  if (inInterval(ssf,iv3)) {
-    let fr = fractionThruInterval(ssf,iv3);
-    if (fr <0.5) {
-      //this.clines(2,1,2*fr);
-     // this.clines(paramsA,'final','middle',2*fr);
-      this.clinesForGrid('final','middle',2*fr);
-    } else {
-     // this.clines(1,0,2*(fr-0.5));
-      //this.clines(paramsA,'middle','initial',2*(fr-0.5));
-      this.clinesForGrid('middle','initial',2*(fr-0.5));
-    }    
-   
-  }
 }
 
 
