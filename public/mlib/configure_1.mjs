@@ -9,19 +9,20 @@ item.configureLines = function (params) {
   let {lines} = this;
   let hln = ln/2;
   let e0,e1;
-  
+  let d = 0;
   let left = lines[index+0];
   if (!left) {
     debugger;
   }
+  
   e0 = Point.mk(-pos,hln).plus(center);
-  e1 = Point.mk(-pos,-hln).plus(center);
+  e1 = Point.mk(d-pos,-hln).plus(center);
   left.setEnds(e0,e1);
   left.update();
   
   let right = lines[index+1];
   e0 = Point.mk(pos,hln).plus(center);
-  e1 = Point.mk(pos,-hln).plus(center);
+  e1 = Point.mk(pos+d,-hln).plus(center);
   right.setEnds(e0,e1);
   right.update();
   
@@ -34,8 +35,8 @@ item.configureLines = function (params) {
   top.update();
   
   let bot = lines[index+3];
-  e0 = Point.mk(-hln,-pos).plus(center);
-  e1 = Point.mk(hln,-pos).plus(center);
+  e0 = Point.mk(d-hln,-pos).plus(center);
+  e1 = Point.mk(d+hln,-pos).plus(center);
   bot.setEnds(e0,e1);
   bot.update();
 }

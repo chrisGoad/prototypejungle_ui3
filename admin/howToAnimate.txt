@@ -286,6 +286,13 @@ c:\ffmpeg\bin\ffmpeg  -framerate 15  -i animations/motion_32_f%03d.jpg -s 500x50
 c:\ffmpeg\bin\ffmpeg  -framerate 15  -i animations/path_test_2_f%03d.jpg -s 500x500  export/path_test_2.gif
 c:\ffmpeg\bin\ffmpeg  -framerate 15 -i animations/color_path_0_f%03d.jpg -s 500x500  export/color_path_0.gif
 c:\ffmpeg\bin\ffmpeg  -framerate 15  -i animations/mutate_f%03d.jpg -s 500x500  export/mutate.gif
+c:\ffmpeg\bin\ffmpeg  -framerate 15  -i animations/mutate_1_f%03d.jpg -s 500x500  export/mutate_1.gif
+c:\ffmpeg\bin\ffmpeg  -framerate 15  -i animations/mutate_2_f%03d.jpg -s 500x500  export/mutate_2.gif
+c:\ffmpeg\bin\ffmpeg  -framerate 15  -i animations/mutate_3_f%03d.jpg -s 500x500  export/mutate_3.gif
+c:\ffmpeg\bin\ffmpeg  -framerate 15  -i animations/mutate_4_f%03d.jpg -s 500x500  export/mutate_4.gif
+c:\ffmpeg\bin\ffmpeg  -framerate 15  -i animations/mutate_5_f%03d.jpg -s 500x500  export/mutate_5.gif
+c:\ffmpeg\bin\ffmpeg  -framerate 15  -i animations/mutate_5_f%03d.jpg -s 500x500  export/mutate_5.gif
+c:\ffmpeg\bin\ffmpeg  -framerate 15  -i animations/mutate_6_f%03d.jpg -s 500x500  export/mutate_6.gif
 
 c:\ffmpeg\bin\ffmpeg -i export/bounce_12.mp4 -i export/bounce_12.wav -c:v copy -c:a aac -map 0:v -map 1:a export/blend_test.mp4
 rm animations/spatter0_7*

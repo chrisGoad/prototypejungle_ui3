@@ -6,6 +6,7 @@ item.addLines = function (n) {
   for (let i=0;i<n;i++) {
     let line =lineP.instantiate();
     lines.push(line);
+    line.stroke =(i%2)?'yellow':'cyan';
   }
   return ln;
 }
@@ -85,7 +86,8 @@ item.speedFun = function (i,j,issf) {
 }
 */
 item.setCellState = function (i,j) {
-  let {gridParamsArrays:gpa,numSteps,stepsSoFar:issf,pauseSteps:ps,numRows:nr} = this;
+  let {gridParamsArrays:gpa,numSteps,stepsSoFar:issf,pauseSteps:ps,numRows:nr,twice} = this;
+ // let numSteps = twice?2*inumSteps:inumSteps;
   let oi = (i)%2;
   oi = (i)>8;
   let cycleSteps = numSteps;
@@ -99,13 +101,13 @@ item.setCellState = function (i,j) {
   let pln = paramsA.length;
   let stepLn = numSteps/(pln-1);
   const inInterval = (v,n) => {
-    return (n*stepLn<=v) && (v <= (n+1)*stepLn);
+    return (n*stepLn<=v) && (v < (n+1)*stepLn);
   }
    const fractionThruInterval = (v,n) => {
     return (v-n*stepLn)/stepLn;
   }
   let cyssf = ssf%cycleSteps;
- for (let n=0;n<pln;n++) {
+ for (let n=0;n<pln-1;n++) {
     if (inInterval(ssf,n)) {
       let fr = fractionThruInterval(ssf,n); 
       console.log('ssf',ssf,'n',n,'stepLn',stepLn,'lb',n*stepLn,'ub',(n+1)*stepLn,'fr',fr);
@@ -125,7 +127,7 @@ item.setCellStates = function () {
 
 item.initialize = function () {
   debugger; 
-  let numSteps = this.numSteps = 128;
+  //let numSteps = this.numSteps = 128;
   let {linesPerCell:lpc} = this;
   this.pauseSteps = 0;//numSteps/8;
   this.initProtos();
