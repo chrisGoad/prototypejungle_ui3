@@ -119,7 +119,7 @@ item.clines =  function (paramsA,fromKey,fr) {
 }
 
 
-  
+item.linesPerCell=12;
 }
 export {rs};
  

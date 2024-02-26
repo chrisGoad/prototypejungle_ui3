@@ -13,10 +13,10 @@ addConfigureMethods(rs);
 addMutateGridMethods(rs);
 
 
-rs.setName('mutate_2');
+rs.setName('mutate_4');
 
 let ht=25;
-ht=100;;
+ht=20;;
 let nr = 32;
 nr=8;
 let topParams = {numRows:nr,numCols:nr,width:ht,height:ht,angleOffset:0*Math.PI/10,framePadding:.1*ht,frameStrokee:'white',frameStrokeWidth:.2,
@@ -34,12 +34,12 @@ rs.initProtos = function () {
   polylineP.stroke = 'white';
   polylineP['stroke-width'] = .4; 
 }
+
 rs.speedFun = function (i,j) {
   let {numSteps,stepsSoFar:ssf} = this;
-  let mssf = Math.floor(.5+(i+j)/nr)*ssf%numSteps;
+  let mssf = (ssf+i+j)%numSteps;
   return mssf;
 }
-
 
 rs.buildParamsArray = function (numLines) {
   let paramsA =this.paramsA =[];
@@ -50,6 +50,7 @@ rs.buildParamsArray = function (numLines) {
   paramsA.push({index:0,center:Point.mk(0,0),lineLengthH:10,lineSepH:0,lineDistH:12,lineLengthV:10,lineSepV:2,lineDistV:5});
   this.buildParamsAforGrid(paramsA);
 }
+
 
  
 export {rs};

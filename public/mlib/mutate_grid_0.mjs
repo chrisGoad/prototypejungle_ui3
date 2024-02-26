@@ -38,8 +38,9 @@ item.gridCellIndex = function (i,j) {
 }
 
 item.adjustParamsAforGridCell = function (i,j,paramsA) {
+  let {linesPerCell:lpc} = this;
   let c = this.gridCellCenter(i,j);
-  let idx = this.gridCellIndex(i,j)*12;
+  let idx = this.gridCellIndex(i,j)*lpc;
   paramsA.forEach((pa) => {
     pa.center = c;
     pa.index = idx;
@@ -85,14 +86,13 @@ item.speedFun = function (i,j,issf) {
 */
 item.setCellState = function (i,j) {
   let {gridParamsArrays:gpa,numSteps,stepsSoFar:issf,pauseSteps:ps,numRows:nr} = this;
-  debugger;
   let oi = (i)%2;
   oi = (i)>8;
   let cycleSteps = numSteps;
   let ssf = this.speedFun(i,j);
    if ((j===0)&&(i<2)) {
     console.log('oi',oi,'issf',issf,'ssf',ssf);
-    debugger;
+    //debugger;
   }
    let idx = this.gridCellIndex(i,j);
   let paramsA = gpa[idx];
@@ -109,7 +109,6 @@ item.setCellState = function (i,j) {
     if (inInterval(ssf,n)) {
       let fr = fractionThruInterval(ssf,n); 
       console.log('ssf',ssf,'n',n,'stepLn',stepLn,'lb',n*stepLn,'ub',(n+1)*stepLn,'fr',fr);
-      debugger;
       this.clines(paramsA,n,fr);
     }
   }   
@@ -124,6 +123,19 @@ item.setCellStates = function () {
   }
 }
 
+item.initialize = function () {
+  debugger; 
+  let numSteps = this.numSteps = 128;
+  let {linesPerCell:lpc} = this;
+  this.pauseSteps = 0;//numSteps/8;
+  this.initProtos();
+  this.addFrame();
+  let lines = this.set('lines',arrayShape.mk());
+  this.addLinesForGrid(lpc);
+  this.buildParamsArray();
+  this.setCellStates();
+
+}
 
 item.updateState = function () {
   this.setCellStates();

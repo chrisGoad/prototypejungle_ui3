@@ -51,19 +51,6 @@ rs.buildParamsArray = function (numLines) {
   this.buildParamsAforGrid(paramsA);
 }
 
-rs.initialize = function () {
-  debugger; 
-  let numSteps = this.numSteps = 128;
-  this.pauseSteps = 0;//numSteps/8;
-  this.initProtos();
-  this.addFrame();
-  let lines = this.set('lines',arrayShape.mk());
-  this.addLinesForGrid(12);
-  this.buildParamsArray();
-  this.setCellStates();
-
-}
-
  
 export {rs};
 
