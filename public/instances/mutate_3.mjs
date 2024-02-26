@@ -1,16 +1,19 @@
 import {rs as linePP} from '/shape/line.mjs';
 //import {rs as circlePP} from '/shape/circle.mjs';
 import {rs as polylinePP} from '/shape/polyline.mjs';
-//import {rs as basicP} from '/generators/basics.mjs';
+import {rs as basicP} from '/generators/basics.mjs';
 //import {rs as addDistanceMethods} from '/mlib/by_distance.mjs';
-import {rs as addConfigureMethods} from '/mlib/configure.mjs';
-import {rs as generatorP} from '/generators/mutate_2.mjs'
+import {rs as addAnimationMethods} from '/mlib/animate0.mjs';
+import {rs as addConfigureMethods} from '/mlib/configure_0.mjs';
+import {rs as addMutateGridMethods} from '/mlib/mutate_grid_0.mjs';
 
-let rs = generatorP.instantiate();
-
-rs.setName('mutate_1');
-
+let rs = basicP.instantiate();
+addAnimationMethods(rs);
 addConfigureMethods(rs);
+addMutateGridMethods(rs);
+
+
+rs.setName('mutate_3');
 
 let ht=25;
 ht=100;;
@@ -31,13 +34,14 @@ rs.initProtos = function () {
   polylineP.stroke = 'white';
   polylineP['stroke-width'] = .4; 
 }
+
 rs.speedFun = function (i,j) {
   let {numSteps,stepsSoFar:ssf} = this;
-  let mssf = Math.floor(.5+(i+j)/nr)*ssf%numSteps;
+  let mssf = (ssf+i+j)%numSteps;
   return mssf;
 }
 
-item.buildParamsArray = function (numLines) {
+rs.buildParamsArray = function (numLines) {
   let paramsA =this.paramsA =[];
   paramsA.push({index:0,center:Point.mk(0,0),lineLengthH:10,lineSepH:0,lineDistH:12,lineLengthV:10,lineSepV:2,lineDistV:5});
   paramsA.push({index:0,center:Point.mk(0,0),lineLengthH:8,lineSepH:4,lineDistH:12,lineLengthV:10,lineSepV:0,lineDistV:12});
@@ -47,7 +51,7 @@ item.buildParamsArray = function (numLines) {
   this.buildParamsAforGrid(paramsA);
 }
 
-item.initialize = function () {
+rs.initialize = function () {
   debugger; 
   let numSteps = this.numSteps = 128;
   this.pauseSteps = 0;//numSteps/8;

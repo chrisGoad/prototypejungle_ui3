@@ -29,11 +29,11 @@ Object.assign(rs,topParams);
 //  this.tries();
   //return;
   // prohibited letters at each position
-  let s0n = '';
-  let s1n = '';
+  let s0n = 'f';
+  let s1n = 'o';
   let s2n = '';
   let s3n = '';
-  let s4n = '';
+  let s4n = 'te';
   this.prohibs = [s0n,s1n,s2n,s3n,s4n];
 
   // prohibited dipthongs
@@ -46,8 +46,8 @@ Object.assign(rs,topParams);
   let k4 = '';
   this.known = [k0,k1,k2,k3,k4];
   let abet= 'abcdefghijklmnopqrstuvwxyz';
-  let cm = abet;
-  //let cm = this.complement('mghtwodsflukbacnv');
+  //let cm = abet;
+  let cm = this.complement('bacmighwrdsluk');
   // possible letters
   this.possLets = this.alphabetize(cm);
   this.addFrame();
@@ -59,10 +59,10 @@ Object.assign(rs,topParams);
  // return;
  // let tc = cm[4];
  // console.log('TOP CHECK',tc);
- debugger;
- //this.wgen4known('miht');
- //this.tryFirsts('miht');
-  this.wgenAllknown('mihts');
+ //debugger;
+ //this.wgen4known('efot');
+ this.tryFirsts4('fote');
+  //this.wgenAllknown('mihts');
   //this.tries();
 }
 
@@ -80,7 +80,7 @@ rs.tries = function () {
   iputs.push(['stank','would','vicar','flesh']);
   iputs.push(['stank','would','vicar','flesh','blame']);
   iputs.push(['might','words','fluke']);
-  iputs.push(['might','words','fluke','brace']);
+  iputs.push(['might','words','fluke','brace']);//this one
   iputs.push(['crane','sloth','fluid']);
   iputs.push(['crane','sloth','fluid','bagle']);
   iputs.push(['spent','would','vicar']);

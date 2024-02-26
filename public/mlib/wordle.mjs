@@ -179,11 +179,11 @@ item.wgenAll = function (sofar) {
   if (this.acount > 10000000) {
     return;
   }
-  if (sofar === 'ai') {
+  if (sofar === 'e') {
    debugger;
   }
   //let {noDups,possLets:plets,dupsRemoved:dr} = this;
-  let {noDups,possLets:plets,possibles5:p5} = this;
+  let {noDups,possLets:plets,possibles5:p5,known} = this;
   let dr = this.removeDups(plets);
  
   let drln = dr.length;
@@ -203,6 +203,7 @@ item.wgenAll = function (sofar) {
     return;
   }
   let lnp5 = p5.length;
+  
   for (let i=0;i<drln;i++) {
    // console.log(this.acount,'sfln',sfln,'i',i);
     this.acount++;
@@ -211,7 +212,16 @@ item.wgenAll = function (sofar) {
       continue;
     }
     let nxt = sofar+lt;
-    this.wgenAll(nxt);
+    if (nxt === 'ee') {
+      debugger;
+    }
+    let nxtOk = this.wOk(nxt);
+    if ((known[0] === 'e') && nxtOk) {
+     // console.log('nxt',nxt);
+    }
+    if (nxtOk) {
+      this.wgenAll(nxt);
+    }
   }
   let nlnp5 = p5.length;
   if ((ln === 4) && (nlnp5>lnp5)) {
@@ -220,19 +230,27 @@ item.wgenAll = function (sofar) {
 }
 // ak = all known
 item.wgenTop = function (ak,lt,k) {
-  let {showPossibles4:p4} = this;
+  let {showPossibles4:p4,known} = this;
   let plets = this.plets = ak?k:(lt?k+lt:this.possLets);
- // debugger;
+  let k0 = known[0];
+  if ((k0 === 'e')&&(lt ==='b')) {
+     debugger;
+  }
   this.wcount = 0;
   this.acount = 0;
   let rd = this.removeDups(plets);
   this.dupsRemoved = rd;
+  let rdln = rd.length;
   let pln = plets.length;
   if (pln === 5) {
     this.mandatory = rd;
+    if (lt && (rd.indexOf(lt) === -1)) {
+      debugger;
+      return;
+    }
   }
-  //this.noDups = (pln === 5);
-  this.noDups = 0;
+  this.noDups = (rdln === 5);
+  //this.noDups = 0;
   let possibles4 = this.possibles4 = [];
   let possibles5 = this.possibles5 = [];
   //debugger;
@@ -242,9 +260,8 @@ item.wgenTop = function (ak,lt,k) {
     debugger;
   }
   if (posb.length>0) {
-    console.log(this.checkStr);
-    console.log('posb',posb);
-    debugger;
+   // console.log(this.checkStr);
+    console.log('lt',lt,'p4',p4,'possibles',posb);
   }
   //console.log('possibles',possibles);
   //console.log('count',possibles.length);
@@ -291,22 +308,39 @@ item.wgen3known = function (k) {
  // console.log(this.possibles);
 }
   
-item.tryFirsts = function (k) {
-  let {prohibs,known} = this;
+item.tryFirsts4 = function (k) {
+  let {possLets,known,prohibs} = this;
+  debugger;
   let phb0 = prohibs[0];
-  let allowed = this.complement(phb0);
+  let allowed = this.removeLetters(possLets,phb0);
   let ln = allowed.length;
   for (let i=0;i<ln;i++) {
     let ai = allowed[i];
+    if (ai==='e') {
+      debugger;
+    }
     known[0] = ai;
-    console.log('FIRST',ai)
-    this.wgen4known(k);
+    let aik = k+ai;
+    let raik = this.removeDups(aik);
+    let noDups = raik.length === 5;
+    this.noDups = noDups;
+    console.log('FIRST',ai);
+    if (noDups) {
+      this.wgenAllKnown(raik);
+    } else {
+      this.wgen4known(k);
+    }
   }
 }
 
 
-item.wgenAllknown = function (k) {
+item.wgenAllKnown = function (k) {
+  console.log('k',k);
    this.wgenTop(1,null,k);
+   let p5 = this.possibles4;
+   let p4 = this.possibles5;
+   //console.log('possibles5',p5);
+   //console.log('possibles4',p4);
 }
 
 
