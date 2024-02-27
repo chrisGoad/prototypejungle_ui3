@@ -116,12 +116,18 @@ item.removeLetters = function (str,lets) {
   }
   return cm;
 }
-item.wOk = function (str) {
+item.wOk1 = function (str) {
   if (1 && this.badBlend(str)) {
     return 0;
   }
+  if (str === 'sense') {
+    debugger;
+  }
   let ln = str.length;
- 
+  let possibles = this.possibles5;
+  if (possibles.indexOf(str) > -1) {
+    return 0;
+  }
   let mlets = this.mandatory;
   let mln = mlets.length;
   let nme = mln-(5-ln);
@@ -140,6 +146,11 @@ item.wOk = function (str) {
    // console.log('str',str,'mlets',mlets,'nmf',nmf,'nme',nme,'fnd',fnd);
   //  debugger;
   }
+  let ok = nmf>=nme;
+  if (ok && (ln>=5)) {
+   // console.log('mlets',mlets,'str',str,'nme',nme,'mln',mln,'ln',ln,'fivemln',5-ln,'nmf',nmf,'ook',nmf>=nme);
+   // debugger
+  }
   if (nmf < nme) {
     return 0;
   }
@@ -147,9 +158,7 @@ item.wOk = function (str) {
     //debugger;
   }
   let dps = this.dprohibs;
-  if (str==='aiaaa') {
-    debugger;
-  }
+  
   let prohibs = this.prohibs;
   let known = this.known;
   let strln = str.length;
@@ -171,8 +180,25 @@ item.wOk = function (str) {
       return 0;
     }
   }
-  
+  if (ln === 5) {
+    this.possibles5.push(str);
+  }
   return 1;
+}
+
+item.wOk = function (str) {
+  let ok = this.wOk1(str);
+  let ln = str.length;
+  if (ok) {
+    if (ln === 5) {
+      this.possibles5.push(str);
+    } else if (ln===4) {
+      this.possibles4.push(str);
+    }
+  } else {
+    this.notPossibles.push(str);
+  }
+  return ok;
 }
  
 item.wgenAll = function (sofar) {
@@ -180,25 +206,28 @@ item.wgenAll = function (sofar) {
     return;
   }
   if (sofar === 'e') {
-   debugger;
+ //  debugger;
   }
   //let {noDups,possLets:plets,dupsRemoved:dr} = this;
   let {noDups,possLets:plets,possibles5:p5,known} = this;
   let dr = this.removeDups(plets);
  
   let drln = dr.length;
+  let ln = sofar.length;
   let ok = this.wOk(sofar);
   if (!ok) {
+    if (1 || (ln === 4)) {
+      this.notPossibles.push(sofar);
+    }
     return;
   }
-  let ln = sofar.length;
   if (ln === 5) {
    //console.log('check',sofar);
     if (sofar === 'apart') {
       // debugger;
     }
      // console.log(this.acount,'ok',sofar);
-    this.possibles5.push(sofar);
+    //this.possibles5.push(sofar);
     this.wcount++;
     return;
   }
@@ -212,16 +241,7 @@ item.wgenAll = function (sofar) {
       continue;
     }
     let nxt = sofar+lt;
-    if (nxt === 'ee') {
-      debugger;
-    }
-    let nxtOk = this.wOk(nxt);
-    if ((known[0] === 'e') && nxtOk) {
-     // console.log('nxt',nxt);
-    }
-    if (nxtOk) {
-      this.wgenAll(nxt);
-    }
+    this.wgenAll(nxt);
   }
   let nlnp5 = p5.length;
   if ((ln === 4) && (nlnp5>lnp5)) {
@@ -231,37 +251,34 @@ item.wgenAll = function (sofar) {
 // ak = all known
 item.wgenTop = function (ak,lt,k) {
   let {showPossibles4:p4,known} = this;
-  let plets = this.plets = ak?k:(lt?k+lt:this.possLets);
+ // let plets = this.plets = ak?k:(lt?k+lt:this.possLets);
+  let plets = this.plets = ak?k:this.possLets;
   let k0 = known[0];
-  if ((k0 === 'e')&&(lt ==='b')) {
-     debugger;
-  }
   this.wcount = 0;
   this.acount = 0;
   let rd = this.removeDups(plets);
   this.dupsRemoved = rd;
   let rdln = rd.length;
   let pln = plets.length;
-  if (pln === 5) {
+  if (0 && (pln === 5)) {
     this.mandatory = rd;
     if (lt && (rd.indexOf(lt) === -1)) {
       debugger;
       return;
     }
   }
-  this.noDups = (rdln === 5);
-  //this.noDups = 0;
-  let possibles4 = this.possibles4 = [];
-  let possibles5 = this.possibles5 = [];
+  //this.noDups = (rdln === 5);
+  this.noDups = 0;
+ // let possibles4 = this.possibles4 = [];
+  //let possibles5 = this.possibles5 = [];
   //debugger;
   this.wgenAll('');
+  return;
   let posb=p4?this.possibles4:possibles5;
-  if (posb.length===1) {
-    debugger;
-  }
+ 
   if (posb.length>0) {
    // console.log(this.checkStr);
-    console.log('lt',lt,'p4',p4,'possibles',posb);
+   // console.log('lt',lt,'p4',p4,'possibles',posb);
   }
   //console.log('possibles',possibles);
   //console.log('count',possibles.length);
@@ -316,9 +333,6 @@ item.tryFirsts4 = function (k) {
   let ln = allowed.length;
   for (let i=0;i<ln;i++) {
     let ai = allowed[i];
-    if (ai==='e') {
-      debugger;
-    }
     known[0] = ai;
     let aik = k+ai;
     let raik = this.removeDups(aik);
@@ -330,6 +344,26 @@ item.tryFirsts4 = function (k) {
     } else {
       this.wgen4known(k);
     }
+  }
+} 
+  
+item.tryFirsts3 = function (k) {
+  let {possLets,known,prohibs} = this;
+  debugger;
+  let phb0 = prohibs[0];
+  let allowed = this.removeLetters(possLets,phb0);
+  let ln = allowed.length;
+  for (let i=0;i<ln;i++) {
+    let ai = allowed[i];
+    if (ai==='e') {
+    //  debugger;
+    }
+    known[0] = ai;
+   // let aik = k+ai;
+    //let raik = this.removeDups(aik);
+    console.log('FIRST',ai);
+    this.wgen3known(k);
+    
   }
 }
 
