@@ -29,48 +29,50 @@ Object.assign(rs,topParams);
 //  this.tries();
   //return;
   // prohibited letters at each position
-  let s0n = '';
+  let s0n = 'm';
   let s1n = '';
   let s2n = '';
   let s3n = '';
-  let s4n = 'sn';
+  let s4n = '';
   this.prohibs = [s0n,s1n,s2n,s3n,s4n];
 
   // prohibited dipthongs
-  this.dprohibs  = [];// ['jk','kj','bk','kb','jh','hj','mk','bj','jb','qq','qk','kq','kh','fz','qp','pq','jl','lj'];
+  this.dprohibs  = []//['jk','kj','bk','kb','jh','hj','mk','bj','jb','qq','qk','kq','kh','fz','qp','pq','jl','lj'];
   // known letters
   let k0 = '';
-  let k1 = '';
-  let k2 = '';
+  let k1 = 'l';
+  let k2 = 'a';
   let k3 = '';
   let k4 = 'e';
   this.known = [k0,k1,k2,k3,k4];
   this.notPossibles = [];
   this.possibles5 = [];
   this.possibles4 = [];
-  let abet= 'abcdefghijklmnopqrstuvwxyz';
+  let abet=this.abet = 'abcdefghijklmnopqrstuvwxyz';
+  this.tries();
+  return;
   //let cm = abet;
-  //let cm = this.complement('bacmighwrdsluk');
-  let cm = 'qeysjxvn';
+  let cm = this.complement('ightcspwoundrv');
+ // let cm = 'qeysjxvn';
   // possible letters
   this.possLets = this.alphabetize(cm);
-  this.mandatory = 'sen';
   this.addFrame();
   //this.wgenffk('pipe');
   //this.first4 = 'pipe';
   //this.wgenTop();
   // this.showPossibles4 = 1;
- // this.wgen3known('ire');
+  //this.wgen3known('ort');
  // return;
  // let tc = cm[4];
  // console.log('TOP CHECK',tc);
  //debugger;
- //this.wgen4known('efot');
+ //this.wgen4known('fort');
  
- this.tryFirsts3('sen');
-  //this.wgenAllknown('mihts');
+ this.tryFirsts4('aeml');
+  //this.wgenAllKnown('aml');
   //this.tries();
   
+  console.log('possibles4',this.possibles4);
   console.log('possibles5',this.possibles5);
   console.log('not possibles',this.notPossibles);
 }
@@ -90,7 +92,10 @@ rs.tries = function () {
   iputs.push(['stank','would','vicar','flesh','blame']);
   iputs.push(['might','words','fluke']);
   iputs.push(['might','words','fluke','brace']);
-  iputs.push(['might','words','fluke','brain','place']);//this one
+  iputs.push(['might','words','fluke','bunch','plays']);//this one
+  iputs.push(['might','clasp','wound']);//this one
+  iputs.push(['might','clasp','wound','brief']);//this one
+  iputs.push(['might','clasp','wound','grove']);//this one
   iputs.push(['crane','sloth','fluid']);
   iputs.push(['crane','sloth','fluid','bagle']);
   iputs.push(['spent','would','vicar']);
@@ -98,7 +103,7 @@ rs.tries = function () {
   for (let i=0;i<ln;i++) {
     let iput = iputs[i];
     let rm = this.removeLetters(abet,iput);
-    console.log('iput',JSON.stringify(iput),'rm',rm);;
+    console.log('iput',JSON.stringify(iput),'rm',rm,'iln',iput.length,'rln',rm.length);;
   }
   const checkBlend = (str) => {
     let bl = this.blend3(str);
