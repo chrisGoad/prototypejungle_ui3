@@ -59,7 +59,7 @@ To edit the content of kop, start by editing c:\prototypejungle_ui3\admin\images
 then run c:\prototypejungle_ui3\admin\update
 
 to deploy to kop run the following for galleries that have changes in images.js
-cd c:\prototypejungle
+cd c:\prototypejungle_ui3
 node admin/genGalleries top 1
 node admin/genGalleries web 1
 node admin/genGalleries drop 1
@@ -67,7 +67,13 @@ node admin/genGalleries partition 1
 node admin/genGalleries lines 1
 node admin/genGalleries anim 1
 node admin/genGalleries grid 1
+
+then 
+
+cd c:\pj
+node admin/update
 node admin/updateKOP
+
 
 not this:
 node admin/imagesToKop

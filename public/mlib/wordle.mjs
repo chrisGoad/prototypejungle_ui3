@@ -54,15 +54,15 @@ item.blend3 = function (str) {
 
 item.badBlend = function (str) {
 //  debugger;
- // return 0;
+ //return 0;
   let bl = this.blend3(str);
   if (!bl) {
     return 0;
   }
-  let okblends = ['thr','scr','spr','shr','spl','str','tch'];
+  let okblends = ['thr','scr','spr','shr','spl','str','tch','nch'];
   if (okblends.indexOf(bl) > -1) {
    // console.log('okblend',bl);
-   
+   return 0;
   } else {
    // console.log('badblend',bl);
     return 1;

@@ -29,30 +29,31 @@ Object.assign(rs,topParams);
 //  this.tries();
   //return;
   // prohibited letters at each position
-  let s0n = 'm';
-  let s1n = '';
+  let s0n = '';
+  let s1n = 'r';
   let s2n = '';
-  let s3n = '';
-  let s4n = '';
+  let s3n = 'e';
+  let s4n = 't';
   this.prohibs = [s0n,s1n,s2n,s3n,s4n];
 
   // prohibited dipthongs
   this.dprohibs  = []//['jk','kj','bk','kb','jh','hj','mk','bj','jb','qq','qk','kq','kh','fz','qp','pq','jl','lj'];
   // known letters
   let k0 = '';
-  let k1 = 'l';
+  let k1 = '';
   let k2 = 'a';
   let k3 = '';
-  let k4 = 'e';
+  let k4 = '';
   this.known = [k0,k1,k2,k3,k4];
   this.notPossibles = [];
   this.possibles5 = [];
   this.possibles4 = [];
   let abet=this.abet = 'abcdefghijklmnopqrstuvwxyz';
-  this.tries();
-  return;
+ // this.tries();
+ // return;
   //let cm = abet;
-  let cm = this.complement('ightcspwoundrv');
+  let cm = this.complement('migh clsp bif');
+ // let cm2 = this.complement('migtlaspbriefwod');
  // let cm = 'qeysjxvn';
   // possible letters
   this.possLets = this.alphabetize(cm);
@@ -68,7 +69,7 @@ Object.assign(rs,topParams);
  //debugger;
  //this.wgen4known('fort');
  
- this.tryFirsts4('aeml');
+ this.tryFirsts4('aert');
   //this.wgenAllKnown('aml');
   //this.tries();
   
@@ -86,16 +87,17 @@ rs.tries = function () {
   this.addFrame();
   let rbets = [];
   let iputs = [];
-  iputs.push(['spent','would','vicar']);
+  iputs.push(['spent','would','vicar']); // 3 11
   iputs.push(['stank','would','vicar']);
   iputs.push(['stank','would','vicar','flesh']);
   iputs.push(['stank','would','vicar','flesh','blame']);
   iputs.push(['might','words','fluke']);
   iputs.push(['might','words','fluke','brace']);
-  iputs.push(['might','words','fluke','bunch','plays']);//this one
-  iputs.push(['might','clasp','wound']);//this one
-  iputs.push(['might','clasp','wound','brief']);//this one
-  iputs.push(['might','clasp','wound','grove']);//this one
+  iputs.push(['might','words','fluke','bunch','plays']);
+  iputs.push(['might','clasp','wound']);
+  iputs.push(['might','clasp','brief']); // 3 12
+  iputs.push(['might','clasp','brief','wound']);//4 7 this one
+  iputs.push(['might','clasp','wound','grove']);
   iputs.push(['crane','sloth','fluid']);
   iputs.push(['crane','sloth','fluid','bagle']);
   iputs.push(['spent','would','vicar']);
@@ -113,7 +115,7 @@ rs.tries = function () {
      console.log('NO BLEND');
     }
   }
-  this.wOk('astry');
+ // this.wOk('astry');
  
   //checkBlend('aibfo');
   //checkBlend('aibfd');

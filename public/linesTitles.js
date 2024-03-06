@@ -1,1 +1,1 @@
-let linesTitles = ["Chaos Within Order","Lights","Bug Eyes","Lines 2"];
+let linesTitles = ["Connectome","Chaos Within Order","Lights","Bug Eyes","Lines 2"];
