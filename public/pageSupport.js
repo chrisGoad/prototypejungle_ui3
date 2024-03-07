@@ -135,7 +135,7 @@ document.addEventListener('DOMContentLoaded', () => {
 	let nextDiv = document.getElementById('nextDiv');
 //	let fullDiv = document.getElementById('fullDiv');
 	let fullDiv = document.getElementById('full');
-	let highDiv = document.getElementById('highDiv');
+//	let highDiv = document.getElementById('highDiv');
 	let topDiv = document.getElementById('topDiv');
 	let titleDiv = document.getElementById('titleDiv');
 	let imageDiv = document.getElementById('imageDiv');
@@ -143,9 +143,9 @@ document.addEventListener('DOMContentLoaded', () => {
 	let imageEl =  document.getElementById('theImage');
 	let videoEl =  document.getElementById('theVideo');
 	let lastPage = cPage === (thePages.length-1);
-  if ((imKind === 'anim') || (!include_hi_res)) {
-    highDiv.style.visibility = "hidden";
-  }
+ // if ((imKind === 'anim') || (!include_hi_res)) {
+ //   highDiv.style.visibility = "hidden";
+ // }
 	if (cPage === 0) {
 	 prevDiv.style.visibility = "hidden";
 	}
@@ -156,7 +156,7 @@ document.addEventListener('DOMContentLoaded', () => {
 	nextDiv.addEventListener('click',onNext);
 	topDiv.addEventListener('click',onTop);
 	fullDiv.addEventListener('click',onFull);
-	highDiv.addEventListener('click',onHigh);
+	//highDiv.addEventListener('click',onHigh);
 	if (title) {
     if (noTitle) {
      // titleDiv.hide();

@@ -5,6 +5,7 @@ sections:
 
 [     [0,'mutate_6','instances',1,'mutate 6',{likes:0,posted:0,category:'drop'}], 
 	     [210,'grid_droplets','generators','square','Droplets',{likes:130,posted:1,category:'grid'}],
+      [0,'wordle','generators',1,'Wordle',{likes:0,posted:0,category:'drop'}], 
 
       [0,'mutate_5','instances',1,'mutate 5',{likes:0,posted:0,category:'drop'}], 
       [0,'mutate_4','instances',1,'mutate 4',{likes:0,posted:0,category:'drop'}], 
@@ -12,7 +13,6 @@ sections:
       [0,'mutate_2','instances',1,'mutate 2',{likes:0,posted:0,category:'drop'}], 
       [0,'mutate_1','instances',1,'mutate 1',{likes:0,posted:0,category:'drop'}], 
       [0,'mutate_0','instances',1,'mutate 0',{likes:0,posted:0,category:'drop'}], 
-      [0,'wordle','generators',1,'Wordle',{likes:0,posted:0,category:'drop'}], 
       [0,'CMB','generators',1,'CMB',{likes:0,posted:0,category:'drop'}], 
       [0,'test_ad','generators',1,'test attack',{likes:0,posted:0,category:'drop'}], 
       [0,'test_eye','generators',1,'test eye',{likes:0,posted:0,category:'drop'}], 

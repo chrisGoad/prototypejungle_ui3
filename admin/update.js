@@ -199,11 +199,13 @@ var fs = require('fs');
 //xferDir(0,'www','doc');
 xferDir('admin');
 //xferDir('server');
-xferFiles('public',['index.html','quads.html','draw.html','index.html','topdefs.js','style.css',
-  'spectrum.css','galleries.html','dropPages.js','dropTitles.js','linesPages.js','linesTitles.js','linesImages.html','gridPages.js','gridTitles.js',
-  'partitionPages.js','partitionTitles.js',
-  'page.html','setAtKOP.js','reallySetAtKOP.js','pageSupport.js','logo.svg','animImages.html','gridImages.html','dropImages.html','partitionImages.html',
-   'webImages.html']);
+xferFiles('public',['index.html','quads.html','draw.html','topdefs.js','style.css',
+  'spectrum.css','galleries.html',
+  //'dropPages.js','dropTitles.js','linesPages.js','linesTitles.js','linesImages.html','gridPages.js','gridTitles.js',
+  //'partitionPages.js','partitionTitles.js',
+  'page.html','setAtKOP.js','reallySetAtKOP.js','pageSupport.js','logo.svg',
+  //'animImages.html','gridImages.html','dropImages.html','partitionImages.html','webImages.html'
+  ]);
 xferFiles('admin',['genGrids.js','gridSections.js','imageOrder.js']);
 xferDirs(['public/generators','public/instances','public/shape','public/mlib','public/json','public/doc','public/server','public/admin']);
 //xferDirs(['js/core','js/dom','js/geom','js/draw']);

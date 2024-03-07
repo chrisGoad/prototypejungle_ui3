@@ -54,7 +54,7 @@ item.blend3 = function (str) {
 
 item.badBlend = function (str) {
 //  debugger;
- //return 0;
+ return 0;
   let bl = this.blend3(str);
   if (!bl) {
     return 0;
@@ -121,7 +121,7 @@ item.wOk1 = function (str) {
   if (1 && this.badBlend(str)) {
     return 0;
   }
-  if (str === 'sense') {
+  if (str === 'clon') {
     debugger;
   }
   let ln = str.length;
@@ -205,6 +205,9 @@ item.wgenAll = function (sofar) {
     debugger;
   }
   let ok = this.wOk(sofar);
+  if (!ok) {
+    return;
+  }
   if (ln === 5) {
        return;
   }
@@ -283,6 +286,11 @@ item.tryFirsts4 = function (k) {
     }
   }
 } 
+
+item.tryFirsts5 = function (k) {
+  this.wgenAllKnown(k);
+}
+
   
 item.tryFirsts3 = function (k) {
   let {possLets,known,prohibs} = this;
