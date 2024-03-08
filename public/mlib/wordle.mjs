@@ -306,7 +306,18 @@ item.tryFirsts3 = function (k) {
   }
 }
 
-
+item.tryFirsts =  function (k) {
+  let ln = k.length;
+  if (ln ===3) {
+    this.tryFirsts3(k);
+  } else if (ln === 4) {
+    this.tryFirsts4(k);
+  } else if (ln===5) {
+    this.tryFirsts5(k);
+  } else {
+    console.log('k',k, ' is too short');
+  }
+}
 item.wgenAllKnown = function (k) {
   this.mandatory = k;
   this.wgenTop(1,null,k);

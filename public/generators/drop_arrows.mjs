@@ -15,7 +15,7 @@ rs.setName('drop_arrows');
 let ht = 400;
 let topParams = {width:ht,height:ht,framePadding:0.1*ht};
 
-let dropParams = {dropTries:40,segLength:2,maxDrops:60000};
+let dropParams = {dropTries:40,segLength:2,maxDrops:20000};
 
 Object.assign(rs,topParams);
 

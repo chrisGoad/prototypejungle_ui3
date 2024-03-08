@@ -10,12 +10,13 @@ let ht= 1000;
 let topParams = {width:ht,height:ht,framePadding:0.1*ht}
 Object.assign(rs,topParams);
 
-rs.dropParams = {dropTries:150,scale:0.5,radius:50}
+rs.dropParams = {dropTries:50,scale:0.7,radius:10,maxLoops:10000,innerRadius:10,outerRadius:20,collideFactor:1.5}
 
 rs.initProtos = function () {
   let circleP = this.circleP = circlePP.instantiate();
   circleP.fill = 'white';
   circleP['stroke-width'] = 0;
+  this.dropP = circleP;
 }
 
 rs.generateCircleDrop= function (p) {
@@ -38,6 +39,7 @@ rs.generateCircleDrop= function (p) {
 }
 
 rs.initialize = function () {
+  debugger;
   this.initProtos();
   let {circleP,dropParams} = this;
   this.addFrame();

@@ -11,9 +11,13 @@ addGridMethods(rs);
 addRandomMethods(rs);
 rs.setName('grid_droplets_wide');
 
-let wd = 300;
+let ht= 300;
+//let wd = (3*ht)/2;
+let wd = 2*ht;
 let nr= 40;
-let topParams = {width:1.75*wd,height:wd,numRows:nr,numCols:nr,pointJiggle:5,framePadding:0.15*wd,backFill:'rgb(200,0,0)'};
+//let nc =(3*nr)/2; 
+let nc =2*nr; 
+let topParams = {width:wd,height:ht,numRows:nr,numCols:nc,pointJiggle:5,framePadding:0.15*wd,backFill:'rgb(200,0,0)'};
 
 Object.assign(rs,topParams);
 

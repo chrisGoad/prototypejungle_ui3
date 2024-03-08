@@ -50,7 +50,7 @@ rs.collides = function (npoint,nradius,drops) {
 }
 
 rs.genRandomPoint = function (rect) {
-  let {stepsSoFar:ssf,width} = this;
+  let {stepsSoFar:ssf,width,height} = this;
   if (ssf) {
     debugger;
     let fc = width/10;
@@ -65,7 +65,7 @@ rs.genRandomPoint = function (rect) {
     let y = Math.random() * extent.y + ly;
     return Point.mk(x,y);
   }
-  let {width,height} = this;
+  //let {width,height} = this;
   let rx = (Math.random()-0.5) * width;
    let ry= (Math.random()-0.5) * height;
   return Point.mk(rx,ry);
@@ -131,7 +131,7 @@ rs.via3d = function (p) {
 }
   
 rs.generateCircleDrops = function (iparams) {
-  let props = ['radius','maxLoops','dropTries','maxDrops','scale','innerRadius','outerRadius'];
+  let props = ['radius','maxLoops','dropTries','maxDrops','scale','innerRadius','outerRadius','collideFactor'];
   let params = {};
   debugger;
   //core.transferProperties(params,this,props);
@@ -140,7 +140,8 @@ rs.generateCircleDrops = function (iparams) {
   this.dropParams = params;
   let {camera} = this;
 
-  let {radius=10,maxLoops=Infinity,maxDrops=Infinity,dropTries,scale=1,innerRadius,outerRadius} = params;
+  //		 {radius=10,maxLoops=Infinity,maxDrops=Infinity,dropTries,scale=1,innerRadius,outerRadius} = params;
+  let {radius=10,maxLoops=Infinity,maxDrops=Infinity,dropTries,scale=1,innerRadius,outerRadius,collideFactor} = params;
   let cnt =0;
   let tries = 0;
   let drops = this.drops = [];
@@ -153,6 +154,8 @@ rs.generateCircleDrops = function (iparams) {
     if (!drop) {
       continue;
     } 
+    drop.collideRadius = collideFactor*radius;
+
     let collideRadius = drop.collideRadius;
     let cl = this.collides(pnt,collideRadius,drops);
     if (cl) {
@@ -178,7 +181,7 @@ rs.generateCircleDrops = function (iparams) {
 rs.generateDrop = function (p) {
   return {radius:this.dropParams.radius};
 }
-/*
+
 rs.installCircleDrops = function (drops) {
   let {shapes,camera,lines,dropP,includeLines,lineP,segs} = this;
   debugger;
@@ -265,7 +268,7 @@ rs.placeLines = function () {
   }
 
 }
-*/    
+  
 
 rs.dropsToPath = function (drops) { 
   let path = drops.map((drop) => drop.point);

@@ -11,7 +11,7 @@ let nr = 128;
 let topParams = {width:ht,height:ht,numRows:nr,numCols:nr,dimension:50,framePadding:0.1*ht}
 Object.assign(rs,topParams);
 
-rs.dropParams = {dropTries:500,numIntersections:2}
+rs.dropParams = {dropTries:500,numIntersections:2,maxLoops:10000}
 
 rs.initProtos = function () {
   let rectP = this.rectP = rectPP.instantiate();

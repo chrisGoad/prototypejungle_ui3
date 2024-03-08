@@ -56,10 +56,10 @@ cd c:\prototypejungle_clone
 git clone https://github.com/chrisGoad/prototypejungle.git
 
 To edit the content of kop, start by editing c:\prototypejungle_ui3\admin\images.js
-then run c:\prototypejungle_ui3\admin\update
+then run c:\pj\admin\update
 
 to deploy to kop run the following for galleries that have changes in images.js
-cd c:\prototypejungle_ui3
+cd c:\pj
 node admin/genGalleries top 1
 node admin/genGalleries web 1
 node admin/genGalleries drop 1
@@ -71,7 +71,6 @@ node admin/genGalleries grid 1
 then 
 
 cd c:\pj
-node admin/update
 node admin/updateKOP
 
 
