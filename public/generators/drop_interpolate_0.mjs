@@ -21,7 +21,7 @@ rs.vValues = [[250,250,0,.1],[250,0,250,.1],[0,250,250,.1],[250,0,0,.1],[0,0,250
 
 Object.assign(rs,topParams);
 
-let dropParams = {dropTries:150,maxDrops:100000}
+let dropParams = {dropTries:150,maxDrops:10000,maxLoops:100000}
 //rs.dropParams = dropParams;
 rs.initProtos = function () {
   let circleP = this.circleP = circlePP.instantiate();

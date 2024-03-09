@@ -4,9 +4,10 @@ import {rs as generatorP} from '/generators/part2_0.mjs';
 let rs = generatorP.instantiate();
 
 rs.setName('part2_0_34');
+rs.whereToPause=113;
+rs.numSteps = 1000;
 let levels = 8;
 levels = 2;
-debugger;
 /*const  buildStatePs = function (n,m) {
   let st = {};
   for (let i = 0;i<n;i++) {
@@ -17,9 +18,10 @@ debugger;
 let kind = 'randomSteps';
 let initState = {a:{value:0},b:{value:0},c:{value:0},levels:{value:0},csf:{value:0.1}};
 let rng = 0.25;
-let pspace = {a:{kind,step:.015,min:-rng,max:rng,interval:1,steps:0.5},b:{kind,step:.013,min:-rng,max:rng,interval:1,steps:0.5},c:{kind,step:.011,min:-rng,max:rng,interval:1,steps:0.5},
-              levels:{kind,min:1,max:3,step:1,interval:150,steps:0.5},csf:{kind,step:0.05,min:0.05,max:14,interval:1,steps:0.5}};
-let pstate = {pathKind:'randomSteps',pspace,cstate:initState};
+let pspace = {a:{kind,step:.015,min:-rng,max:rng,interval:1,steps:0.5},b:{kind,step:.013,min:-rng,max:rng,interval:1,steps:0.5},
+c:{kind,step:.011,min:-rng,max:rng,interval:1,steps:0.5},
+levels:{kind,min:1,max:3,step:1,interval:150,steps:0.5},csf:{kind,step:0.05,min:0.05,max:14,interval:1,steps:0.5}};
+let pstate = rs.pstate={pathKind:'randomSteps',pspace,cstate:initState};
 let doWhatt = function (cstate) {
   console.log('cstate.a',cstate.a.value,'b',cstate.b.value);
   debugger;
@@ -44,7 +46,6 @@ let mkqp7 = function (eps) {
 }
 
 let mkqspa = function () {
-  debugger;
   let qspa = [];
   qspa.push(mkqp46(eps0,6));
   qspa.push(mkqp46(eps1,6));
@@ -93,12 +94,11 @@ const setEps = function (cstate) {
   eps1 = cstate.b.value;
   eps2 = cstate.c.value;
   csf = cstate.csf.value;
-  console.log('cstate a',cstate.a.value,'b',cstate.b.value,'c',cstate.c.value,'csf',csf);
+ // console.log('cstate a',cstate.a.value,'b',cstate.b.value,'c',cstate.c.value,'csf',csf);
  }
 // rs.timeSteps(pstate,30,function (cstate) ={doWhat(this );
 
-rs.oneStep = function () {
-  debugger;
+rs.oneStepp = function () {
   this.resetShapes();
 //  for (let i=0;i<10;i++) {
     this.timeStep(pstate);
@@ -117,15 +117,39 @@ rs.oneStep = function () {
  setTimeout(() => this.oneStep(),40)
  //setTimeout(() => this.oneStep(),40)
 }
+
+
+rs.updateState = function () {
+ // debugger;
+  this.resetShapes();
+  let {stepsSoFar:ssf} = this;
+  console.log('ssf',ssf)
+//  for (let i=0;i<10;i++) {
+    this.timeStep(pstate);
+    let cstate = pstate.cstate;
+    setEps(cstate);
+    this.qspa = mkqspa();
+    //console.log('levels',cstate.levels.value);
+    //let strokeWidths = rs.partParams.strokeWidths = [];
+   // rs.computeExponentials({dest:strokeWidths,n:20,root:csf,factor:.7});
+
+    //rs.partParams.levels = cstate.levels;
+    //this.partParams.levels = cstate.levels.value;
+
+  //}
+ // draw.refresh();
+ //setTimeout(() => this.oneStep(),40)
+ //setTimeout(() => this.oneStep(),40)
+ this.pauseAnimationMaybe();
+ }
 rs.afterInitialize = function () {
   let lines = this.set('lines',arrayShape.mk());
 
- this.oneStep();
+ //this.oneStep();
 }
 
 rs.afterDisplayCell = function (prt) {
-debugger;
-	  console.log('CSF',csf);
+	//  console.log('CSF',csf);
   let w = prt.where;
   let ws = this.whereString(w);
   let wln = w.length;
@@ -134,7 +158,7 @@ debugger;
   if  (!wa) {
     wa = this[ws] = [];
   }
-  console.log('where',w,'ws',ws,'wln',wln,);
+//  console.log('where',w,'ws',ws,'wln',wln,);
   let crc = this.circleP.instantiate();
   let pgon =  prt.polygon;
   let dim = pgon.minDimension();
@@ -147,7 +171,6 @@ debugger;
     let waln = wa.length;
 
   if (waln > 1) {
-      debugger;
 
     let ln = this.lineP.instantiate();
     ln.stroke = 'white';

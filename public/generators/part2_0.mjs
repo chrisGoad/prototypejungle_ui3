@@ -6,10 +6,11 @@ import {rs as linePP} from '/shape/line.mjs';
 import {rs as basicP} from '/generators/basics.mjs';
 import {rs as addPartMethods} from '/mlib/partTree2.mjs';	
 import {rs as addPathMethods} from '/mlib/path.mjs';	
-
+import {rs as addAnimationMethods} from '/mlib/animate0.mjs'
 let rs = basicP.instantiate();
 addPartMethods(rs);
 addPathMethods(rs);
+addAnimationMethods(rs);
 rs.setName('part2_0');
 let wd = 100;
 let topParams = {width:wd,height:wd,framePadding:0.2*wd,frameStrokee:'white'}

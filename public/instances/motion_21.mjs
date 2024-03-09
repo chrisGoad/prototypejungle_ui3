@@ -12,7 +12,8 @@ rs.setName('motion_21');
 let ht=50;
 
 
-let topParams = {width:ht,height:ht,angleOffset:0*Math.PI/10,framePadding:-0.1*ht,frameStroke:'white',frameStrokeWidth:.2,timePerStep:1/(16*32),stopTime:1,recordingMotion:1,saveAnimation:1,
+let topParams = {width:ht,height:ht,angleOffset:0*Math.PI/10,framePadding:-0.1*ht,frameStroke:'white',frameStrokeWidth:.2,timePerStep:1/(16*32),stopTime:1,recordingMotion:1,
+saveAnimation:1,whereToPause:2,
     circleRadius:.2,nearestFadeFactor:20,shapesPerPath:50,speed:1,segsPerCircle:20,radius:.4*ht,numSlices:8};
 
 Object.assign(rs,topParams);
@@ -62,7 +63,8 @@ rs.initialize = function () {
  // return;
   let av = this.allValues();
   this.addLinesBetweenPositions(av,lineP);
-  let colors = [[250,250,0],[0,250,0],[0,250,250],[100,250,250],[250,250,250],[250,250,100]];
+//  let colors = [[250,250,0],[0,250,0],[0,250,250],[100,250,250],[250,250,250],[250,250,100]];
+  let colors = [[0,250,250],[0,250,0],[0,250,250],[100,250,250],[250,250,250],[250,250,100]];
   this.addColorPath(colors,1,lines);
 }
 
@@ -82,6 +84,7 @@ rs.updateState = function () {
     }
   }
   this.updateLines(apnts,fn);
+  this.pauseAnimationMaybe();
 }
 
 

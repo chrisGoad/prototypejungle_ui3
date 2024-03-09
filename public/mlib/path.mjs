@@ -187,14 +187,14 @@ item.sinusoidVal = function (sv,ev,ivel,cstep) {
   let fr = cstep/steps;
   let nvl = down?sv - fr*delta:sv+fr*delta;
   let nnvl = down?sv - cstep*vel:sv+cstep*vel;
-  console.log('cstep',cstep,'vel',vel,'nvl',nvl,'nnvl',nnvl);
+ // console.log('cstep',cstep,'vel',vel,'nvl',nvl,'nnvl',nnvl);
   let phase = (Math.PI)*(cstep/steps) - Math.PI/2; 
   let nvn =  (1+ Math.sin(phase))/2;
   let nv = down?sv - nvn*delta:sv+nvn*delta;
   if (isNaN(nvl)) {
     debugger;
   }
-  debugger;
+  //debugger;
   return {nosin:nnvl,sin:nv};
 }
 
@@ -379,7 +379,7 @@ item.randomStepsNextState = function (pspace,cstate,component) {
 }
 
 item.nextTable = {'random':'randomNextState','randomWalk':'randomWalk2dNextState','randomWalkScalar':'randomWalkScalarNextState',
-                  'randomValue':'randomValueNextState','randomSteps':'randomStepsdNextState','sweep':'sweepNextState',
+                  'randomValue':'randomValueNextState','randomSteps':'randomStepsNextState','sweep':'sweepNextState',
                   'sweepFixedDur':'sweepFixedDurNextState','interpolate':'interpolateNextState'};
                   
                   
@@ -428,6 +428,7 @@ item.nextStatee = function (pathKind,pspace,cstate,component) {
 
 item.stepComponent = function (nm,forTrace) { // stv = subtracevalue
   let {stepsSoFar:ssf,iStart,iSteps,iTarget}= this;
+ // debugger;
   let interpolating = iStart&&(ssf>=iStart);
   let {pspace,cstate}= this.pstate;
   let cst = cstate[nm];
@@ -516,7 +517,7 @@ item.oneInterpolationStep = function () {
    if (this.updateState) {
     this.updateState();
   } else {
-      debugger;
+      //debugger;
       this.pstate.cstate = this.interpolateStates(this.interpFrom,this.interpTo,i/this.numISteps);
 
     this.resetShapes();
@@ -553,7 +554,7 @@ item.oneStep = function (one) {
   if (ns&&this.saveAnimation&&(ns>this.chopOffBeginning)) { // for some reason, the first frame is corrupted 
     draw.saveFrame(ns-Math.max(this.chopOffBeginning+1,1));
   }
-  debugger;
+  //debugger;
   if (this.updateState) {
     this.updateState();
   } else {
