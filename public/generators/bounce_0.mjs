@@ -2,12 +2,12 @@ import {rs as circlePP} from '/shape/circle.mjs';
 import {rs as linePP} from '/shape/line.mjs';
 import {rs as basicP} from '/generators/basics.mjs';
 import {rs as addAnimationMethods} from '/mlib/animate0.mjs';
-import {rs as addAudioMethods} from '/mlib/audio.mjs';	
+//import {rs as addAudioMethods} from '/mlib/audio.mjs';	
 
 let rs = basicP.instantiate();
 
 addAnimationMethods(rs);
-addAudioMethods(rs);
+//addAudioMethods(rs);
 
 rs.setName('bounce_0');
 let ht=50;
@@ -437,7 +437,7 @@ rs.enactCollide2Particles = function (particle1,particle2,t) {
   let {ray:ray2,fillStructure:FS2,shape:shape2,radius:r2} = prt2; 
  // console.log('r1',r1,'r2',r2);
   if (1||((r1>2)&&(r2>2))) {
-    this.playTone(this.nextFreq(),.1);
+ //   this.playTone(this.nextFreq(),.1);
     
   }
   ray1.initialPosition=prt1.position;
@@ -678,7 +678,6 @@ rs.updatePosition = function (particle,t,moveShape) {
 
 
 rs.updatePositions = function (t,moveShapes) {
-  debugger;
   let {motionHistory:mh,recordingMotion:rm,lastTime:lt}=this;
   this.currentTime = t;
   let {particles} = this;
@@ -916,7 +915,7 @@ rs.stopMediaRecorder = function () {
 rs.updateState = function () {
   let {stepsSoFar:ssf,timePerStep,lastCollision,nextC,stopTime,segments,particles,mediaRecorder:mr,motionHistory:mh} = this;
   //console.log('motionHistory:',JSON.stringify(mh));
-  this.initAudio();
+  //this.initAudio();
   if ((ssf%20)===19) {
     //console.log('playtone');
     

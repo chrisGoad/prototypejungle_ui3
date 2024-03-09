@@ -71,6 +71,17 @@ item.oneStep = function (one) {
    setTimeout(() => this.oneStep(),this.stepInterval);
  }
 }
+item.pauseAnimationMaybe = function () {
+  let {stepsSoFar:ssf,whereToPause:wtp,whereToSave:wts} = this;
+  if (wtp && (ssf === (wtp+0))) {
+    debugger;
+    this.paused = 1;
+    let wts = this.whereToSave;
+    let wtps = this.padIntTo(wtp,3);
+    let nwts = wts+'_f'+wtps; 
+    this.setName(nwts);
+  }
+}
 
 }  
    

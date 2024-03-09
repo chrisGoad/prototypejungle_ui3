@@ -1223,6 +1223,23 @@ rs.pointsAroundCell = function (params,x,y) {
    return [UL,UR,LR,LL,UL];
 }
 
+item.padIntTo = function (v,n) {
+  let vs = v+'';
+  let ln = vs.length;
+  let np = n-ln;
+  if (np <=0) {
+    return vs;
+  }
+  let zs ='';
+  for (let i=0;i<np;i++) {
+    zs = zs+'0';
+  }
+  return zs+vs;
+}
+  
+    
+  
+
   
   
   
