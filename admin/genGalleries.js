@@ -30,6 +30,7 @@ let drop = kind === 'drop';
 let grid = kind === 'grid';
 let lines = kind === 'lines';
 let anim = kind === 'anim';
+let stills = kind === 'stills';
 let partition = kind === 'partition';
 let web = kind === 'web';
 let sortByOrder = toBoolean(sortByOrderstr);
@@ -151,6 +152,8 @@ if (alternate) {
   outPath = 'public/linesImages.html';
 } else if (anim) {
   outPath = 'public/animImages.html';
+} else if (stills) {
+  outPath = 'public/stillsImages.html';
 } else if (partition) {
   outPath = 'public/partitionImages.html';
 } else if (web) {
@@ -277,6 +280,9 @@ if (imKind === 'g') {
     } else if (anim) {
       kindTitle = 'Animation'
       aboutURL = "kop_anim.html";
+    } else if (stills) {
+      kindTitle = 'Animation Stills'
+      aboutURL = "kop_stills.html";
     }
     if (!top) {
     

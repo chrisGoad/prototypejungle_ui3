@@ -117,6 +117,9 @@ document.addEventListener('DOMContentLoaded', () => {
   }  else if (imKind === 'anim') {
     thePages = animPages;
     theTitles = animTitles;
+  } else if (imKind === 'stills') {
+    thePages = stillsPages;
+    theTitles = stillsTitles;
   } else if (imKind === 'grid') {
     thePages = gridPages;
     theTitles = gridTitles;

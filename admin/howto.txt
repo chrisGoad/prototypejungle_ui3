@@ -66,6 +66,7 @@ node admin/genGalleries drop 1
 node admin/genGalleries partition 1
 node admin/genGalleries lines 1
 node admin/genGalleries anim 1
+node admin/genGalleries stills 1
 node admin/genGalleries grid 1
 
 then 

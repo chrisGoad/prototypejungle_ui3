@@ -45,7 +45,10 @@ sections:
  [0,'part2_0_31','instances',1,'Pulse',{video:'gif',noTitle:0,likes:0,posted:0,category:'anim'}],
      [0,'stripes_1','instances',1,'Gridulous',{video:'gif',likes:0,posted:0,category:'anim'}], 
 
-  
+ // stills
+ [0,'motion_29','instances',1,'Connectome',{likes:152,posted:1,category:'stills'}],
+         [0,'bounce_16_f073','instances',1,'Square Dance',{likes:0,posted:0,category:'stills'}], 
+
 
  
  //partition

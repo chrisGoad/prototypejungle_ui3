@@ -46,6 +46,7 @@ xferFile('public','reallySetAtKOP.js','setAtKOP.js');
 xferFiles('public',['dropPages.js','dropTitles.js','dropImages.html','draw.html',
                      'linesPages.js','linesTitles.js','linesImages.html',
                      'animPages.js','animTitles.js','animImages.html',
+                     'stillsPages.js','stillsTitles.js','stillsImages.html',
                      'gridPages.js','gridTitles.js','gridImages.html',
                      'partitionPages.js','partitionTitles.js','partitionImages.html',
                      'webPages.js','webTitles.js','webImages.html',
