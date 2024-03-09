@@ -54,7 +54,7 @@ item.blend3 = function (str) {
 
 item.badBlend = function (str) {
 //  debugger;
- return 0;
+// return 0;
   let bl = this.blend3(str);
   if (!bl) {
     return 0;
@@ -121,7 +121,7 @@ item.wOk1 = function (str) {
   if (1 && this.badBlend(str)) {
     return 0;
   }
-  if (str === 'clon') {
+  if (str === 'cvher') {
     debugger;
   }
   let ln = str.length;
@@ -267,10 +267,15 @@ item.wgen3known = function (k) {
   
 item.tryFirsts4 = function (k) {
   let {possLets,known,prohibs} = this;
+  let k0 = known[0];
   debugger;
   this.mandatory = k;
   let phb0 = prohibs[0];
   let allowed = this.removeLetters(possLets,phb0);
+  if (k0) {
+    this.wgen4known(k);
+    return;
+  }
   let ln = allowed.length;
   for (let i=0;i<ln;i++) {
     let ai = allowed[i];

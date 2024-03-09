@@ -2148,7 +2148,7 @@ Polygon.mangle = function (params) {
 //debugger;
  // let orect = this.orect; 
   let sides = this.sides();
-  let msides = sides.map( (s) => s.lengthen(ln).twist(tw));
+  let msides = sides.map( (s) => s.lengthenBy(ln).twist(tw));
   if (within) {
     let csides = msides.map((s) => within.intersectLineSegment(s));
     return csides;
@@ -2350,10 +2350,10 @@ Rectangle.mangle = function (params) {
  // let orect = this.orect; 
   let sides = this.labeledSides();
   let {left,right,top,bottom} = sides;
-  let mleft = left.lengthen(ln).twist(tw);
-  let mright = right.lengthen(ln).twist(tw);
-  let mtop = top.lengthen(ln).twist(tw);
-  let mbottom = bottom.lengthen(ln).twist(tw);
+  let mleft = left.lengthenBy(ln).twist(tw);
+  let mright = right.lengthenBy(ln).twist(tw);
+  let mtop = top.lengthenBy(ln).twist(tw);
+  let mbottom = bottom.lengthenBy(ln).twist(tw);
   if (within) {
    
     //let ln = 1.2;
