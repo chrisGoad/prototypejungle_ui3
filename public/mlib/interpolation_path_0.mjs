@@ -228,16 +228,23 @@ item.straightPath = function (p0,p1) {
   return path;
 }
 */
- item.circleToPath = function (circle) {
+ item.circleToPath = function (circle,scale) {
   let {center,radius} = circle;
   debugger;
+  let scaleX = 1;
+  let scaleY = 1;
+  if (scale) {
+    scaleX = scale.x;
+    scaleY = scale.y;
+  }
+  let usc = center.plus(radius,0);
   let sv = Point.mk(center.plus(radius,0));
   let pf = (fr) => {
     let a = fr * 2 * Math.PI;
-    let x = Math.cos(a);
-    let y = Math.sin(a);
-    let p = Point.mk(x,y).times(radius).plus(center);
-    return p;
+    let x = scaleX*radius*Math.cos(a);
+    let y = scaleY*radius*Math.sin(a);
+    let p = Point.mk(x,y)
+    return p.plus(center);;
   }
   let pe0 = {pathTime:0,value:sv,pathFunction:pf};
   let pe1 = {pathTime:1,value:sv};

@@ -5,6 +5,8 @@ sections:
 
 [
  //anim
+  [0,'mutate_6','instances',1,'Linear Motion 2',{video:'gif',noTitle:0,likes:0,posted:0,category:'anim'}],
+  [0,'motion_32','instances',1,'Diagonal Organism',{video:'gif',noTitle:0,likes:0,posted:0,category:'anim'}],
   [0,'motion_24','instances',1,'Colliding Orbits',{video:'gif',noTitle:0,likes:0,posted:0,category:'anim'}],
   [0,'rectangle_gon_grid_7','instances',1,'Clockwise',{video:'gif',noTitle:0,likes:0,posted:0,category:'anim'}],
   [0,'bounce_1','instances',1,'Bounce 2',{video:'mp4',noTitle:0,likes:0,posted:0,category:'anim'}],
@@ -47,7 +49,9 @@ sections:
 
  // stills
  [0,'motion_29','instances',1,'Connectome',{likes:152,posted:1,category:'stills'}],
-         [0,'bounce_16_f073','instances',1,'Square Dance',{likes:0,posted:0,category:'stills'}], 
+ [0,'bounce_16_f077','instances',1,'Square Dance Frame 77',{likes:0,posted:0,category:'stills'}], 
+ [0,'motion_29_f001','instances',1,'Motion 29 Frame 1',{likes:0,posted:0,category:'stills'}], 
+ [0,'motion_24_f002','instances',1,'Motion 24 Frame 2',{likes:0,posted:0,category:'stills'}], 
 
 
  
@@ -74,7 +78,10 @@ sections:
  [0,'part2_0_1','instances',1,'Window',{likes:0,posted:0,noTitle:1,category:'partition'}], 
  [5,'part2_0_2','instances',1,'Recursion',{likes:0,posted:0,noTitle:1,category:'partition'}], 
  
- [100,'drop_space_junk','generators',1,'Space Junk',{likes:50,posted:1,category:'drop',variant:0}], 
+ //drop
+ 
+ [0,'drop_interpolate_0','generators',1,'Motion Illusion',{likes:50,posted:1,category:'drop',variant:0}], 
+ //[100,'drop_space_junk','generators',1,'Space Junk',{likes:50,posted:1,category:'drop',variant:0}], 
  [10,'drop_light','generators',1,'Light',{likes:50,posted:1,category:'drop',variant:0}], 
  [0,'drop_night','generators',1,'Beach At Night',{likes:50,posted:1,category:'dropCircles',variant:0}], 
   [110,'drop_all_0','generators',1,'Thatch',{likes:0,posted:0,category:'drop'}], 
@@ -85,13 +92,13 @@ sections:
   [150,'drop_rects_1','generators',1,'Rects 1',{likes:0,posted:0,category:'drop'}], 
  [0,'web_random_radius','generators',1,'Scratches',{likes:36,posted:1,category:'drop',variant:3}], 
  //[0,'drop_whorls','generators',1,'Whorls',{likes:45,posted:1,category:'drop'}], 
-    [50,'drop_iris','generators',1,'Iris',{likes:45,posted:1,category:'drop'}], //was [0,'drop0_1_27','final',1,'Iris',posted:1,category:'grid'}],
+    //[50,'drop_iris','generators',1,'Iris',{likes:45,posted:1,category:'drop'}], //was [0,'drop0_1_27','final',1,'Iris',posted:1,category:'grid'}],
 [70,'drop_arrows','generators',1,'Arrows',{likes:27,posted:1,category:'drop'}],  //was [0,'drop0_1_21','final',1,'Leaves']
   //[0,'drop_leaves','generators',1,'Leaves',{likes:0,posted:0,category:'drop'}],  //was [0,'drop0_1_21','final',1,'Leaves']
-  [20,'drop_dandelion','generators',1,'Dandelion',{likes:78,posted:1,category:'drop'}],// was [0,'drop0_1_24','final',1,'Dandelion',posted:1,category:'grid'}],
+ // [20,'drop_dandelion','generators',1,'Dandelion',{likes:78,posted:1,category:'drop'}],// was [0,'drop0_1_24','final',1,'Dandelion',posted:1,category:'grid'}],
   [90,'drop_metal_2','generators',1,'Metal 2',{likes:0,posted:0,category:'drop'}], // was [0,'drop0_5','final',1,'Metal 2',posted:1,category:'grid'}],
-[40,'drop_ice','generators',1,'Ice',{likes:44,posted:1,category:'drop'}], // was   [0,'drop0_0','final',1,'Ice',posted:1,category:'grid'}],
-    [80,'drop_clouds','generators',1,'Clouds',{likes:7,posted:1,category:'drop'}], // was [0,'drop0_0_1','final',1,'Clouds',posted:1,category:'grid'}],
+//[40,'drop_ice','generators',1,'Ice',{likes:44,posted:1,category:'drop'}], // was   [0,'drop0_0','final',1,'Ice',posted:1,category:'grid'}],
+  // [80,'drop_clouds','generators',1,'Clouds',{likes:7,posted:1,category:'drop'}], // was [0,'drop0_0_1','final',1,'Clouds',posted:1,category:'grid'}],
 //[0,'drop_horizon','generators',1,'Horizon',{likes:0,posted:0,category:'drop'}], //was  [0,'drop0_3','final',1,'Horizon']
     [30,'drop_circles_23','generators',1,'Symmetries',{likes:47,posted:1,category:'drop'}], // was [0,'drop0__13','final',1,'Starry Night']     
    // [30,'drop_starry_night','generators',1,'Starry Night',{likes:47,posted:1,category:'drop'}], // was [0,'drop0__13','final',1,'Starry Night']     
@@ -103,14 +110,16 @@ sections:
    [20,'web_wheel','generators',1,'Wheel',{likes:30,posted:1,category:'web'}],
    [25,'web_thing_0','generators',1,'Web Thing',{likes:0,posted:0,category:'web'}], 
 
-   
- [0,'motion_29','instances',1,'Connectome',{likes:152,posted:1,category:'lines'}],
+//lines
+ //[0,'motion_29','instances',1,'Connectome',{likes:152,posted:1,category:'lines'}],
  [5,'lines_chaos_within_order','generators','wide2','Chaos Within Order',{likes:152,posted:1,category:'lines'}],
 		 //	 [0,'lines_1','generators','square','Lines 1',{likes:31,posted:1,category:'lines',sources:1}],
 	[30,'lines_2','instances','wide2','Lines 2',{likes:0,posted:0,category:'lines',sources:1}],
    [20,'lines_bugeyes','generators','square','Bug Eyes',{likes:6,posted:1,category:'lines',sources:1}],
 	   [10,'lines_lights','generators','square','Lights',{likes:12,posted:1,category:'lines'}],  // VV 
 
+
+//grids
    [220,'grid_maze','generators','square','Maze',{likes:38,posted:1,category:'grid'}],  // was [0,'grid0_8','final','square','Maze',posted:1,category:'grid'}],
  [0,'grid_fade','generators',1,'Fade',{likes:532,posted:1,category:'grid'}], 
  [20,'grid_comet','generators',1,'Comet',{likes:57,posted:1,category:'grid'}], 

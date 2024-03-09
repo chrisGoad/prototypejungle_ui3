@@ -10,7 +10,7 @@ let ht= 1000;
 let topParams = {width:ht,height:ht,framePadding:0.1*ht}
 Object.assign(rs,topParams);
 
-rs.dropParams = {dropTries:50,scale:0.7,radius:10,maxLoops:10000,innerRadius:10,outerRadius:20,collideFactor:1.5}
+rs.dropParams = {dropTries:50,scale:0.2,radius:2,maxLoops:10000,innerRadius:10,outerRadius:20,collideFactor:1.5}
 
 rs.initProtos = function () {
   let circleP = this.circleP = circlePP.instantiate();

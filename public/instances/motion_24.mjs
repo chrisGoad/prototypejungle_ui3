@@ -12,7 +12,8 @@ rs.setName('motion_24');
 let ht=50;
 
 
-let topParams = {width:ht,height:ht,angleOffset:0*Math.PI/10,framePadding:-0.1*ht,frameStrokee:'white',frameStrokeWidth:.2,timePerStep:1/(32*32),stopTime:1,recordingMotion:1,saveAnimation:1,distanceThreshold:10,
+let topParams = {width:ht,height:ht,angleOffset:0*Math.PI/10,framePadding:-0.1*ht,frameStrokee:'white',frameStrokeWidth:.2,timePerStep:1/(32*32),stopTime:1,recordingMotion:1,
+saveAnimation:1,distanceThreshold:10,whereToPause:0,//2,
     circleRadius:.2,nearestFadeFactor:20,shapesPerPath:64,speed:1,segsPerCircle:6,radius:.4*ht,numSlices:8};
 
 Object.assign(rs,topParams);
@@ -41,9 +42,7 @@ rs.initProtos = function () {
 rs.buildPath = function (params) {
   let {radius,scaleX,scaleY,numSegs} = params;
   let circle = Circle.mk(Point.mk(0,0),radius);
-  let cpath = this.circleToPath(circle,numSegs);
-  let scale = {x:scaleX,y:scaleY};
-  let path = this.scale2dPath(cpath,scale);
+  let path = this.circleToPath(circle,Point.mk(scaleX,scaleY));
   return path;
 }
 
@@ -57,6 +56,7 @@ rs.initialize = function () {
   this.numSteps =128;
   this.set('shapes',arrayShape.mk());
   let lines = this.set('lines',arrayShape.mk());
+  let segs = this.set('segs',arrayShape.mk());
   let path0 = this.buildPath({radius,scaleX:.3,scaleY:1,numSegs:40});
   let path1 = this.buildPath({radius,scaleX:1,scaleY:.3,numSegs:40});
   //this.paths = [path0,path1];
@@ -91,6 +91,8 @@ rs.updateState = function () {
     }
   }
   this.updateLines(apnts,fn);
+    this.pauseAnimationMaybe();
+
 }
 
 

@@ -8,7 +8,7 @@ let ht=50;
 
 let topParams = {width:ht,height:ht,framePadding:0.1*ht,frameStroke:'rgb(2,2,2)',frameStrokeWidth:.2,timePerStep:0.15,stopTime:200,stopStep:1000	,reflect:1,		
                  collideWithParticle:1,numParticles:7,saveAnimation:1,boxD:0.9*ht,speedup:1,swp:1,numParticles:4,chopOffBeginning:18,numLines:200,
-                 whereToPause:73
+                 whereToPause:77
                  } //420 790
 	
 Object.assign(rs,topParams);
@@ -100,25 +100,6 @@ rs.onUpdate = function () {
     this.drawLines();
   }
   this.pauseAnimationMaybe();
-  /*
-  if (wtp && (ssf === (wtp+0))) {
-    debugger;
-    this.paused = 1;
-    let wts = this.whereToSave;
-    let wtps = wtp+'';
-    let ln = wtps.length;
-    let wtpps;
-    if (ln === 1) {
-      wtpps = '00'+wtps;
-    } else if (ln===2) {
-      wtpps = '0'+wtps;
-    } else {
-      wtpps = wtps;
-    }
-    let nwts = wts+'_f'+wtpps;  
-    this.setName(nwts);
-  }
-  */
 }
    
 rs.initialize = function () {
