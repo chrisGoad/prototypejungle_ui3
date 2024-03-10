@@ -93,7 +93,7 @@ item.setCellState = function (i,j) {
   let cycleSteps = numSteps;
   let ssf = this.speedFun(i,j);
    if ((j===0)&&(i<2)) {
-    console.log('oi',oi,'issf',issf,'ssf',ssf);
+   // console.log('oi',oi,'issf',issf,'ssf',ssf);
     //debugger;
   }
    let idx = this.gridCellIndex(i,j);
@@ -110,7 +110,7 @@ item.setCellState = function (i,j) {
  for (let n=0;n<pln-1;n++) {
     if (inInterval(ssf,n)) {
       let fr = fractionThruInterval(ssf,n); 
-      console.log('ssf',ssf,'n',n,'stepLn',stepLn,'lb',n*stepLn,'ub',(n+1)*stepLn,'fr',fr);
+     // console.log('ssf',ssf,'n',n,'stepLn',stepLn,'lb',n*stepLn,'ub',(n+1)*stepLn,'fr',fr);
       this.clines(paramsA,n,fr);
     }
   }   
@@ -140,7 +140,10 @@ item.initialize = function () {
 }
 
 item.updateState = function () {
+  let {stepsSoFar:ssf} = this;
+  console.log('ssf',ssf);
   this.setCellStates();
+  this.pauseAnimationMaybe();
 }
 }
 

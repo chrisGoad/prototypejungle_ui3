@@ -48,10 +48,11 @@ sections:
      [0,'stripes_1','instances',1,'Gridulous',{video:'gif',likes:0,posted:0,category:'anim'}], 
 
  // stills
- [0,'motion_29','instances',1,'Connectome',{likes:152,posted:1,category:'stills'}],
+ [0,'mutate_6_f016','instances',1,'Mutate 6 Frame 16',{likes:152,posted:1,category:'stills'}],
  [0,'bounce_16_f077','instances',1,'Square Dance Frame 77',{likes:0,posted:0,category:'stills'}], 
- [0,'motion_29_f001','instances',1,'Motion 29 Frame 1',{likes:0,posted:0,category:'stills'}], 
- [0,'motion_24_f002','instances',1,'Motion 24 Frame 2',{likes:0,posted:0,category:'stills'}], 
+ [0,'motion_29_f001','instances',1,'Connectome Frame 1',{likes:0,posted:0,category:'stills'}], 
+ [0,'motion_24_f002','instances',1,' Colliding Orbits Frame 2',{likes:0,posted:0,category:'stills'}], 
+ [0,'part2_0_34_f113','instances',1,'Paths Frame 113',{likes:0,posted:0,category:'stills'}], 
 
 
  
@@ -117,6 +118,7 @@ sections:
 	[30,'lines_2','instances','wide2','Lines 2',{likes:0,posted:0,category:'lines',sources:1}],
    [20,'lines_bugeyes','generators','square','Bug Eyes',{likes:6,posted:1,category:'lines',sources:1}],
 	   [10,'lines_lights','generators','square','Lights',{likes:12,posted:1,category:'lines'}],  // VV 
+  [40,'web_diamond','generators',1,'Diamond',{likes:137,posted:1,category:'lines'}],
 
 
 //grids

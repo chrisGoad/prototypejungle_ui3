@@ -22,7 +22,7 @@ let nr = 32;
 nr=8;
 nr=12;
 let topParams = {numRows:nr,numCols:nr,width:ht,height:ht,angleOffset:0*Math.PI/10,framePadding:.1*ht,frameStrokee:'white',frameStrokeWidth:.2,
-timePerStep:1/(16*32),stopTime:1,recordingMotion:1,saveAnimation:1,distanceThreshold:3,twice:1,numSteps:256,
+timePerStep:1/(16*32),stopTime:1,recordingMotion:1,saveAnimation:1,distanceThreshold:3,twice:1,numSteps:256,whereToPause:16,
     circleRadius:.2,nearestFadeFactor:20,shapesPerPath:200,speed:1,segsPerCircle:20,radius:.4*ht,numSlices:8,bendRadius:1.5};
 
 Object.assign(rs,topParams);
