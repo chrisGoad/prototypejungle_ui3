@@ -201,7 +201,7 @@ item.wgenAll = function (sofar) {
   let dr = this.removeDups(plets);
   let drln = dr.length;
   let ln = sofar.length;
-  if (sofar === 'aaab') {
+  if (sofar === 'seeps') {
     debugger;
   }
   let ok = this.wOk(sofar);
@@ -247,7 +247,7 @@ item.wgenffk = function (f4) {//first four known
 }
 item.wgen4known = function (k) {
   let {possLets} = this;
-  this.mandatory = k;  
+//  this.mandatory = k;
   let ln = possLets.length;
   for (let i=0;i<ln;i++) {
     let lt = possLets[i];
@@ -324,7 +324,7 @@ item.tryFirsts =  function (k) {
   }
 }
 item.wgenAllKnown = function (k) {
-  this.mandatory = k;
+  //this.mandatory = k;
   this.wgenTop(1,null,k);
 }  
 

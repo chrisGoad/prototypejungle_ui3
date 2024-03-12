@@ -59,6 +59,7 @@ rs.boundaryLineGenerator = function (end0,end1,rvs,cell) {
 }
 
 rs.initialize = function () {
+  debugger;
   this.initProtos();
   this.addFrame();
   this.addRectangle(this.backFill);

@@ -36,9 +36,7 @@ const afterMainInstall = function (e,rs) {
   finishMainInstall();
 }
 const afterMainInstallM = function (module) {
-  //debugger;
   main = module.rs;
- // debugger;
   finishMainInstall();
 }
 

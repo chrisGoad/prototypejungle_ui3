@@ -31,19 +31,19 @@ Object.assign(rs,topParams);
   // prohibited letters at each position
   let s0n = '';
   let s1n = '';
-  let s2n = 'g';
-  let s3n = '';
+  let s2n = '';
+  let s3n = 'he';
   let s4n = '';
   this.prohibs = [s0n,s1n,s2n,s3n,s4n];
 
   // prohibited dipthongs
   this.dprohibs  = []//['jk','kj','bk','kb','jh','hj','mk','bj','jb','qq','qk','kq','kh','fz','qp','pq','jl','lj'];
   // known letters
-  let k0 = '';
-  let k1 = '';
+  let k0 = 'h';
+  let k1 = 'e';
   let k2 = 'a';
-  let k3 = 's';
-  let k4 = 'p';
+  let k3 = 'v';
+  let k4 = '';
   this.known = [k0,k1,k2,k3,k4];
   this.notPossibles = [];
   this.possibles5 = [];
@@ -53,7 +53,7 @@ Object.assign(rs,topParams);
  // return;
   //let cm = abet;
 //  let cm = this.complement('might clasp brief wound');
- let cm = this.complement('miht cl');// brief wound');
+  let cm = this.complement('migt clsp brif wound');
   // possible letters
   this.possLets = this.alphabetize(cm);
   this.addFrame();
@@ -68,7 +68,7 @@ Object.assign(rs,topParams);
  //debugger;
  //this.wgen4known('fort');
  
- this.tryFirsts('gasp');
+ this.tryFirsts('aeh');
   //this.wgenAllKnown('aml');
   //this.tries();
   

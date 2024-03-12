@@ -12,6 +12,7 @@ The first element of the path may assert other attributes of the path as a whole
 an active interpolation path is {cyclic,startTime,speed,pathTime,cycle:integer,path:p,activeElementIndex:integer,value,action} where the activeElementIndex is the index of  the path element 
 which is active at pathTime. pathTime is path relative.  globalTime = startTime+ pathTime/speed. pathTime = (globalTime-startTime)/speed
 */
+
 item.pointAlongPath = function (path,fr) {
   let pln = path.length;
   let idx = 0;
@@ -237,8 +238,8 @@ item.straightPath = function (p0,p1) {
     scaleX = scale.x;
     scaleY = scale.y;
   }
-  let usc = center.plus(radius,0);
-  let sv = Point.mk(center.plus(radius,0));
+  let sv = center.plus(Point.mk(radius,0));
+ // let sv = Point.mk(center.plus(radius,0));
   let pf = (fr) => {
     let a = fr * 2 * Math.PI;
     let x = scaleX*radius*Math.cos(a);
@@ -270,9 +271,9 @@ item.straightPath = function (p0,p1) {
 }
 item.bendToPathh = function (params) {
   let {bendKind:bk,startPoint:sp,direction:dir,radius} = params;
-  /* bend kinds are UL UR
-                    LL LR
-  */
+  //bend kinds are UL UR
+  //                  LL LR
+  
   let center,a0,a1;
   if (bk === 'UL') {
      center = sp.plus(Point.mk(0,radius));
@@ -300,9 +301,8 @@ item.bendToPathh = function (params) {
 item.uturnToPath = function (params) {
   let {startPoint:sp,fromDir,dirChange:dc,radius} = params;
   console.log('fromDir',fromDir,'dc',dc);
-  /* dirChange is clockwise or counterclockwise
-  fromDir is left right up down
-  */
+  // dirChange is clockwise or counterclockwise
+  //fromDir is left right up down
   let center,a0,a1;
   if (fromDir === 'left') {
     if (dc === 'clockwise') {
@@ -413,29 +413,24 @@ item.bendToPath = function (params) {
    
   
   
-item.bumpyCircleToPath = function (params) {
-  let {icenter,innerRadius:ird,outerRadius:ord,numBumps,numSegs} = params;
-  let center=icenter?icenter:Point.mk(0,0);
-  let delta = ord-ird;
-  let radius = ird+0.5*delta;
-  let do2 = delta/2;
-  let inc = (2*Math.PI)/numSegs;
-  let bumpL = (2*Math.PI)/numBumps;
-  let path=[];
-  for (let i=0;i<=numSegs;i++) {
-    let a = i*inc;
-    let wib = (a%bumpL)/bumpL;//whereInBump
-    let bv = Math.sin(wib*2*Math.PI);
-   // console.log('wib',wib,'bv',bv);
-    let x = Math.cos(a);
-    let y = Math.sin(a);
-    let p = Point.mk(x,y).times(radius+bv*do2);
-    let t = i/numSegs;
-    let pe = {pathTime:t,value:p};
-    path.push(pe);
+item.sinWaveToPath = function (params) {
+  let {waveLength:wl,amplitude:a,startPoint:sp,thetaAtStart:tas,thetaAtEnd:tae} = params;
+  let vas =Math.sin(tas)*a;
+  let yoff = sp.y-vas;
+  const pf = (fr) => {
+    let theta = tas + fr*(tae-tas);
+    let valy = Math.sin(theta)*a+yoff;
+    let valx = ((theta - tas)/(2*Math.PI))*wl;
+    return Point.mk(valx,valy).plus(sp);
   }
+  let ep = pf(1);
+  let pe0 = {pathTime:0,value:sp,pathFunction:pf};
+  let pe1 = {pathTime:1,value:ep};
+  let path=[pe0,pe1];
   return path;
 }
+    
+  
 
 
 
@@ -537,7 +532,6 @@ item.pathAroundCell = function (params,x,y,offset) {
 
 item.show2dPath = function (path,numSegs) {
   let {polylineP,polylines} = this;
-  debugger;
   let poly = polylineP.instantiate();
   let points = [];
   for (let i=0;i<=numSegs;i++) {
@@ -585,9 +579,22 @@ item.concatPaths = function (paths) {
   }
   return cp;
 }
-
+item.interpolatePaths = function(p0,p1,ofr)  {
+  const pf = (ifr) => {
+    let pnt0 = this.pointAlongPath(p0,ifr);
+    let pnt1 = this.pointAlongPath(p1,ifr);
+    let pnt = this.interpolate(pnt0,pnt1,ofr);
+    return pnt;
+  }
+  let sp = pf(0);
+  let ep = pf(1);
+    
+  let pe0 = {pathTime:0,value:sp,pathFunction:pf};
+  let pe1 = {pathTime:1,value:ep};
+  let path=[pe0,pe1];
+  return path;
 }
-
+}
 export {rs};
 
 
