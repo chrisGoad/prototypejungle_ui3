@@ -16,18 +16,6 @@ let topParams = {width:ht,height:ht,framePadding:0.1*ht,frameStrokee:'white',fra
 
 Object.assign(rs,topParams)
 
-let pv = ht/4;
-
-let UL = Point.mk(-pv,-pv);
-let UR = Point.mk(pv,-pv);
-let LR = Point.mk(pv,pv);
-let LL = Point.mk(-pv,pv);
-
-let p = [{pathTime:0,value:UL},{pathTime:1,value:UR},{pathTime:2,value:LR},{pathTime:3,value:LL},{pathTime:4,value:UL}];
-let np = rs.normalizePath(p);
-let ap = rs.mkActivePath(0,1/4,np);
-
-rs.activePaths = [ap];
 
 
 
@@ -55,8 +43,8 @@ rs.initialize = function () {
   this.set('polylines',arrayShape.mk());
   
   let wl = 10;
-  let sinp0 = {waveLength:wl,amplitude:-4,startPoint:Point.mk(-2*wl,10),thetaAtStart:-4*Math.PI,thetaAtEnd:4*Math.PI};
-  let sinp1 = {waveLength:wl,amplitude:4,startPoint:Point.mk(-2*wl,-10),thetaAtStart:-4*Math.PI,thetaAtEnd:4*Math.PI};
+  let sinp0 = {waveLength:wl,amplitude:-8,startX:-4*wl,thetaAtStart:-8*Math.PI,thetaAtEnd:8*Math.PI,baseY:10};
+  let sinp1 = {waveLength:wl,amplitude:8,startX:-4*wl,thetaAtStart:-8*Math.PI,thetaAtEnd:8*Math.PI,baseY:-10};
   let p0 = this.sinWaveToPath(sinp0);
   let p1 = this.sinWaveToPath(sinp1);
   let numPaths = 60;

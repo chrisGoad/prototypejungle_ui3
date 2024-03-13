@@ -414,15 +414,19 @@ item.bendToPath = function (params) {
   
   
 item.sinWaveToPath = function (params) {
-  let {waveLength:wl,amplitude:a,startPoint:sp,thetaAtStart:tas,thetaAtEnd:tae} = params;
+  let {waveLength:wl,amplitude:a,startX:sx,thetaAtStart:tas,thetaAtEnd:tae,baseY} = params;
   let vas =Math.sin(tas)*a;
-  let yoff = sp.y-vas;
+  //let yoff = sp.y-vas;
   const pf = (fr) => {
+    let cf = (1-2*Math.abs(fr-0.5))
+    let ca = cf *a;
+    let cby = cf*baseY;
     let theta = tas + fr*(tae-tas);
-    let valy = Math.sin(theta)*a+yoff;
+    let valy = Math.sin(theta)*ca;
     let valx = ((theta - tas)/(2*Math.PI))*wl;
-    return Point.mk(valx,valy).plus(sp);
+    return Point.mk(valx+sx,valy+cby);
   }
+  let sp = pf(0);
   let ep = pf(1);
   let pe0 = {pathTime:0,value:sp,pathFunction:pf};
   let pe1 = {pathTime:1,value:ep};

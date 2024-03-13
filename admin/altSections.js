@@ -4,7 +4,8 @@ module.exports = {
 sections: 
 
 [    
-      [0,'web_diamond','generators',1,'web diamond',{likes:0,posted:0,category:'web'}], 
+      [0,'ip_test_2','generators',1,'ip test 2',{likes:0,posted:0,category:'web'}], 
+      [0,'mutate_6','instances',1,'mutate 6',{likes:0,posted:0,category:'drop'}], 
       [0,'mutate_6','instances',1,'mutate 6',{likes:0,posted:0,category:'drop'}], 
 	    [0,'part2_0_34','instances',1,'part 2 0 34',{video:'gif',noTitle:0,likes:0,posted:0,category:'anim'}],
 	    [0,'motion_32','instances',1,'Diagonal Organism',{video:'gif',noTitle:0,likes:0,posted:0,category:'anim'}],
