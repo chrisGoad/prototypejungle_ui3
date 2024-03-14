@@ -11,8 +11,9 @@ addIPmethods(rs);
 addAnimationMethods(rs);
 
 rs.setName('ip_test_2');
-let ht=50;
-let topParams = {width:ht,height:ht,framePadding:0.1*ht,frameStrokee:'white',frameStrokeWidth:.2,timePerStep:1/4,stopTime:100}
+let ht=45;
+let wd = 2*ht;
+let topParams = {width:wd,height:ht,framePadding:0.1*ht,frameStrokee:'white',frameStrokeWidth:.2,timePerStep:1/4,stopTime:100}
 
 Object.assign(rs,topParams)
 
@@ -43,8 +44,8 @@ rs.initialize = function () {
   this.set('polylines',arrayShape.mk());
   
   let wl = 10;
-  let sinp0 = {waveLength:wl,amplitude:-8,startX:-4*wl,thetaAtStart:-8*Math.PI,thetaAtEnd:8*Math.PI,baseY:10};
-  let sinp1 = {waveLength:wl,amplitude:8,startX:-4*wl,thetaAtStart:-8*Math.PI,thetaAtEnd:8*Math.PI,baseY:-10};
+  let sinp0 = {waveLength:wl,amplitude:-8,startX:-4.5*wl,thetaAtStart:-8*Math.PI,thetaAtEnd:8*Math.PI,baseY:10};
+  let sinp1 = {waveLength:wl,amplitude:8,startX:-3.5*wl,thetaAtStart:-8*Math.PI,thetaAtEnd:8*Math.PI,baseY:-10};
   let p0 = this.sinWaveToPath(sinp0);
   let p1 = this.sinWaveToPath(sinp1);
   let numPaths = 60;

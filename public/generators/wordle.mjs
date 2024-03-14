@@ -30,9 +30,9 @@ Object.assign(rs,topParams);
   //return;
   // prohibited letters at each position
   let s0n = 'c';
-  let s1n = 'l';
-  let s2n = 'a';
-  let s3n = '';
+  let s1n = '';
+  let s2n = 'i';
+  let s3n = 'se';
   let s4n = '';
   this.prohibs = [s0n,s1n,s2n,s3n,s4n];
 
@@ -40,7 +40,7 @@ Object.assign(rs,topParams);
   this.dprohibs  = []//['jk','kj','bk','kb','jh','hj','mk','bj','jb','qq','qk','kq','kh','fz','qp','pq','jl','lj'];
   // known letters
   let k0 = '';
-  let k1 = 'o';
+  let k1 = 'i';
   let k2 = '';
   let k3 = '';
   let k4 = '';
@@ -53,7 +53,7 @@ Object.assign(rs,topParams);
  // return;
   //let cm = abet;
 //  let cm = this.complement('might clasp brief wound');
-  let cm = this.complement('might sp brief wund');
+  let cm = this.complement('mght lap brf');// brief wound');
   // possible letters
   this.possLets = this.alphabetize(cm);
   this.addFrame();
@@ -68,7 +68,7 @@ Object.assign(rs,topParams);
  //debugger;
  //this.wgen4known('fort');
  
- this.tryFirsts('clao');
+ this.tryFirsts('cise');
   //this.wgenAllKnown('aml');
   //this.tries();
   
