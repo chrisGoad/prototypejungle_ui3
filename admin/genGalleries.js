@@ -13,7 +13,6 @@ let forKOP = toBoolean(process.argv[3]);
 let sortByOrderstr = "1";
 let alwaysLocal = 1;
 
-console.log 
 /*
 if (process.argv[3]==="0") {
   sortByOrderstr = "0";
@@ -33,6 +32,7 @@ let anim = kind === 'anim';
 let stills = kind === 'stills';
 let partition = kind === 'partition';
 let web = kind === 'web';
+let alll = kind === 'all'
 let sortByOrder = toBoolean(sortByOrderstr);
 let byKind = kind === 'byKind';
 let alternate = kind === 'alt';
@@ -116,7 +116,10 @@ if (byLikes) {
 } else if (images || forKOP  || forPJ || drop || grid || lines || anim || partition || web)  {
   sectionsPath = './images.js';
   imKind = 'g'
-}  else if (local_images)  {
+} else if (alll)  {
+  sectionsPath = './allImages.js';
+  imKind = 'g'
+}   else if (local_images)  {
   sectionsPath = './images.js';
   imKind = 'g'
 } else {
@@ -125,8 +128,10 @@ if (byLikes) {
 }
 console.log('imKind',imKind);
 
- pagesPath = `public/${imKind}Pages.js`;
+ //pagesPath = `public/${imKind}Pages.js`;
+ 
  pagesPath = `public/${kind}Pages.js`;
+ console.log('pagesPath',pagesPath);
   pagesVar = `${imKind}Pages`;
   pagesVar = `${kind}Pages`;
   titlesPath = `public/${imKind}Titles.js`;
@@ -154,6 +159,8 @@ if (alternate) {
   outPath = 'public/animImages.html';
 } else if (stills) {
   outPath = 'public/stillsImages.html';
+}else if (alll) {
+  outPath = 'public/allImages.html';
 } else if (partition) {
   outPath = 'public/partitionImages.html';
 } else if (web) {
@@ -283,6 +290,9 @@ if (imKind === 'g') {
     } else if (stills) {
       kindTitle = 'Animation Stills'
       aboutURL = "kop_stills.html";
+    }  else if (alll) {
+      kindTitle = 'All Images and Animations';
+      aboutURL = "all_stills.html";
     }
     if (!top) {
     
@@ -299,7 +309,7 @@ if (imKind === 'g') {
       
       
     `;
-     console.log('pageIntro',pageIntro);
+    // console.log('pageIntro',pageIntro);
     } 
    } else  {
     if (local_images) {
@@ -358,13 +368,14 @@ const thingString = function (order,ix,dir,useThumb,ititle,props) {
 	debugger;
   let {variant,likes,posted,category,sources,noTitle,video} = props;
   //console.log('POSTED',posted,'category',category,'kind',kind);
-  if ((kind !== 'alt') && (kind !== 'book') &&(category !==  kind)) {
-    return '</div>';
+  if (!alll&&((kind !== 'alt') && (kind !== 'book') &&(category !==  kind))) {
+    return '</div>';a
   }
 	let spix = ix.split('.');
 	let path = spix[0];
 	let ext = video?video:((spix.length === 1)?'jpg':spix[1]);
 	let x = path + '.'+ ext;
+  console.log('ix',ix,'x',x);
   let title=ititle?(noTitle?(forKOP?'':'No Title'):ititle):pageNumber+'';
   if (neverTitle) {
     title = '';
@@ -415,7 +426,12 @@ const thingString = function (order,ix,dir,useThumb,ititle,props) {
       galURL = "gridImages.html";
     } else if (title === 'Webs') {
       galURL = "webImages.html";
+    } else if (title === 'Stills') {
+      galURL = "stillsImages.html";
+    } else if (alll) {
+      galURL = "allImages.html";
     } 
+    
 
     galStart = `<a style="color:white" href="${galURL}">`;
     galLink = `${galStart}${title}</a>`
@@ -424,7 +440,7 @@ const thingString = function (order,ix,dir,useThumb,ititle,props) {
   let propsStr = imagesHere?`<span style="font-size:10pt">${likes?'Likes '+likes:''} ${posted?"":" NOT POSTED"} ${local_images?'Local':''} ${category}</span><br>`:'';;
   let sourcenm = `source${sources?'s':''}`;
 	//if (forKOP || forPJ) {
-  console.log('forKOP',forKOP,'astart',astart);
+  console.log('forKOP',forKOP);
 	if (forKOP) {
 		//let titleLink = title?`${astart}${title}</a></p>`:'';
 		let titleLink = title?`${astart}${title}</a>`:'';
@@ -435,12 +451,12 @@ const thingString = function (order,ix,dir,useThumb,ititle,props) {
     } else {
       rs = `<div><p class="centered"><a style="color:white" href="http://localhost:8081/draw.html?source=/${dir}/${path}.${fileExt}${theImageArg}">${title}</a><p/>`;
     }
-   console.log("RRRRSSS",rs);
+  // console.log("RRRRSSS",rs);
   //rs = rs +`<p class="centered"><a style="color:white" href="${srcUrl}">${sourcenm}</a></p>`;
     rs = rs +`<p class="centered">${astart}<img width="200" src="${thumbsrc}" alt="Image Missing"></a></p></div>`;
 	} 
   if (top) {
-		console.log('top','galLink',galLink);
+		//console.log('top','galLink',galLink);
     rs = `<div><p class="centered">${galLink}</p>`;
 
     rs = rs +
@@ -454,7 +470,7 @@ const thingString = function (order,ix,dir,useThumb,ititle,props) {
     ${astart}<img width="200" src="${thumbsrc}"></a></p></div>
     `;
 	}
-  console.log ('rs = ',rs);
+  //console.log ('rs = ',rs);
 	return rs;
 }
 
@@ -569,8 +585,8 @@ let sectionString = function (things) {
       rs += `</div><br><div style="text-align:center">${txt}</div><br><div>`;
     } else {
       let [order,file,directory,useThumb,title,props] = thing;
-     // console.log('PROPS',props);
-    //  console.log('Order',order,'file',file);
+      console.log('PROPS',props);
+      console.log('file',file);
      // let tov = typeof variant;
     //  console.log('is variant',tov);
       let ord = thing[0];
@@ -578,7 +594,8 @@ let sectionString = function (things) {
       if ((ord <  orderMin) || (ord > orderMax)) {
         continue;
       }*/
-      let ts = thingString(ord,file,directory,useThumb,title,props);
+      let atitle=title?title:file;
+      let ts = thingString(ord,file,directory,useThumb,atitle,props);
 //console.log('ts',ts);
       if (ts!=='</div>') {
         rs+=ts;
@@ -611,13 +628,13 @@ const sectionsString = function (sections) {
 }
 const writeThePages = function () {
 	let js = `let ${pagesVar}= ${JSON.stringify(thePages)};`;
-  //console.log('writeThePagess',js,pagesVar,pagesPath);
+  console.log('writeThePagess',js,pagesVar,pagesPath);
 	fs.writeFileSync(pagesPath,js);
 	//fs.writeFileSync(alternate?'public/altPages.js':(byKind?'public/byKindPages.js':'public/thePages.js'),js);
 }
 const writeTheTitles = function () {
 	let js = `let ${titlesVar} = ${JSON.stringify(theTitles)};`
-    console.log('writeTheTitles',js,titlesPath);
+ //   console.log('writeTheTitles',js,titlesPath);
 
 	fs.writeFileSync(titlesPath,js);
 //	fs.writeFileSync(alternate?'public/altTitles.js':(byKind?'public/byKindTitles.js':'public/theTitles.js'),js);
@@ -630,7 +647,7 @@ const writeTheLocals = function () {
 
 		
 const writePage = function (sections) {
-	 console.log('Page Intro',pageIntro);
+	// console.log('Page Intro',pageIntro);
 	let frs = '';
 	frs += pageTop;
   frs += pageIntro;
