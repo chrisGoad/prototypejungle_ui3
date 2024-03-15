@@ -206,7 +206,7 @@ xferFiles('public',['index.html','quads.html','draw.html','topdefs.js','style.cs
   'page.html','setAtKOP.js','reallySetAtKOP.js','pageSupport.js','logo.svg',
   //'animImages.html','gridImages.html','dropImages.html','partitionImages.html','webImages.html'
   ]);
-xferFiles('admin',['genGrids.js','gridSections.js','imageOrder.js']);
+xferFiles('admin',['genGrids.js','gridSections.js','imageOrder.js','allImages.js']);
 xferDirs(['public/generators','public/instances','public/shape','public/mlib','public/json','public/doc','public/server','public/admin']);
 //xferDirs(['js/core','js/dom','js/geom','js/draw']);
 xferDirs(['public/js/core','public/js/dom','public/js/geom','public/js/draw']);

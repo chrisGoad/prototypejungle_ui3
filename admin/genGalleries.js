@@ -13,6 +13,8 @@ let forKOP = toBoolean(process.argv[3]);
 let sortByOrderstr = "1";
 let alwaysLocal = 1;
 
+console.log('kind',kind);
+
 /*
 if (process.argv[3]==="0") {
   sortByOrderstr = "0";
@@ -32,7 +34,7 @@ let anim = kind === 'anim';
 let stills = kind === 'stills';
 let partition = kind === 'partition';
 let web = kind === 'web';
-let alll = kind === 'all'
+let alll = kind === 'all';
 let sortByOrder = toBoolean(sortByOrderstr);
 let byKind = kind === 'byKind';
 let alternate = kind === 'alt';
@@ -61,7 +63,10 @@ console.log('kind','['+kind+']','sortByOrder',sortByOrder,'forKOP',forKOP,'byKin
 //let alternate = 0;
 let sectionsPath;
 let imKind;
-if (byLikes) {
+ if (alll)  {
+  sectionsPath = './allImages.js';
+  imKind = 'g'
+} else if (byLikes) {
   sectionsPath = './images.js';
   imKind = 'g';
 } else if (alternate) {
@@ -116,9 +121,6 @@ if (byLikes) {
 } else if (images || forKOP  || forPJ || drop || grid || lines || anim || partition || web)  {
   sectionsPath = './images.js';
   imKind = 'g'
-} else if (alll)  {
-  sectionsPath = './allImages.js';
-  imKind = 'g'
 }   else if (local_images)  {
   sectionsPath = './images.js';
   imKind = 'g'
@@ -126,7 +128,7 @@ if (byLikes) {
   console.log("unrecognized kind ","'"+kind+"'");
   return;
 }
-console.log('imKind',imKind);
+console.log('sectionsPath',sectionsPath,'imKind',imKind);
 
  //pagesPath = `public/${imKind}Pages.js`;
  
@@ -386,6 +388,7 @@ const thingString = function (order,ix,dir,useThumb,ititle,props) {
   //console.log('variant',variant);
   //console.log('vpath',vpath);
   let vx = vpath+'.'+ext;
+  console.log('vx',vx);
   thePages.push(vx);
 	let imsrc = `images/std_size/${vpath}.jpg`;
 	let thumbsrc = `images/thumbs/${vpath}.jpg`;
@@ -529,7 +532,7 @@ const stripOrnt = function (str) {
    */   
  
 let sectionString = function (things) {
-  //console.log('things',things);
+  console.log('things',things);
 	let numThingsThisLine = 0;
 	let startLine =  `
 <div class="theGrid">
@@ -567,15 +570,15 @@ let sectionString = function (things) {
     return -1;
   }
   //console.log('things unordered',things);
-  if (sortByOrder) {
-    //console.log('sortByOrder',JSON.stringify(things));
+  if (0&&sortByOrder) {
+    console.log('sortByOrder');
     things.sort(compareByOrder);
   }
   // console.log('things ordered',things);
 //  ln = 2;
 	for (let i=0;i<ln;i++) {
 		let thing = things[i];
-   // console.log('thing',thing,'i',i);
+   console.log('thing',thing,'i',i);
     let tln = thing.length;
     if (tln === 1) {
    //   console.log("Section");
@@ -660,6 +663,7 @@ const writePage = function (sections) {
 
 //let sectionsC = require(alternate?'./altSections.js':'./gridSections.js');
 let sectionsC = require(sectionsPath);
+console.log('sectionsC',sectionsC);
 let imageOrder  = require('./imageOrder.js');
 //console.log('sectionsC', sectionsC);
 
