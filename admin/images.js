@@ -17,6 +17,7 @@ sections:
  //[0,'line_path_2_11','instances',1,'Bounce',{video:'gif',likes:0,posted:0,category:'anim'}], 
   [0,'curves_10','instances',1,'Wave Functions 1',{video:'gif',likes:0,posted:0,category:'anim'}], 
         [0,'bounce_16','instances',1,'Square Dance',{video:'mp4',likes:0,posted:0,category:'anim'}], 
+        [0,'drop_circles_26','instances',1,'Manic',{video:'gif',likes:0,posted:0,category:'anim'}], 
             [0,'part2_0_43','instances',1,'You are getting very sleepy...',{video:'gif',likes:0,posted:0,category:'anim'}],
 
  //[0,'part2_0_31','instances',1,'Pulse',{video:'gif',noTitle:0,likes:0,posted:0,category:'anim'}],
