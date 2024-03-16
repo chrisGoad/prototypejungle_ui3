@@ -170,7 +170,8 @@ item.execMotion = function (mg,m,t,i) {
 }
 
 item.execMotionGroup = function (mg,t) {
-  let {motionsPerPath,polygon,paths} = mg;
+ // let {motionsPerPath,polygon,paths} = mg;
+  let {motionsPerPath,polygon,path} = mg;
   debugger;
   let positions = mg.positions = [];
   let pathsln = paths.length;
@@ -178,6 +179,26 @@ item.execMotionGroup = function (mg,t) {
     let motions = motionsPerPath[i];
     let ln = motions.length;
     for (let i=0;i<ln;i++) {
+      let m = motions[i];
+      this.execMotion(mg,m,t,i);
+    }
+  }
+  //debugger;
+  if (polygon) {
+    polygon.corners = positions;
+    polygon.show();
+    polygon.update();
+  }
+ 
+}
+item.execMotionGroupp = function (mg,t) {
+ // let {motionsPerPath,polygon,paths} = mg;
+  let {motionsPerPath,polygon,motions} = mg;
+  debugger;
+  let positions = mg.positions = [];
+  let motionsln = motions.length;
+  for (let i=0;i<motionsln;i++) {
+    for (let i=0;i<motionsln;i++) {
       let m = motions[i];
       this.execMotion(mg,m,t,i);
     }
@@ -201,11 +222,11 @@ item.execMotionGroups = function (t) {
 
 
 item.mkP2Pmotion = function (mg,params) { //point to point
-  debugger;
+  //debugger;
   let {motions,shapeP} = mg;
   let {mshapes} = this;
   let {p0,p1,phase,oPoly} = params;
-  debugger;
+ // debugger;
   //let {motions,mshapes,stepsSoFar:ssf} = this;
   let shape = shapeP?shapeP.instantiate():null;
   if (shape) {
@@ -339,6 +360,7 @@ item.mkPathMotionGroup = function (params) {
 }
 
 item.connectShapes = function () {
+  debugger;
   let {connectorP,connectedMotions:cnm} = this;
   let connectors = this.set('connectors',arrayShape.mk());
   let connectorSegs = this.set('connectorSegs',arrayShape.mk());

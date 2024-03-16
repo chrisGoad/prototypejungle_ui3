@@ -50,6 +50,7 @@ rs.shapeConnectorC = function (params) { //,connectJump) {
   let shapesPerPath = mg.shapesPerPath;
   let pln = shapesPerPath.length;
   let numPhasesG = mg.numPhases;
+
   for (let i = 0;i<pln;i++) {
     let shapes = shapesPerPath[i];
     let ln = shapes.length;
@@ -122,6 +123,8 @@ rs.addMotionsForCell = function (params) {
 
 rs.initialize = function() { 
   debugger;
+      this.connectedMotions = [];
+
   this.initProtos();
   let {corners,polygonP,showThePath} =this;
   this.addFrame();

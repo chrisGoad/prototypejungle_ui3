@@ -71,7 +71,7 @@ rs.addMotions = function () {
   this.mkP2PmotionGroup({cycles,duration,p0s,p1s,shapeP:circleP,oPolys});
 }
        
-
+/*
 rs.testPath = function () {
   debugger;
   let p0=Point.mk(0,0);
@@ -82,14 +82,16 @@ rs.testPath = function () {
   let t0 = this.alongPath(path,0.25);
   let t1 = this.alongPath(path,0.75);
 }
+*/
 rs.initialize = function() { 
   debugger;
-  this.testPath();
+  //this.testPath();
   this.initProtos();
   let {corners,polygonP} =this;
   this.addFrame();
   this.initGrid();
   this.motionGroups = [];
+  this.paths =[];
   this.set('mshapes',arrayShape.mk());
   this.addMotions();
 } 

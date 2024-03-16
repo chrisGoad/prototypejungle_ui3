@@ -52,7 +52,7 @@ rs.initProtos = function () {
 rs.connectIndices = function (params) {
   let {cell,pathIndex:pi,connectIndex:ci,numPhases:ln} = params;
   let {numSpokes:ns} = this;
-  debugger;
+ // debugger;
   let e0si = (7*ci)%ln;
   let e1pi = (pi+1)%ns;
   //let e1si = (ci+Math.floor(Math.random()*20))%ln;

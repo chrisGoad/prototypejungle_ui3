@@ -37,7 +37,7 @@ return 0;
 const isAnim = function (fln) {
     return isOne(fln,notAnims,anims,animNms,'Anim')
 }
-let instanceNms = ['rectangle_gon_grid','flows','gridSpinner'];
+let instanceNms = ['rectangle_gon_grid','flows','gridSpinner','line_path','motion_'];
 let instances = {bounce_3:1}
 let notInstances= {}
 
