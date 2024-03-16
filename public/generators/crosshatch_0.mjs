@@ -1,15 +1,17 @@
 import {rs as linePP} from '/shape/line.mjs';
 import {rs as basicP} from '/generators/basics.mjs';
 import {rs as addPathMethods} from '/mlib/path.mjs';	
+import {rs as addAnimationMethods} from '/mlib/animate0.mjs';
 
 
 let rs = basicP.instantiate();
 addPathMethods(rs);
+addAnimationMethods(rs);
 
 rs.setName('crosshatch_0');
 
 rs.pstate = {pspace:{},cstate:{}};
-
+rs.whereToPause=1;
 
 let ht= 100;
 let hht = 0.5*ht;
@@ -179,6 +181,8 @@ rs.stepsSoFar = 0;
 rs.updateState = function () {
   let {cFrame,numSteps,wentBack} = this;
   this.setFromTraces(cFrame);
+  debugger;
+  this.pauseAnimationMaybe();
   cFrame++;
   if (cFrame>=numSteps-80) {
     cFrame = 0;

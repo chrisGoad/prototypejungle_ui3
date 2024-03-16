@@ -11,7 +11,7 @@ addSegsetMethods(rs);
 rs.setName('drop_metal_2');
 let wd = 400;
 let topParams = {width:wd,height:wd,numSegs:4,framePadding:0.15*wd,circular:false}
-let dropParams = {dropTries:40,maxDrops:50000,maxLoops:20000}
+let dropParams = {dropTries:40,maxDrops:50000,maxLoops:10000}
 
 Object.assign(rs,topParams);
 

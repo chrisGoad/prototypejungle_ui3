@@ -824,6 +824,10 @@ LineSegment.lengthenBy = function (fr) {
 	let nend1 = cntr.plus(hvc);
 	return LineSegment.mk(nend0,nend1);
  }
+ 
+ LineSegment.lengthen = function (fr) {
+  return this.lengthenBy(fr);
+ }
 
 LineSegment.twist = function (da) {
 	let {end0,end1} = this;

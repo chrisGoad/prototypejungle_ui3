@@ -6,10 +6,12 @@ console.log('dir',dir);
 let dirc =fs.readdirSync(dir);
 console.log('dirc',dirc);
 
-
-let notAnims = {bounce_16_f077:1,bounce_16_f073:1,drop_move_2:1};
-let anims= {drop_circles_21:1,cubes_1:1,drop_circles_19:1,drop_circles_20:1,drop_circles_26:1};
-let animNms = ['bounce_','curves_','path_avoidance','PathAvoidance','3d_grid','color_path'];
+// figure out what went wrong with rectangle_gon_grid
+let notAnims = {bounce_16_f077:1,crosshatch_0_f001:1,rectangle_gon_grid_9:1};
+let anims= {drop_circles_21:1,cubes_1:1,drop_circles_19:1,drop_circles_20:1,drop_circles_26:1,CMB:1,drop_circles_14_5x7:1,drop_circles_15:1,
+   drop_circles_17:1,drop_circles_25:1,drop_on_top_2:1,drop_on_top_7:1,drop_on_top_7_combo_1:1,drop_on_top_5:1,example1:1,emergence:1};
+let animNms = ['bounce_','curves_','path_avoidance','PathAvoidance','3d_grid','color_path','rectangle_gon_grid','crosshatch','drop_dandelion',
+    'drop_ice','drop_leaves','drop_move'];
 const isOne = function (fln,nots,sos,names,kind){
   if (nots[fln]) {
     console.log(fln,' is not',kind);
@@ -35,7 +37,7 @@ return 0;
 const isAnim = function (fln) {
     return isOne(fln,notAnims,anims,animNms,'Anim')
 }
-let instanceNms = ['rectangle_gon_grid'];
+let instanceNms = ['rectangle_gon_grid','flows','gridSpinner'];
 let instances = {bounce_3:1}
 let notInstances= {}
 
