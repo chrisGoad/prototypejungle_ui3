@@ -78,6 +78,7 @@ rs.initialize = function () {
   this.numSteps =stp/tps;
   this.numSteps =2*159+3;
   this.numSteps =265;
+  this.positions =[];
   this.set('shapes',arrayShape.mk());
   this.set('lines',arrayShape.mk());
  // this.buildUniformArrays({speed:.02,mass:2,shapesPerRing:8,randomSpeeds:1});

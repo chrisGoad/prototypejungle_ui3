@@ -191,7 +191,7 @@ item.execMotionGroup = function (mg,t) {
   }
  
 }
-item.execMotionGroupp = function (mg,t) {
+item.execMotionGroup = function (mg,t) {
  // let {motionsPerPath,polygon,paths} = mg;
   let {motionsPerPath,polygon,motions} = mg;
   debugger;
