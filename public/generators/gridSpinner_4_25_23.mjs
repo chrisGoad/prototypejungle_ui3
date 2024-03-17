@@ -1,8 +1,9 @@
+debugger;
 import {rs as addGridMethods} from '/mlib/grid2.mjs';	
 import {rs as addQuadMethods} from '/mlib/rect2quad.mjs';	
-import {rs as addMotionMethods} from '/mlib/motion_4_24_23.mjs';	
+import {rs as addMotionMethods} from '/mlib/motion_4_25_23.mjs';	
 import {rs as addAnimationMethods} from '/mlib/animate0.mjs';
-import {rs as addPathMethods} from '/mlib/paths_4_24_23.mjs';
+import {rs as addPathMethods} from '/mlib/paths_4_25_23.mjs';
 
 import {rs as linePP} from '/shape/line.mjs';
 import {rs as circlePP} from '/shape/circle.mjs';
@@ -39,83 +40,58 @@ rs.toQuad = function(p) {
 
 //rs.shapeConnectorC = function (mg,cell,numConnections,selj,selk) { //,connectJump) {
 rs.shapeConnectorC = function (params) { //,connectJump) {
-  let {connectedShapes:cns,numC,randomOffset:rf,lowFade} = this;
-  if (typeof lowFade !== 'number') {
-    debugger;
-    lowFade = .06;
-  }
-  let {motionGroup:mg,cell,numConnections:ncp,connectIndices:ci} = params;
-  let {paths} = mg;
+  let {connectedShapes:cns,numC} = this;
+  let {motionGroup:mg,cell,numConnections,connectIndices:ci} = params;
   debugger;
   let shapesPerPath = mg.shapesPerPath;
   let pln = shapesPerPath.length;
-  let numPhasesG = mg.numPhases;
-
+  let numPhases = mg.phases.length;
   for (let i = 0;i<pln;i++) {
     let shapes = shapesPerPath[i];
     let ln = shapes.length;
-    let path = paths[i];
-    let pnc = path.numConnections;
-    let pnp = path.numPhases;
-    let numPhases = pnp?pnp:numPhasesG;
-    let numConnections = pnc?pnc:ncp
     for (let j=0;j<numConnections;j++) {
       let cparams = {cell,pathIndex:i,connectIndex:j,numPhases}
-   //   debugger;
       let cis =  ci.call(this,cparams); 
       if (!cis) {
         continue;
       }
-      let {end0ShapeIndex,end1PathIndex,end1ShapeIndex} = cis;
       //let s1i = selk.call(this,cell,s0is,ln);
      // let j = Math.floor(Math.random()*ln);
      // let k = Math.floor(Math.random()*ln);
-      let sh0 = shapes[end0ShapeIndex];
-      let e1shapes = shapesPerPath[end1PathIndex]; 
-      if (!e1shapes) {
-        debugger;
-      }
-      let sh1 = e1shapes[end1ShapeIndex];
+      let sh0 = shapes[cis.end0ShapeIndex];
+      let e1shapes = shapesPerPath[cis.end1PathIndex]; 
+      let sh1 = e1shapes[cis.end1ShapeIndex];
       //let sh1 = rc?shapes[k]:shapes[(j+connectJump)%ln];
       if (!sh0) {
          debugger;
       }
-      let connection = {shape0:sh0,shape1:sh1,path,connectIndex:j,end0ShapeIndex,end1PathIndex,end1ShapeIndex,numConnections,numPhases,cell,lowFade};
-      if (this.annotateConnection) {
-         this.annotateConnection(connection);
-      }
-      cns.push(connection);
-      //cns.push({shape0:sh0,shape1:sh1,path,randomOffset0,randomOffset1});
-    //  cns.push(sh0,sh1,path,randomOffset0,randomOffset1]);
+      cns.push([sh0,sh1]);
     }
   }
 }
 
 
 rs.shapeConnector = function (mg,cell) {
-  let {connectIndices,numConnections:ncg} = this;
-  let {numConnections:ncc} = cell;
-  let numConnections = ncc?ncc:ncg;
+  debugger;
+  let {connectIndices,numConnections} = this;
   this.shapeConnectorC({motionGroup:mg,cell,numConnections,connectIndices});
 }
 
 
 
 rs.addMotionsForCell = function (params) {
-  let {cell,paths,numPhases,shapeConnector,backwards}  = params;
+  let {cell,paths,numPhases,shapeConnector}  = params;
   let {deltaX,numSteps,circleP,iPolygonP,cycles} = this;
   let duration = numSteps;
- /* let ip = 1/numPhases;
+  let ip = 1/numPhases;
   let phases =[];
   for (let i=0;i<numPhases;i++) {
     phases.push(i*ip);
-  }*/
+  }
   let {polygon,coords} = cell;
   let {x,y} = coords;
   let shapeP=circleP;
-  debugger;
- // this.mkPathMotionGroup({cell,phases,paths,cycles,duration,shapeP,oPoly:polygon,shapeConnector});
-  this.mkPathMotionGroup({cell,numPhases,paths,cycles,duration,shapeP,oPoly:polygon,shapeConnector,backwards});
+  this.mkPathMotionGroup({cell,phases,paths,cycles,duration,shapeP,oPoly:polygon,shapeConnector});
 }
 
  
@@ -123,8 +99,6 @@ rs.addMotionsForCell = function (params) {
 
 rs.initialize = function() { 
   debugger;
-      this.connectedMotions = [];
-
   this.initProtos();
   let {corners,polygonP,showThePath} =this;
   this.addFrame();
@@ -151,8 +125,7 @@ rs.initialize = function() {
 rs.updateState = function () {
   let {stepsSoFar:ssf} =this;
 //  debugger;
-  this.execMotionGroups(ssf);			
-  this.callIfDefined("afterUpdateState");
+  this.execMotionGroups(ssf);
 } 
 
 
@@ -160,5 +133,4 @@ rs.updateState = function () {
 
   
 export {rs};
-
 

@@ -35,6 +35,7 @@ let stills = kind === 'stills';
 let partition = kind === 'partition';
 let web = kind === 'web';
 let alll = kind === 'all';
+let allA = kind === 'allA';
 let sortByOrder = toBoolean(sortByOrderstr);
 let byKind = kind === 'byKind';
 let alternate = kind === 'alt';
@@ -65,6 +66,9 @@ let sectionsPath;
 let imKind;
  if (alll)  {
   sectionsPath = './allImages.js';
+  imKind = 'g'
+} else if (allA)  {
+  sectionsPath = './allAnimations.js';
   imKind = 'g'
 } else if (byLikes) {
   sectionsPath = './images.js';
@@ -163,6 +167,8 @@ if (alternate) {
   outPath = 'public/stillsImages.html';
 }else if (alll) {
   outPath = 'public/allImages.html';
+} else if (allA) {
+  outPath = 'public/allAnimations.html';
 } else if (partition) {
   outPath = 'public/partitionImages.html';
 } else if (web) {
@@ -293,8 +299,11 @@ if (imKind === 'g') {
       kindTitle = 'Animation Stills'
       aboutURL = "kop_stills.html";
     }  else if (alll) {
-      kindTitle = 'All Images and Animations';
-      aboutURL = "all_stills.html";
+      kindTitle = 'All Images';
+      aboutURL = "all_images.html";
+    }  else if (allA) {
+      kindTitle = 'All Animations';
+      aboutURL = "all_animations.html";
     }
     if (!top) {
     
@@ -370,7 +379,7 @@ const thingString = function (order,ix,dir,useThumb,ititle,props) {
 	debugger;
   let {variant,likes,posted,category,sources,noTitle,video} = props;
   //console.log('POSTED',posted,'category',category,'kind',kind);
-  if (!alll&&((kind !== 'alt') && (kind !== 'book') &&(category !==  kind))) {
+  if (!alll&&!allA&&((kind !== 'alt') && (kind !== 'book') &&(category !==  kind))) {
     return '</div>';a
   }
 	let spix = ix.split('.');
