@@ -5,14 +5,18 @@ let dir = 'public/images/std_size';
 console.log('dir',dir);
 let dirc =fs.readdirSync(dir);
 console.log('dirc',dirc);
-
+let omit ={bounce_0:1};
 // figure out what went wrong with rectangle_gon_grid
-let notAnims = {bounce_16_f077:1,crosshatch_0_f001:1,rectangle_gon_grid_9:1};
+let notAnims = {bounce_16_f077:1,crosshatch_0_f001:1,rectangle_gon_grid_9:1,curves_0:1};
 let anims= {drop_circles_21:1,cubes_1:1,drop_circles_19:1,drop_circles_20:1,drop_circles_26:1,CMB:1,drop_circles_14_5x7:1,drop_circles_15:1,
    drop_circles_17:1,drop_circles_25:1,drop_on_top_2:1,drop_on_top_7:1,drop_on_top_7_combo_1:1,drop_on_top_5:1,example1:1,emergence:1};
 let animNms = ['bounce_','curves_','path_avoidance','PathAvoidance','3d_grid','color_path','rectangle_gon_grid','crosshatch','drop_dandelion',
-    'drop_ice','drop_leaves','drop_move','line_path','motion_','gridSpinner','mutate_'];
+    'drop_ice','drop_leaves','drop_move','line_path','motion_','gridSpinner','mutate_','path_rwalk_'];
 const isOne = function (fln,nots,sos,names,kind){
+  if (omit[fln]) {
+    console.log(fln,' omitted');
+    return 0;
+  }
   if (nots[fln]) {
     console.log(fln,' is not',kind);
     return 0;
@@ -37,7 +41,7 @@ return 0;
 const isAnim = function (fln) {
     return isOne(fln,notAnims,anims,animNms,'Anim')
 }
-let instanceNms = ['rectangle_gon_grid','flows','gridSpinner','line_path','motion_','part_','part2_','paths_','mutate_'];
+let instanceNms = ['rectangle_gon_grid','flows','gridSpinner','line_path','motion_','part_','part2_','paths_','mutate_','bounce_','curves_','path_rwalk_'];
 let instances = {bounce_3:1}
 let notInstances= {}
 
@@ -65,14 +69,14 @@ for (let i=0;i<ln;i++ ) {
   let ext = dis[1];
   let fln = dis[0];
  // console.log('fln',fln);
-
-   let anim = isAnim(fln);
+ 
+    let anim = isAnim(fln);
    let inst = isInstance(fln);
   let iog = inst?'instances':'generators';
   //console.log('i',i,'di',di,'dis',dis,'fln',fln,'ext',ext);
   let kind = fln.split('_')[0];
  
-  if ((ext === 'jpg')&&(kind!=='web')&&(!anim))  {
+  if ((ext === 'jpg')&&(kind!=='web')&&(!anim)&&(!omit[fln]))  {
 	  let cmd = `[0,'${fln}','${iog}','','',{}], \n`;
     outp+=cmd;
     if (xferImages) {

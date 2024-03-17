@@ -2,20 +2,18 @@ import {rs as gonPP} from '/shape/polygon.mjs';
 import {rs as linePP} from '/shape/line.mjs';
 import {rs as circlePP} from '/shape/circle.mjs';
 import {rs as basicP} from '/generators/basics.mjs';
-import {rs as addGonMethods} from '/mlib/gons_0_12_14_23.mjs';
+import {rs as addGonMethods} from '/mlib/gons_0_12_19_23.mjs';
 import {rs as addAnimation} from '/mlib/animate0.mjs';
-//import {rs as motionHistory} from '/motionHistories/motion_1.mjs';
+debugger;
 
 let rs = basicP.instantiate();
-//rs.motionHistory = motionHistory;
 addGonMethods(rs);
 addAnimation(rs);
 rs.setName('rectangle_gon_grid_0');
 
 
 let ht= 100;
-let nr = 500;
-nr = 50;
+let nr = 200;
 //nr = 5	;
 
 let topParams = {width:ht,height:ht,numRows:nr,numCols:nr,framePadding:0.01*ht,frameStroke:'white',frameStrokeWidth:.1,saveAnimation:1,oneShot:1,
@@ -120,40 +118,26 @@ rs.rotate = function (a) {
   return rv;
 }
 rs.buildColorsA = function () {
-  let {colors}  = this;
-  let cla = [colors];
+  this.colorsA = [this.icolors];
   for (let i=1;i<4;i++) {
-    cla.push(this.rotate(cla[i-1]));
+    this.colorsA.push(this.rotate(this.colorsA[i-1]));
   }
-  this.colorsA = cla.reverse();
 }
 
 
 rs.setColors= function (stage,fr) {
-  let {stepsSoFar:ssf} =this;
-  if (ssf > 62){
-  //  debugger;
-  }
-  
-  let cla = this.colorsA;
-  let ln = cla.length;
-  let colors0 = this.colorsA[stage%ln];
-  let colors1 = this.colorsA[(stage+1)%ln];
-  let colors = this.interpolate(colors0,colors1,fr);
-  if (this.getVerbose) {
-    console.log('colors',JSON.stringify(colors));
-  }
-  this.colors = colors;
+  let colors0 = this.colorsA[stage];
+  let colors1 = this.colorsA[(stage+1)%4];
+  this.colors = this.interpolate(colors0,colors1,fr);
 }
 
 
 
 rs.initialize = function () {
-  debugger;//keep
+  debugger;
   this.initProtos();
-   let {width:wd,circleP,numRows,numCols,width,height,stepsPerStage:sps,tfn,dfn,colors,startAtStep:sas} = this;
+   let {width:wd,circleP,numRows,numCols,width,height,stepsPerStage:sps} = this;
    this.numSteps=4*sps;
-   this.stepsSoFar = sas;
    this.addFrame();
   let lines = this.set('lines',arrayShape.mk());
   this.set('gons',arrayShape.mk());
@@ -177,51 +161,22 @@ rs.initialize = function () {
    this.buildColorsA();
    this.setColors(0,0);
   //this.interpolateColors(gons,vertices,vValues,this.tfn,this.dfn);
-  let iparams ={gons,vertices,colors:this.colors,tfn,dfn};
-  this.interpolateColors(iparams);
- // this.interpolateColors(gons,vertices,this.colors,this.tfn,this.dfn);
+  this.interpolateColors(gons,vertices,this.colors,this.tfn,this.dfn);
 }
    
 rs.updateState = function () {
-  let {stepsPerStage:sps,stepsSoFar:ssf,gons,vertices,vValues,colors,tfn,dfn,verbose} = this;
+  let {stepsPerStage:sps,stepsSoFar:ssf,gons,vertices,vValues,colors} = this;
   console.log('UPDATE');
+  debugger;	
   let stage = Math.floor(ssf/sps);
   let fr = (ssf%sps)/sps;
   this.setColors(stage,fr);
-  let iparams ={gons,vertices,colors,tfn,dfn,verbose}
-   this.interpolateColors(iparams);
-   //this.interpolateColors(gons,vertices,this.colors,this.tfn,this.dfn);
+   this.interpolateColors(gons,vertices,this.colors,this.tfn,this.dfn);
 }
   
-rs.processHistoryElement = function (elt) {
-  let pnms = Object.getOwnPropertyNames(elt);
-  let ln = pnms.length;
-  let par=[];
-  let t;
-  for (let i=0;i<ln;i++) {
-    let p = pnms[i];
-    let v = elt[p];
-    if (p==='time') {
-      t = v;
-      continue;
-    }
-    let {x,y} = v;
-    let pnt = Point.mk(x,y);
-    par.push(pnt);
-  }
-  return {time:t,points:par};
-}
-
-rs.processHistory = function (h) {
-  let ph = h.map((v) => this.processHistoryElement(v));
-    
-  return ph;
-}
-  
-   
+ 
 
 
 export {rs};
-
 
 
