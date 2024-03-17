@@ -132,6 +132,9 @@ document.addEventListener('DOMContentLoaded', () => {
   }else if (imKind === 'all') {
     thePages = allPages;
     theTitles = allTitles;
+  } else if (imKind === 'allA') {
+    thePages = allAPages;
+    theTitles = allATitles;
   }
 	//lastPage = getArgs.lastPage;
 	let title = theTitles[cPage];

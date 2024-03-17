@@ -5,24 +5,34 @@ let dir = 'public/images/std_size';
 console.log('dir',dir);
 let dirc =fs.readdirSync(dir);
 console.log('dirc',dirc);
-let omit ={bounce_0:1};
+let omit ={bounce_0:1,'3d_grid_2':1};
 // figure out what went wrong with rectangle_gon_grid
 let notAnims = {bounce_16_f077:1,crosshatch_0_f001:1,rectangle_gon_grid_9:1,curves_0:1};
 let anims= {drop_circles_21:1,cubes_1:1,drop_circles_19:1,drop_circles_20:1,drop_circles_26:1,CMB:1,drop_circles_14_5x7:1,drop_circles_15:1,
    drop_circles_17:1,drop_circles_25:1,drop_on_top_2:1,drop_on_top_7:1,drop_on_top_7_combo_1:1,drop_on_top_5:1,example1:1,emergence:1};
 let animNms = ['bounce_','curves_','path_avoidance','PathAvoidance','3d_grid','color_path','rectangle_gon_grid','crosshatch','drop_dandelion',
     'drop_ice','drop_leaves','drop_move','line_path','motion_','gridSpinner','mutate_','path_rwalk_'];
+let mp4s ={};
+let notMp4s ={};
+let mp4Nms =['bounce_'];
+let isOneVerbose
 const isOne = function (fln,nots,sos,names,kind){
   if (omit[fln]) {
-    console.log(fln,' omitted');
+    if (isOneVerbose) {
+      console.log(fln,' omitted');
+    }
     return 0;
   }
   if (nots[fln]) {
-    console.log(fln,' is not',kind);
+    if (isOneVerbose) {
+      console.log(fln,' is not',kind);
+    }
     return 0;
   }
   if (sos[fln]) {
-    console.log(fln,' is',kind);
+    if (isOneVerbose) {
+      console.log(fln,' is',kind);
+    }
     return 1;
   }
   let lna = names.length;
@@ -31,7 +41,9 @@ const isOne = function (fln,nots,sos,names,kind){
    
     let idx = fln.indexOf(anm);
     if (idx>=0) {
-      console.log(fln,' is ',kind);
+      if (isOneVerbose) {
+        console.log(fln,' is ',kind);
+      }
      return 1;
     }
   }
@@ -49,6 +61,10 @@ const isInstance = function (fln) {
     return isOne(fln,notInstances,instances,instanceNms,'Instance')
 }
 
+
+const isMp4 = function (fln) {
+    return isOne(fln,notMp4s,mp4s,mp4Nms,'mp4')
+}
 
  const xferFile = function(dir,ifl,iofl) {
     let ofl = iofl?iofl:ifl;
@@ -104,9 +120,13 @@ for (let i=0;i<ln;i++ ) {
   let iog = inst?'instances':'generators';
   //console.log('i',i,'di',di,'dis',dis,'fln',fln,'ext',ext);
   let kind = fln.split('_')[0];
- 
+  let mp4=isMp4(fln);
+  let vid = mp4?'mp4':'gif';
+  if (mp4) {
+     console.log('fln',fln,'vid',vid);
+  }
   if ((ext === 'jpg')&&(kind!=='web')&&(anim))  {
-	  let cmd = `[0,'${fln}','${iog}','','',{}], \n`;
+	  let cmd = `[0,'${fln}','${iog}','','',{video:'${vid}'}], \n`;
     aoutp+=cmd;
     if (xferImages) {
       xferFile('public/images/std_size/',di);

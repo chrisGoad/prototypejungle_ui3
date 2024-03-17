@@ -116,6 +116,7 @@ rs.genGrid = function () {
 rs.initialize = function () {
   debugger;
   this.initProtos();
+  this.numSteps = 200;
   let {circleP,dropParams,numSteps,cubeDim} = this;
   this.addFrame();
   let {focalPoint,focalLength,cameraScaling,cameraAxis} = this;
