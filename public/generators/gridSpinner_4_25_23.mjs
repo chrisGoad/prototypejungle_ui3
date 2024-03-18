@@ -15,7 +15,7 @@ addGridMethods(rs);
 addMotionMethods(rs);
 addQuadMethods(rs);
 addPathMethods(rs);
-
+debugger;
 //addQuadMethods(rs);
 addAnimationMethods(rs);
 

@@ -531,13 +531,27 @@ item.oneInterpolationStep = function () {
   }
 
 }
+
+item.pauseAnimationMaybe = function () {
+  let {stepsSoFar:ssf,whereToPause:wtp,whereToSave:wts} = this;
+  if (wtp && (ssf === (wtp+0))) {
+    debugger;
+    this.paused = 1;
+    let wts = this.whereToSave;
+    let wtps = this.padIntTo(wtp,3);
+    let nwts = wts+'_f'+wtps; 
+    this.setName(nwts);
+  }
+}
 item.oneStep = function (one) {
   //debugger;
+  let {stepsSoFar:ssf} = this;
+  console.log('ssf',ssf);
   if (this.paused) {
     return;
   }
   this.callIfDefined('initAudio');
-  let ns = this.stepsSoFar;
+  let ns = ssf;
        //console.log('ns',ns,'tns',this.numSteps);
   //this.stepsSoFar++;
   if  (this.stepsSoFar >= (this.numSteps-this.chopOffEnd)) {
@@ -554,7 +568,8 @@ item.oneStep = function (one) {
   if (ns&&this.saveAnimation&&(ns>this.chopOffBeginning)) { // for some reason, the first frame is corrupted 
     draw.saveFrame(ns-Math.max(this.chopOffBeginning+1,1));
   }
-  //debugger;
+  debugger;
+  this.pauseAnimationMaybe();
   if (this.updateState) {
     this.updateState();
   } else {

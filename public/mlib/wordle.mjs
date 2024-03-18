@@ -180,7 +180,7 @@ item.checkForMandatories = function (str) {
 
 item.wOk1 = function (str) {
  if (str.length ===5) {
-  // debugger;
+  //debugger;
  }
  if (this.badBlend(str)) {
     return 0;

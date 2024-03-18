@@ -77,6 +77,66 @@ item.mkRectangularPath = function (rect) {
   return [LL,UL,UR,LR,LL];
 }
      
+item.mkSpokePaths = function (params) {
+  let {numSpokes:ns,innerRadius:irdi,outerRadius:ord,center,startAngle:isa} = params;
+  let sa = isa?isa:0;
+  let ird = irdi?irdi:0;
+  let da = (2*Math.PI)/ns;
+  let paths = [];
+  for (let i=0;i<ns;i++) {
+    let ca = sa + i*da;
+    let vec = Point.mk(Math.cos(ca),Math.sin(ca));
+    let ip = vec.times(ird).plus(center);
+    let op = vec.times(ord).plus(center);
+    paths.push([ip,op]);
+  }
+  return paths;
+}
+
+item.interpolatePaths = function (path0,path1) {
+  let ln = Math.min(path0.length,path1.length);
+  let rp = [];
+  for (let i=0;i<ln;i++) {
+    let fr = i/ln;
+    let p0 = path0[i]
+    let p1 = path1[i]
+    let vec = p1.difference(p0);
+    let svec = vec.times(fr);
+    let ip = p0.plus(svec);
+    rp.push(ip);
+  }
+  return rp;
+}		
+
+       
+item.setPathLength = function (path,n) {
+  let rp = [];
+  for (let i=0;i<n;i++) {
+    let fr = i/(n-1);
+    let cp = this.alongPath(path,fr);
+    rp.push(cp);
+  }
+  return rp;
+}
+
+item.mkParallelPaths = function (params) {
+  let {numPaths:np,rectangle} = params;
+  let rect =  rectangle?rectangle:Rectangle.mk(Point.mk(0,0),Point.mk(1,1));
+  let {corner,extent} = rect;
+  let {x:cx,y:cy} = corner;
+  let {x:ex,y:ey} = extent;
+  let dx = ey/(np-1);
+  let paths = [];
+  let minV = cx;
+  let maxV = cx+ex;;
+  for (let i=0;i<np;i++) {
+    let cv = i*dx+minV;
+    let ip = Point.mk(minV,cv);
+    let ep = Point.mk(maxV,cv);
+    paths.push(i%2?[ip,ep]:[ep,ip]);
+  }
+  return paths;
+}
 item.mkCircle = function (params) {
   let {radius:r,numPoints:np,center,startAngle:sa,endAngle:ea,clockWise:clkw} = params;
   //let da = (2*Math.PI)/(np+1);
@@ -93,6 +153,10 @@ item.mkCircle = function (params) {
   }
   return path;
 }
+item.mkCirclePath = function (params) {
+  return this.mkCircle(params);
+}
+
 
 item.mkWavyCircle = function (params) {
   let {radius:r,deltaRadius,numWaves:nw,numPoints:np,center,startAngle:sa} = params;

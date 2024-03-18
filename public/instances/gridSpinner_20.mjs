@@ -1,7 +1,8 @@
 
 
 debugger;
-import {rs as generatorP} from '/generators/gridSpinner.mjs';
+import {rs as generatorP} from '/generators/gridSpinner_4_25_23.mjs';
+
 let rs = generatorP.instantiate();
 import {rs as linePP} from '/shape/line.mjs';
 import {rs as circlePP} from '/shape/circle.mjs';
@@ -96,8 +97,8 @@ rs.addMotions = function () {
   //let center = Point.mk(.5,.5);
   let center = Point.mk(.5,.6);
   let numPoints = 20;
-  let path0 = this.mkCircle({radius:0.4,numPoints,center});
-  let path1 = this.mkCircle({radius:0.3,numPoints,center});
+  let path0 = this.mkCirclePath({radius:0.4,numPoints,center});
+  let path1 = this.mkCirclePath({radius:0.3,numPoints,center});
   let path2 = this.setPathLength([Point.mk(.2,.3),Point.mk(.8,.3)],numPoints);
   let path3 = this.setPathLength([Point.mk(.2,.1),Point.mk(.8,.1)],numPoints);
   let ipath0 = this.interpolatePaths(path0,path2);

@@ -4,9 +4,11 @@ import {rs as basicP} from '/generators/basics.mjs';
 //import {rs as addDropMethods} from '/mlib/drop.mjs';
 import {rs as addPathMethods} from '/mlib/path.mjs';	
 //import {rs as addAudioMethods} from '/mlib/audio.mjs';	
+import {rs as addAnimationMethods} from '/mlib/animate0.mjs';
 
 let rs = basicP.instantiate();
 addPathMethods(rs);
+//addAnimationMethods(rs);
 //addAudioMethods(rs);
 rs.setName('reflected_path_0');
 
@@ -105,7 +107,7 @@ rs.atCycleEnd = function (nm) {
    let {pspace,cstate} = pstate;
   let cs = cstate[nm];
   let {dir,toP,toSide,line,inBack,seg,start} = cs;
-     console.log('cycleEnd ssf',ssf,'nm',nm,'inBack',inBack,'color',line.stroke);
+     //console.log('cycleEnd ssf',ssf,'nm',nm,'inBack',inBack,'color',line.stroke);
 
   let na = toSide%2?-dir:Math.PI -dir;
   if (0 && (ssf < noNewPaths)) {
@@ -319,7 +321,7 @@ rs.placeIcircles = function (ai) {
  // let ai = this.allIntersections(segs);
   let cl = icircles.length;
   let ail = ai.length;
-  console.log('ail',ail);
+ // console.log('ail',ail);
   if (ail > cl) {
     let nn = ail-cl;
     for (let j=0;j<nn;j++) {
@@ -440,6 +442,7 @@ rs .addSomePathsss = function (n) {
 }
 rs.updateState = function () {
   let {stepsSoFar:ssf,numSteps,cycleTime,lines,ecircles,segs,ht,numPaths,noNewPaths,addPathInterval,schedule,part0tm} = this;
+  debugger;
  // let s0 = schedule[0];
  // let {dir,tm,pnt} = s0;
   //let lln = vlines.length;

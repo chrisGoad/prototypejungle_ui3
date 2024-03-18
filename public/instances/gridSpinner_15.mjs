@@ -1,7 +1,7 @@
 
 
 debugger;
-import {rs as generatorP} from '/generators/gridSpinner.mjs';
+import {rs as generatorP} from '/generators/gridSpinner_4_25_23.mjs';
 let rs = generatorP.instantiate();
 import {rs as linePP} from '/shape/line.mjs';
 import {rs as circlePP} from '/shape/circle.mjs';
@@ -21,6 +21,8 @@ Object.assign(rs,topParams);
 
 
 rs.initProtos = function () {
+  debugger;
+  this.numSteps = 100;
   let lineP = this.lineP = linePP.instantiate();
   lineP['stroke-width'] = .4;
   lineP.stroke = 'cyan';

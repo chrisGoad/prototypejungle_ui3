@@ -27,6 +27,10 @@ item.setNumSteps = function () {
 item.oneStep = function (one) {
   let {paused,numSteps,lastStep,chopOffEnd,chopOffBeginning,timePerStep:tps,stepsSoFar:issf,startAtStep,stepArray,stepArrayStep:sars} = this;
   let ssf = this.stepsSoFar = stepArray?stepArray[sars]:issf;
+  if (1) {
+    console.log('ssf',ssf);
+  }
+  
   if (stepArray)  {
     this.numSteps = Infinity;
   }
@@ -51,6 +55,8 @@ item.oneStep = function (one) {
     }
     return;
   }
+  debugger;
+  this.pauseAnimationMaybe();
     this.updateState();
   let frnum = ssf- Math.max(startAtStep,1);
   if (ssf&&this.saveAnimation&&(!stepArray)) { // for some reason, the first frame is corrupted 

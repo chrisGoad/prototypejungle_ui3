@@ -94,7 +94,8 @@ c:\ffmpeg\bin\ffmpeg  -framerate 10 -i animations/part2_0_44_f%03d.jpg -s 800x80
 c:\ffmpeg\bin\ffmpeg  -framerate 20 -i animations/part2_0_46_f%03d.jpg -s 800x800  export/part2_0_46.gif
 c:\ffmpeg\bin\ffmpeg  -framerate 20 -i animations/part2_0_46_f%03d.jpg -s 800x800  export/part2_0_46f.gif
 c:\ffmpeg\bin\ffmpeg  -framerate 20 -i animations/part2_0_31_f%03d.jpg -s 500x500  export/part2_0_31.anim.gif
-c:\ffmpeg\bin\ffmpeg  -framerate 10 -i animations/grid_emergence_f%03d.jpg -s 500x500  export/grid_emergence.gif
+c:\ffmpeg\bin\ffmpeg  -framerate 10 -i animations/emergence_f%03d.jpg -s 500x500  export/emergence.gif
+c:\ffmpeg\bin\ffmpeg  -framerate 10 -i animations/emergence_f%03d.jpg -s 500x500  export/emergence.mp4
 c:\ffmpeg\bin\ffmpeg  -framerate 10 -i animations/part2_0_32_f%03d.jpg -s 500x500  export/part2_0_32.gif
 c:\ffmpeg\bin\ffmpeg  -framerate 20 -i animations/part2_0_32_f%03d.jpg -s 500x500  export/part2_0_32.mp4
 c:\ffmpeg\bin\ffmpeg  -framerate 20 -i animations/drop_move_f%03d.jpg -s 500x500  export/drop_move.gif
@@ -184,8 +185,12 @@ c:\ffmpeg\bin\ffmpeg  -framerate 15 -i animations/gridSpinner_7_f%03d.jpg -s 500
 c:\ffmpeg\bin\ffmpeg  -framerate 15 -i animations/gridSpinner_8_f%03d.jpg -s 500x500  export/gridSpinner_8.gif
 c:\ffmpeg\bin\ffmpeg  -framerate 15 -i animations/gridSpinner_9_f%03d.jpg -s 500x500  export/gridSpinner_9.gif
 c:\ffmpeg\bin\ffmpeg  -framerate 15 -i animations/gridSpinner_10_f%03d.jpg -s 500x500  export/gridSpinner_10.gif
+c:\ffmpeg\bin\ffmpeg  -framerate 15 -i animations/gridSpinner_1_f%03d.jpg -s 500x500  export/gridSpinner_1.gif
+c:\ffmpeg\bin\ffmpeg  -framerate 15 -i animations/gridSpinner_0_f%03d.jpg -s 500x500  export/gridSpinner_0.gif
 c:\ffmpeg\bin\ffmpeg  -framerate 15 -i animations/gridSpinner_10_f%03d.jpg -s 500x500  export/gridSpinner_10.mp4
+c:\ffmpeg\bin\ffmpeg  -framerate 15 -i animations/gridSpinner_11_f%03d.jpg -s 500x500  export/gridSpinner_11.mp4
 c:\ffmpeg\bin\ffmpeg  -framerate 15 -i animations/gridSpinner_13_f%03d.jpg -s 500x500  export/gridSpinner_13.mp4
+c:\ffmpeg\bin\ffmpeg  -framerate 15 -i animations/gridSpinner_13_f%03d.jpg -s 500x500  export/gridSpinner_13.gif
 c:\ffmpeg\bin\ffmpeg  -framerate 15 -i animations/gridSpinner_14_f%03d.jpg -s 500x500  export/gridSpinner_14.mp4
 c:\ffmpeg\bin\ffmpeg  -framerate 15 -i animations/gridSpinner_15_f%03d.jpg -s 800x800  export/gridSpinner_15.gif
 c:\ffmpeg\bin\ffmpeg  -framerate 15 -i animations/gridSpinner_17_f%03d.jpg -s 500x500  export/gridSpinner_17.mp4

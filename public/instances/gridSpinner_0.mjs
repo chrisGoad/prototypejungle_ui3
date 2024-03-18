@@ -1,5 +1,4 @@
 
-debugger;
 import {rs as addGridMethods} from '/mlib/grid2.mjs';	
 import {rs as addQuadMethods} from '/mlib/rect2quad.mjs';	
 import {rs as addMotionMethods} from '/mlib/motion.mjs';	
@@ -58,7 +57,7 @@ rs.addMotions = function () {
   let cycles = 2;
   let duration = numSteps;
   cells.forEach((cell) =>{
-    debugger;
+    //debugger;
     let {polygon,coords} = cell;
     let {x,y} = coords;
     let shapeP,polyP,numSides;
@@ -81,12 +80,15 @@ rs.addMotions = function () {
 rs.initialize = function() { 
   debugger;
   this.initProtos();
+  this.numSteps = 200;
   let {corners,polygonP} =this;
   this.addFrame();
   this.initGrid();
   this.motionGroups = [];
   this.set('mshapes',arrayShape.mk());
   this.addMotions();
+  this.execMotionGroups(0);
+
 } 
   //this.updateState();
 
@@ -94,7 +96,11 @@ rs.initialize = function() {
 
 rs.updateState = function () {
   let {stepsSoFar:ssf} =this;
+   console.log('ssf',ssf);
   debugger;
+  if (ssf === 25) {
+    this.paused = 1;
+  }
   this.execMotionGroups(ssf);
 } 
 

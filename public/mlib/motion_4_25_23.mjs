@@ -152,6 +152,7 @@ item.showPathh = function (path,fc,lineP) {
    // debugger;
   }
   let fr = ef%1;
+  debugger;
   let cp = this.alongPath(path,fr);
   let rp = this.usq2qpoint(cp,oPoly.corners);
   m.lastCycle = cycleNum;

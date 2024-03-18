@@ -52,7 +52,8 @@ rs.toQuad = function(p) {
 
 rs.addMotions = function () {
   let {cells,deltaX,numSteps,circleP,iPolygonP,cycles} = this;
-  //let radius = 0.4*0.5*deltaX;
+  //let radius = 0.4*0.5*deltaX
+  debugger;
   let duration = numSteps;
   let d =0.25;
   let p0 = Point.mk(d,0.5);
@@ -86,6 +87,7 @@ rs.testPath = function () {
 rs.initialize = function() { 
   debugger;
   //this.testPath();
+  this.numSteps = 200;
   this.initProtos();
   let {corners,polygonP} =this;
   this.addFrame();
@@ -101,6 +103,10 @@ rs.initialize = function() {
 
 rs.updateState = function () {
   let {stepsSoFar:ssf} =this;
+     console.log('ssf',ssf);
+  if (ssf === 20) {
+    this.paused = 1;
+  }
   debugger;
   this.execMotionGroups(ssf);
 } 

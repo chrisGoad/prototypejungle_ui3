@@ -2,7 +2,7 @@ import {rs as addGridMethods} from '/mlib/grid2.mjs';
 import {rs as addQuadMethods} from '/mlib/rect2quad.mjs';	
 import {rs as addMotionMethods} from '/mlib/motion_4_24_23.mjs';	
 import {rs as addAnimationMethods} from '/mlib/animate0.mjs';
-import {rs as addPathMethods} from '/mlib/paths_4_24_23.mjs';
+import {rs as addPathMethods} from '/mlib/paths.mjs';
 
 import {rs as linePP} from '/shape/line.mjs';
 import {rs as circlePP} from '/shape/circle.mjs';
