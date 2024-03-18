@@ -13,7 +13,7 @@ let ht=50;
 
 let topParams = {width:ht,height:ht,framePadding:0.3*ht,frameStrokee:'white',frameStrokeWidth:.2,timePerStep:1/80,stopTime:6,recordingMotion:1,saveAnimation:1,
   //  circleRadius:.1,ringRadii:[],nearestCount:6,nearestFadeFactor:20,toAngle:2*Math.PI,particleColor:'blue',shapesPerPath:4,speed:1}
-    circleRadius:.1,ringRadii:[],nearestCount:6,nearestFadeFactor:0,toAngle:2*Math.PI,particleColor:'blue',shapesPerPath:4,speed:1}
+    circleRadius:.1,ringRadii:[],nearestCount:6,nearestFadeFactor:0,toAngle:2*Math.PI,particleColor:'blue',shapesPerPath:4,speed:1,whereToPause:422}
 
 Object.assign(rs,topParams);
 let subParams ={speed:10,shapesPerRing:2};

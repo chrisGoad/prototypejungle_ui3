@@ -13,7 +13,7 @@ let stt=2;
 
 
 let topParams = {width:ht,height:ht,framePadding:0.3*ht,frameStrokee:'white',frameStrokeWidth:.2,timePerStep:1/80,stopTime:12,recordingMotion:1,saveAnimation:1,
-    circleRadius:.2,ringRadii:[],nearestCount:6,nearestFadeFactor:20,toAngle:2*Math.PI,particleColor:'blue'};
+    circleRadius:.2,ringRadii:[],nearestCount:6,nearestFadeFactor:20,toAngle:2*Math.PI,particleColor:'blue',whereToPause:422};//184};
 
 Object.assign(rs,topParams);
 let subParams ={speed:10,shapesPerRing:2};
@@ -115,14 +115,14 @@ rs.updateState = function () {
     let fr = dist/60;
     let pow = 4;
     let pfr = Math.pow(1-fr,pow);
-    console.log('fr',fr,'pfr',pfr);
+   // console.log('fr',fr,'pfr',pfr);
     let icolor = this.interpolate(black,color,pfr);
     let bsw = .4;
     let stroke = this.arrayToRGB(color);
     if (line) {
       line.stroke = stroke;
       let swfc = Math.pow(pfr,.2);
-      console.log('sw fc',swfc);
+    //  console.log('sw fc',swfc);
       if (swfc < .4) {
         line.hide();
       } else {

@@ -13,7 +13,7 @@ let stt=2;
 
 
 let topParams = {width:ht,height:ht,framePadding:0.3*ht,frameStroke:'white',frameStrokeWidth:.2,timePerStep:1/80,stopTime:12,recordingMotion:1,saveAnimation:1,
-    circleRadius:.4,ringRadii:[],nearestCount:6,nearestFadeFactor:20,toAngle:2*Math.PI,particleColor:'blue'};
+    circleRadius:.4,ringRadii:[],nearestCount:6,nearestFadeFactor:20,toAngle:2*Math.PI,particleColor:'blue',whereToPause:195};
 
 Object.assign(rs,topParams);
 let subParams ={speed:10,shapesPerRing:2};
@@ -109,7 +109,7 @@ rs.updateState = function () {
     let pfr = Math.pow(1-fr,pow);
     //let pfrpow = Math.pow(pfr,1/pow);
    // console.log('fr',fr,'pfr',pfr,'pfrpow',pfrpow);
-    console.log('fr',fr,'pfr',pfr);
+   // console.log('fr',fr,'pfr',pfr);
   //  let icolor = this.interpolate(black,color,pfr);
     let icolor = this.interpolate(color,black,pfr);
     let sw = .8;
@@ -117,7 +117,7 @@ rs.updateState = function () {
     if (line) {
       line.stroke = stroke;
       let pfrp = Math.pow(pfr,.15);
-      console.log('pfrp',pfrp,'stroke-widthh',pfrp);
+      //console.log('pfrp',pfrp,'stroke-widthh',pfrp);
       line['stroke-width'] = sw*pfrp;;
     //  line['stroke-width'] = sw*(.8-pfrp);
       line.update();

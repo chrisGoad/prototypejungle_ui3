@@ -10,7 +10,8 @@ let dirc =fs.readdirSync(dir);
 let omit =['bounce_0','3d_grid_2','3d_grid_0','bounce_11','bounce_13','bounce_14','bounce_16_f073','bounce_2','bounce_6','bounce_7','bounce_8',
            'bounce_3','CMB','color_path_0','crosshatch_0','curves_2','drop_circles_17','drop_dandelion','drop_dandelion_with_circles','drop_ice',
            'drop_move','gridSpinner_18','gridSpinner_19','gridSpinner_14','gridSpinner_2','gridSpinner_3','gridSpinner_4','gridSpinner_6','gridSpinner_8',
-           'gridSpinner_9','=gridSpinner','gridSpinner_12','gridSpinner_16','grid_emergence','example1'];
+           'gridSpinner_9','=gridSpinner','gridSpinner_12','gridSpinner_16','grid_emergence','example1','l2ine_path_2_11b','line_path_2_9',
+           '=motion_1','motion_14','motion_14','motion_16','motion_17','motion_18','motion_19','=motion_2','=motion_20'];
 // figure out what went wrong with rectangle_gon_grid
 /*let notAnims = {bounce_16_f077:1,crosshatch_0_f001:1,rectangle_gon_grid_9:1,curves_0:1,drop_circles_14_5x7:1,drop_circles_15:1,
                drop_circles_25:1,drop_circles_21:1,drop_leaves:1,};*/
