@@ -104,7 +104,10 @@ rs.whichCycle = function () {
 
 rs.updateState= function () {
   debugger;
+    let {stepsSoFar:ssf}  = this;
+
   let wc = this.whichCycle();
+  console.log('ssf',ssf,'wc',wc);
   this.execCycle(wc);
 }
 /*

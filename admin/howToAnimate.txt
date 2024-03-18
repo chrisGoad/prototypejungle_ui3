@@ -121,6 +121,7 @@ c:\ffmpeg\bin\ffmpeg  -framerate 20 -i animations/spirals_0_2_f%03d.jpg -s 800x8
 c:\ffmpeg\bin\ffmpeg  -framerate 20 -i animations/paths_0_1_f%03d.jpg -s 800x800  export/paths_0_1.mp4
 c:\ffmpeg\bin\ffmpeg  -framerate 5 -i animations/crosshatch_0_f%03d.jpg -s 800x800  export/crosshatch_0.mp4
 c:\ffmpeg\bin\ffmpeg  -framerate 20 -i animations/crosshatch_0_f%03d.jpg -s 800x800  export/crosshatch_0.mp4
+c:\ffmpeg\bin\ffmpeg  -framerate 20 -i animations/crosshatch_1_f%03d.jpg -s 800x800  export/crosshatch_1.mp4
 c:\ffmpeg\bin\ffmpeg  -framerate 20 -i animations/flows_0_f%03d.jpg -s 800x800  export/flows_0.mp4
 c:\ffmpeg\bin\ffmpeg  -framerate 2 -i animations/flows_0_0_f%03d.jpg -s 800x800  export/flows_0_0.mp4
 c:\ffmpeg\bin\ffmpeg  -framerate 15 -i animations/flows_0_1_f%03d.jpg -s 800x800  export/flows_0_1.mp4
@@ -215,7 +216,7 @@ c:\ffmpeg\bin\ffmpeg  -framerate 10 -i animations/3d_grid_2_f%03d.jpg -s 500x500
 c:\ffmpeg\bin\ffmpeg  -framerate 15 -i animations/paths_10_f%03d.jpg -s 500x500  export/paths_10.gif
 c:\ffmpeg\bin\ffmpeg  -framerate 15 -i animations/emergence_f%03d.jpg -s 500x500  export/emergence.mp4
 c:\ffmpeg\bin\ffmpeg  -framerate 15 -i animations/emergence_f%03d.jpg -s 500x500  export/emergence.gif
-c:\ffmpeg\bin\ffmpeg  -framerate 15 -i animations/cubes_1_f%03d.jpg -s 500x500  export/cubes_1.mp4
+c:\ffmpeg\bin\ffmpeg  -framerate 15 -i animations/cubes_1_f%03d.jpg -s 500x500  export/cubes_1.gif
 c:\ffmpeg\bin\ffmpeg  -framerate 30 -i animations/gons_3_f%03d.jpg -s 500x500  export/gons_3.gif
 c:\ffmpeg\bin\ffmpeg  -framerate 15 -i animations/spin_0_f%03d.jpg -s 500x500  export/spin_0.gif
 c:\ffmpeg\bin\ffmpeg  -framerate 15 -i animations/grid_drop_0_f%03d.jpg -s 500x500  export/grid_drop_0.gif
@@ -239,6 +240,8 @@ c:\ffmpeg\bin\ffmpeg  -framerate 15 -i animations/bounce_18_f%03d.jpg -s 1000x10
 c:\ffmpeg\bin\ffmpeg  -framerate 15 -i animations/bounce_19_f%03d.jpg -s 1000x1000  export/bounce_19.gif
 c:\ffmpeg\bin\ffmpeg  -framerate 20 -i animations/bounce_12_f%03d.jpg -s 500x500  export/bounce_12.gif
 c:\ffmpeg\bin\ffmpeg  -framerate 20 -i animations/curves_1_f%03d.jpg -s 500x500  export/curves_1.gif
+c:\ffmpeg\bin\ffmpeg  -framerate 20 -i animations/curves_3_f%03d.jpg -s 500x500  export/curves_3.gif
+c:\ffmpeg\bin\ffmpeg  -framerate 20 -i animations/curves_4_f%03d.jpg -s 500x500  export/curves_4.gif
 c:\ffmpeg\bin\ffmpeg  -framerate 20 -i animations/curves_6_f%03d.jpg -s 500x500  export/curves_6.gif
 c:\ffmpeg\bin\ffmpeg  -framerate 20 -i animations/curves_5_f%03d.jpg -s 1000x1000  export/curves_5.gif
 c:\ffmpeg\bin\ffmpeg  -framerate 10 -i animations/curves_7_f%03d.jpg -s 500x500  export/curves_7.gif

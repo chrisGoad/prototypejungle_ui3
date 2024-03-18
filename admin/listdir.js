@@ -2,10 +2,11 @@
 var fs = require('fs');
 let xferImages = process.argv[2];
 let dir = 'public/images/std_size';
-console.log('dir',dir);
+//console.log('dir',dir);
 let dirc =fs.readdirSync(dir);
-console.log('dirc',dirc);
-let omit ={bounce_0:1,'3d_grid_2':1,bounce_11:1,bounce_13:1,bounce_14:1,bounce_16_f073:1,bounce_2:1,bounce_6:1,bounce_7:1,bounce_8:1};
+//console.log('dirc',dirc);
+let omit ={bounce_0:1,'3d_grid_2':1,'3d_grid_0':1,bounce_11:1,bounce_13:1,bounce_14:1,bounce_16_f073:1,bounce_2:1,bounce_6:1,bounce_7:1,bounce_8:1,
+           bounce_3:1,CMB:1,color_path_0:1,crosshatch_0:1,curves_2:1};
 // figure out what went wrong with rectangle_gon_grid
 let notAnims = {bounce_16_f077:1,crosshatch_0_f001:1,rectangle_gon_grid_9:1,curves_0:1};
 let anims= {drop_circles_21:1,cubes_1:1,drop_circles_19:1,drop_circles_20:1,drop_circles_26:1,CMB:1,drop_circles_14_5x7:1,drop_circles_15:1,
@@ -14,23 +15,23 @@ let animNms = ['bounce_','curves_','path_avoidance','PathAvoidance','3d_grid','c
     'drop_ice','drop_leaves','drop_move','line_path','motion_','gridSpinner','mutate_','path_rwalk_'];
 let mp4s ={};9
 let notMp4s ={bounce_12:1,bounce_15:1,bounce_17:1,bounce_18:1,bounce_19:1};
-let mp4Nms =['bounce_'];
-let isOneVerbose
+let mp4Nms =['bounce_','crosshatch_'];
+let isOneVerbose='crosshatch_1';
 const isOne = function (fln,nots,sos,names,kind){
   if (omit[fln]) {
-    if (isOneVerbose) {
+    if (isOneVerbose===fln) {
       console.log(fln,' omitted');
     }
     return 0;
   }
   if (nots[fln]) {
-    if (isOneVerbose) {
+    if (isOneVerbose === fln) {
       console.log(fln,' is not',kind);
     }
     return 0;
   }
   if (sos[fln]) {
-    if (isOneVerbose) {
+    if (isOneVerbose===fln) {
       console.log(fln,' is',kind);
     }
     return 1;
@@ -41,7 +42,7 @@ const isOne = function (fln,nots,sos,names,kind){
    
     let idx = fln.indexOf(anm);
     if (idx>=0) {
-      if (isOneVerbose) {
+      if (isOneVerbose===fln) {
         console.log(fln,' is ',kind);
       }
      return 1;
@@ -63,7 +64,11 @@ const isInstance = function (fln) {
 
 
 const isMp4 = function (fln) {
-    return isOne(fln,notMp4s,mp4s,mp4Nms,'mp4')
+    let io = isOne(fln,notMp4s,mp4s,mp4Nms,'mp4')
+    if (isOneVerbose===fln) {
+      console.log('fln',fln,'isMp4',io);
+    }
+    return io;
 }
 
  const xferFile = function(dir,ifl,iofl) {
@@ -122,7 +127,7 @@ for (let i=0;i<ln;i++ ) {
   let kind = fln.split('_')[0];
   let mp4=isMp4(fln);
   let vid = mp4?'mp4':'gif';
-  if (mp4) {
+  if (fln==='crosshatch_1') {
      console.log('fln',fln,'vid',vid);
   }
   if ((ext === 'jpg')&&(kind!=='web')&&(anim))  {

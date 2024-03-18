@@ -223,6 +223,7 @@ rs.updatePolylines = function (phase,amplitude) {
 rs.initialize = function () {
    debugger;
   let {timePerStep,stopTime,fills,height:ht,boxD,numParticles:numP,yc,maxifc} = this;
+  this.numSteps =40;
   let hht = 0.5*ht;
   this.initProtos();
   this.addFrame();
@@ -235,7 +236,9 @@ rs.initialize = function () {
 
 
 rs.updateState= function () {
-  let {phase} = this;
+  let {phase,stepsSoFar:ssf} = this;
+  debugger;
+  console.log('phase',phase/(2*Math.PI),'ssf',ssf);
   debugger;
   let ph = this.phase =  phase + .05*Math.PI;
   this.updatePolylines(ph,.5);

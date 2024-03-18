@@ -106,7 +106,7 @@ rs.cycles = 5;
 rs.initialize = function () {
   debugger;
   let {cycles,numLines} = this;
-  let numSteps = this.numSteps = (cycles+1) * (numLines/2);
+  let numSteps = this.numSteps = 100;//(cycles+1) * (numLines/2);
   let numFrames = this.numFrames = numSteps+numLines;
   this.initProtos();
   this.addFrame();

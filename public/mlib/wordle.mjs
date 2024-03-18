@@ -55,6 +55,9 @@ item.blend3 = function (str) {
 item.badBlend = function (str) {
 //  debugger;
 // return 0;
+ if (this.allowBadBlends) {
+    return 0;
+  }
   let bl = this.blend3(str);
   if (!bl) {
     return 0;
@@ -117,18 +120,97 @@ item.removeLetters = function (str,lets) {
   }
   return cm;
 }
+item.checkForKnown = function (str) {
+  let known = this.known;
+  let strln = str.length;
+  for (let i=0;i<strln;i++) {
+    let clet = str[i];
+    let k = known[i];
+    if (k && (k!== clet)) {
+      return 0;
+    }
+  }
+  return 1
+}
+
+item.checkForProhibs = function (str) {
+ let prohibs = this.prohibs;
+  let strln = str.length;
+  for (let i=0;i<strln;i++) {
+    let clet = str[i];
+  
+    let cno = prohibs[i];
+    if (cno.indexOf(clet) > -1) {
+      return 0;
+    }
+  }
+  return 1;
+}
+
+item.checkForPossibles= function (str) {
+   let ln = str.length;
+  let possibles = this.possibles5;
+  if (possibles.indexOf(str) > -1) {
+    return 0;
+  }
+  return 1;
+}
+
+item.checkForMandatories = function (str) {
+ let mlets = this.mandatory;
+  let ln = str.length;
+  let mln = mlets.length;
+  let nme = mln-(5-ln);
+  let nmf = 0;
+  let fnd = '';
+  if (nme >0) {
+    for (let i=0;i<ln;i++) {
+      let lt = str[i];
+      if (mlets.indexOf(lt)>-1) {
+        if (fnd.indexOf(lt) === -1) {
+          fnd = fnd+lt;
+          nmf++;
+        }
+      }
+    }
+  }
+  let ok = nmf>=nme;
+  return ok;
+}
+
 item.wOk1 = function (str) {
+ if (str.length ===5) {
+  // debugger;
+ }
+ if (this.badBlend(str)) {
+    return 0;
+  }
+  if (!this.checkForKnown(str)) {
+    return 0;
+  } 
+  if (!this.checkForProhibs(str)) {
+    return 0;
+  }
+  if (!this.checkForPossibles(str)) {
+    return 0;
+  }
+  if (!this.checkForMandatories(str)) {
+    return 0;
+  }
+  return 1;
+}
+
+item.wOk11 = function (str) {
   if (1 && this.badBlend(str)) {
     return 0;
   }
-  if (str === 'cvher') {
-    debugger;
-  }
+ 
   let ln = str.length;
   let possibles = this.possibles5;
   if (possibles.indexOf(str) > -1) {
     return 0;
   }
+  
   let mlets = this.mandatory;
   let mln = mlets.length;
   let nme = mln-(5-ln);
@@ -153,6 +235,7 @@ item.wOk1 = function (str) {
   if (nmf < nme) {
     return 0;
   }
+ 
   let dps = this.dprohibs;
   let prohibs = this.prohibs;
   let known = this.known;
@@ -167,6 +250,9 @@ item.wOk1 = function (str) {
     if (cno.indexOf(clet) > -1) {
       return 0;
     }
+  }  if (str.length === 5) {
+    console.log('str',str);
+    debugger;
   }
   let dln = dps.length;
   for (let i=0;i<dln;i++) {
