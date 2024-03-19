@@ -168,7 +168,7 @@ if (alternate) {
 }else if (alll) {
   outPath = 'public/allImages.html';
 } else if (allA) {
-  outPath = 'public/allAnimations.html';
+  outPath = 'public/allAImages.html';
 } else if (partition) {
   outPath = 'public/partitionImages.html';
 } else if (web) {

@@ -12,9 +12,9 @@ let nr = 8;
 //
 nr =3;
 rs.setName('paths_5');
-let topParams = {width:wd,height:wd,numRows:nr,numCols:nr,numConnections:400,framePadding:.1*wd,stepsPerMove:10,numStepss:24,numSteps:300,
-                 cycles:1,frameStrokee:'rgb(2,2,2)',frameStroke:'white',frameStrokeWidth:1,saveAnimation:1,stepInterval:40,randomConnections:1,lowFade:0,scaling:1,
-                 pauseAtt:[29,30,59,60],numConnections:60,numPhases:60/*100*/,showThePaths:0,showIntersections:0,chopOffBeginning:2,chopOffEnd:0,newCoords:1}
+let topParams = {width:wd,height:wd,numRows:nr,numCols:nr,numConnections:400,framePadding:.2*wd,stepsPerMove:10,numStepss:24,numSteps:300, cycles:1,frameStrokee:'rgb(2,2,2)',frameStroke:'white',frameStrokeWidth:1,saveAnimation:1,stepInterval:40,randomConnections:1,lowFade:0,scaling:1,
+whereToPause:200,
+pauseAtt:[29,30,59,60],numConnections:60,numPhases:60/*100*/,showThePaths:0,showIntersections:0,chopOffBeginning:2,chopOffEnd:0,newCoords:1}
 Object.assign(rs,topParams);
 
 

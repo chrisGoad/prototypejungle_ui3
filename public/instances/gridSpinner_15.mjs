@@ -44,7 +44,7 @@ rs.initProtos = function () {
   circleP['stroke-width'] = 0;
   let icircleP = this.icircleP = circlePP.instantiate();
   icircleP.dimension= 1;
-  icircleP.fill = 'red';
+  icircleP.fill = 'blue';
   icircleP['stroke-width'] = 0;
   
 }

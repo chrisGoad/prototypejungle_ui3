@@ -48,7 +48,7 @@ xferFiles('public',['dropPages.js','dropTitles.js','dropImages.html','draw.html'
                      'animPages.js','animTitles.js','animImages.html',
                      'stillsPages.js','stillsTitles.js','stillsImages.html',
                      'allPages.js','allTitles.js','allImages.html',
-                     'allAPages.js','allATitles.js','allAnimations.html',
+                     'allAPages.js','allATitles.js','allAImages.html',
                      'gridPages.js','gridTitles.js','gridImages.html',
                      'partitionPages.js','partitionTitles.js','partitionImages.html',
                      'webPages.js','webTitles.js','webImages.html',

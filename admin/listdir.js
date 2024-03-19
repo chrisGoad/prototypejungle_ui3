@@ -13,7 +13,10 @@ let omit =['bounce_0','3d_grid_2','3d_grid_0','bounce_11','bounce_13','bounce_14
            'gridSpinner_9','=gridSpinner','gridSpinner_12','gridSpinner_16','grid_emergence','example1','l2ine_path_2_11b','line_path_2_9',
            '=motion_1','motion_14','motion_14','motion_16','motion_17','motion_18','motion_19','=motion_2','motion_20','motion_22','motion_23',
            'motion_25','motion_26','motion_27','motion_28','motion_29','motion_4','motion_6','motion_7','motion_8',
-           'mutate_3','mutate_4','mutate_5'];
+           'mutate_3','mutate_4','mutate_5','paths_0','paths_0','paths_0_0','paths_0_1','paths_1','paths_2','paths_6','paths_8',
+           'path_rwalk_2','path_rwalk_3','=path_rwalk_4','path_rwalk_4_0','path_avoidance_4','bounce_19',
+           'line_path_0_2','line_path_0_3','line_path_0_5','line_path_0_6','rectangle_gon_grid'];
+let omitIm = ['3d_grid','bounce'];
 // figure out what went wrong with rectangle_gon_grid
 /*let notAnims = {bounce_16_f077:1,crosshatch_0_f001:1,rectangle_gon_grid_9:1,curves_0:1,drop_circles_14_5x7:1,drop_circles_15:1,
                drop_circles_25:1,drop_circles_21:1,drop_leaves:1,};*/
@@ -29,7 +32,8 @@ let animNms = ['bounce_','curves_','path_avoidance','PathAvoidance','3d_grid','c
 let mp4s ={};
 //let notMp4s ={bounce_12:1,'bounce_15:1,'bounce_17:1,'bounce_18:1,'bounce_19:1};
 let notMp4s =['bounce_12','bounce_15','bounce_17','bounce_18','bounce_19'];
-let mp4Nms =['bounce_','crosshatch_','emergence','gridSpinner_10','gridSpinner_11','=motion_3'];
+let mp4Nms =['bounce_','crosshatch_','emergence','gridSpinner_10','gridSpinner_11','=motion_3','paths_5','path_avoidance_6','motion_10'];
+//let mp4Nms =['bounce_'];
 let isOneVerbose='crosshatch_1';
 
 const occursIn = function (fln,names) {
@@ -122,7 +126,10 @@ for (let i=0;i<ln;i++ ) {
   let ext = dis[1];
   let fln = dis[0];
  // console.log('fln',fln);
- 
+  let oim = occursIn(fln,omitIm);
+  if (oim) {
+     continue;
+  }
     let anim = isAnim(fln);
    let inst = isInstance(fln);
   let iog = inst?'instances':'generators';
