@@ -178,6 +178,36 @@ item.checkForMandatories = function (str) {
   return ok;
 }
 
+item.checkForDoubles= function (str) {
+  let db = this.doubles;
+  if (!db) {
+    return 1;
+  }
+  const appears_twice = function (str,d) {
+    let ln = str.length;
+    let cnt = 0;
+    for (let j=0;j<ln;j++) {
+      let clet = str[j];
+      if (clet === d) {
+        cnt++;
+      }
+      if (cnt === 2) {
+        return 1;
+      }
+    }
+    return 0;
+  }
+  let dbln = db.length;
+  for (let i=0;i<dbln;i++) {
+    let d = db[i];
+    if (!appears_twice(str,d)) {
+      return 0;
+    }
+  }
+  return 1;
+}
+
+
 item.wOk1 = function (str) {
  if (str.length ===5) {
   //debugger;
@@ -185,6 +215,10 @@ item.wOk1 = function (str) {
  if (this.badBlend(str)) {
     return 0;
   }
+  if (!this.checkForDoubles(str)) {
+    return 0;
+  }
+ // console.log('doubles',str);
   if (!this.checkForKnown(str)) {
     return 0;
   } 
@@ -311,6 +345,9 @@ item.wgenAll = function (sofar) {
 // ak = all known
 item.wgenTop = function (ak,lt,k) {
   let {showPossibles4:p4,known,mandatory} = this;
+  if (!mandatory) {
+    debugger;
+  }
   let plets = this.plets = ak?k:this.possLets;
   let k0 = known[0];
   this.wcount = 0;
@@ -379,6 +416,7 @@ item.tryFirsts4 = function (k) {
 } 
 
 item.tryFirsts5 = function (k) {
+  this.mandatory=k;
   this.wgenAllKnown(k);
 }
 

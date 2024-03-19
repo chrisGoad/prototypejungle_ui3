@@ -23,7 +23,7 @@ let ht=50;
 9106*.5 = 13/4553
 */
 let topParams = {width:ht,height:ht,angleOffset:0*Math.PI/10,framePadding:0.2*ht,frameStrokee:'white',frameStrokeWidth:.2,timePerStep:1/(32*32),stopTime:1,recordingMotion:1,
-saveAnimation:1,numSegs:30,whereToPause:1,
+saveAnimation:1,numSegs:30,whereToPause:10000,
     circleRadius:.2,nearestFadeFactor:20,shapesPerPath:32,speedd:1,segsPerCircle:6,radius:.15*ht,numSlices:8,distanceThreshold:15};
 
 Object.assign(rs,topParams);

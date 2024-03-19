@@ -13,7 +13,7 @@ let stt=2;
 
 
 let topParams = {width:ht,height:ht,framePadding:0.3*ht,frameStroke:'white',frameStrokeWidth:.2,timePerStep:1/50,stopTime:12,recordingMotion:1,saveAnimation:1,
-    circleRadius:.4,ringRadii:[],nearestCount:6,nearestFadeFactor:20,toAngle:2*Math.PI,particleColor:'blue'};
+    circleRadius:.4,ringRadii:[],nearestCount:6,nearestFadeFactor:20,toAngle:2*Math.PI,particleColor:'blue',whereToPause:150};
 
 Object.assign(rs,topParams);
 let subParams ={speed:10,shapesPerRing:2};
@@ -107,7 +107,7 @@ rs.updateState = function () {
     let fr = dist/60;
     let pow = 4;
     let pfr = Math.pow(1-fr,pow);
-    console.log('fr',fr,'pfr',pfr);
+  //  console.log('fr',fr,'pfr',pfr);
     let icolor = this.interpolate(black,color,pfr);
     let sw = .8;
     let stroke = this.arrayToRGB(color);
@@ -123,7 +123,7 @@ rs.updateState = function () {
     fn(null,d);
   } 
   //return;
-  console.log('steps',ssf,'time',t);
+ // console.log('steps',ssf,'time',t);
   this.updateAngles(t);
   this.displayPositions();
   let dists = this.updateLines(positions,fn);
@@ -135,7 +135,7 @@ rs.updateState = function () {
     this.maxd = tmax;
   }
   
-  console.log('cmin',this.mind,'cmax',this.maxd);
+ // console.log('cmin',this.mind,'cmax',this.maxd);
  // this.displayNearestPositions(positions,nearestCount,nff,{attackDuration:0.05}); 
 }
 
