@@ -12,7 +12,7 @@ addAnimationMethods(rs);
 
 rs.setName('ip_test_2');
 let ht=45;
-let wd = 2*ht;
+let wd = 2.2*ht;
 let topParams = {width:wd,height:ht,framePadding:0.1*ht,frameStrokee:'white',frameStrokeWidth:.2,timePerStep:1/4,stopTime:100}
 
 Object.assign(rs,topParams)

@@ -1,7 +1,7 @@
 
 
 //debugger;
-import {rs as generatorP} from '/generators/paths.mjs';
+import {rs as generatorP} from '/generators/paths_6_13_23.mjs';
 let rs = generatorP.instantiate();
 import {rs as linePP} from '/shape/line.mjs';
 import {rs as circlePP} from '/shape/circle.mjs';

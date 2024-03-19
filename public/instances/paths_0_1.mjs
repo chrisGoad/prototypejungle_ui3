@@ -2,7 +2,8 @@
 import {rs as rectPP} from '/shape/rectangle.mjs';
 import {rs as linePP} from '/shape/line.mjs';
 
-import {rs as generatorP} from '/generators/paths_0.mjs';
+//import {rs as generatorP} from '/generators/paths_0.mjs';
+import {rs as generatorP} from '/generators/paths_6_13_23.mjs';
 
 
 let rs = generatorP.instantiate();
