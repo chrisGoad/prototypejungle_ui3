@@ -120,9 +120,12 @@ c:\ffmpeg\bin\ffmpeg  -framerate 10 -i animations/spirals_0_0_f%03d.jpg -s 800x8
 c:\ffmpeg\bin\ffmpeg  -framerate 10 -i animations/spirals_0_1_f%03d.jpg -s 800x800  export/spirals_0_1.mp4
 c:\ffmpeg\bin\ffmpeg  -framerate 20 -i animations/spirals_0_2_f%03d.jpg -s 800x800  export/spirals_0_2.mp4
 c:\ffmpeg\bin\ffmpeg  -framerate 20 -i animations/paths_0_1_f%03d.jpg -s 800x800  export/paths_0_1.mp4
+c:\ffmpeg\bin\ffmpeg  -framerate 20 -i animations/paths_0_0_f%03d.jpg -s 800x800  export/paths_0_0.mp4
 c:\ffmpeg\bin\ffmpeg  -framerate 5 -i animations/crosshatch_0_f%03d.jpg -s 800x800  export/crosshatch_0.mp4
 c:\ffmpeg\bin\ffmpeg  -framerate 20 -i animations/crosshatch_0_f%03d.jpg -s 800x800  export/crosshatch_0.mp4
+c:\ffmpeg\bin\ffmpeg  -framerate 20 -i animations/reflected_path_0_f%03d.jpg -s 800x800  export/reflected_path_0.mp4
 c:\ffmpeg\bin\ffmpeg  -framerate 20 -i animations/crosshatch_1_f%03d.jpg -s 800x800  export/crosshatch_1.mp4
+c:\ffmpeg\bin\ffmpeg  -framerate 20 -i animations/crosshatch_1_f%03d.jpg -s 800x800  export/crosshatch_1.gif
 c:\ffmpeg\bin\ffmpeg  -framerate 20 -i animations/flows_0_f%03d.jpg -s 800x800  export/flows_0.mp4
 c:\ffmpeg\bin\ffmpeg  -framerate 2 -i animations/flows_0_0_f%03d.jpg -s 800x800  export/flows_0_0.mp4
 c:\ffmpeg\bin\ffmpeg  -framerate 15 -i animations/flows_0_1_f%03d.jpg -s 800x800  export/flows_0_1.mp4
@@ -142,7 +145,7 @@ c:\ffmpeg\bin\ffmpeg  -framerate 4 -i animations/path_avoidance_3_f%03d.jpg -s 8
 c:\ffmpeg\bin\ffmpeg  -framerate 20 -i animations/path_avoidance_4_f%03d.jpg -s 800x800  export/path_avoidance_4.gif
 c:\ffmpeg\bin\ffmpeg  -framerate 20 -i animations/path_avoidance_5_f%03d.jpg -s 800x800  export/path_avoidance_5.gif
 c:\ffmpeg\bin\ffmpeg  -framerate 20 -i animations/path_avoidance_6_f%03d.jpg -s 800x800  export/path_avoidance_6.gif
-c:\ffmpeg\bin\ffmpeg  -framerate 10 -i animations/path_avoidance_6_f%03d.jpg -s 800x800  export/path_avoidance_6.gif
+c:\ffmpeg\bin\ffmpeg  -framerate 10 -i animations/path_avoidance_6_f%03d.jpg -s 800x800  export/path_avoidance_6.mp4
 c:\ffmpeg\bin\ffmpeg  -framerate 20 -i animations/path_avoidance_7_f%03d.jpg -s 800x800  export/path_avoidance_7.gif
 c:\ffmpeg\bin\ffmpeg  -framerate 20 -i animations/path_avoidance_5_f%03d.jpg -s 800x800  export/path_avoidance_5.gif
 c:\ffmpeg\bin\ffmpeg  -framerate 20 -i animations/path_avoidance_5_f%03d.jpg -s 800x800  export/path_avoidance_5.mp4
@@ -208,6 +211,8 @@ c:\ffmpeg\bin\ffmpeg  -framerate 20 -i animations/gridSpinner_29_f%03d.jpg -s 50
 c:\ffmpeg\bin\ffmpeg  -framerate 15 -i animations/gridSpinner_30_f%03d.jpg -s 500x500  export/gridSpinner_30.gif
 c:\ffmpeg\bin\ffmpeg  -framerate 15 -i animations/gridSpinner_30_f%03d.jpg -s 500x500  export/gridSpinner_30.mp4
 c:\ffmpeg\bin\ffmpeg  -framerate 20 -i animations/paths_3_f%03d.jpg -s 500x500  export/paths_3.gif
+c:\ffmpeg\bin\ffmpeg  -framerate 20 -i animations/paths_4_f%03d.jpg -s 500x500  export/paths_4.gif
+c:\ffmpeg\bin\ffmpeg  -framerate 20 -i animations/paths_5_f%03d.jpg -s 500x500  export/paths_5.gif
 c:\ffmpeg\bin\ffmpeg  -framerate 20 -i animations/paths_3_f%03d.jpg -s 500x500  export/paths_3.mp4
 c:\ffmpeg\bin\ffmpeg  -framerate 15 -i animations/paths_0_f%03d.jpg -s 500x500  export/paths_0.mp4
 c:\ffmpeg\bin\ffmpeg  -framerate 15 -i animations/paths_5_f%03d.jpg -s 500x500  export/paths_5.mp4

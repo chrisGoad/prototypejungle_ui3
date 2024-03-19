@@ -3,11 +3,11 @@ import {rs as linePP} from '/shape/line.mjs';
 import {rs as basicP} from '/generators/basics.mjs';
 //import {rs as addDropMethods} from '/mlib/drop.mjs';
 import {rs as addPathMethods} from '/mlib/path.mjs';	
-import {rs as addAudioMethods} from '/mlib/audio.mjs';	
+//import {rs as addAudioMethods} from '/mlib/audio.mjs';	
 
 let rs = basicP.instantiate();
 addPathMethods(rs);
-addAudioMethods(rs);
+//addAudioMethods(rs);
 rs.setName('reflected_path_0');
 
 rs.setSides = function (d) {
