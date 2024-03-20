@@ -12,7 +12,7 @@ let omit =['bounce_0','bounce_10','3d_grid_2','3d_grid_0','bounce_11','bounce_14
            'bounce_3','CMB','color_path_0','crosshatch_0','curves_2','drop_circles_17','drop_dandelion','drop_dandelion_with_circles','drop_ice',
            'drop_move','gridSpinner_18','gridSpinner_19','gridSpinner_14','gridSpinner_2','gridSpinner_3','gridSpinner_4','gridSpinner_6','gridSpinner_8',
            'gridSpinner_9','=gridSpinner','gridSpinner_12','gridSpinner_16','grid_emergence','example1','l2ine_path_2_11b','line_path_2_9',
-           '=motion_1','motion_14','motion_14','motion_16','motion_17','motion_18','motion_19','=motion_2','motion_20','motion_22','motion_23',
+           '=motion_1','motion_14','motion_14','motion_16','motion_17','=motion_18','motion_19','=motion_2','motion_20','motion_22','motion_23',
            'motion_25','motion_26','motion_27','motion_28','motion_29','motion_4','motion_6','motion_7','motion_8',
            'mutate_3','mutate_4','mutate_5','paths_0','paths_0','paths_0_0','paths_0_1','paths_2','paths_6','paths_8',
            'path_rwalk_2','path_rwalk_3','=path_rwalk_4','path_rwalk_4_0','path_avoidance_4','bounce_19','=paths_1',
@@ -43,9 +43,9 @@ let mp4s ={};
 //let notMp4s ={bounce_12:1,'bounce_15:1,'bounce_17:1,'bounce_18:1,'bounce_19:1};
 let notMp4s =['bounce_12','bounce_15','bounce_17','bounce_18','bounce_19'];
 let mp4Nms =['bounce_','crosshatch_','emergence','gridSpinner_10','gridSpinner_11','=motion_3','paths_5','path_avoidance_6','motion_10',
-'=reflected_path_0','gons_3'];
+'=reflected_path_0','gons_3','motion_18'];
 //let mp4Nms =['bounce_'];
-let isOneVerbose;//='crosshatch_1';
+let isOneVerbose='motion_18_32';
 
 const occursIn = function (fln,names) {
   let lna = names.length;
@@ -168,9 +168,11 @@ for (let i=0;i<ln;i++ ) {
   let dis = di.split('.');
   let ext = dis[1];
   let fln = dis[0];
- // console.log('fln',fln);
+     let anim = isAnim(fln);
 
-   let anim = isAnim(fln);
+  if (fln==='motion_18_32') {
+    console.log('fln',fln,ext,'anim',anim);
+  }
    let inst = isInstance(fln);
   let iog = inst?'instances':'generators';
   //console.log('i',i,'di',di,'dis',dis,'fln',fln,'ext',ext);
