@@ -1,5 +1,5 @@
-//import {rs as circlePP} from '/shape/circle.mjs';
-//import {rs as linePP} from '/shape/line.mjs';
+import {rs as circlePP} from '/shape/circle.mjs';
+import {rs as linePP} from '/shape/line.mjs';
 import {rs as basicP} from '/generators/basics.mjs';
 import {rs as addPathMethods} from '/mlib/path.mjs';	
 
@@ -21,7 +21,7 @@ rs.addPath = function () {
 }
 
 rs.addPath();
-
+*/
 debugger;
 let ht= 100;
 let hht = 0.5*ht;
@@ -45,8 +45,7 @@ rs.initProtos = function () {
   let lineP = this.lineP = linePP.instantiate();
   lineP['stroke-width'] = .2;
   lineP.stroke = 'white';
-}  
-*/
+}
 rs.allocateDots = function (n) {
   for (let i=0;i<n;i++) {
     let dot = this.circleP.instantiate();
@@ -175,6 +174,7 @@ rs.initialize = function () {
 rs.updateState = function () {
   let {pstate,includeDots,includeLines} = this;
   let {cstate} = pstate;
+  debugger;
   let a = cstate['a'].value;
   this.angleInc  = a;
   debugger;

@@ -92,7 +92,7 @@ rs.partStrokeWidth = function (prt) {
   return rs;
 }
 
-rs.updateStatee = function () {
+rs.updateState = function () {
   debugger;
   let ssf = this.stepsSoFar;
   let ns = this.numSteps;
