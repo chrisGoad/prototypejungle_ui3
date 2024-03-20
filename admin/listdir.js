@@ -4,7 +4,8 @@ let xferImages = process.argv[2];
 let dir = 'public/images/std_size';
 //console.log('dir',dir);
 let dirc =fs.readdirSync(dir);
-//console.log('dirc',dirc);
+let jsd = JSON.stringify(dirc);
+//console.log(jsd);
 /*let omit ={bounce_0:1,'3d_grid_2':1,'3d_grid_0':1,bounce_11:1,bounce_13:1,bounce_14:1,bounce_16_f073:1,bounce_2:1,bounce_6:1,bounce_7:1,bounce_8:1,
            bounce_3:1,CMB:1,color_path_0:1,crosshatch_0:1,curves_2:1,drop_circles_17:1,drop_dandelion:1,drop_dandelion_with_circles:1,drop_ice:1}*/
 let omit =['bounce_0','3d_grid_2','3d_grid_0','bounce_11','bounce_13','bounce_14','bounce_16_f073','bounce_2','bounce_6','bounce_7','bounce_8',
@@ -18,7 +19,9 @@ let omit =['bounce_0','3d_grid_2','3d_grid_0','bounce_11','bounce_13','bounce_14
            'line_path_0_2','line_path_0_3','line_path_0_5','line_path_0_6','rectangle_gon_grid'];
 let omitIm = ['3d_grid','bounce','CMB','color_path_0','crosshatch_0','curves_2','drop_circles_14_5x7','drop_circles_17','drop_dandelion',
 'drop_ice','gridSpinner','curves_0','drop_circles_12','drop_circles_2','drop_leaves',,'drop_circles_2','drop_move','drop_on_top_5',
- ,'drop_on_top_7_combo_1','example1','flows','gons','grid_droplets-wide','grid_emergence','grid_example2'];
+ ,'drop_on_top_7_combo_1','example1','flows','gons','grid_droplets-wide','grid_emergence','grid_example2','interpolator_0',
+ 'interpolate_colors_0','interpolate_colors_1','interpolate_colors_2','interpolate_colors_7','interpolate_colors_4',
+ 'line_loop','line_path','logic','mathematicians','motion','moving','mutate','necker'];
 // figure out what went wrong with rectangle_gon_grid
 /*let notAnims = {bounce_16_f077:1,crosshatch_0_f001:1,rectangle_gon_grid_9:1,curves_0:1,drop_circles_14_5x7:1,drop_circles_15:1,
                drop_circles_25:1,drop_circles_21:1,drop_leaves:1,};*/
@@ -37,7 +40,7 @@ let notMp4s =['bounce_12','bounce_15','bounce_17','bounce_18','bounce_19'];
 let mp4Nms =['bounce_','crosshatch_','emergence','gridSpinner_10','gridSpinner_11','=motion_3','paths_5','path_avoidance_6','motion_10',
 '=reflected_path_0','gons_3'];
 //let mp4Nms =['bounce_'];
-let isOneVerbose='crosshatch_1';
+let isOneVerbose;//='crosshatch_1';
 
 const occursIn = function (fln,names) {
   let lna = names.length;
@@ -184,3 +187,4 @@ for (let i=0;i<ln;i++ ) {
 aoutp+=']}';
 
 fs.writeFileSync('admin/allAnimations.js',aoutp);
+fs.writeFileSync('admin/allFiles.js',jsd);

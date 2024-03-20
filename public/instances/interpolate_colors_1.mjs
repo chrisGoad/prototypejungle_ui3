@@ -10,7 +10,7 @@ let nr = 201;
 //nr = 5	;
 
 let colors=[[0,250,10],[238,105,65],[10,10,250],[10,10,10]];
-let topParams = {width:ht,height:ht,numRows:nr,numCols:nr,randomColors:1,
+let topParams = {width:ht,height:ht,numRows:nr,numCols:nr,randomColors:0,
                   framePadding:0.01*ht,frameStroke:'white',frameStrokeWidth:.1,saveAnimation:1,oneShot:1,
 numSteps:2000,chopOffBeginningg:218,stepInterval:50,ULC:colors[0],URC:colors[1],LLC:colors[1],LRC:colors[0],CNC:colors[3],period:20,xgapf:.1,ygapf:.1};//50
 //numSteps:295,chopOffBeginning:218,stepInterval:50,ULC:rs.randomFill('ran','ran','ran',100,250),URC:[0,0,250],LLC:[0,250,0],LRC:[0,250,0]};//50
@@ -40,7 +40,23 @@ rs.initialize = function () {
       LLC =this.LLC=this.randomArray(10,250,['ran','ran','ran']);
       LRC =this.LRC=this.randomArray(10,250,['ran','ran','ran']);
       CNC =this.CNC=this.randomArray(10,250,['ran','ran','ran']);
-    } 
+    } else {
+      this.ULC = [160,91,245];
+      this.URC = [170,91,249];
+      this.LLC = [120,83,189];
+     this.LRC = [48,119,175];
+     this.CNC = [62,144,47];
+    }
+    const printColors = (nm,vl) => {
+      let jvl = JSON.stringify(vl);
+      let pv = `${nm} = ${jvl};`;
+      console.log(pv);
+    }
+    printColors('ULC',ULC);
+    printColors('URC',URC);
+    printColors('LLC',LLC);
+    printColors('LRC',LRC);
+    printColors('CNC',CNC);
    this.paintCenteredGrid();
     //this.paintGrid();
   } else {
