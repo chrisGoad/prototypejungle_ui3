@@ -18,7 +18,7 @@ let omit =['bounce_0','3d_grid_2','3d_grid_0','bounce_11','bounce_13','bounce_14
            'line_path_0_2','line_path_0_3','line_path_0_5','line_path_0_6','rectangle_gon_grid'];
 let omitIm = ['3d_grid','bounce','CMB','color_path_0','crosshatch_0','curves_2','drop_circles_14_5x7','drop_circles_17','drop_dandelion',
 'drop_ice','gridSpinner','curves_0','drop_circles_12','drop_circles_2','drop_leaves',,'drop_circles_2','drop_move','drop_on_top_5',
- ,'drop_on_top_7_combo_1','example1','flows'];
+ ,'drop_on_top_7_combo_1','example1','flows','gons','grid_droplets-wide','grid_emergence','grid_example2'];
 // figure out what went wrong with rectangle_gon_grid
 /*let notAnims = {bounce_16_f077:1,crosshatch_0_f001:1,rectangle_gon_grid_9:1,curves_0:1,drop_circles_14_5x7:1,drop_circles_15:1,
                drop_circles_25:1,drop_circles_21:1,drop_leaves:1,};*/
@@ -94,7 +94,7 @@ const isAnim = function (fln) {
     return isOne(fln,notAnims,anims,animNms,'Anim')
 }
 let instanceNms = ['rectangle_gon_grid','flows','gridSpinner','line_path','motion_','part_','part2_','paths_','mutate_','bounce_','curves_','path_rwalk_'];
-let instances = ['bounce_3','gons_3'];
+let instances = ['bounce_3','gons_3','interpolate_colors','grid_distortion_field','grid_maze_wide'];
 let notInstances= [];
 
 const isInstance = function (fln) {
