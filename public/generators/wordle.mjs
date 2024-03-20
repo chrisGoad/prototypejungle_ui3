@@ -26,6 +26,41 @@ Object.assign(rs,topParams);
   
   rs.initialize = function () {
   debugger;
+  this.doubles ='';
+  // prohibited letters at each position
+  let s0n = '';
+  let s1n = '';
+  let s2n = '';
+  let s3n = '';
+  let s4n = '';
+  this.prohibs = [s0n,s1n,s2n,s3n,s4n];
+
+  // prohibited dipthongs
+  this.dprohibs  = [];
+  // known letters
+  let k0 = '';
+  let k1 = 'i';
+  let k2 = '';
+  let k3 = '';
+  let k4 = '';
+  this.known = [k0,k1,k2,k3,k4];
+  this.notPossibles = [];
+  this.possibles5 = [];
+  this.possibles4 = [];
+  let abet=this.abet = 'abcdefghijklmnopqrstuvwxyz';
+//  let cm = this.complement('might clasp brief wound');
+  let cm = this.complement('mht casp bref wud');
+  // possible letters
+  this.possLets = this.alphabetize(cm);
+  this.addFrame();
+ this.allowBadBlends = 0;
+ this.tryFirsts('gilno');
+  console.log('possibles5',this.possibles5);
+}
+
+
+  rs.initializeee = function () {
+  debugger;
 //  this.tries();
   //return;
   // prohibited letters at each position
@@ -38,9 +73,9 @@ Object.assign(rs,topParams);
   return;*/
   this.doubles ='';
   let s0n = '';
-  let s1n = 'l';
+  let s1n = 'i';
   let s2n = '';
-  let s3n = 's';
+  let s3n = '';
   let s4n = '';
   this.prohibs = [s0n,s1n,s2n,s3n,s4n];
 
@@ -61,7 +96,7 @@ Object.assign(rs,topParams);
  // return;
   //let cm = abet;
 //  let cm = this.complement('might clasp brief wound');
- let cm = this.complement('mght clsp rf woun');// wound');
+  let cm = this.complement('mht casp');//brief wound');
   // possible letters
   this.possLets = this.alphabetize(cm);
   this.addFrame();
@@ -76,7 +111,7 @@ Object.assign(rs,topParams);
  //debugger;
  //this.wgen4known('fort');
  this.allowBadBlends = 0;
- this.tryFirsts('abdei');
+ this.tryFirsts('gil');
   //this.wgenAllKnown('aml');
   //this.tries();
   

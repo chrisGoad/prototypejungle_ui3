@@ -17,7 +17,8 @@ let omit =['bounce_0','3d_grid_2','3d_grid_0','bounce_11','bounce_13','bounce_14
            'path_rwalk_2','path_rwalk_3','=path_rwalk_4','path_rwalk_4_0','path_avoidance_4','bounce_19',
            'line_path_0_2','line_path_0_3','line_path_0_5','line_path_0_6','rectangle_gon_grid'];
 let omitIm = ['3d_grid','bounce','CMB','color_path_0','crosshatch_0','curves_2','drop_circles_14_5x7','drop_circles_17','drop_dandelion',
-'drop_ice','gridSpinner'];
+'drop_ice','gridSpinner','curves_0','drop_circles_12','drop_circles_2','drop_leaves',,'drop_circles_2','drop_move','drop_on_top_5',
+ ,'drop_on_top_7_combo_1','example1','flows'];
 // figure out what went wrong with rectangle_gon_grid
 /*let notAnims = {bounce_16_f077:1,crosshatch_0_f001:1,rectangle_gon_grid_9:1,curves_0:1,drop_circles_14_5x7:1,drop_circles_15:1,
                drop_circles_25:1,drop_circles_21:1,drop_leaves:1,};*/
@@ -27,14 +28,14 @@ let notAnims = ['bounce_16_f077','crosshatch_0_f001','rectangle_gon_grid_9','cur
 /*let anims= {drop_circles_21:1,cubes_1:1,drop_circles_19:1,drop_circles_20:1,drop_circles_26:1,CMB:1,drop_circles_14_5x7:1,drop_circles_15:1,
    drop_circles_25:1,drop_on_top_2:1,drop_on_top_7:1,drop_on_top_7_combo_1:1,drop_on_top_5:1,example1:1,emergence:1};*/
 let anims= ['drop_circles_21','cubes_1','drop_circles_19','drop_circles_20','drop_circles_26','CMB','drop_circles_14_5x7','drop_circles_15',
-   'drop_circles_25','drop_on_top_2','drop_on_top_7','drop_on_top_7_combo_1','drop_on_top_5','example1','emergence','reflected_path_0'];
+   'drop_circles_25','drop_on_top_2','drop_on_top_7','drop_on_top_7_combo_1','drop_on_top_5','example1','emergence','reflected_path_0','gons_3'];
 let animNms = ['bounce_','curves_','path_avoidance','PathAvoidance','3d_grid','color_path','rectangle_gon_grid','crosshatch','drop_dandelion',
     'drop_ice','drop_leaves','drop_move','line_path','motion_','gridSpinner','mutate_','path_rwalk_','paths_'];
 let mp4s ={};
 //let notMp4s ={bounce_12:1,'bounce_15:1,'bounce_17:1,'bounce_18:1,'bounce_19:1};
 let notMp4s =['bounce_12','bounce_15','bounce_17','bounce_18','bounce_19'];
 let mp4Nms =['bounce_','crosshatch_','emergence','gridSpinner_10','gridSpinner_11','=motion_3','paths_5','path_avoidance_6','motion_10',
-'=reflected_path_0'];
+'=reflected_path_0','gons_3'];
 //let mp4Nms =['bounce_'];
 let isOneVerbose='crosshatch_1';
 
@@ -93,7 +94,7 @@ const isAnim = function (fln) {
     return isOne(fln,notAnims,anims,animNms,'Anim')
 }
 let instanceNms = ['rectangle_gon_grid','flows','gridSpinner','line_path','motion_','part_','part2_','paths_','mutate_','bounce_','curves_','path_rwalk_'];
-let instances = ['bounce_3'];
+let instances = ['bounce_3','gons_3'];
 let notInstances= [];
 
 const isInstance = function (fln) {
