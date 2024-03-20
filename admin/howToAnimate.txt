@@ -127,6 +127,7 @@ c:\ffmpeg\bin\ffmpeg  -framerate 20 -i animations/reflected_path_0_f%03d.jpg -s 
 c:\ffmpeg\bin\ffmpeg  -framerate 20 -i animations/crosshatch_1_f%03d.jpg -s 800x800  export/crosshatch_1.mp4
 c:\ffmpeg\bin\ffmpeg  -framerate 20 -i animations/crosshatch_1_f%03d.jpg -s 800x800  export/crosshatch_1.gif
 c:\ffmpeg\bin\ffmpeg  -framerate 20 -i animations/gons_3_f%03d.jpg -s 800x800  export/gons_3.gif
+c:\ffmpeg\bin\ffmpeg  -framerate 20 -i animations/gons_3_f%03d.jpg -s 800x800  export/gons_3.mp4
 c:\ffmpeg\bin\ffmpeg  -framerate 20 -i animations/flows_0_f%03d.jpg -s 800x800  export/flows_0.mp4
 c:\ffmpeg\bin\ffmpeg  -framerate 2 -i animations/flows_0_0_f%03d.jpg -s 800x800  export/flows_0_0.mp4
 c:\ffmpeg\bin\ffmpeg  -framerate 15 -i animations/flows_0_1_f%03d.jpg -s 800x800  export/flows_0_1.mp4

@@ -37,11 +37,11 @@ rs.initProtos = function () {
   iPolygonP.fill = 'green'; 
   let circleP = this.circleP = circlePP.instantiate();
   circleP.dimension= 1;
-  circleP.fill = 'white';
+  circleP.fill = 'green';
   circleP['stroke-width'] = 0;
    let icircleP = this.icircleP = circlePP.instantiate();
   icircleP.dimension= 2;
-  icircleP.fill = 'red';
+  icircleP.fill = 'transparent';
   icircleP['stroke-width'] = 0;
    let icircleP2 = this.icircleP2 = circlePP.instantiate();
   icircleP2.dimension= 2;

@@ -68,6 +68,7 @@ node admin/genGalleries lines 1
 node admin/genGalleries anim 1
 node admin/genGalleries stills 1
 node admin/genGalleries all 1
+node admin/genGalleries allA 1
 
 then 
 
