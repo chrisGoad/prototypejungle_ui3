@@ -12,7 +12,7 @@ rs.pstate = {pspace:{},cstate:{}};
 
 let wd=100;
 let topParams = {width:wd,height:wd,frameStrokee:'white',frameStrokeWidth:0.1,framePadding:.1*wd,numSteps:8*138/*1000*/,saveAnimation:1,
-  numSpinners:32,shapesPerSpinner:15,pulseDurLow:20,pulseDurHigh:50
+  numSpinners:32,shapesPerSpinner:15,pulseDurLow:20,pulseDurHigh:50,whereToPause:283
   };
   
 rs.addSpinner = function (params) {
@@ -93,7 +93,7 @@ rs.spinTo = function (sp,theta) {
     let bv = forColor('b');
     let fill = `rgb(${rv},${rv},${bv})`;
    // console.log(i,'i','pdur',pdur,'pv',pv,'pDown',pDown,'npv',npv,'fill',fill);
-    sh.fill = fill;       
+ //   sh.fill = fill;       
      sh.update();
     sh.show();
   }
@@ -153,7 +153,8 @@ rs.spinSpinners = function (numSpinners,theta) {
 }
      
 rs.initialize = function () {
-  debugger
+  debugger;
+  this.numSteps =2720;
   let {numSpinners:nsp} = this;
   //this.setBackgroundColor('rgb(10,10,100)');
   this.setBackgroundColor('rgb(0,0,0)');

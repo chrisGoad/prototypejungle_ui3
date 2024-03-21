@@ -10,7 +10,7 @@ let rs = generatorP.instantiate();
 rs.setName('curves_6')
 let ht=50;
 
-let topParams = {width:ht,height:ht,framePadding:0.1*ht,frameStroke:'white',frameStrokeWidth:.2,numSteps:256,spikeWidthFactor:.95,spinPerStep:Math.PI/128,	
+let topParams = {width:ht,height:ht,framePadding:0.1*ht,frameStrokee:'white',frameStrokeWidth:.2,numSteps:256,spikeWidthFactor:.95,spinPerStep:Math.PI/128,	
                  saveAnimation:1,numWaveLines:2,numWaves:2,maxifc:0.65,numCycles:6,amplitude:1,innerDim:2,outerDim:20,numSpikes:8,baseTheta:0,
                  yc:1,ifc:0,numRings:15} //420 790
 	

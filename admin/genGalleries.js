@@ -37,7 +37,7 @@ let web = kind === 'web';
 let alll = kind === 'all';
 let allA = kind === 'allA';
 let sortByOrder = toBoolean(sortByOrderstr);
-let byKind = kind === 'byKind';
+/*let byKind = kind === 'byKind';*/
 let alternate = kind === 'alt';
 let byLikes = kind === 'byLikes';
 let byAspect = kind === 'byAspect';
@@ -59,7 +59,7 @@ if (forKOP) {
   orderMax = 10000;
 }
 
-console.log('kind','['+kind+']','sortByOrder',sortByOrder,'forKOP',forKOP,'byKind',byKind,'byAspect',byAspect,'byLikes',byLikes,'signed',signed,'horizontal',horizontal,'horizontalnf',horizontalnf);
+//console.log('kind','['+kind+']','sortByOrder',sortByOrder,'forKOP',forKOP,'byKind',byKind,'byAspect',byAspect,'byLikes',byLikes,'signed',signed,'horizontal',horizontal,'horizontalnf',horizontalnf);
 //return;
 //let alternate = 0;
 let sectionsPath;
@@ -77,48 +77,6 @@ let imKind;
  sectionsPath = './altSections.js';
   sortByOrder = 0;
   imKind = 'book';
-} else if (book) {
- sectionsPath = './book_images.js';
-  sortByOrder = 0;
-  imKind = 'alt';
-} else if (byKind) {
-  sectionsPath = './byKindSections.js';
-  imKind = 'g';
-} else if (byAspect) {
-  sectionsPath = './byAspectSections.js'
-} else if (vertical) {
-  signed = 0;
-  imKind = 'v';
-  sectionsPath = './verticalSections.js';
-  pagesPath = 'public/vPages.js';
-  pagesVar = 'vPages';
-  titlesPath = 'public/vTitles.js';
-  titlesVar = 'vTitles';
-} else if (horizontal) {
-
-  signed = 0;
-    console.log('HORIZONTAL');
-
-  imKind = 'h';
-  sectionsPath = './horizontalSections.js';
-  pagesPath = 'public/hPages.js';
-  pagesVar = 'hPages';
-  titlesPath = 'public/hTitles.js';
-  titlesVar = 'hTitles';
-
-} else if (horizontalnf) {
-  console.log('HORIZONTALNF');
-  imKind = 'hnf';
-  sectionsPath = './horizontalnfSections.js';
-  pagesPath = 'public/hnfPages.js';
-  pagesVar = 'hnfPages';
-  titlesPath = 'public/hnfTitles.js';
-  titlesVar = 'hnfTitles';
-
-} else if (square) {
-  signed = 0;
-  imKind = 'sq';
-  sectionsPath = './squareSections.js';
 }  else if (top)  {
   sectionsPath = './galleries.js';
   imKind = 'g'
@@ -169,22 +127,8 @@ if (alternate) {
   outPath = 'public/allImages.html';
 } else if (allA) {
   outPath = 'public/allAImages.html';
-} else if (partition) {
-  outPath = 'public/partitionImages.html';
-} else if (web) {
+}  else if (web) {
   outPath = 'public/webImages.html';
-} else if (byKind) {
-  outPath = 'public/byKind.html';
-} else if (byAspect) {
-  outPath = 'public/aspectGrids.html';
-} else if (vertical) {
-  outPath = 'public/vertical.html';
-} else if (horizontal) {
-  outPath = 'public/horizontal.html';
-} else if (horizontalnf) {
-  outPath = 'public/horizontalnf.html';
-} else if (square) {
-  outPath = 'public/square.html';
 } else {
   //outPath = (local_images)?"public/local_images.html":'public/images.html';
   outPath = 'public/images.html';
@@ -302,8 +246,8 @@ if (imKind === 'g') {
       kindTitle = 'All Images';
       aboutURL = "all_images.html";
     }  else if (allA) {
-      kindTitle = 'All Animations';
-      aboutURL = "all_animations.html";
+      kindTitle = 'Animations';
+      aboutURL = "kop_anim.html";
     }
     if (!top) {
     
@@ -337,29 +281,7 @@ if (imKind === 'g') {
       `;
     }
   }
-} else if (imKind === 'h') {
-pageIntro = 
-`${headLine}
-<p class="introLineLarge">Horizontal  Posters (3 to 2 ratio of width to height).</p>
-<p class="introLineSmall">A white frame is shown when necessary to indicate the extent of the poster.</p>
-`;
-}  else if (imKind === 'hnf') {
-pageIntro =
-`${headLine} 
-<p class="introLineLarge">Horizontal Prints (3 to 2 ratio of width to height).</p>
-`;
-} else if (imKind === 'sq') {
-pageIntro = 
-`${headLine} 
-<p class="introLineLarge">Square Prints</p>
-`;
-}  else if (imKind === 'v') {
-pageIntro = 
-`${headLine} 
-<p class="introLineLarge">Vertical Posters (3 to 2 ratio of height to width)  Posters.</p>
-<p class="introLineSmall">A white frame is shown when necessary to indicate the extent of the poster.</p>
-`;
-}
+}   
 let pageScript = 
 `<script>
 document.addEventListener('DOMContentLoaded', () => {
@@ -387,10 +309,45 @@ const thingString = function (order,ix,dir,useThumb,ititle,props) {
 	let ext = video?video:((spix.length === 1)?'jpg':spix[1]);
 	let x = path + '.'+ ext;
   console.log('ix',ix,'x',x);
-  let title=ititle?(noTitle?(forKOP?'':'No Title'):ititle):pageNumber+'';
+  const titleMap = {line_path_2_11:'line path 0',motion_18_4:'motion 0',motion_18_8:'motion 1',motion_18_16:'motion 2',motion_18_32:'motion 3'};
+  const titleFun = (str)=> {
+    if ((!alll)&&(!allA)) {
+      return str;
+    }
+    let mpt = titleMap[str];
+    if (mpt) {
+       return mpt;
+    }
+    let spl = str.split('_');
+    let sp0=spl[0];
+    let sp1=spl[1];
+    let sp2=spl[2];
+    let spln = spl.length;
+    console.log('spln',spln,'sp0',sp0,'sp1',sp1,'sp2',sp2);
+    if (spln=== 2) {
+       let ttl = sp0+' '+sp1;
+       console.log('ttl',ttl);
+       return ttl;
+    }
+    if (spln===3) {
+      if ((sp0==='part2')&&(sp1==='0')) {
+        return 'partition '+sp2;
+      }
+      if ((sp0==='drop')&&(sp1==='circles')) {
+        return 'dropCircles '+sp2;
+      }
+       if (0&&(sp0==='motion')&&(sp1==='18')) {
+        return 'motion 1'+sp2;
+      }
+    }
+    return str;
+  }
+  /*let title=ititle?(noTitle?(forKOP?'':'No Title'):ititle):pageNumber+'';
   if (neverTitle) {
     title = '';
-  }
+  }*/
+  let title = titleFun(ititle);
+  
   console.log('ititle',ititle,'title',title);
   theTitles.push(ititle?ititle:pageNumber+'');
   let vpath = (variant?path+'_v_'+variant:path);
@@ -541,7 +498,7 @@ const stripOrnt = function (str) {
    */   
  
 let sectionString = function (things) {
-  console.log('things',things);
+ // console.log('things',things);
 	let numThingsThisLine = 0;
 	let startLine =  `
 <div class="theGrid">
@@ -672,7 +629,7 @@ const writePage = function (sections) {
 
 //let sectionsC = require(alternate?'./altSections.js':'./gridSections.js');
 let sectionsC = require(sectionsPath);
-console.log('sectionsC',sectionsC);
+//console.log('sectionsC',sectionsC);
 let imageOrder  = require('./imageOrder.js');
 //console.log('sectionsC', sectionsC);
 

@@ -4,6 +4,8 @@ let xferImages = process.argv[2];
 let dir = 'public/images/std_size';
 //console.log('dir',dir);
 let dirc =fs.readdirSync(dir);
+//let dirc = ['bounce_0.jpg'];
+console.log('dirc',dirc);
 let jsd = JSON.stringify(dirc);
 //console.log(jsd);
 /*let omit ={bounce_0:1,'3d_grid_2':1,'3d_grid_0':1,bounce_11:1,bounce_13:1,bounce_14:1,bounce_16_f073:1,bounce_2:1,bounce_6:1,bounce_7:1,bounce_8:1,
@@ -39,13 +41,13 @@ let anims= ['drop_circles_21','cubes_1','drop_circles_19','drop_circles_20','dro
 let animNms = ['bounce_','curves_','path_avoidance','PathAvoidance','3d_grid','color_path','rectangle_gon_grid','crosshatch','drop_dandelion',
     'drop_ice','drop_leaves','drop_move','=line_path_2_11','motion_','gridSpinner','mutate_','path_rwalk_','paths_','=part2_0_34',
     'part2_0_43','part2_0_35'];
-let mp4s ={};
+let mp4s =[];
 //let notMp4s ={bounce_12:1,'bounce_15:1,'bounce_17:1,'bounce_18:1,'bounce_19:1};
 let notMp4s =['bounce_12','bounce_15','bounce_17','bounce_18','bounce_19'];
 let mp4Nms =['bounce_','crosshatch_','emergence','gridSpinner_10','gridSpinner_11','=motion_3','paths_5','path_avoidance_6','motion_10',
-'=reflected_path_0','gons_3','motion_18'];
+'=reflected_path_0','gons_3','motion_18','motion_11','paths_5'];
 //let mp4Nms =['bounce_'];
-let isOneVerbose='motion_18_32';
+let isOneVerbose='motion_11';
 
 const occursIn = function (fln,names) {
   let lna = names.length;

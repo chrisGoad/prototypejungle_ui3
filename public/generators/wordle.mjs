@@ -31,7 +31,7 @@ Object.assign(rs,topParams);
   let s0n = '';
   let s1n = '';
   let s2n = '';
-  let s3n = '';
+  let s3n = 'hse';
   let s4n = '';
   this.prohibs = [s0n,s1n,s2n,s3n,s4n];
 
@@ -39,8 +39,8 @@ Object.assign(rs,topParams);
   this.dprohibs  = [];
   // known letters
   let k0 = '';
-  let k1 = 'i';
-  let k2 = '';
+  let k1 = '';
+  let k2 = 'a';
   let k3 = '';
   let k4 = '';
   this.known = [k0,k1,k2,k3,k4];
@@ -49,12 +49,12 @@ Object.assign(rs,topParams);
   this.possibles4 = [];
   let abet=this.abet = 'abcdefghijklmnopqrstuvwxyz';
 //  let cm = this.complement('might clasp brief wound');
-  let cm = this.complement('mht casp bref wud');
+ let cm = this.complement('migt clp brif');// wound');
   // possible letters
   this.possLets = this.alphabetize(cm);
   this.addFrame();
  this.allowBadBlends = 0;
- this.tryFirsts('gilno');
+ this.tryFirsts('aehs');
   console.log('possibles5',this.possibles5);
 }
 
