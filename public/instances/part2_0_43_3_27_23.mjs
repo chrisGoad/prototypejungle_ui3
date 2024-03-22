@@ -1,5 +1,4 @@
 
-//import {rs as generatorP} from '/generators/part2_0.mjs';
 import {rs as generatorP} from '/generators/part2_0_3_27_23.mjs';
 
 let rs = generatorP.instantiate();
@@ -29,16 +28,16 @@ let step2 =1.0;
 let step3 =1.0;
 let bounce  = 0;
 let sinusoidal = 0;
-let vel = .01;
+let vel= 1;
 let pspace = {
-  sw:{kind,step:step,min:1,max:topLevels,interval:1,steps:0.5,vel},
+  sw:{kind,step:step,min:1,max:topLevels,interval:1,steps:0.5},
   pc0:{kind,step:step0*baseStep,min:minpc,max:maxpc,interval:1,steps:0.5,bounce,sinusoidal,vel},
   pc1:{kind,step:step1*baseStep,min:minpc,max:maxpc,interval:1,steps:0.5,bounce,sinusoidal,vel},
   pc2:{kind,step:step2*baseStep,min:minpc,max:maxpc,interval:1,steps:0.5,bounce,sinusoidal,vel},
   pc3:{kind,step:step3*baseStep,min:minpc,max:maxpc,interval:1,steps:0.5,bounce,sinusoidal,vel},
 };
 
-rs.numSteps = 250;
+rs.numSteps = 200;
 rs.copyOfInitState = rs.deepCopy(initState);
 
 rs.pstate = {pspace,cstate:initState};
@@ -94,10 +93,9 @@ rs.partStrokeWidth = function (prt) {
   return rs;
 }
 
-rs.updateState = function () {
+rs.updateStatee = function () {
   debugger;
   let ssf = this.stepsSoFar;
-  console.log('ssf',ssf);
   let ns = this.numSteps;
   let hns = 0.5*ns;
   let fr = ssf<hns?ssf/hns:1-(ssf-hns)/hns;
@@ -113,11 +111,10 @@ rs.chopOffBeginning = 1;
  rs.stepInterval = 40;
 let ist=rs.numISteps = 0;
 
-rs.numSteps = 103-ist;
+rs.numSteps = 101-ist;
 //rs.numSteps = 2000;
 rs.recycle = 1;
 //rs.numSteps = 300;
 //rs.addToArray(strokeWidths,.1,levels);
 export {rs};
-
 

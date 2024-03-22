@@ -354,7 +354,7 @@ rs.extendPartOneLevel = function (prt,sep) {
      return;
    }
    if (sep && sep.stop) {
-     console.log('stop');
+   //  console.log('stop');
      return;
    }
    let {polygon:pgon,stop} = prt;
@@ -658,7 +658,7 @@ rs.stepPartParams = function (params) {
   }
   let ln = whichToStep.length;
   stepper.step(0);
-  console.log(JSON.stringify(this.ar));
+ // console.log(JSON.stringify(this.ar));
   for (let i=0;i<ln;i++) {
     let wts = whichToStep[i];
     let wtsln = wts.length;
@@ -749,7 +749,7 @@ rs.stepPartParams = function (params) {
   let {pcs,frs} = partParams;
   let ln = wPcs.length;
   stepper.step(0);
-  console.log(JSON.stringify(this.ar));
+  //console.log(JSON.stringify(this.ar));
   for (let i=0;i<ln;i++) {
     let wts = wPcs[i];
     let wtsln = wts.length;
@@ -764,6 +764,7 @@ rs.stepPartParams = function (params) {
 
 rs.alreadyInitialized = 0;
 rs.initialize = function () {
+  debugger;
   let {width:wd,height:ht,partParams,dropParams} = this;
   let hwd = 0.5*wd;
   let hht = 0.5*ht;

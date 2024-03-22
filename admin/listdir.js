@@ -49,7 +49,8 @@ let mp4Nms =['bounce_','crosshatch_','emergence','gridSpinner_10','gridSpinner_1
 
 let gifs = [];
 let notgifs =[];
-let gifNms =['part2_0_43','part2_0_46','path_rwalk_4_1','stripes_1'];
+//let gifNms =['part2_0_43','part2_0_46','path_rwalk_4_1','stripes_1'];
+let gifNms =['part2_0_46','path_rwalk_4_1','stripes_1'];
 
 let isOneVerbose='motion_11';
 

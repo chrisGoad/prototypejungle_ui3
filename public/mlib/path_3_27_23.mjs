@@ -365,6 +365,7 @@ item.nextTable = {'random':'randomNextState','randomWalk':'randomWalk2dNextState
                   
                   
 item.nextState = function (pathKind,pspace,cstate,component) {
+  debugger;
   let csc = cstate[component];
   if (csc.paused) {
     return;
