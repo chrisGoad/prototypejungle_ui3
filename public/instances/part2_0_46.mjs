@@ -1,5 +1,5 @@
 
-import {rs as generatorP} from '/generators/part2_0.mjs';
+import {rs as generatorP} from '/generators/part2_0_3_27_23.mjs';
 
 let rs = generatorP.instantiate();
 
@@ -31,13 +31,14 @@ let maxpc4 = 50;
 //let minpc7 = -.5;
 let minpc7 = 0;
 let maxpc7 = .95;
+let vel = .1
 let pspace = {
-  dir:{kind,step:step9,min:0,max:2*Math.PI,interval:1,steps:0.5,bounce:1},
-  pc3:{kind,step:step3,min:minpc,max:maxpc,interval:1,steps:0.5,bounce,sinusoidal},
-  pc4:{kind,step:step4,min:minpc4,max:maxpc4,interval:1,steps:0.5,bounce:0,sinusoidal:0},
-  pc4r:{kind,step:step4,min:maxpc4,max:minpc4,interval:1,steps:0.5,bounce:0,sinusoidal:0},
-  pc7:{kind,step:step7,min:minpc7,max:maxpc7,interval:1,steps:0.5,bounce:1,sinusoidal:1},
-  pc10:{kind,step:step10,min:minpc10,max:maxpc10,interval:1,steps:0.5,bounce:0,sinusoidal:0},
+  dir:{kind,step:step9,min:0,max:2*Math.PI,interval:1,steps:0.5,bounce:1,vel},
+  pc3:{kind,step:step3,min:minpc,max:maxpc,interval:1,steps:0.5,bounce,sinusoidal,vel},
+  pc4:{kind,step:step4,min:minpc4,max:maxpc4,interval:1,steps:0.5,bounce:0,sinusoidal:0,vel},
+  pc4r:{kind,step:step4,min:maxpc4,max:minpc4,interval:1,steps:0.5,bounce:0,sinusoidal:0,vel},
+  pc7:{kind,step:step7,min:minpc7,max:maxpc7,interval:1,steps:0.5,bounce:1,sinusoidal:1,vel},
+  pc10:{kind,step:step10,min:minpc10,max:maxpc10,interval:1,steps:0.5,bounce:0,sinusoidal:0,vel},
 };
 
 rs.numSteps = 200;
