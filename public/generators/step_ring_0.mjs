@@ -12,7 +12,7 @@ addPathInParts(rs);
 
 let wd = 1700;
 rs.setName('step_ring_0');
-let topParams = {width:wd,height:wd,framePadding:.1*wd,frameStroke:'white',frameStrokeWidth:1,saveAnimation:1}
+let topParams = {width:wd,height:wd,framePadding:.1*wd,frameStrokee:'white',frameStrokeWidth:1,saveAnimation:1}
 Object.assign(rs,topParams);
 
 

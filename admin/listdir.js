@@ -15,8 +15,8 @@ let omit =['bounce_0','bounce_10','3d_grid_2','3d_grid_0','bounce_11','bounce_14
            'drop_move','gridSpinner_18','gridSpinner_19','gridSpinner_14','gridSpinner_2','gridSpinner_3','gridSpinner_4','gridSpinner_6','gridSpinner_8',
            'gridSpinner_9','=gridSpinner','gridSpinner_12','gridSpinner_16','grid_emergence','example1','l2ine_path_2_11b','line_path_2_9',
            '=motion_1','motion_14','motion_14','motion_16','motion_17','=motion_18','motion_19','=motion_2','motion_20','motion_22','motion_23',
-           'motion_25','motion_26','motion_27','motion_28','motion_29','motion_4','motion_6','motion_7','motion_8',
-           'mutate_3','mutate_4','mutate_5','paths_0','paths_0','paths_0_0','paths_0_1','paths_2','paths_6','paths_8',
+           'motion_25','motion_26','motion_27','motion_28','motion_29','motion_4','motion_6','motion_7','motion_8','bounce_12','reflected_path_0_1',
+           'mutate_3','mutate_4','mutate_5','paths_0','paths_0','paths_0_0','paths_0_1','paths_2','paths_6','paths_8','drop_circles_19',
            'path_rwalk_2','path_rwalk_3','=path_rwalk_4','path_rwalk_4_0','path_avoidance_4','bounce_19','=paths_1',
            'line_path_0_2','line_path_0_3','line_path_0_5','line_path_0_6','rectangle_gon_grid','step_ring_1','part2_0_34_f113_f113','part2_0_47'];
 let omitIm = ['3d_grid','bounce','CMB','color_path_0','crosshatch_0','curves_2','drop_circles_14_5x7','drop_circles_17','drop_dandelion',
@@ -49,7 +49,7 @@ let mp4Nms =['bounce_','crosshatch_','emergence','gridSpinner_10','gridSpinner_1
 
 let gifs = [];
 let notgifs =[];
-let gifNms =['part2_0_43'];
+let gifNms =['part2_0_43','part2_0_46','path_rwalk_4_1','stripes_1'];
 
 let isOneVerbose='motion_11';
 
