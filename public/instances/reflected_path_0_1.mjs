@@ -6,13 +6,15 @@ rs.setName('reflected_path_0_1');
 
 debugger;
 rs.setTopParams = function () {
-  debugger;
+  debugger;	
+  
   let ht = 100;
   let d = 0.5*ht;
   let vel = 1;
-  let cycleTime = Math.floor(ht/vel)
+  let cycleTime = Math.floor(ht/vel);
+  console.log('cycleTime',cycleTime);
   this.setSides(d);
-  let topParams = {ht,d,width:ht,height:ht,framePadding:.0*ht,frameStroke:'white',frameStrokeWidth:1,numPaths:6,theta:-0.2 *Math.PI,vel,
+  let topParams = {numSteps:20,saveAnimation:1,ht,d,width:ht,height:ht,framePadding:.0*ht,frameStroke:'white',frameStrokeWidth:1,numPaths:6,theta:-0.2 *Math.PI,vel,
   cycleTime,numSteps:10*cycleTime,noNewPaths:8*cycleTime,lineLength:20,addPathInterval:30,fromOneSide:1}
   Object.assign(this,topParams);
 }

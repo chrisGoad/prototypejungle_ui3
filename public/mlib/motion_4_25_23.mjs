@@ -146,7 +146,7 @@ item.showPathh = function (path,fc,lineP) {
     return;
   }
   let ef = hf+phase;
-  console.log('phase',phase,'ef',ef);
+ // console.log('phase',phase,'ef',ef);
 
   if (ef > 1) {
    // debugger;
@@ -396,7 +396,7 @@ item.updateConnectors = function () {
       fadeHigh = (1-apMax)/lowFade;
     }
     let minFade = Math.min(fadeLow,fadeHigh);
-    console.log('apMax',apMax,'apMin',apMin,'fadeLow',fadeLow,'fadeHigh',fadeHigh);
+   // console.log('apMax',apMax,'apMin',apMin,'fadeLow',fadeLow,'fadeHigh',fadeHigh);
     let clr = `rgba(255,255,255,${minFade})`;
     connector.stroke = clr;
     c0.fill = clr;

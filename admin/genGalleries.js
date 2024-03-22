@@ -113,7 +113,9 @@ if (alternate) {
   outPath = 'public/bookImages.html';
 } else if (drop) {
    outPath = 'public/dropImages.html';
-} else if (top) {
+}else if (partition) {
+   outPath = 'public/partitionImages.html';
+}  else if (top) {
    outPath = 'public/galleries.html';
 }  else if (grid) {
   outPath = 'public/gridImages.html';
@@ -253,7 +255,8 @@ if (imKind === 'g') {
     
       aboutStart = anim?'':`<a style="color:white" href="doc/${aboutURL}">`;
       aboutLink = `${aboutStart}about ${kindTitle}</a>`;
-      let aboutLine = anim?'':`<p class="introLineSmall">${aboutLink}</p>`;  
+      let aboutLine = alll?`<p class="introLineSmall">${aboutLink}</p>`:'';;  
+      //let aboutLine = ''; 
       let enlargeText = anim?'To view animations, click on the images.':'To enlarge the images, click on them.';
       pageIntro = 
       `
@@ -264,6 +267,8 @@ if (imKind === 'g') {
       
       
     `;
+    
+    
     // console.log('pageIntro',pageIntro);
     } 
    } else  {
@@ -353,10 +358,14 @@ const thingString = function (order,ix,dir,useThumb,ititle,props) {
   if (neverTitle) {
     title = '';
   }*/
-  let title = titleFun(ititle);
+ // let title = ititle?titleFun(ititle):pageNumber+'';;
+  let title = noTitle?pageNumber+'':titleFun(ititle)
+ // let title = ititle?titleFun(ititle):'XXX';;
+  //let title = 'XXX';;
   
   //console.log('ititle',ititle,'title',title);
-  theTitles.push(ititle?ititle:pageNumber+'');
+  //theTitles.push(ititle?ititle:pageNumber+'');
+  theTitles.push(title);
   let vpath = (variant?path+'_v_'+variant:path);
   //console.log('variant',variant);
   //console.log('vpath',vpath);
@@ -380,7 +389,7 @@ const thingString = function (order,ix,dir,useThumb,ititle,props) {
   //let kindArg = 'imKind='+imKind;
 //  console.log('kind',kind);
   let kindArg = 'imKind='+kind;
-  let noTitleArg = noTitle?'&noTitle=1':'';
+  let noTitleArg = '';//noTitle?'&noTitle=1':'';
   let localArg = 'local='+(local_images||imagesHere?1:0);
 	let theImageArg = '';
 	pageNumber++;
@@ -420,7 +429,7 @@ const thingString = function (order,ix,dir,useThumb,ititle,props) {
 	if (forKOP) {
 		//let titleLink = title?`${astart}${title}</a></p>`:'';
 		let titleLink = title?`${astart}${title}</a>`:'';
-		//console.log('forKOP');
+	//	console.log('titleLink',titleLink);
     srcUrl = (sources)?`https://prototypejungle.net/doc/${path}_sources.html`:`https://prototypejungle.net/${dir}/${path}.${fileExt}`;
     if (forKOP){
       rs = `<div><p class="centered">${titleLink}</p>`
@@ -446,7 +455,7 @@ const thingString = function (order,ix,dir,useThumb,ititle,props) {
     ${astart}<img width="200" src="${thumbsrc}"></a></p></div>
     `;
 	}
-  //console.log ('rs = ',rs);
+ // console.log ('rs = ',rs);
 	return rs;
 }
 
@@ -503,7 +512,7 @@ const stripOrnt = function (str) {
 
   }
    */   
- const favorites =  ['bounce 16','curves 10','dropCircles 20','gridSpinner 13','gridSpinner 5'];
+ const favorites =  ['bounce 16','curves 10','dropCircles 20','gridSpinner 13','gridSpinner 5','partition 43','paths 10','motion 3'];
 let sectionString = function (things) {
  // console.log('things',things);
 	let numThingsThisLine = 0;

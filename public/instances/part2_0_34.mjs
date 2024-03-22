@@ -6,6 +6,7 @@ let rs = generatorP.instantiate();
 rs.setName('part2_0_34');
 rs.whereToPause=113;
 rs.numSteps = 1000;
+rs.saveAnimation=1;
 let levels = 8;
 levels = 2;
 /*const  buildStatePs = function (n,m) {

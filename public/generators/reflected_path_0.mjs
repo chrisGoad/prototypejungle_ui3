@@ -14,7 +14,7 @@ rs.setSides = function (d) {
   let corners = [Point.mk(-d,d),Point.mk(-d,-d),Point.mk(d,-d),Point.mk(d,d)];
   let sides = [LineSegment.mk(corners[0],corners[1]),
                LineSegment.mk(corners[1],corners[2]),
-               LineSegment.mk(corners[2],corners[3]),
+               LineSegment.mk(corners[2],corners[3]),	
                LineSegment.mk(corners[3],corners[0])];
   this.corners = corners;
   this.sides = sides;

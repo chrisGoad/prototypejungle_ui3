@@ -28,11 +28,11 @@ Object.assign(rs,topParams);
   debugger;
   this.doubles ='';
   // prohibited letters at each position
-  let s0n = '';
+  let s0n = 'c';
   let s1n = '';
-  let s2n = '';
-  let s3n = 'hse';
-  let s4n = '';
+  let s2n = 'a';
+  let s3n = 'e';
+  let s4n = 'd';
   this.prohibs = [s0n,s1n,s2n,s3n,s4n];
 
   // prohibited dipthongs
@@ -40,7 +40,7 @@ Object.assign(rs,topParams);
   // known letters
   let k0 = '';
   let k1 = '';
-  let k2 = 'a';
+  let k2 = '';
   let k3 = '';
   let k4 = '';
   this.known = [k0,k1,k2,k3,k4];
@@ -49,12 +49,12 @@ Object.assign(rs,topParams);
   this.possibles4 = [];
   let abet=this.abet = 'abcdefghijklmnopqrstuvwxyz';
 //  let cm = this.complement('might clasp brief wound');
- let cm = this.complement('migt clp brif');// wound');
+  let cm = this.complement('might lsp brif woun xz');
   // possible letters
   this.possLets = this.alphabetize(cm);
   this.addFrame();
  this.allowBadBlends = 0;
- this.tryFirsts('aehs');
+ this.tryFirsts('acde');
   console.log('possibles5',this.possibles5);
 }
 

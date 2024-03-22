@@ -21,6 +21,7 @@ Object.assign(rs,topParams);
 
 
 rs.initProtos = function () {
+  this.numSteps = 100;
   let lineP = this.lineP = linePP.instantiate();
   lineP['stroke-width'] = .4;
   lineP.stroke = 'cyan';
