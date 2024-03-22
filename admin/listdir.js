@@ -4,7 +4,7 @@ let xferImages = process.argv[2];
 let dir = 'public/images/std_size';
 //console.log('dir',dir);
 let dirc =fs.readdirSync(dir);
-//let dirc = ['bounce_0.jpg'];
+//dirc = ['drop_circles3.jpg'];
 console.log('dirc',dirc);
 let jsd = JSON.stringify(dirc);
 //console.log(jsd);

@@ -59,7 +59,7 @@ if (forKOP) {
   orderMax = 10000;
 }
 
-//console.log('kind','['+kind+']','sortByOrder',sortByOrder,'forKOP',forKOP,'byKind',byKind,'byAspect',byAspect,'byLikes',byLikes,'signed',signed,'horizontal',horizontal,'horizontalnf',horizontalnf);
+console.log('kind','['+kind+']','sortByOrder',sortByOrder,'forKOP',forKOP);
 //return;
 //let alternate = 0;
 let sectionsPath;
@@ -297,6 +297,44 @@ document.addEventListener('DOMContentLoaded', () => {
 `;
 let pageNumber = 0;
 let numPages = 0;
+ const titleMap = {line_path_2_11:'line path 0',motion_18_4:'motion 0',motion_18_8:'motion 1',motion_18_16:'motion 2',motion_18_32:'motion 3',
+  drop_circles3:'drop_3'};
+  const titleFun = (str)=> {
+    if ((!alll)&&(!allA)) {
+      return str;
+    }
+    let mpt = titleMap[str];
+    if (mpt) {
+       //console.log('str',str,'mpt',mpt);
+       return mpt;
+    }
+    let spl = str.split('_');
+    let sp0=spl[0];
+    let sp1=spl[1];
+    let sp2=spl[2];
+    let spln = spl.length;
+ //   console.log('spln',spln,'sp0',sp0,'sp1',sp1,'sp2',sp2);
+    if (spln=== 2) {
+       let ttl = sp0+' '+sp1;
+     //  console.log('ttl',ttl);
+       return ttl;
+    }
+    if (spln===3) {
+      if ((sp0==='part2')&&(sp1==='0')) {
+        return 'partition '+sp2;
+      }
+      if ((sp0==='drop')&&(sp1==='circles')) {
+        return 'dropCircles '+sp2;
+      }
+       if ((sp0==='drop')&&(sp1==='all')) {
+        return 'drop '+sp2;
+      }
+       if (0&&(sp0==='motion')&&(sp1==='18')) {
+        return 'motion 1'+sp2;
+      }
+    }
+    return str;
+  }
 const thingString = function (order,ix,dir,useThumb,ititle,props) {
 	debugger;
   let {variant,likes,posted,category,sources,noTitle,video} = props;
@@ -308,53 +346,22 @@ const thingString = function (order,ix,dir,useThumb,ititle,props) {
 	let path = spix[0];
 	let ext = video?video:((spix.length === 1)?'jpg':spix[1]);
 	let x = path + '.'+ ext;
-  console.log('ix',ix,'x',x);
-  const titleMap = {line_path_2_11:'line path 0',motion_18_4:'motion 0',motion_18_8:'motion 1',motion_18_16:'motion 2',motion_18_32:'motion 3'};
-  const titleFun = (str)=> {
-    if ((!alll)&&(!allA)) {
-      return str;
-    }
-    let mpt = titleMap[str];
-    if (mpt) {
-       return mpt;
-    }
-    let spl = str.split('_');
-    let sp0=spl[0];
-    let sp1=spl[1];
-    let sp2=spl[2];
-    let spln = spl.length;
-    console.log('spln',spln,'sp0',sp0,'sp1',sp1,'sp2',sp2);
-    if (spln=== 2) {
-       let ttl = sp0+' '+sp1;
-       console.log('ttl',ttl);
-       return ttl;
-    }
-    if (spln===3) {
-      if ((sp0==='part2')&&(sp1==='0')) {
-        return 'partition '+sp2;
-      }
-      if ((sp0==='drop')&&(sp1==='circles')) {
-        return 'dropCircles '+sp2;
-      }
-       if (0&&(sp0==='motion')&&(sp1==='18')) {
-        return 'motion 1'+sp2;
-      }
-    }
-    return str;
-  }
+ // console.log('ix',ix,'x',x);
+ 
+
   /*let title=ititle?(noTitle?(forKOP?'':'No Title'):ititle):pageNumber+'';
   if (neverTitle) {
     title = '';
   }*/
   let title = titleFun(ititle);
   
-  console.log('ititle',ititle,'title',title);
+  //console.log('ititle',ititle,'title',title);
   theTitles.push(ititle?ititle:pageNumber+'');
   let vpath = (variant?path+'_v_'+variant:path);
   //console.log('variant',variant);
   //console.log('vpath',vpath);
   let vx = vpath+'.'+ext;
-  console.log('vx',vx);
+ // console.log('vx',vx);
   thePages.push(vx);
 	let imsrc = `images/std_size/${vpath}.jpg`;
 	let thumbsrc = `images/thumbs/${vpath}.jpg`;
@@ -409,7 +416,7 @@ const thingString = function (order,ix,dir,useThumb,ititle,props) {
   let propsStr = imagesHere?`<span style="font-size:10pt">${likes?'Likes '+likes:''} ${posted?"":" NOT POSTED"} ${local_images?'Local':''} ${category}</span><br>`:'';;
   let sourcenm = `source${sources?'s':''}`;
 	//if (forKOP || forPJ) {
-  console.log('forKOP',forKOP);
+ // console.log('forKOP',forKOP);
 	if (forKOP) {
 		//let titleLink = title?`${astart}${title}</a></p>`:'';
 		let titleLink = title?`${astart}${title}</a>`:'';
@@ -496,7 +503,7 @@ const stripOrnt = function (str) {
 
   }
    */   
- 
+ const favorites =  ['bounce 16','curves 10','dropCircles 20','gridSpinner 13','gridSpinner 5'];
 let sectionString = function (things) {
  // console.log('things',things);
 	let numThingsThisLine = 0;
@@ -525,8 +532,38 @@ let sectionString = function (things) {
    // things.sort(compareLikes);
   }
   const compareByOrder = function (thing1,thing2) {
+   // console.log('thing1',thing1);
+    let title1 = titleFun(thing1[1]);
+    let title2= titleFun(thing2[1]);
+    let order1 = favorites.indexOf(title1);
+    let order2 = favorites.indexOf(title2);
+    if ((order1>-1)&&(order2>-1)) {
+      console.log('order1',order1,title1);
+      console.log('order2',order2,title2);
+    }
+    if (order1 === order2) {
+    
+      return 0;
+    }
+    if ((order2 > -1)&&(order1 == -1)) {
+      console.log('case1',1);
+      return 1;
+    }
+    if ((order2 > order1)  && (order1!==-1)) { 
+      console.log('case2',1);
+      return -1;
+    }
+     if ((order1 > order2)  && (order2!==-1)) { 
+      console.log('case3',-1);
+      return 1;
+    }
+    console.log(-1);
+    return -1;
+  }
+  const compareByOrderr = function (thing1,thing2) {
     let order1 = thing1[0];
     let order2 = thing2[0];
+    
     if (order1 === order2) {
       return 0;
     }
@@ -536,7 +573,7 @@ let sectionString = function (things) {
     return -1;
   }
   //console.log('things unordered',things);
-  if (0&&sortByOrder) {
+  if (allA) {//&&sortByOrder) {
     console.log('sortByOrder');
     things.sort(compareByOrder);
   }
@@ -544,7 +581,7 @@ let sectionString = function (things) {
 //  ln = 2;
 	for (let i=0;i<ln;i++) {
 		let thing = things[i];
-   console.log('thing',thing,'i',i);
+   //console.log('thing',thing,'i',i);
     let tln = thing.length;
     if (tln === 1) {
    //   console.log("Section");
@@ -554,8 +591,8 @@ let sectionString = function (things) {
       rs += `</div><br><div style="text-align:center">${txt}</div><br><div>`;
     } else {
       let [order,file,directory,useThumb,title,props] = thing;
-      console.log('PROPS',props);
-      console.log('file',file);
+     // console.log('PROPS',props);
+      //console.log('file',file);
      // let tov = typeof variant;
     //  console.log('is variant',tov);
       let ord = thing[0];
@@ -597,7 +634,7 @@ const sectionsString = function (sections) {
 }
 const writeThePages = function () {
 	let js = `let ${pagesVar}= ${JSON.stringify(thePages)};`;
-  console.log('writeThePagess',js,pagesVar,pagesPath);
+ // console.log('writeThePagess',js,pagesVar,pagesPath);
 	fs.writeFileSync(pagesPath,js);
 	//fs.writeFileSync(alternate?'public/altPages.js':(byKind?'public/byKindPages.js':'public/thePages.js'),js);
 }
