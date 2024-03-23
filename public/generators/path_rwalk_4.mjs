@@ -142,12 +142,11 @@ rs.initProtos = function () {
 }  
 
 
-rs.numSteps = 715;
 rs.initialize = function () {
   debugger;
   this.saveAnimation = 1;
  this.setBackgroundColor('black');
-
+ this.numSteps = 614;
   this.initProtos();
   this.addFrame();
   let walkers = this.set('walkers',arrayShape.mk());

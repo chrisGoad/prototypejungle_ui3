@@ -86,10 +86,10 @@ rs.computeBiasBy = function (component) {
   return minbb;
 }
 rs.updateState = function () {
-  let {walkers,goTowards,pstate,numSteps,got} = this;
+  let {walkers,goTowards,pstate,numSteps,got,stepsSoFar:ssf} = this;
   let {cstate} = pstate;
   let {time} = cstate;
-  console.log('time',time);
+  console.log('time',time,'ssf',ssf);
   debugger;
   let ln = walkers.length;
   for (let i=0;i<ln;i++) {
