@@ -510,10 +510,12 @@ item.oneInterpolationStep = function () {
 
 }
 item.oneStep = function (one) {
-  //debugger;
+ debugger;
   if (this.paused) {
     return;
   }
+  let {saveAnimation:sva} = this;
+  console.log('sva',sva);
   this.callIfDefined('initAudio');
   let ns = this.stepsSoFar;
        //console.log('ns',ns,'tns',this.numSteps);

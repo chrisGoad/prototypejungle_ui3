@@ -2,7 +2,8 @@ import {rs as circlePP} from '/shape/circle.mjs';
 import {rs as linePP} from '/shape/line.mjs';
 import {rs as basicP} from '/generators/basics.mjs';
 //import {rs as addDropMethods} from '/mlib/drop.mjs';
-import {rs as addPathMethods} from '/mlib/path.mjs';	
+//import {rs as addPathMethods} from '/mlib/path.mjs';	
+import {rs as addPathMethods} from '/mlib/path_3_27_23.mjs';	
 
 let rs = basicP.instantiate();
 addPathMethods(rs);
@@ -142,9 +143,9 @@ rs.initProtos = function () {
 
 
 rs.numSteps = 715;
-rs.saveAnimation = 0;
 rs.initialize = function () {
   debugger;
+  this.saveAnimation = 1;
  this.setBackgroundColor('black');
 
   this.initProtos();

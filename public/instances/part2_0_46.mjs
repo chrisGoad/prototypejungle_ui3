@@ -33,15 +33,16 @@ let minpc7 = 0;
 let maxpc7 = .95;
 let vel = .1
 let pspace = {
-  dir:{kind,step:step9,min:0,max:2*Math.PI,interval:1,steps:0.5,bounce:1,vel},
+  dir:{kind,step:step9,min:0,max:2*Math.PI,interval:1,steps:0.5,bounce:0,vel:vel},
   pc3:{kind,step:step3,min:minpc,max:maxpc,interval:1,steps:0.5,bounce,sinusoidal,vel},
   pc4:{kind,step:step4,min:minpc4,max:maxpc4,interval:1,steps:0.5,bounce:0,sinusoidal:0,vel},
   pc4r:{kind,step:step4,min:maxpc4,max:minpc4,interval:1,steps:0.5,bounce:0,sinusoidal:0,vel},
-  pc7:{kind,step:step7,min:minpc7,max:maxpc7,interval:1,steps:0.5,bounce:1,sinusoidal:1,vel},
+  pc7:{kind,step:step7,min:minpc7,max:maxpc7,interval:1,steps:0.5,bounce:1,sinusoidal:1,vel:vel/10},
   pc10:{kind,step:step10,min:minpc10,max:maxpc10,interval:1,steps:0.5,bounce:0,sinusoidal:0,vel},
 };
 
 rs.numSteps = 200;
+rs.chopOffEnd = 0;
 rs.copyOfInitState = rs.deepCopy(initState);
 
 rs.pstate = {pspace,cstate:initState};
@@ -208,7 +209,7 @@ let ist=rs.numISteps = 0;
 rs.numSteps = 101-ist;
 rs.numSteps = 3000;
 rs.numSteps = 100;
-rs.numSteps = 2*colorSw+8;
+rs.numSteps = 2*colorSw+8+1
 //rs.addToArray(strokeWidths,.1,levels);
 export {rs};
 

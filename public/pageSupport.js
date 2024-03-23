@@ -155,10 +155,10 @@ document.addEventListener('DOMContentLoaded', () => {
  // if ((imKind === 'anim') || (!include_hi_res)) {
  //   highDiv.style.visibility = "hidden";
  // }
-	if (cPage === 0) {
+	if ((cPage === 0)|| (imKind === 'allA')) {
 	 prevDiv.style.visibility = "hidden";
 	}
-	if (lastPage) {
+	if (lastPage  || (imKind === 'allA')) {
 	  nextDiv.style.visibility = "hidden";
 	}
 	prevDiv.addEventListener('click',onPrev);

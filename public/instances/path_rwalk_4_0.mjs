@@ -8,7 +8,8 @@ let rs = generatorP.instantiate();
 rs.setName('path_rwalk_4_0');
 rs.ht= 100;
 let topParams = {width:2.8*rs.ht,height:2.8*rs.ht,framePadding:.1,frameStrokee:'white',frameStrokeWidth:1}
-rs.numWalkers = 2;
+rs.numWalkers = 40;
+rs.saveAnimation = 1;
 Object.assign(rs,topParams);
 
  let initState = {time:0};
