@@ -49,11 +49,12 @@ sections:
      [0,'stripes_1','instances',1,'Gridulous',{video:'gif',likes:0,posted:0,category:'anim'}], 
 
  // stills
- [0,'mutate_6_f016','instances',1,'Mutate 6 Frame 16',{likes:152,posted:1,category:'stillss'}],
- [0,'bounce_16_f077','instances',1,'Square Dance fr77',{likes:0,posted:0,category:'stills',frame:77}], 
- [0,'motion_29_f001','instances',1,'Connectome fr1',{likes:0,posted:0,category:'stills',frame:1}], 
- [0,'motion_24_f002','instances',1,' Colliding Orbits fr2',{likes:0,posted:0,category:'stills',frame:2}], 
- [0,'part2_0_34_f113','instances',1,'Paths fr113',{likes:0,posted:0,category:'stills',frame:113}], 
+ [0,'mutate_6_f016','instances',1,'Mutate',{likes:152,posted:1,category:'stillss'}],
+ [0,'bounce_16_f077','instances',1,'Square Dance',{likes:0,posted:0,category:'stills',frame:77}], 
+ [0,'motion_29_f001','instances',1,'Connectome fr1',{likes:0,posted:0,category:'stillss',frame:1}], 
+ [0,'motion_24_f002','instances',1,' Colliding Orbits',{likes:0,posted:0,category:'stills',frame:2}], 
+ [0,'part2_0_34_f113','instances',1,'Paths',{likes:0,posted:0,category:'stills',frame:113}], 
+ [0,'motion_21_f002','instances',1,'Spiral',{likes:0,posted:0,category:'stills',frame:2}], 
 
 
  

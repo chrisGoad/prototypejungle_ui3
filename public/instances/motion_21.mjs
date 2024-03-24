@@ -13,7 +13,7 @@ let ht=50;
 
 
 let topParams = {width:ht,height:ht,angleOffset:0*Math.PI/10,framePadding:-0.1*ht,frameStrokee:'white',frameStrokeWidth:.2,timePerStep:1/(16*32),stopTime:1,recordingMotion:1,
-saveAnimation:1,whereToPause:1000,
+saveAnimation:1,whereToPause:2,
     circleRadius:.2,nearestFadeFactor:20,shapesPerPath:50,speed:1,segsPerCircle:20,radius:.4*ht,numSlices:8};
 
 Object.assign(rs,topParams);

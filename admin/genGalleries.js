@@ -303,7 +303,9 @@ document.addEventListener('DOMContentLoaded', () => {
 let pageNumber = 0;
 let numPages = 0;
  const titleMap = {line_path_2_11:'line path 0',motion_18_4:'motion 0',motion_18_8:'motion 1',motion_18_16:'motion 2',motion_18_32:'motion 3',
-  motion_3:'motion 4',drop_circles3:'drop_3'};
+  motion_3:'motion 4',drop_circles3:'drop_3',bounce_16:'Square Dance',motion_24:'Colliding Orbits',drop_circles_20:'Necker Cube',
+  gons_3:'Pulsing Polygons',motion_18_32:'Mandala',crosshatch_1:'Crosshatch',part2_0_34:'Paths',
+  gridSpinner_13:'Spinner',gridSpinner_5:'Walkers',part2_0_43:'You are getting very sleepy',curves_10:'Stretch',paths_10:'Tower'};
   const titleFun = (str)=> {
     if ((!alll)&&(!allA)) {
       return str;
@@ -514,7 +516,8 @@ const stripOrnt = function (str) {
 
   }
    */   //  first anim favorites
- const favorites =  ['bounce_16','curves_10','drop_circles_20','gridSpinner_13','gridSpinner_5','part2_0_43','paths_10','motion_18_32',
+ const favorites =  ['bounce_16','curves_10','motion_24','drop_circles_20','gridSpinner_13','gridSpinner_5','part2_0_43','paths_10','motion_18_32',
+ 'crosshatch_1','gons_3',
  //now image favorites
  'part2_0_1','drop_circles_14','drop_circles_3','drop_interpolate_0',
  'grid_distortion_field_warped','grid_droplets_wide','grid_fade','grid_ramp',
