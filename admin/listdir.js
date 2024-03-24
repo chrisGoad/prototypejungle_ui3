@@ -75,6 +75,10 @@ const occursIn = function (fln,names) {
   
 const isOne = function (fln,nots,sos,names,kind){
   //if (omit[fln]) {
+  if (fln.indexOf('__f')>-1) {
+    console.log('not',fln);
+    return 0;
+  }
   if (occursIn(fln,omit)) {
     if (isOneVerbose===fln) {
       console.log(fln,' omitted');

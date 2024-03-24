@@ -84,7 +84,7 @@ item.pauseAnimationMaybe = function () {
     this.pauseAnimationMaybeCalled = 1;
     let wts = this.whereToSave;
     let wtps = this.padIntTo(wtp,3);
-    let nwts = wts+'_f'+wtps; 
+    let nwts = wts+'__f'+wtps; 
     this.setName(nwts);
   }
 }

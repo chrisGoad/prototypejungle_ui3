@@ -55,6 +55,7 @@ sections:
  [0,'motion_24_f002','instances',1,' Colliding Orbits',{likes:0,posted:0,category:'stills',frame:2}], 
  [0,'part2_0_34_f113','instances',1,'Paths',{likes:0,posted:0,category:'stills',frame:113}], 
  [0,'motion_21_f002','instances',1,'Spiral',{likes:0,posted:0,category:'stills',frame:2}], 
+ [0,'gons_3_f043','instances',1,'Pulsing Polygons',{likes:0,posted:0,category:'stills',frame:43}], 
 
 
  

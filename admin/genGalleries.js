@@ -303,9 +303,13 @@ document.addEventListener('DOMContentLoaded', () => {
 let pageNumber = 0;
 let numPages = 0;
  const titleMap = {line_path_2_11:'line path 0',motion_18_4:'motion 0',motion_18_8:'motion 1',motion_18_16:'motion 2',motion_18_32:'motion 3',
-  motion_3:'motion 4',drop_circles3:'drop_3',bounce_16:'Square Dance',motion_24:'Colliding Orbits',drop_circles_20:'Necker Cube',
-  gons_3:'Pulsing Polygons',motion_18_32:'Mandala',crosshatch_1:'Crosshatch',part2_0_34:'Paths',
-  gridSpinner_13:'Spinner',gridSpinner_5:'Walkers',part2_0_43:'You are getting very sleepy',curves_10:'Stretch',paths_10:'Tower'};
+  motion_3:'motion 4',drop_circles3:'drop_3',bounce_16:'Square Dance',motion_24:'Colliding Orbits',drop_circles_20:'Necker',
+  gons_3:'Pulsing Polygons',motion_18_32:'Mandala',crosshatch_1:'Crosshatch',part2_0_34:'Paths',part2_0_1:'Vortex',drop_circles_14:'Bloom',
+  drop_circles_3:'Dropped Circles',drop_interpolate_0:'Motion Illusion',grid_distortion_field_warped:'Distortion Field',
+  grid_droplets_wide:'Droplets',grid_fade:'Fade',grid_ramp:'Ramp',interpolate_colors_3:'Interpolate Colors 1',interpolate_colors_6:'Interpolate Colors 2',
+  ip_test_2:'Waves',triangle_0:'Form',
+  
+  gridSpinner_13:'Spinner',gridSpinner_5:'Walkers',part2_0_43:'You are getting very sleepy',curves_10:'Stretch',paths_10:'Tower',};
   const titleFun = (str)=> {
     if ((!alll)&&(!allA)) {
       return str;

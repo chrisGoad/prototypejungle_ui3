@@ -11,7 +11,7 @@ rs.pstate = {pspace:{},cstate:{}};
 
 let wd=100;
 let topParams = {width:wd,height:wd,frameStrokee:'white',frameStrokeWidth:0.1,framePadding:.6*wd,stepsPerMove:10,numCubes:15,
-  dim:40,disp:50,numSegs:10,gray:100,delta:20,saveAnimation:1
+  dim:40,disp:50,numSegs:10,gray:100,delta:20,saveAnimation:1,whereToPause:43,
  
   };
   
