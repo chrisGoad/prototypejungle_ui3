@@ -347,6 +347,8 @@ const thingString = function (order,ix,dir,useThumb,ititle,props) {
   if (!alll&&!allA&&((kind !== 'alt') && (kind !== 'book') &&(category !==  kind))) {
     return '</div>';a
   }
+  let fr = props.frame;
+  console.log('fr',fr)
 	let spix = ix.split('.');
 	let path = spix[0];
 	let ext = video?video:((spix.length === 1)?'jpg':spix[1]);
@@ -429,14 +431,14 @@ const thingString = function (order,ix,dir,useThumb,ititle,props) {
 	if (forKOP) {
 		//let titleLink = title?`${astart}${title}</a></p>`:'';
 		let titleLink = title?`${astart}${title}</a>`:'';
-	//	console.log('titleLink',titleLink);
+		console.log('titleLink',titleLink);
     srcUrl = (sources)?`https://prototypejungle.net/doc/${path}_sources.html`:`https://prototypejungle.net/${dir}/${path}.${fileExt}`;
     if (forKOP){
-      rs = `<div><p class="centered">${titleLink}</p>`
+      rs = stills?`<div><p class="centered">${titleLink}</p><p class="centered">Frame ${fr}</p>`:`<div><p class="centered">${titleLink}</p>`
     } else {
       rs = `<div><p class="centered"><a style="color:white" href="http://localhost:8081/draw.html?source=/${dir}/${path}.${fileExt}${theImageArg}">${title}</a><p/>`;
     }
-  // console.log("RRRRSSS",rs);
+  console.log("RRRRSSS",rs);
   //rs = rs +`<p class="centered"><a style="color:white" href="${srcUrl}">${sourcenm}</a></p>`;
     rs = rs +`<p class="centered">${astart}<img width="200" src="${thumbsrc}" alt="Image Missing"></a></p></div>`;
 	} 
@@ -512,7 +514,7 @@ const stripOrnt = function (str) {
 
   }
    */   //  first anim favorites
- const favorites =  ['bounce 16','curves 10','dropCircles 20','gridSpinner 13','gridSpinner 5','partition 43','paths 10','motion 3',
+ const favorites =  ['bounce_16','curves_10','drop_circles_20','gridSpinner_13','gridSpinner_5','part2_0_43','paths_10','motion_18_32',
  //now image favorites
  'part2_0_1','drop_circles_14','drop_circles_3','drop_interpolate_0',
  'grid_distortion_field_warped','grid_droplets_wide','grid_fade','grid_ramp',
@@ -555,7 +557,7 @@ let sectionString = function (things) {
     let title2= thing2[1];
     let order1 = favorites.indexOf(title1);
     let order2 = favorites.indexOf(title2);
-    if ((order1>-1)&&(order2>-1)) {
+    if (0&&(order1>-1)&&(order2>-1)) {
       console.log('order1',order1,title1);
       console.log('order2',order2,title2);
     }
@@ -564,18 +566,18 @@ let sectionString = function (things) {
       return 0;
     }
     if ((order2 > -1)&&(order1 == -1)) {
-      console.log('case1',1);
+      //console.log('case1',1);
       return 1;
     }
     if ((order2 > order1)  && (order1!==-1)) { 
-      console.log('case2',1);
+      //console.log('case2',1);
       return -1;
     }
      if ((order1 > order2)  && (order2!==-1)) { 
-      console.log('case3',-1);
+      //console.log('case3',-1);
       return 1;
     }
-    console.log(-1);
+    //console.log(-1);
     return -1;
   }
   const compareByOrderr = function (thing1,thing2) {

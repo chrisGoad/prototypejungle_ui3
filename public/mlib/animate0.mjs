@@ -49,13 +49,11 @@ item.oneStep = function (one) {
     } else {
       console.log('FRAME WAS NOT ESCAPED!');
     }
-    debugger;
     if (this.onCompleteAnimation) {
       this.onCompleteAnimation();
     }
     return;
   }
-  debugger;
   this.pauseAnimationMaybe();
     this.updateState();
   let frnum = ssf- Math.max(startAtStep,1);
@@ -77,11 +75,13 @@ item.oneStep = function (one) {
    setTimeout(() => this.oneStep(),this.stepInterval);
  }
 }
+
 item.pauseAnimationMaybe = function () {
-  let {stepsSoFar:ssf,whereToPause:wtp,whereToSave:wts} = this;
-  if (wtp && (ssf === (wtp+0))) {
+  let {stepsSoFar:ssf,whereToPause:wtp,whereToSave:wts,pauseAnimationMaybeCalled:pamc} = this;
+  if (wtp && (ssf === (wtp+0))&&(!pamc)) {
     debugger;
     this.paused = 1;
+    this.pauseAnimationMaybeCalled = 1;
     let wts = this.whereToSave;
     let wtps = this.padIntTo(wtp,3);
     let nwts = wts+'_f'+wtps; 
