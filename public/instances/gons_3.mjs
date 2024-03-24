@@ -64,7 +64,7 @@ rs.initialize = function () {
   //let gclr = {r:0,g:0,b:0};
   let gclr = this.gclr = {r:gray,g:gray,b:gray};
 
-  debugger;
+  //debugger;
   this.adjustGons(dD,dVH);
   let minval = Math.sqrt(30);
   let maxval = Math.sqrt(250);
@@ -89,7 +89,7 @@ rs.initialize = function () {
 }
 
 rs.adjustGon = function (nm,d,extent,ps,clr) {
-  debugger;
+  //debugger;
   let {numSegs} = this;
   let gon = this[nm];
   let newgon = this.genGonGon(extent,d,numSegs,gon);
@@ -125,7 +125,7 @@ rs.adjustGons = function (dD,dVH,cD,cVH) {
 rs.updateState = function () {
   let {pstate} = this;
   let {cstate,pspace} = pstate;
-  debugger;
+  //debugger;
   let valx = cstate.x.value;
   let valcx = cstate.cx.value;
   let valy = cstate.y.value;

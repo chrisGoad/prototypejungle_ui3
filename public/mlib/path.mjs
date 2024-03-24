@@ -539,7 +539,7 @@ item.pauseAnimationMaybe = function () {
     this.paused = 1;
     let wts = this.whereToSave;
     let wtps = this.padIntTo(wtp,3);
-    let nwts = wts+'_f'+wtps; 
+    let nwts = wts+'__f'+wtps; 
     this.setName(nwts);
   }
 }
@@ -568,7 +568,7 @@ item.oneStep = function (one) {
   if (ns&&this.saveAnimation&&(ns>this.chopOffBeginning)) { // for some reason, the first frame is corrupted 
     draw.saveFrame(ns-Math.max(this.chopOffBeginning+1,1));
   }
-  debugger;
+  //debugger;
   this.pauseAnimationMaybe();
   if (this.updateState) {
     this.updateState();

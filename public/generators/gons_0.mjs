@@ -1,4 +1,4 @@
-debugger;
+//debugger;
 import {rs as circlePP} from '/shape/circle.mjs';
 import {rs as linePP} from '/shape/line.mjs';
 import {rs as gonPP} from '/shape/polygon.mjs';
@@ -117,7 +117,7 @@ rs.genGonGon = function (extent,d,nsegs,gon) {
   let {numSegs} = this;
   let isnum = typeof d === 'number';
   let idx = 0;
-  debugger;
+ // debugger;
   let icorners = gon?gon.corners:undefined;
   let crnsL = this.genCorners1(extent,isnum?d:d[0],'left',nsegs,icorners,idx);
   idx += numSegs;

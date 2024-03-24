@@ -11,7 +11,7 @@ let neverTitle = 0;
 let kind = process.argv[2];
 let forKOP = toBoolean(process.argv[3]);
 let sortByOrderstr = "1";
-let alwaysLocal = 1;
+let alwaysLocal = 0;
 
 console.log('kind',kind);
 
@@ -49,6 +49,7 @@ let imagesHere = kind === 'imagesHere';
 let images = (kind === 'images') || imagesHere;
 
 let local_images = alwaysLocal || (kind === 'local_images') || alternate ;
+console.log('local_images',local_images);
 let whichPage = 1;
 let orderMin,orderMax;
 if (forKOP) {
@@ -242,10 +243,10 @@ if (imKind === 'g') {
       kindTitle = 'Animation'
       aboutURL = "kop_anim.html";
     } else if (stills) {
-      kindTitle = 'Animation Stills'
+      kindTitle = 'Frames From Animations'
       aboutURL = "kop_stills.html";
     }  else if (alll) {
-      kindTitle = 'All Images';
+      kindTitle = 'Images';
       aboutURL = "all_images.html";
     }  else if (allA) {
       kindTitle = 'Animations';
@@ -255,7 +256,7 @@ if (imKind === 'g') {
     
       aboutStart = anim?'':`<a style="color:white" href="doc/${aboutURL}">`;
       aboutLink = `${aboutStart}about ${kindTitle}</a>`;
-      let aboutLine = alll?`<p class="introLineSmall">${aboutLink}</p>`:'';;  
+      let aboutLine = '';//alll?`<p class="introLineSmall">${aboutLink}</p>`:'';;  
       //let aboutLine = ''; 
       let enlargeText = anim?'To view animations, click on the images.':'To enlarge the images, click on them.';
       pageIntro = 
@@ -389,9 +390,9 @@ const thingString = function (order,ix,dir,useThumb,ititle,props) {
   }
   //theLocals.push(localim?1:0);
 
-  if (!(local_images || imagesHere)) {
-	  thumbsrc = `https://kingdomofpattern.com/images/thumbs/${vpath}.jpg`;
-  }
+ // if (!(local_images || imagesHere)) {
+	//  thumbsrc = `https://kingdomofpattern.com/images/thumbs/${vpath}.jpg`;
+ // }
 //console.log('thumbsrc',thumbsrc);
 	let pageArg = 'page='+pageNumber;
   //let kindArg = 'imKind='+imKind;
@@ -399,6 +400,7 @@ const thingString = function (order,ix,dir,useThumb,ititle,props) {
   let kindArg = 'imKind='+kind;
   let noTitleArg = '';//noTitle?'&noTitle=1':'';
   let localArg = 'local='+(local_images||imagesHere?1:0);
+  console.log('local_images',local_images,'imagesHere',imagesHere);
 	let theImageArg = '';
 	pageNumber++;
 	let lastPageArg = (pageNumber === numPages)?'&lastPage=1':'';
@@ -444,9 +446,10 @@ const thingString = function (order,ix,dir,useThumb,ititle,props) {
     } else {
       rs = `<div><p class="centered"><a style="color:white" href="http://localhost:8081/draw.html?source=/${dir}/${path}.${fileExt}${theImageArg}">${title}</a><p/>`;
     }
-  console.log("RRRRSSS",rs);
   //rs = rs +`<p class="centered"><a style="color:white" href="${srcUrl}">${sourcenm}</a></p>`;
     rs = rs +`<p class="centered">${astart}<img width="200" src="${thumbsrc}" alt="Image Missing"></a></p></div>`;
+      console.log("RRRRSSS",rs);
+
 	} 
   if (top) {
 		//console.log('top','galLink',galLink);
@@ -456,6 +459,7 @@ const thingString = function (order,ix,dir,useThumb,ititle,props) {
     `<p class="centered">${galStart}<img width="200" src="${thumbsrc}" alt="Image Missing"></a></p></div>`;
 	} else if (!forKOP) {
     srcUrl = (sources)?`doc/${path}_sources.html`:`${dir}/${path}.${fileExt}`;
+    console.log('srcUrl',srcUrl);
 	//	console.log('not for KOP');
     rs = `<div><p style="text-align:center"><a href="http://localhost:8081/draw.html?source=/${dir}/${path}.${fileExt}${theImageArg}">${title}</a><br>
     <a href="${srcUrl}">${sourcenm}</a><br>
