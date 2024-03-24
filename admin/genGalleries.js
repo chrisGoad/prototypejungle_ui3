@@ -303,7 +303,7 @@ document.addEventListener('DOMContentLoaded', () => {
 let pageNumber = 0;
 let numPages = 0;
  const titleMap = {line_path_2_11:'line path 0',motion_18_4:'motion 0',motion_18_8:'motion 1',motion_18_16:'motion 2',motion_18_32:'motion 3',
-  drop_circles3:'drop_3'};
+  motion_3:'motion 4',drop_circles3:'drop_3'};
   const titleFun = (str)=> {
     if ((!alll)&&(!allA)) {
       return str;
@@ -511,8 +511,15 @@ const stripOrnt = function (str) {
     return rs;
 
   }
-   */   
- const favorites =  ['bounce 16','curves 10','dropCircles 20','gridSpinner 13','gridSpinner 5','partition 43','paths 10','motion 3'];
+   */   //  first anim favorites
+ const favorites =  ['bounce 16','curves 10','dropCircles 20','gridSpinner 13','gridSpinner 5','partition 43','paths 10','motion 3',
+ //now image favorites
+ 'part2_0_1','drop_circles_14','drop_circles_3','drop_interpolate_0',
+ 'grid_distortion_field_warped','grid_droplets_wide','grid_fade','grid_ramp',
+'interpolate_colors_3','interpolate_colors_6',
+'ip_test_2','lines_bug_eyes',
+'quad_9_6',
+'triangle_0' ];
 let sectionString = function (things) {
  // console.log('things',things);
 	let numThingsThisLine = 0;
@@ -542,8 +549,10 @@ let sectionString = function (things) {
   }
   const compareByOrder = function (thing1,thing2) {
    // console.log('thing1',thing1);
-    let title1 = titleFun(thing1[1]);
-    let title2= titleFun(thing2[1]);
+    //let title1 = titleFun(thing1[1]);
+    let title1 = thing1[1];
+   // let title2= titleFun(thing2[1]);
+    let title2= thing2[1];
     let order1 = favorites.indexOf(title1);
     let order2 = favorites.indexOf(title2);
     if ((order1>-1)&&(order2>-1)) {
@@ -582,7 +591,7 @@ let sectionString = function (things) {
     return -1;
   }
   //console.log('things unordered',things);
-  if (allA) {//&&sortByOrder) {
+  if (allA||alll) {//&&sortByOrder) {
     console.log('sortByOrder');
     things.sort(compareByOrder);
   }
