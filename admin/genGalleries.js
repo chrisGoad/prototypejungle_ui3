@@ -15,15 +15,8 @@ let alwaysLocal = 0;
 
 console.log('kind',kind);
 
-/*
-if (process.argv[3]==="0") {
-  sortByOrderstr = "0";
-}
-*/
-
 let signed = 0
-//let signed = toBoolean(signedstr);
-//let forKOP = toBoolean(forKOPstr);
+
 let forPJ = kind === 'forPJ';
 let book = kind === 'book';
 let top = kind === 'top';
@@ -61,8 +54,7 @@ if (forKOP) {
 }
 
 console.log('kind','['+kind+']','sortByOrder',sortByOrder,'forKOP',forKOP);
-//return;
-//let alternate = 0;
+
 let sectionsPath;
 let imKind;
  if (alll)  {
@@ -93,7 +85,6 @@ let imKind;
 }
 console.log('sectionsPath',sectionsPath,'imKind',imKind);
 
- //pagesPath = `public/${imKind}Pages.js`;
  
  pagesPath = `public/${kind}Pages.js`;
  console.log('pagesPath',pagesPath);
@@ -133,7 +124,6 @@ if (alternate) {
 }  else if (web) {
   outPath = 'public/webImages.html';
 } else {
-  //outPath = (local_images)?"public/local_images.html":'public/images.html';
   outPath = 'public/images.html';
 }
 console.log('sectionsPath', sectionsPath,'outPath',outPath);
@@ -257,7 +247,6 @@ if (imKind === 'g') {
       aboutStart = anim?'':`<a style="color:white" href="doc/${aboutURL}">`;
       aboutLink = `${aboutStart}about ${kindTitle}</a>`;
       let aboutLine = '';//alll?`<p class="introLineSmall">${aboutLink}</p>`:'';;  
-      //let aboutLine = ''; 
       let enlargeText = anim?'To view animations, click on the images.':'To enlarge the images, click on them.';
       pageIntro = 
       `
@@ -270,7 +259,6 @@ if (imKind === 'g') {
     `;
     
     
-    // console.log('pageIntro',pageIntro);
     } 
    } else  {
     if (local_images) {
@@ -363,17 +351,10 @@ const thingString = function (order,ix,dir,useThumb,ititle,props) {
  // console.log('ix',ix,'x',x);
  
 
-  /*let title=ititle?(noTitle?(forKOP?'':'No Title'):ititle):pageNumber+'';
-  if (neverTitle) {
-    title = '';
-  }*/
- // let title = ititle?titleFun(ititle):pageNumber+'';;
   let title = noTitle?pageNumber+'':titleFun(ititle)
- // let title = ititle?titleFun(ititle):'XXX';;
-  //let title = 'XXX';;
+
   
   //console.log('ititle',ititle,'title',title);
-  //theTitles.push(ititle?ititle:pageNumber+'');
   theTitles.push(title);
   let vpath = (variant?path+'_v_'+variant:path);
   //console.log('variant',variant);
@@ -385,14 +366,7 @@ const thingString = function (order,ix,dir,useThumb,ititle,props) {
 	let thumbsrc = `images/thumbs/${vpath}.jpg`;
   let localSrc =`public/images/thumbs/${vpath}.jpg`;
   let videoSrc = video?`images/std_size/${vpath}.${video}`:null; 
-  if (ix === 'drift_web') {
-    //console.log('IIIIIXXXX',ix);
-  }
-  //theLocals.push(localim?1:0);
-
- // if (!(local_images || imagesHere)) {
-	//  thumbsrc = `https://kingdomofpattern.com/images/thumbs/${vpath}.jpg`;
- // }
+ 
 //console.log('thumbsrc',thumbsrc);
 	let pageArg = 'page='+pageNumber;
   //let kindArg = 'imKind='+imKind;
@@ -434,21 +408,15 @@ const thingString = function (order,ix,dir,useThumb,ititle,props) {
   //console.log('ASTART',astart);
   let propsStr = imagesHere?`<span style="font-size:10pt">${likes?'Likes '+likes:''} ${posted?"":" NOT POSTED"} ${local_images?'Local':''} ${category}</span><br>`:'';;
   let sourcenm = `source${sources?'s':''}`;
-	//if (forKOP || forPJ) {
  // console.log('forKOP',forKOP);
 	if (forKOP) {
 		//let titleLink = title?`${astart}${title}</a></p>`:'';
 		let titleLink = title?`${astart}${title}</a>`:'';
 		console.log('titleLink',titleLink);
     srcUrl = (sources)?`https://prototypejungle.net/doc/${path}_sources.html`:`https://prototypejungle.net/${dir}/${path}.${fileExt}`;
-    if (forKOP){
-      rs = stills?`<div><p class="centered">${titleLink}</p><p class="centered">Frame ${fr}</p>`:`<div><p class="centered">${titleLink}</p>`
-    } else {
-      rs = `<div><p class="centered"><a style="color:white" href="http://localhost:8081/draw.html?source=/${dir}/${path}.${fileExt}${theImageArg}">${title}</a><p/>`;
-    }
-  //rs = rs +`<p class="centered"><a style="color:white" href="${srcUrl}">${sourcenm}</a></p>`;
+    rs = stills?`<div><p class="centered">${titleLink}</p><p class="centered">Frame ${fr}</p>`:`<div><p class="centered">${titleLink}</p>`
     rs = rs +`<p class="centered">${astart}<img width="200" src="${thumbsrc}" alt="Image Missing"></a></p></div>`;
-      console.log("RRRRSSS",rs);
+     // console.log("RRRRSSS",rs);
 
 	} 
   if (top) {
@@ -490,40 +458,8 @@ const stripOrnt = function (str) {
    // console.log('stripOrnt','lst',lst,str,' = ',rs);
     return rs;
   }
- /*const getOrder = function (thing) {
-  //console.log('getOrder',thing);
-    let file = stripOrnt(thing[1]);
-    let props = thing[5];
-    let vr = props.variant;
-    let ffile = vr?file+'_v_'+vr:file;
-    let order = orderDict[ffile];
-   // console.log('getOrder',order,ffile,typeof order);
-    return order?order:1000;
- }
  
-    
-  const compareByOrder = function (thing1,thing2) {
-   // console.log('compareByOrder',thing1,thing2);
-    if ((thing1.length === 1) || (thing2.length ===1)) {
-      return 0;
-    }
-    let file1 = stripOrnt(thing1[1]);
-    let file2 = stripOrnt(thing2[1]);
-    let order1 = getOrder(thing1);
-    let order2 = getOrder(thing2);
-    let rs;
-    if (order1 === order2) {
-      rs = 0;
-    } else if (order1 > order2) { 
-      rs = 1;
-    } else {
-      rs = -1;
-    }
-  //  console.log('file1',file1,'file2',file2,'order1',order1,'order2',order2,'rs',rs);
-    return rs;
-
-  }
-   */   //  first anim favorites
+   //  first anim favorites
  const favorites =  ['bounce_16','curves_10','motion_24','drop_circles_20','gridSpinner_13','gridSpinner_5','part2_0_43','paths_10','motion_18_32',
  'crosshatch_1','gons_3',
  //now image favorites
@@ -561,10 +497,7 @@ let sectionString = function (things) {
    // things.sort(compareLikes);
   }
   const compareByOrder = function (thing1,thing2) {
-   // console.log('thing1',thing1);
-    //let title1 = titleFun(thing1[1]);
     let title1 = thing1[1];
-   // let title2= titleFun(thing2[1]);
     let title2= thing2[1];
     let order1 = favorites.indexOf(title1);
     let order2 = favorites.indexOf(title2);
@@ -591,18 +524,7 @@ let sectionString = function (things) {
     //console.log(-1);
     return -1;
   }
-  const compareByOrderr = function (thing1,thing2) {
-    let order1 = thing1[0];
-    let order2 = thing2[0];
-    
-    if (order1 === order2) {
-      return 0;
-    }
-    if (order1 > order2) { 
-      return 1;
-    }
-    return -1;
-  }
+
   //console.log('things unordered',things);
   if (allA||alll) {//&&sortByOrder) {
     console.log('sortByOrder');
@@ -618,7 +540,6 @@ let sectionString = function (things) {
    //   console.log("Section");
       let txt = thing[0];
       numThingsThisLine = numThingsPerLine;
-   //  rs += `</div>${startLine}<div>${txt}</div></div>`;
       rs += `</div><br><div style="text-align:center">${txt}</div><br><div>`;
     } else {
       let [order,file,directory,useThumb,title,props] = thing;
@@ -627,16 +548,11 @@ let sectionString = function (things) {
      // let tov = typeof variant;
     //  console.log('is variant',tov);
       let ord = thing[0];
-     /* let ord = getOrder(thing);
-      if ((ord <  orderMin) || (ord > orderMax)) {
-        continue;
-      }*/
       let atitle=title?title:file;
       let ts = thingString(ord,file,directory,useThumb,atitle,props);
 //console.log('ts',ts);
       if (ts!=='</div>') {
         rs+=ts;
-       //rs += thingString(file,directory,useThumb,title,image);
        numThingsThisLine++;
       }
     }
@@ -658,7 +574,6 @@ let sectionString = function (things) {
 
 const sectionsString = function (sections) {
 	let rs = '';
-	//sections.forEach((section) => rs += sectionString(section));
 	rs += sectionString(sections);
 	return rs;
 
@@ -667,7 +582,6 @@ const writeThePages = function () {
 	let js = `let ${pagesVar}= ${JSON.stringify(thePages)};`;
  // console.log('writeThePagess',js,pagesVar,pagesPath);
 	fs.writeFileSync(pagesPath,js);
-	//fs.writeFileSync(alternate?'public/altPages.js':(byKind?'public/byKindPages.js':'public/thePages.js'),js);
 }
 const writeTheTitles = function () {
 	let js = `let ${titlesVar} = ${JSON.stringify(theTitles)};`
@@ -695,7 +609,6 @@ const writePage = function (sections) {
 	fs.writeFileSync(outPath,frs);
 }
 
-//let sectionsC = require(alternate?'./altSections.js':'./gridSections.js');
 let sectionsC = require(sectionsPath);
 //console.log('sectionsC',sectionsC);
 let imageOrder  = require('./imageOrder.js');
@@ -722,11 +635,9 @@ const countPages = function (sections) {
 	return rs;
 }
 		
-//numPages = countPages(sectionsC);
 
  writePage(sectionsC.sections);
  writeThePages();
  writeTheTitles();
- //writeTheLocals();
  console.log('numPages',numPages);
  
