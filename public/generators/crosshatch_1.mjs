@@ -145,6 +145,7 @@ rs.stepsSoFar = 0;
 
 rs.updateState = function () {
   let {cFrame,numSteps,wentBack} = this;
+  debugger;
   this.setFromTraces(cFrame);
   cFrame++;
   if (cFrame>=numSteps-80) {
@@ -162,4 +163,5 @@ rs.timeStep = () => {};
 
 rs.stepInterval = 60;
 rs.saveAnimation = 1;
+rs.whereToPause=83;
 export {rs}

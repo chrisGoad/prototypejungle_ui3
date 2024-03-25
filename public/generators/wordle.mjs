@@ -39,23 +39,26 @@ Object.assign(rs,topParams);
   this.dprohibs  = [];
   // known letters
   let k0 = '';
-  let k1 = 'o';
+  let k1 = '';
   let k2 = '';
-  let k3 = 'e';
-  let k4 = '';
+  let k3 = '';
+  let k4 = 'y';
   this.known = [k0,k1,k2,k3,k4];
   this.notPossibles = [];
   this.possibles5 = [];
   this.possibles4 = [];
   let abet=this.abet = 'abcdefghijklmnopqrstuvwxyz';
 //  let cm = this.complement('might clasp brief wound');
-  let cm = this.complement('migh casp brif und');
+  let cm = this.complement('might cp brief wound joke');
   // possible letters
-  this.possLets = this.alphabetize(cm);
+  let possLets =this.possLets = this.alphabetize(cm);
   this.addFrame();
- this.allowBadBlends = 0;
- this.tryFirsts('elotw');
+ this.allowBadBlends = 1;
+ let mandatory = this.mandatory = 'alsy'
+ this.tryFirsts(mandatory);
   console.log('possibles5',this.possibles5);
+  let prm = this.removeLetters(possLets,mandatory);
+  console.log('prm',prm);
 }
 
 

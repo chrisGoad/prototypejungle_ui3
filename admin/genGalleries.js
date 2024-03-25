@@ -42,7 +42,7 @@ let imagesHere = kind === 'imagesHere';
 let images = (kind === 'images') || imagesHere;
 
 let local_images = alwaysLocal || (kind === 'local_images') || alternate ;
-console.log('local_images',local_images);
+//console.log('local_images',local_images);
 let whichPage = 1;
 let orderMin,orderMax;
 if (forKOP) {
@@ -53,7 +53,7 @@ if (forKOP) {
   orderMax = 10000;
 }
 
-console.log('kind','['+kind+']','sortByOrder',sortByOrder,'forKOP',forKOP);
+console.log('kind','['+kind+']','sortByOrder',sortByOrder,'forKOP',forKOP,'top',top);
 
 let sectionsPath;
 let imKind;
@@ -343,7 +343,7 @@ const thingString = function (order,ix,dir,useThumb,ititle,props) {
     return '</div>';a
   }
   let fr = props.frame;
-  console.log('fr',fr)
+  //console.log('fr',fr)
 	let spix = ix.split('.');
 	let path = spix[0];
 	let ext = video?video:((spix.length === 1)?'jpg':spix[1]);
@@ -374,13 +374,13 @@ const thingString = function (order,ix,dir,useThumb,ititle,props) {
   let kindArg = 'imKind='+kind;
   let noTitleArg = '';//noTitle?'&noTitle=1':'';
   let localArg = 'local='+(local_images||imagesHere?1:0);
-  console.log('local_images',local_images,'imagesHere',imagesHere);
+//  console.log('local_images',local_images,'imagesHere',imagesHere);
 	let theImageArg = '';
 	pageNumber++;
 	let lastPageArg = (pageNumber === numPages)?'&lastPage=1':'';
 	let rs,srcUrl,aboutURL,aboutStart,aboutLink;
 	let astart = `<a style="color:white" href="page.html?image=${vx}&${pageArg}&${kindArg}&${localArg}${noTitleArg}">`;
-  	let galURL,galStartgalLink;
+  	let galURL,galStart,galLink;
   if (top) {
     if (title === 'Drops') {
       galURL = "dropImages.html";
@@ -418,24 +418,25 @@ const thingString = function (order,ix,dir,useThumb,ititle,props) {
     rs = rs +`<p class="centered">${astart}<img width="200" src="${thumbsrc}" alt="Image Missing"></a></p></div>`;
      // console.log("RRRRSSS",rs);
 
-	} 
-  if (top) {
+	} else  {
+  //  console.log('WWWWWWWWWWW');
+ // if (top) {
 		//console.log('top','galLink',galLink);
     rs = `<div><p class="centered">${galLink}</p>`;
 
     rs = rs +
     `<p class="centered">${galStart}<img width="200" src="${thumbsrc}" alt="Image Missing"></a></p></div>`;
-	} else if (!forKOP) {
+	//} else if (!forKOP) {
     srcUrl = (sources)?`doc/${path}_sources.html`:`${dir}/${path}.${fileExt}`;
-    console.log('srcUrl',srcUrl);
+   // console.log('srcUrl',srcUrl);
 	//	console.log('not for KOP');
     rs = `<div><p style="text-align:center"><a href="http://localhost:8081/draw.html?source=/${dir}/${path}.${fileExt}${theImageArg}">${title}</a><br>
-    <a href="${srcUrl}">${sourcenm}</a><br>
+    <a href="${srcUrl}">${sourcenm}</a><br
     ${propsStr}
     ${astart}<img width="200" src="${thumbsrc}"></a></p></div>
     `;
 	}
- // console.log ('rs = ',rs);
+  console.log ('rs = ',rs);
 	return rs;
 }
 
