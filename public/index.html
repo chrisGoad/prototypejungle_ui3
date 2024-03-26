@@ -8,7 +8,7 @@
     .theGrid {
       display:grid;
       padding-top:10px;
-      grid-template-columns:1fr 1fr 1fr 1fr 1fr 1fr;
+      grid-template-columns:1fr 3fr 1fr 3fr  1fr;
     }
     .indent {
       padding-left:40px;
@@ -70,7 +70,8 @@
 document.addEventListener('DOMContentLoaded', () => {
 	debugger;
 	let cWidth =document.documentElement.clientWidth;
-	let imWid = Math.floor(0.09*cWidth);
+	//let imWid = Math.floor(0.09*cWidth);
+	let imWid = Math.floor(0.2*cWidth);
 	let images = document.querySelectorAll('img');
 	images.forEach((im) => {
 		im.width = ''+imWid;
@@ -90,16 +91,20 @@ document.addEventListener('DOMContentLoaded', () => {
 <div class="theGrid">
   <div></div>
   
-  
-   
-   <div><p class="centered"><a style="color:white" href="allImages.html">Images</a></p><p class="centered"><a style="color:white" href="allImages.html"><img width="200" src="images/thumbs/part2_0_1.jpg" alt="Image Missing"></a></p></div>
-   
  
-  <div><p class="centered"><a style="color:white" href="allAImages.html">Animations</a></p><p class="centered"><a style="color:white" href="allAImages.html"><img width="200" src="images/thumbs/gridSpinner_13.jpg" alt="Image Missing"></a></p></div>
+   
+   <div><p class="centered"><a style="color:white" href="allImages.html">Images</a></p><p class="centered"><a style="color:white" href="allImages.html"><img width="300" src="images/std_size/part2_0_1.jpg" alt="Image Missing"></a></p></div>
   
- 
+ <!--  
+   <div><img width="400px" src="images/std_size/1S.jpg" alt="Image Missing"></div>
+     <div></div>
+-->
+ <div></div>
+  <div><p class="centered"><a style="color:white" href="allAImages.html">Animations</a></p><p class="centered"><a style="color:white" href="allAImages.html"><img width="200" src="images/std_size/crosshatch_1__f083.jpg" alt="Image Missing"></a></p></div>
+  
+ <!--
      <div><p class="centered"><a style="color:white" href="stillsImages.html">Frames From Animations</a></p><p class="centered"><a style="color:white" href="stillsImages.html"><img width="200" src="images/thumbs/motion_21_f002.jpg" alt="Image Missing"></a></p></div>
-   <!--
+   
    
    <div><p class="centered"><a style="color:white" href="allAImages.html">All Animations</a></p><p class="centered"><a style="color:white" href="allImages.html"><img width="200" src="images/thumbs/motion_24_f002.jpg" alt="Image Missing"></a></p></div>
   

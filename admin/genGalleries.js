@@ -420,7 +420,7 @@ const thingString = function (order,ix,dir,useThumb,ititle,props) {
 		let titleLink = title?`${astart}${title}</a>`:'';
 		//console.log('titleLink',titleLink);
     srcUrl = (sources)?`https://prototypejungle.net/doc/${path}_sources.html`:`https://prototypejungle.net/${dir}/${path}.${fileExt}`;
-    rs = stills?`<div><p class="centered">${titleLink}</p><p class="centered">Frame ${fr}</p>`:`<div><p class="centered">${titleLink}</p>`
+    rs = stills?`<div><p class="centered">${titleLink}</p><p class="centered">Frame ${props.frame}</p>`:`<div><p class="centered">${titleLink}</p>`
     rs = rs +`<p class="centered">${astart}<img width="200" src="${thumbsrc}" alt="Image Missing"></a></p></div>`;
      // console.log("RRRRSSS",rs);
 
