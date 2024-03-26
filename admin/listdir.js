@@ -164,6 +164,10 @@ for (let i=0;i<ln;i++ ) {
   let dis = di.split('.');
   let ext = dis[1];
   let fln = dis[0];
+  if (fln.indexOf('__f')>-1) {
+    console.log('NOTTTTT',fln);
+    continue;
+  }
  // console.log('fln',fln);
   let oim = occursIn(fln,omitIm);
   if (oim) {

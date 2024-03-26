@@ -247,7 +247,7 @@ if (imKind === 'g') {
       aboutStart = anim?'':`<a style="color:white" href="doc/${aboutURL}">`;
       aboutLink = `${aboutStart}about ${kindTitle}</a>`;
       let aboutLine = '';//alll?`<p class="introLineSmall">${aboutLink}</p>`:'';;  
-      let enlargeText = anim?'To view animations, click on the images.':'To enlarge the images, click on them.';
+      let enlargeText = allA?'To run the animations, click on the images.':'To enlarge the images, click on them.';
       pageIntro = 
       `
       ${headLine}
@@ -467,8 +467,8 @@ const stripOrnt = function (str) {
   }
  
    //  first anim favorites
- const favorites =  ['bounce_16','curves_10','motion_24','drop_circles_20','gridSpinner_13','gridSpinner_5','part2_0_43','paths_10','motion_18_32',
- 'crosshatch_1','gons_3',
+ const favorites =  ['crosshatch_1','bounce_16','curves_10','motion_24','drop_circles_20','gridSpinner_13','gridSpinner_5','part2_0_43','paths_10','motion_18_32',
+ 'gons_3',
  //now image favorites
  'part2_0_1','drop_circles_14','drop_circles_3','drop_interpolate_0',
  'grid_distortion_field_warped','grid_droplets_wide','grid_fade','grid_ramp',
