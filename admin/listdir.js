@@ -5,7 +5,7 @@ let dir = 'public/images/std_size';
 //console.log('dir',dir);
 let dirc =fs.readdirSync(dir);
 //dirc = ['drop_circles3.jpg'];
-console.log('dirc',dirc);
+//console.log('dirc',dirc);
 let jsd = JSON.stringify(dirc);
 //console.log(jsd);
 /*let omit ={bounce_0:1,'3d_grid_2':1,'3d_grid_0':1,bounce_11:1,bounce_13:1,bounce_14:1,bounce_16_f073:1,bounce_2:1,bounce_6:1,bounce_7:1,bounce_8:1,
@@ -28,6 +28,7 @@ let omitIm = ['3d_grid','bounce','CMB','color_path_0','crosshatch_0','curves_2',
  ,'part2_0_42','part2_0_45','part2_0_48','part2_0_49','part2_0_53','part2_0_55','part2_0_57','part2_0_58','part2_0_D',
  'path','quad','poly','rotate','spirals','spin','step_colors','step_ring','stripes','textTest','triangle_4','wiggle_grid_0','part2_0_34_f113_f113',
  'part2_0_47'];
+let framesIncluded = {crosshatch_1:'f083'};
 // figure out what went wrong with rectangle_gon_grid
 /*let notAnims = {bounce_16_f077:1,crosshatch_0_f001:1,rectangle_gon_grid_9:1,curves_0:1,drop_circles_14_5x7:1,drop_circles_15:1,
                drop_circles_25:1,drop_circles_21:1,drop_leaves:1,};*/
@@ -52,7 +53,7 @@ let notgifs =[];
 //let gifNms =['part2_0_43','part2_0_46','path_rwalk_4_1','stripes_1'];
 let gifNms =['part2_0_43','part2_0_46','stripes_1'];
 
-let isOneVerbose='motion_11';
+let isOneVerbose='';
 
 const occursIn = function (fln,names) {
   let lna = names.length;
@@ -75,6 +76,12 @@ const occursIn = function (fln,names) {
   
 const isOne = function (fln,nots,sos,names,kind){
   //if (omit[fln]) {
+  //if (occursIn(fln,['crosshatch'])) {
+  if (0&&framesIncluded[fln]&&(kind==='Anim')) {
+    console.log('Included Frame',fln,'kind',kind,'fi',framesIncluded);
+    debugger;
+    return 1;
+  }
   if (fln.indexOf('__f')>-1) {
     console.log('not',fln);
     return 0;
@@ -180,7 +187,7 @@ for (let i=0;i<ln;i++ ) {
 outp+=']}';
 
 fs.writeFileSync('admin/allImages.js',outp);
-
+console.log('ANIMANIM');
 let aoutp = 'module.exports = { sections:[ \n'
 for (let i=0;i<ln;i++ ) {
 //for (let i=0;i<10;i++ ) {
@@ -189,8 +196,11 @@ for (let i=0;i<ln;i++ ) {
   let dis = di.split('.');
   let ext = dis[1];
   let fln = dis[0];
+    
      let anim = isAnim(fln);
-
+     if (occursIn(fln,['crosshatch'])) {//==='crosshatch_1__f083') {
+       console.log('XX',fln,'anim',anim);
+     }
   if (fln==='motion_18_32') {
     console.log('fln',fln,ext,'anim',anim);
   }
