@@ -56,6 +56,7 @@ sections:
  [0,'part2_0_34__f113','instances',1,'Paths',{likes:0,posted:0,category:'stills',frame:113}], 
  [0,'motion_21__f002','instances',1,'Spiral',{likes:0,posted:0,category:'stills',frame:2}], 
  [0,'gons_3__f043','instances',1,'Pulsing Polygons',{likes:0,posted:0,category:'stills',frame:43}], 
+ [0,'crosshatch_1__f083','instances',1,'Crosshatch',{likes:0,posted:0,category:'stills',frame:83}], 
 
 
  

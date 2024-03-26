@@ -339,11 +339,14 @@ const thingString = function (order,ix,dir,useThumb,ititle,props) {
 	debugger;
   let {variant,likes,posted,category,sources,noTitle,video} = props;
   //console.log('POSTED',posted,'category',category,'kind',kind);
-  if (!alll&&!allA&&((kind !== 'alt') && (kind !== 'book') &&(category !==  kind))) {
+  if (!alll&&!allA&&((kind !=='alt') && (kind !== 'book') &&(category !==  kind))) {
     return '</div>';a
   }
-  let fr = props.frame;
-  //console.log('fr',fr)
+  //let fr = anim?props.frame:'';
+  let fr = allA?props.frame:'';
+  if (fr) {
+    console.log('FR',fr,'kind',kind);
+  }
 	let spix = ix.split('.');
 	let path = spix[0];
 	let ext = video?video:((spix.length === 1)?'jpg':spix[1]);
@@ -359,15 +362,18 @@ const thingString = function (order,ix,dir,useThumb,ititle,props) {
   let vpath = (variant?path+'_v_'+variant:path);
   //console.log('variant',variant);
   //console.log('vpath',vpath);
+ // let vx = fr?vpath+'__'+fr+'.'+ext:vpath+'.'+ext;
   let vx = vpath+'.'+ext;
+  let vpath_fr = fr?vpath+'__'+fr:vpath;
  // console.log('vx',vx);
   thePages.push(vx);
-	let imsrc = `images/std_size/${vpath}.jpg`;
-	let thumbsrc = `images/thumbs/${vpath}.jpg`;
-  let localSrc =`public/images/thumbs/${vpath}.jpg`;
+	let imsrc = `images/std_size/${vpath_fr}.jpg`;
+	let thumbsrc = `images/thumbs/${vpath_fr}.jpg`;
+  let localSrc =`public/images/thumbs/${vpath_fr}.jpg`;
   let videoSrc = video?`images/std_size/${vpath}.${video}`:null; 
- 
-//console.log('thumbsrc',thumbsrc);
+  if (fr) {
+    console.log('thumbsrc',thumbsrc,'kind',kind);
+  }
 	let pageArg = 'page='+pageNumber;
   //let kindArg = 'imKind='+imKind;
 //  console.log('kind',kind);
@@ -412,7 +418,7 @@ const thingString = function (order,ix,dir,useThumb,ititle,props) {
 	if (forKOP) {
 		//let titleLink = title?`${astart}${title}</a></p>`:'';
 		let titleLink = title?`${astart}${title}</a>`:'';
-		console.log('titleLink',titleLink);
+		//console.log('titleLink',titleLink);
     srcUrl = (sources)?`https://prototypejungle.net/doc/${path}_sources.html`:`https://prototypejungle.net/${dir}/${path}.${fileExt}`;
     rs = stills?`<div><p class="centered">${titleLink}</p><p class="centered">Frame ${fr}</p>`:`<div><p class="centered">${titleLink}</p>`
     rs = rs +`<p class="centered">${astart}<img width="200" src="${thumbsrc}" alt="Image Missing"></a></p></div>`;
@@ -436,7 +442,7 @@ const thingString = function (order,ix,dir,useThumb,ititle,props) {
     ${astart}<img width="200" src="${thumbsrc}"></a></p></div>
     `;
 	}
-  console.log ('rs = ',rs);
+ // console.log ('rs = ',rs);
 	return rs;
 }
 

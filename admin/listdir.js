@@ -28,7 +28,7 @@ let omitIm = ['3d_grid','bounce','CMB','color_path_0','crosshatch_0','curves_2',
  ,'part2_0_42','part2_0_45','part2_0_48','part2_0_49','part2_0_53','part2_0_55','part2_0_57','part2_0_58','part2_0_D',
  'path','quad','poly','rotate','spirals','spin','step_colors','step_ring','stripes','textTest','triangle_4','wiggle_grid_0','part2_0_34_f113_f113',
  'part2_0_47'];
-let framesIncluded = {crosshatch_1:'f083'};
+let frameMap = {crosshatch_1:'f083'};
 // figure out what went wrong with rectangle_gon_grid
 /*let notAnims = {bounce_16_f077:1,crosshatch_0_f001:1,rectangle_gon_grid_9:1,curves_0:1,drop_circles_14_5x7:1,drop_circles_15:1,
                drop_circles_25:1,drop_circles_21:1,drop_leaves:1,};*/
@@ -62,7 +62,7 @@ const occursIn = function (fln,names) {
     if (anm && (anm[0]==='=')){
       let abnm = anm.substring(1);
       if (abnm === fln) {
-         console.log('exact match fln=',fln);
+         //console.log('exact match fln=',fln);
          return 1
       }
     }
@@ -83,7 +83,7 @@ const isOne = function (fln,nots,sos,names,kind){
     return 1;
   }
   if (fln.indexOf('__f')>-1) {
-    console.log('not',fln);
+    console.log('NOTT',fln);
     return 0;
   }
   if (occursIn(fln,omit)) {
@@ -196,11 +196,14 @@ for (let i=0;i<ln;i++ ) {
   let dis = di.split('.');
   let ext = dis[1];
   let fln = dis[0];
-    
-     let anim = isAnim(fln);
-     if (occursIn(fln,['crosshatch'])) {//==='crosshatch_1__f083') {
-       console.log('XX',fln,'anim',anim);
-     }
+  let fr = frameMap[fln];
+  if (fr) {
+    console.log('Frame',fr);
+  }  
+  let anim = isAnim(fln);
+  if (occursIn(fln,['crosshatch'])) {//==='crosshatch_1__f083') {
+   console.log('XX',fln,'anim',anim);
+  }
   if (fln==='motion_18_32') {
     console.log('fln',fln,ext,'anim',anim);
   }
@@ -216,7 +219,7 @@ for (let i=0;i<ln;i++ ) {
      console.log('fln',fln,'vid',vid);
   }
   if ((ext === 'jpg')&&(kind!=='web')&&(anim))  {
-	  let cmd = `[0,'${fln}','${iog}','','',{video:'${vid}'}], \n`;
+	  let cmd = fr?`[0,'${fln}','${iog}','','',{video:'${vid}',frame:'${fr}'}], \n`:`[0,'${fln}','${iog}','','',{video:'${vid}'}], \n`;
     aoutp+=cmd;
     if (xferImages) {
       xferFile('public/images/std_size/',di);
