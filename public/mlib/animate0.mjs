@@ -25,7 +25,7 @@ item.setNumSteps = function () {
 
 
 item.oneStep = function (one) {
-  let {paused,numSteps,lastStep,chopOffEnd,chopOffBeginning,timePerStep:tps,stepsSoFar:issf,startAtStep,stepArray,stepArrayStep:sars} = this;
+  let {paused,numSteps,lastStep,chopOffEnd,chopOffBeginning,timePerStep:tps,stepsSoFar:issf,startAtStep,stepArray,stepArrayStep:sars,prevPauseAnimation:ppa} = this;
   let ssf = this.stepsSoFar = stepArray?stepArray[sars]:issf;
   if (1) {
     console.log('ssf',ssf);
@@ -54,12 +54,19 @@ item.oneStep = function (one) {
     }
     return;
   }
-  this.pauseAnimationMaybe();
     this.updateState();
   let frnum = ssf- Math.max(startAtStep,1);
   if (ssf&&this.saveAnimation&&(!stepArray)) { // for some reason, the first frame is corrupted 
+    if (ppa) {
+      debugger;
+      this.whereToSave = ppa;
+      core.vars.whereToSave  = ppa;
+      this.prevPauseAnimation=0;
+    }
     draw.saveFrame(frnum);
   }
+    this.pauseAnimationMaybe();
+
    //   this.updateState();
   if (stepArray) {
     this.stepArrayStep++;
@@ -76,13 +83,27 @@ item.oneStep = function (one) {
  }
 }
 
-item.pauseAnimationMaybe = function () {
+/*item.pauseAnimationMaybe = function () {
   let {stepsSoFar:ssf,whereToPause:wtp,whereToSave:wts,pauseAnimationMaybeCalled:pamc} = this;
   if (wtp && (ssf === (wtp+0))&&(!pamc)) {
     debugger;
     this.paused = 1;
     this.pauseAnimationMaybeCalled = 1;
     let wts = this.whereToSave;
+    let wtps = this.padIntTo(wtp,3);
+    let nwts = pamc?wtps:wts+'__f'+wtps; 
+    this.setName(nwts);
+  }
+}*/
+
+
+item.pauseAnimationMaybe = function () {
+  let {stepsSoFar:ssf,whereToPause:wtp,whereToSave:wts,prevPauseAnimation:ppa} = this;
+  if (wtp && (ssf === (wtp+0))&&(!ppa)) {
+    debugger;
+    this.paused = 1;
+    let wts = this.whereToSave;
+     this.prevPauseAnimation= wts;
     let wtps = this.padIntTo(wtp,3);
     let nwts = wts+'__f'+wtps; 
     this.setName(nwts);

@@ -532,20 +532,23 @@ item.oneInterpolationStep = function () {
 
 }
 
+
 item.pauseAnimationMaybe = function () {
-  let {stepsSoFar:ssf,whereToPause:wtp,whereToSave:wts} = this;
-  if (wtp && (ssf === (wtp+0))) {
+  let {stepsSoFar:ssf,whereToPause:wtp,whereToSave:wts,prevPauseAnimation:ppa} = this;
+  if (wtp && (ssf === (wtp+0))&&(!ppa)) {
     debugger;
     this.paused = 1;
     let wts = this.whereToSave;
+     this.prevPauseAnimation= wts;
     let wtps = this.padIntTo(wtp,3);
     let nwts = wts+'__f'+wtps; 
     this.setName(nwts);
   }
 }
+
 item.oneStep = function (one) {
   //debugger;
-  let {stepsSoFar:ssf} = this;
+  let {stepsSoFar:ssf,prevPauseAnimation:ppa} = this;
   console.log('ssf',ssf);
   if (this.paused) {
     return;
@@ -566,6 +569,17 @@ item.oneStep = function (one) {
     return;
   }
   if (ns&&this.saveAnimation&&(ns>this.chopOffBeginning)) { // for some reason, the first frame is corrupted 
+  //  debugger;
+    if (ppa) {
+      debugger;
+      this.whereToSave = ppa;
+      core.vars.whereToSave  = ppa;
+      this.prevPauseAnimation=0;
+      this.havePaused = 1;
+    }
+    if (this.havePaused) {
+      debugger;
+    }
     draw.saveFrame(ns-Math.max(this.chopOffBeginning+1,1));
   }
   //debugger;

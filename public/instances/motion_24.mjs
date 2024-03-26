@@ -75,7 +75,7 @@ rs.initialize = function () {
 rs.updateState = function () {
   let {currentTime:ct,activePaths,circ,lineP,segs,ints,stepsSoFar:ssf,radius,distanceThreshold:th} = this;
   console.log('ssf',ssf,'ct',ct);
-  debugger;
+ // debugger;
   this.runActivePaths();
   let av = this.allValues();
   let apnts = av.filter( (v) => !Array.isArray(v));
@@ -91,7 +91,7 @@ rs.updateState = function () {
     }
   }
   this.updateLines(apnts,fn);
-    this.pauseAnimationMaybe();
+  //  this.pauseAnimationMaybe();
 
 }
 

@@ -52,7 +52,7 @@ rs.initProtos = function () {
 
 rs.setFromTraces = function (n) {
   let {vlines,hlines,rt,gt,bt,swv,swh,numSteps,startFade,numLines} = this;
-  debugger;
+ // debugger;
 
   let oldSchool = 0;
   let inwards = 1;
@@ -145,7 +145,7 @@ rs.stepsSoFar = 0;
 
 rs.updateState = function () {
   let {cFrame,numSteps,wentBack} = this;
-  debugger;
+ // debugger;
   this.setFromTraces(cFrame);
   cFrame++;
   if (cFrame>=numSteps-80) {
