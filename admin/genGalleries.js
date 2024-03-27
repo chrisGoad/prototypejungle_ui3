@@ -319,20 +319,31 @@ document.addEventListener('DOMContentLoaded', () => {
 let pageNumber = 0;
 let numPages = 0;
  const titleMap = {line_path_2_11:'line path 0',motion_18_4:'motion 0',motion_18_8:'motion 1',motion_18_16:'motion 2',motion_18_32:'motion 3',
-  motion_3:'motion 4',drop_circles3:'drop_3',bounce_16:'Square Dance',motion_24:'Colliding Orbits',drop_circles_20:'Necker',
+  motion_3:'motion 4',ddrop_circles3:'drop_3',bounce_16:'Square Dance',motion_24:'Colliding Orbits',drop_circles_20:'Necker',
   gons_3:'Pulsing Polygons',motion_18_32:'Mandala',crosshatch_1:'Crosshatch',part2_0_34:'Paths',part2_0_1:'Vortex',drop_circles_14:'Bloom',
-  drop_circles_3:'Dropped Circles',drop_interpolate_0:'Motion Illusion',grid_distortion_field_warped:'Distortion Field',
-  drop_all_0:'Thatch',drop_all_2:'Inversion',drop_circles3:'Pop',
+  droppp_circles_3:'Dropped Circles',drop_interpolate_0:'Motion Illusion',grid_distortion_field_warped:'Distortion Field',
+  drop_all_0:'Thatch',drop_all_2:'Inversion',drop_circles3:'Pop',drop_space_junk:'Space Junk',drop_many_textures:'Many Textures',
+  drop_on_circles:'Borromean Knot',drop_metal_2:'Metal',drop_embedded_circles:'Embedded Circles',drop_on_line:'Cross 1',
+  drop_on_top_2:'Drop on Top 1',drop_on_top_7:'Drop on Top 2',drop_rects_1:'Field of Squares',drop_starry_night:'Starry Night',
+  drop_square:'Cross 2',grid_drop_0:'Spilled Paint',grid_cloudy_sky:'Cloudy Sky',triangle_1:'Triangle',lines_2:'Cobweb',part_0_4:'Partition 35',
+  part2_0_41a:'Partition 24',
+  part2_0_41b:'Partition 25',grid_quilt_1:'Quilt 1',grid_quilt_3:'Quilt 2',grid_two_quilts:'Two Quilts',
   grid_droplets_wide:'Droplets',gggrid_fade:'Fade',gggrid_ramp:'Ramp',interpolate_colors_3:'Interpolate Colors 1',interpolate_colors_6:'Interpolate Colors 2',
-  ip_test_2:'Waves',triangle_0:'Form',grid_1:'Bulge',grid_3:'Grid Grid',grid_4:'Rumpled 1',grid_6:'Rumpled 2',
+ ip_test_2:'Waves',triangle_0:'Form',grid_1:'Bulge',grid_3:'Grid Grid',grid_4:'Rumpled 1',grid_6:'Rumpled 2'}
   
   
-  gridSpinner_13:'Spinner',gridSpinner_5:'Walkers',part2_0_43:'You are getting very sleepy',curves_10:'Stretch',paths_10:'Tower',};
+  // gridSpinner_13:'Spinner',gridSpinner_5:'Walkers',part2_0_43:'You are getting very sleepy',curves_10:'Stretch',paths_10:'Tower',};
+  
+let numericMaps = {dropCircles:{3:1,0:2,1:3,10:4,13:5,15:6,18:7,4:8,7:9,9:10},
+    partition:{10:1,11:2,12:3,13:4,14:5,15:6,16:7,17:8,19:9,2:10,18:9,
+20:11,21:12,22:13,23:14,24:15,25:16,26:17,27:18,28:19,29:20,3:21,37:22,4:23,44:26,5:27,50:28,51:29,52:30,56:31,6:32,7:33,9:34,41:23}};
+
+
   const titleFun = (str)=> {
     if ((!alll)&&(!allA)) {
       return str;
     }
-    if (str === 'drop_3') {
+    if (str.indexOf('part2_0_')>-1) {
        console.log(str,'!!!');
     }
     let mpt = titleMap[str];
@@ -359,8 +370,20 @@ let numPages = 0;
        return ttl;
     }
     if (spln===3) {
+      if ((sp0==='drop')&&(sp1==='circles')) {
+         let nummap = numericMaps.dropCircles;
+         let num = nummap[sp2];
+         let ttl = 'Drop Circles '+num;
+         console.log(str,'==>',ttl);
+         return ttl;
+      }
+ 
       if ((sp0==='part2')&&(sp1==='0')) {
-        return 'partition '+sp2;
+         let nummap = numericMaps.partition;
+         let num = nummap[sp2];
+         let ttl = 'Partition '+num;
+         console.log(str,'=>==>',ttl);
+         return ttl;
       }
       if ((sp0==='drop')&&(sp1==='circles')) {
         return 'dropCircles '+sp2;
@@ -381,6 +404,9 @@ const thingString = function (order,ix,dir,useThumb,ititle,props) {
   if (!alll&&!allA&&((kind !=='alt') && (kind !== 'book') &&(category !==  kind))) {
     return '</div>';a
   }
+    if (ix.indexOf('grid_drop_0')>-1) {
+       console.log(ix,'!!!!!!!!!!!!!!!');
+    }
   //let fr = anim?props.frame:'';
   let fr = allA?props.frame:'';
   if (fr) {

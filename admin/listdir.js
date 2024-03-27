@@ -27,7 +27,8 @@ let omitIm = ['drop_all_1','3d_grid','bounce','CMB','color_path_0','crosshatch_0
  'part2_0_30','part2_0_31','part2_0_32','part2_0_33','=part2_0_34','part2_0_35',,'part2_0_39','part2_0_38','part2_0_36',
  ,'part2_0_42','part2_0_45','part2_0_48','part2_0_49','part2_0_53','part2_0_55','part2_0_57','part2_0_58','part2_0_D',
  'path','quad','poly','rotate','spirals','spin','step_colors','step_ring','stripes','textTest','triangle_4','wiggle_grid_0','part2_0_34_f113_f113',
- 'part2_0_47'];
+ 'part2_0_47','drop_circles_19','drop_circles_11','grid_droplets','grid_maze_wide','grid_fade_wide','grid_pbc_uniform_size','segDrops_0',
+ 'part2_0_41b','part2_0_41c','grid_void_variant'];
 let frameMap = {crosshatch_1:'f083'};
 // figure out what went wrong with rectangle_gon_grid
 /*let notAnims = {bounce_16_f077:1,crosshatch_0_f001:1,rectangle_gon_grid_9:1,curves_0:1,drop_circles_14_5x7:1,drop_circles_15:1,
