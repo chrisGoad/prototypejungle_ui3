@@ -318,32 +318,40 @@ document.addEventListener('DOMContentLoaded', () => {
 `;
 let pageNumber = 0;
 let numPages = 0;
- const titleMap = {line_path_2_11:'line path 0',motion_18_4:'motion 0',motion_18_8:'motion 1',motion_18_16:'motion 2',motion_18_32:'motion 3',
-  motion_3:'motion 4',ddrop_circles3:'drop_3',bounce_16:'Square Dance',motion_24:'Colliding Orbits',drop_circles_20:'Necker',
-  gons_3:'Pulsing Polygons',motion_18_32:'Mandala',crosshatch_1:'Crosshatch',part2_0_34:'Paths',part2_0_1:'Vortex',drop_circles_14:'Bloom',
+ const titleMap = {line_path_2_11:'line path 0',mmotion_18_4:'motion 0',mmotion_18_8:'motion 1',mmotion_18_16:'motion 2',mmotion_18_32:'motion 3',
+  mmotion_3:'motion 4',ddrop_circles3:'drop_3',bounce_16:'Square Dance',motion_24:'Colliding Orbits',drop_circles_20:'Necker',
+  gons_3:'Pulsation 1',step_ring_0:'Pulsation 2',motion_18_32:'Mandala',crosshatch_1:'Crosshatch',part2_0_34:'Paths 1',part2_0_1:'Vortex',drop_circles_14:'Bloom',
   droppp_circles_3:'Dropped Circles',drop_interpolate_0:'Motion Illusion',grid_distortion_field_warped:'Distortion Field',
   drop_all_0:'Thatch',drop_all_2:'Inversion',drop_circles3:'Pop',drop_space_junk:'Space Junk',drop_many_textures:'Many Textures',
   drop_on_circles:'Borromean Knot',drop_metal_2:'Metal',drop_embedded_circles:'Embedded Circles',drop_on_line:'Cross 1',
   drop_on_top_2:'Drop on Top 1',drop_on_top_7:'Drop on Top 2',drop_rects_1:'Field of Squares',drop_starry_night:'Starry Night',
   drop_square:'Cross 2',grid_drop_0:'Spilled Paint',grid_cloudy_sky:'Cloudy Sky',triangle_1:'Triangle',lines_2:'Cobweb',part_0_4:'Partition 35',
-  part2_0_41a:'Partition 24',
-  part2_0_41b:'Partition 25',grid_quilt_1:'Quilt 1',grid_quilt_3:'Quilt 2',grid_two_quilts:'Two Quilts',
+  part2_0_41a:'Partition 24',part2_0_43:'You are getting very sleepy',paths_10:'Tower',part2_0_35:'Evolving Partition 1',part2_0_46:'Evolving Partition 2',
+  part2_0_41b:'Partition 25',grid_quilt_1:'Quilt 1',grid_quilt_3:'Quilt 2',grid_two_quilts:'Two Quilts',path_rwalk_4_0:'Swarm',
   grid_droplets_wide:'Droplets',gggrid_fade:'Fade',gggrid_ramp:'Ramp',interpolate_colors_3:'Interpolate Colors 1',interpolate_colors_6:'Interpolate Colors 2',
- ip_test_2:'Waves',triangle_0:'Form',grid_1:'Bulge',grid_3:'Grid Grid',grid_4:'Rumpled 1',grid_6:'Rumpled 2'}
+ ip_test_2:'Waves',triangle_0:'Form',grid_1:'Bulge',grid_3:'Grid Grid',grid_4:'Rumpled 1',grid_6:'Rumpled 2',path_avoidance_5:'Figure/Ground',
+ motion_18_16:'Motion 5',motion_18_4:'Motion 6',motion_18_8:'Motion 7',mutate_2:'Mutate 1',mutate_6:'Mutate 2',curves_7:'Beast',
+ path_avoidance_6:'Intersections',cubes_1:'Cubes',curves_10:'Stretch',line_path_2_11:'Bounce 9',drop_circles_26:'Manic'}
   
   
   // gridSpinner_13:'Spinner',gridSpinner_5:'Walkers',part2_0_43:'You are getting very sleepy',curves_10:'Stretch',paths_10:'Tower',};
   
 let numericMaps = {dropCircles:{3:1,0:2,1:3,10:4,13:5,15:6,18:7,4:8,7:9,9:10},
     partition:{10:1,11:2,12:3,13:4,14:5,15:6,16:7,17:8,19:9,2:10,18:9,
-20:11,21:12,22:13,23:14,24:15,25:16,26:17,27:18,28:19,29:20,3:21,37:22,4:23,44:26,5:27,50:28,51:29,52:30,56:31,6:32,7:33,9:34,41:23}};
+20:11,21:12,22:13,23:14,24:15,25:16,26:17,27:18,28:19,29:20,3:21,37:22,4:23,44:26,5:27,50:28,51:29,52:30,56:31,6:32,7:33,9:34,41:23},
+bounce:{1:1,13:2,15:3,17:4,18:5,4:6,5:7,9:8},
+curves:{1:1,3:2,4:3,5:4,6:5,8:6,9:7},
+gridSpinner:{0:1,1:2,10:3,11:4,15:5,17:6,7:7},
+motion:{10:1,11:2,12:3,15:4,2:5,3:9,0:6,1:7,21:8,4:9,32:10,5:11,9:12},
+paths:{3:2,4:3,5:4,7:5}
+};
 
 
   const titleFun = (str)=> {
     if ((!alll)&&(!allA)) {
       return str;
     }
-    if (str.indexOf('part2_0_')>-1) {
+    if (str.indexOf('curves_10')>-1) {
        console.log(str,'!!!');
     }
     let mpt = titleMap[str];
@@ -361,13 +369,24 @@ let numericMaps = {dropCircles:{3:1,0:2,1:3,10:4,13:5,15:6,18:7,4:8,7:9,9:10},
  //   console.log('spln',spln,'sp0',sp0,'sp1',sp1,'sp2',sp2);
     if (spln=== 2) {
       let ttl;
-       if ((sp0 === 'grid')||(sp0 === 'lines')||(sp0 === 'drop')) {
-          ttl = capitalize(sp1);
-       } else {
-         ttl = sp0+' '+sp1;
-       }
-       console.log(str,'=>',ttl);
-       return ttl;
+      if ((sp0 === 'grid')||(sp0 === 'lines')||(sp0 === 'drop')) {
+        ttl = capitalize(sp1);
+      } else if ((sp0==='bounce')||(sp0 === 'curves')||(sp0==='gridSpinner')||(sp0 === 'motion')||(sp0 === 'paths')){
+        let nummap = numericMaps[sp0]
+        let num = nummap[sp1];
+        let csp0 = capitalize(sp0);
+        if (num) {
+          ttl = csp0+' '+num;
+        } else {
+          ttl = str;
+        }
+        console.log(str,'=>=>=>',ttl);
+        return ttl;
+      } else {
+        ttl = sp0+' '+sp1;
+        console.log(str,'=>',ttl);
+        return ttl;
+      }
     }
     if (spln===3) {
       if ((sp0==='drop')&&(sp1==='circles')) {
