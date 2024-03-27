@@ -10,7 +10,7 @@ let jsd = JSON.stringify(dirc);
 //console.log(jsd);
 /*let omit ={bounce_0:1,'3d_grid_2':1,'3d_grid_0':1,bounce_11:1,bounce_13:1,bounce_14:1,bounce_16_f073:1,bounce_2:1,bounce_6:1,bounce_7:1,bounce_8:1,
            bounce_3:1,CMB:1,color_path_0:1,crosshatch_0:1,curves_2:1,drop_circles_17:1,drop_dandelion:1,drop_dandelion_with_circles:1,drop_ice:1}*/
-let omit =['bounce_0','bounce_10','3d_grid_2','3d_grid_0','bounce_11','bounce_14','bounce_16_f073','bounce_2','bounce_6','bounce_7','bounce_8',
+let omit =['drop_all_1','bounce_0','bounce_10','3d_grid_2','3d_grid_0','bounce_11','bounce_14','bounce_16_f073','bounce_2','bounce_6','bounce_7','bounce_8',
            'bounce_3','CMB','color_path_0','crosshatch_0','curves_2','drop_circles_17','drop_dandelion','drop_dandelion_with_circles','drop_ice',
            'drop_move','gridSpinner_18','gridSpinner_19','gridSpinner_14','gridSpinner_2','gridSpinner_3','gridSpinner_4','gridSpinner_6','gridSpinner_8',
            'gridSpinner_9','=gridSpinner','gridSpinner_12','gridSpinner_16','grid_emergence','example1','l2ine_path_2_11b','line_path_2_9',
@@ -19,7 +19,7 @@ let omit =['bounce_0','bounce_10','3d_grid_2','3d_grid_0','bounce_11','bounce_14
            'mutate_3','mutate_4','mutate_5','paths_0','paths_0','paths_0_0','paths_0_1','paths_2','paths_6','paths_8','drop_circles_19',
            'path_rwalk_2','path_rwalk_3','=path_rwalk_4','path_rwalk_4_1','path_avoidance_4','bounce_19','=paths_1',
            'line_path_0_2','line_path_0_3','line_path_0_5','line_path_0_6','rectangle_gon_grid','step_ring_1','part2_0_34_f113_f113','part2_0_47'];
-let omitIm = ['3d_grid','bounce','CMB','color_path_0','crosshatch_0','curves_2','drop_circles_14_5x7','drop_circles_17','drop_dandelion',
+let omitIm = ['drop_all_1','3d_grid','bounce','CMB','color_path_0','crosshatch_0','curves_2','drop_circles_14_5x7','drop_circles_17','drop_dandelion',
 'drop_ice','gridSpinner','curves_0','drop_circles_12','drop_circles_2','drop_leaves',,'drop_circles_2','drop_move','drop_on_top_5',
  ,'drop_on_top_7_combo_1','example1','flows','gons','grid_droplets-wide','grid_emergence','grid_example2','interpolator_0',
  'interpolate_colors_0','interpolate_colors_1','interpolate_colors_2','interpolate_colors_7','interpolate_colors_4',

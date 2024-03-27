@@ -7,6 +7,33 @@ const toBoolean = (v) => {
   }
 }
 
+const lowerCaseA = 'abcdefghijklmnopqrstuvwxyz';
+const upperCaseA = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+const toUpperCase = function (lt) {
+  let idx = lowerCaseA.indexOf(lt);
+  if (idx<0) {
+    return lt;
+  }
+  let uc = upperCaseA[idx];
+  return uc;
+}
+
+const capitalize = function (str) {
+  let ln = str.length;
+  if (ln===0) {
+     return str;
+  }
+  let lt0 = str[0];
+  let clt0 = toUpperCase(lt0);
+  let rst = str.substring(1);
+  let vl = clt0+rst;
+  return vl;
+}
+console.log('capitalize cat',capitalize('cat'));
+
+  
+//console.log('upper _',toUpperCase('_'));
+  
 let neverTitle = 0;
 let kind = process.argv[2];
 let forKOP = toBoolean(process.argv[3]);
@@ -295,17 +322,24 @@ let numPages = 0;
   motion_3:'motion 4',drop_circles3:'drop_3',bounce_16:'Square Dance',motion_24:'Colliding Orbits',drop_circles_20:'Necker',
   gons_3:'Pulsing Polygons',motion_18_32:'Mandala',crosshatch_1:'Crosshatch',part2_0_34:'Paths',part2_0_1:'Vortex',drop_circles_14:'Bloom',
   drop_circles_3:'Dropped Circles',drop_interpolate_0:'Motion Illusion',grid_distortion_field_warped:'Distortion Field',
-  grid_droplets_wide:'Droplets',grid_fade:'Fade',grid_ramp:'Ramp',interpolate_colors_3:'Interpolate Colors 1',interpolate_colors_6:'Interpolate Colors 2',
-  ip_test_2:'Waves',triangle_0:'Form',
+  drop_all_0:'Thatch',drop_all_2:'Inversion',drop_circles3:'Pop',
+  grid_droplets_wide:'Droplets',gggrid_fade:'Fade',gggrid_ramp:'Ramp',interpolate_colors_3:'Interpolate Colors 1',interpolate_colors_6:'Interpolate Colors 2',
+  ip_test_2:'Waves',triangle_0:'Form',grid_1:'Bulge',grid_3:'Grid Grid',grid_4:'Rumpled 1',grid_6:'Rumpled 2',
+  
   
   gridSpinner_13:'Spinner',gridSpinner_5:'Walkers',part2_0_43:'You are getting very sleepy',curves_10:'Stretch',paths_10:'Tower',};
   const titleFun = (str)=> {
     if ((!alll)&&(!allA)) {
       return str;
     }
+    if (str === 'drop_3') {
+       console.log(str,'!!!');
+    }
     let mpt = titleMap[str];
     if (mpt) {
        //console.log('str',str,'mpt',mpt);
+        console.log(str,'->',mpt);
+
        return mpt;
     }
     let spl = str.split('_');
@@ -315,8 +349,13 @@ let numPages = 0;
     let spln = spl.length;
  //   console.log('spln',spln,'sp0',sp0,'sp1',sp1,'sp2',sp2);
     if (spln=== 2) {
-       let ttl = sp0+' '+sp1;
-     //  console.log('ttl',ttl);
+      let ttl;
+       if ((sp0 === 'grid')||(sp0 === 'lines')||(sp0 === 'drop')) {
+          ttl = capitalize(sp1);
+       } else {
+         ttl = sp0+' '+sp1;
+       }
+       console.log(str,'=>',ttl);
        return ttl;
     }
     if (spln===3) {
