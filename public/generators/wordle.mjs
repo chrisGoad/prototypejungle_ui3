@@ -28,10 +28,10 @@ Object.assign(rs,topParams);
   debugger;
   this.doubles ='';
   // prohibited letters at each position
-  let s0n = '';
-  let s1n = '';
-  let s2n = '';
-  let s3n = 's';
+  let s0n = 'b';
+  let s1n = 'o';
+  let s2n = 'a';
+  let s3n = '';
   let s4n = 't';
   this.prohibs = [s0n,s1n,s2n,s3n,s4n];
 
@@ -39,22 +39,24 @@ Object.assign(rs,topParams);
   this.dprohibs  = [];
   // known letters
   let k0 = '';
-  let k1 = '';
-  let k2 = 'u';
-  let k3 = 'n';
+  let k1 = 'a';
+  let k2 = '';
+  let k3 = '';
   let k4 = '';
   this.known = [k0,k1,k2,k3,k4];
   this.notPossibles = [];
   this.possibles5 = [];
   this.possibles4 = [];
   let abet=this.abet = 'abcdefghijklmnopqrstuvwxyz';
+ // let abet=this.abet = 'fjqvxyz';
 //  let cm = this.complement('might clasp brief wound');
-  let cm = this.complement('mih clap brief wod');
+//let cm = this.complement('parse might wound black');
+let cm = this.complement('prse migh wund lck');
   // possible letters
   let possLets =this.possLets = this.alphabetize(cm);
   this.addFrame();
  this.allowBadBlends = 0;
- let mandatory = this.mandatory = 'gnstu'
+ let mandatory = this.mandatory = 'abot'
  this.tryFirsts(mandatory);
   console.log('possibles5',this.possibles5);
   let prm = this.removeLetters(possLets,mandatory);

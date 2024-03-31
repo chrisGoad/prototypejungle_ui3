@@ -29,7 +29,7 @@ const capitalize = function (str) {
   let vl = clt0+rst;
   return vl;
 }
-console.log('capitalize cat',capitalize('cat'));
+//console.log('capitalize cat',capitalize('cat'));
 
   
 //console.log('upper _',toUpperCase('_'));
@@ -40,7 +40,7 @@ let forKOP = toBoolean(process.argv[3]);
 let sortByOrderstr = "1";
 let alwaysLocal = 0;
 
-console.log('kind',kind);
+//console.log('kind',kind);
 
 let signed = 0
 
@@ -325,23 +325,36 @@ let numPages = 0;
   drop_all_0:'Thatch',drop_all_2:'Inversion',drop_circles3:'Pop',drop_space_junk:'Space Junk',drop_many_textures:'Many Textures',
   drop_on_circles:'Borromean Knot',drop_metal_2:'Metal',drop_embedded_circles:'Embedded Circles',drop_on_line:'Cross 1',
   drop_on_top_2:'Drop on Top 1',drop_on_top_7:'Drop on Top 2',drop_rects_1:'Field of Squares',drop_starry_night:'Starry Night',
-  drop_square:'Cross 2',grid_drop_0:'Spilled Paint',grid_cloudy_sky:'Cloudy Sky',triangle_1:'Triangle',lines_2:'Cobweb',part_0_4:'Partition 35',
-  part2_0_41a:'Partition 24',part2_0_43:'You are getting very sleepy',paths_10:'Tower',part2_0_35:'Evolving Partition 1',part2_0_46:'Evolving Partition 2',
+  drop_square:'Cross 2',grid_drop_0:'Spilled Paint',grid_cloudy_sky:'Cloudy Sky',triangle_1:'Triangle',lines_2:'Cobweb',part_0_4:'Partition 29',
+  part2_0_41a:'Partition 25',part2_0_43:'You are getting very sleepy',paths_10:'Tower',part2_0_35:'Evolving Partition 1',part2_0_46:'Evolving Partition 2',
   part2_0_41b:'Partition 25',grid_quilt_1:'Quilt 1',grid_quilt_3:'Quilt 2',grid_two_quilts:'Two Quilts',path_rwalk_4_0:'Swarm',
   grid_droplets_wide:'Droplets',gggrid_fade:'Fade',gggrid_ramp:'Ramp',interpolate_colors_3:'Interpolate Colors 1',interpolate_colors_6:'Interpolate Colors 2',
+ interpolate_colors_8:'Interpolate Colors 3',interpolate_colors_9:'Interpolate Colors 4',
  ip_test_2:'Waves',triangle_0:'Form',grid_1:'Bulge',grid_3:'Grid Grid',grid_4:'Rumpled 1',grid_6:'Rumpled 2',path_avoidance_5:'Figure/Ground',
  motion_18_16:'Motion 5',motion_18_4:'Motion 6',motion_18_8:'Motion 7',mutate_2:'Mutate 1',mutate_6:'Mutate 2',curves_7:'Beast',
- path_avoidance_6:'Intersections',cubes_1:'Cubes',curves_10:'Stretch',line_path_2_11:'Bounce 9',drop_circles_26:'Manic'}
+ path_avoidance_6:'Intersections',cubes_1:'Cubes',curves_10:'Stretch',line_path_2_11:'Bounce 9',drop_circles_26:'Manic',
+ drop_semi_ordered:'Semi-ordered',grid_smoke_1:'Smoke',stripes_1:'Stripes',lines_chaos_within_order:'Chaos within Order'}
   
   
   // gridSpinner_13:'Spinner',gridSpinner_5:'Walkers',part2_0_43:'You are getting very sleepy',curves_10:'Stretch',paths_10:'Tower',};
   
 let numericMaps = {dropCircles:{3:1,0:2,1:3,10:4,13:5,15:6,18:7,4:8,7:9,9:10},
-    partition:{10:1,11:2,12:3,13:4,14:5,15:6,16:7,17:8,19:9,2:10,18:9,
-20:11,21:12,22:13,23:14,24:15,25:16,26:17,27:18,28:19,29:20,3:21,37:22,4:23,44:26,5:27,50:28,51:29,52:30,56:31,6:32,7:33,9:34,41:23},
+partition:{10:1,12:2,
+13:3,14:4,15:5,16:6,
+17:7,19:8,2:9,20:10,
+22:11,23:12,24:13,
+25:14,26:15,27:16,28:17,
+29:18,3:19,37:20,4:21,
+5:22,51:23,52:24,56:25,
+6:26,7:27,9:28
+},
+    //10:1,11:2,12:3,13:4,14:5,15:6,16:7,17:8,18:9,19:10,2:11,
+//20:12,21:13,22:14,23:15,
+//24:16,25:17,26:18,27:19,28:20,29:21,3:22,37:23,
+//4:24,41:25,44:26,5:27,50:28,51:29,52:30,56:31,6:32,7:33,9:34},
 bounce:{1:1,13:2,15:3,17:4,18:5,4:6,5:7,9:8},
 curves:{1:1,3:2,4:3,5:4,6:5,8:6,9:7},
-gridSpinner:{0:1,1:2,10:3,11:4,15:5,17:6,7:7},
+gridSpinner:{13:1,5:2,0:3,1:4,10:5,11:6,15:7,17:8,7:9},
 motion:{10:1,11:2,12:3,15:4,2:5,3:9,0:6,1:7,21:8,4:9,32:10,5:11,9:12},
 paths:{3:2,4:3,5:4,7:5}
 };
@@ -357,7 +370,7 @@ paths:{3:2,4:3,5:4,7:5}
     let mpt = titleMap[str];
     if (mpt) {
        //console.log('str',str,'mpt',mpt);
-        console.log(str,'->',mpt);
+        //console.log(str,'->',mpt);
 
        return mpt;
     }
@@ -367,24 +380,27 @@ paths:{3:2,4:3,5:4,7:5}
     let sp2=spl[2];
     let spln = spl.length;
  //   console.log('spln',spln,'sp0',sp0,'sp1',sp1,'sp2',sp2);
+    if (sp0==='grid') {
+//          console.log('grid!!!!!!!!!!');
+     }
     if (spln=== 2) {
       let ttl;
-      if ((sp0 === 'grid')||(sp0 === 'lines')||(sp0 === 'drop')) {
-        ttl = capitalize(sp1);
-      } else if ((sp0==='bounce')||(sp0 === 'curves')||(sp0==='gridSpinner')||(sp0 === 'motion')||(sp0 === 'paths')){
-        let nummap = numericMaps[sp0]
-        let num = nummap[sp1];
-        let csp0 = capitalize(sp0);
-        if (num) {
+      let csp0=capitalize(sp0);
+     // if ((sp0 === 'grid')||(sp0 === 'lines')||(sp0 === 'drop')) {
+       // ttl = capitalize(sp1);
+      if ((sp0==='bounce')||(sp0 === 'curves')||(sp0==='gridSpinner')||(sp0 === 'motion')||(sp0 === 'paths')||
+      (sp0==='drop')||(sp0==='grid')||(sp0==='lines')){
+      
+        let sp1n =1*sp1;
+        let sp1num  = Number.isInteger(sp1n);
+        if (sp1num) {
+          let nummap = numericMaps[sp0];
+          let num = nummap?nummap[sp1n]:sp1;
           ttl = csp0+' '+num;
         } else {
-          ttl = str;
+          ttl = capitalize(sp1);
         }
-        console.log(str,'=>=>=>',ttl);
-        return ttl;
-      } else {
-        ttl = sp0+' '+sp1;
-        console.log(str,'=>',ttl);
+//        console.log(str,'=>=>=>',ttl);
         return ttl;
       }
     }
@@ -393,15 +409,20 @@ paths:{3:2,4:3,5:4,7:5}
          let nummap = numericMaps.dropCircles;
          let num = nummap[sp2];
          let ttl = 'Drop Circles '+num;
-         console.log(str,'==>',ttl);
+   //    console.log(str,'==>',ttl);
          return ttl;
       }
  
       if ((sp0==='part2')&&(sp1==='0')) {
          let nummap = numericMaps.partition;
-         let num = nummap[sp2];
-         let ttl = 'Partition '+num;
-         console.log(str,'=>==>',ttl);
+         let numm = nummap[sp2];
+         if (!numm) {
+           return;
+         }
+         //let num = numm?numm:sp2;
+        let ttl = 'Partition '+numm;
+       //  let ttl = 'Partition '+sp2;
+         //console.log(str,'=>==>',ttl);
          return ttl;
       }
       if ((sp0==='drop')&&(sp1==='circles')) {
@@ -423,16 +444,20 @@ const thingString = function (order,ix,dir,useThumb,ititle,props) {
   if (!alll&&!allA&&((kind !=='alt') && (kind !== 'book') &&(category !==  kind))) {
     return '</div>';a
   }
-    if (ix.indexOf('grid_drop_0')>-1) {
-       console.log(ix,'!!!!!!!!!!!!!!!');
+    if (ix.indexOf('grid_')>-1) {
+       //console.log(ix,'!!!!!!!!!!!!!!!');
     }
   //let fr = anim?props.frame:'';
   let fr = allA?props.frame:'';
   if (fr) {
-    console.log('FR',fr,'kind',kind);
+    //console.log('FR',fr,'kind',kind);
   }
 	let spix = ix.split('.');
 	let path = spix[0];
+  let verbose = path==='motion_5';
+  if (verbose) {
+    console.log('path',path);
+  }
 	let ext = video?video:((spix.length === 1)?'jpg':spix[1]);
 	let x = path + '.'+ ext;
  // console.log('ix',ix,'x',x);
