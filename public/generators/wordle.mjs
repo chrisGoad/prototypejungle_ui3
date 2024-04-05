@@ -29,10 +29,10 @@ Object.assign(rs,topParams);
   this.doubles ='';
   // prohibited letters at each position
   let s0n = '';
-  let s1n = '';
-  let s2n = 'u';
-  let s3n = 's';
-  let s4n = 'e';
+  let s1n = 'i';
+  let s2n = 'r';
+  let s3n = '';
+  let s4n = '';
   this.prohibs = [s0n,s1n,s2n,s3n,s4n];
 
   // prohibited dipthongs
@@ -40,9 +40,9 @@ Object.assign(rs,topParams);
   // known letters
   let k0 = '';
   let k1 = '';
-  let k2 = 'r';
-  let k3 = '';
-  let k4 = '';
+  let k2 = '';
+  let k3 = 's';
+  let k4 = 't';
   this.known = [k0,k1,k2,k3,k4];
   this.notPossibles = [];
   this.possibles5 = [];
@@ -51,15 +51,15 @@ Object.assign(rs,topParams);
  // let abet=this.abet = 'fjqvxyz';
 //  let cm = this.complement('might clasp brief wound');
 //let cm = this.complement('parse might wound black');
-let cm = this.complement('pa black wond');// might wound black');
+let cm = this.complement('pae mgh');// wound black');
+
   // possible letters
   let possLets =this.possLets = this.alphabetize(cm);
   this.addFrame();
  this.allowBadBlends = 0;
- let mandatory = this.mandatory = 'ersu'
- this.tryFirsts(mandatory);
+ this.tryFirsts('ir');
   console.log('possibles5',this.possibles5);
-  let prm = this.removeLetters(possLets,mandatory);
+  let prm = this.removeLetters(possLets,this.mandatory);
   console.log('prm',prm);
 }
 

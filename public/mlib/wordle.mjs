@@ -392,7 +392,6 @@ item.tryFirsts4 = function (k) {
   let {possLets,known,prohibs} = this;
   let k0 = known[0];
   debugger;
-  this.mandatory = k;
   let phb0 = prohibs[0];
   let allowed = this.removeLetters(possLets,phb0);
   if (k0) {
@@ -416,14 +415,12 @@ item.tryFirsts4 = function (k) {
 } 
 
 item.tryFirsts5 = function (k) {
-  this.mandatory=k;
   this.wgenAllKnown(k);
 }
 
   
 item.tryFirsts3 = function (k) {
-  let {possLets,known,prohibs} = this;
-  this.mandatory = k;
+  let {possLets,known,prohibs} = this;  
   let phb0 = prohibs[0];
   let allowed = this.removeLetters(possLets,phb0);
   let ln = allowed.length;
@@ -435,7 +432,17 @@ item.tryFirsts3 = function (k) {
   }
 }
 
-item.tryFirsts =  function (k) {
+item.tryFirsts =  function (ik) {
+  let {known} = this;
+  let k = ik;
+  known.forEach((kn) => {
+    if (kn) { 
+      k=k+kn;
+    }
+  });
+  debugger;
+  console.log('k',k);
+  this.mandatory = k;
   let ln = k.length;
   if (ln ===3) {
     this.tryFirsts3(k);
