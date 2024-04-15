@@ -432,12 +432,17 @@ item.tryFirsts3 = function (k) {
   }
 }
 
-item.tryFirsts =  function (ik) {
-  let {known} = this;
-  let k = ik;
+item.tryFirsts =  function () {
+  let {known,prohibs} = this;
+  let k = '';
   known.forEach((kn) => {
     if (kn) { 
       k=k+kn;
+    }
+  });
+  prohibs.forEach((ph) => {
+    if (ph) { 
+      k=k+ph;
     }
   });
   debugger;
