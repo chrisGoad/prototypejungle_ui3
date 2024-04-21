@@ -387,6 +387,16 @@ item.wgen3known = function (k) {
     this.wgen4known(v+k);
   };
 }
+
+item.wgen2known = function (k) {
+  let {possLets:plets} = this;
+  let ln = plets.length;
+  for (let i=0;i<ln;i++) {
+    let v = plets[i];
+    console.log('TOP CHECK',v);
+    this.wgen3known(v+k);
+  };
+}
   
 item.tryFirsts4 = function (k) {
   let {possLets,known,prohibs} = this;
@@ -432,6 +442,20 @@ item.tryFirsts3 = function (k) {
   }
 }
 
+  
+item.tryFirsts2 = function (k) {
+  let {possLets,known,prohibs} = this;  
+  let phb0 = prohibs[0];
+  let allowed = this.removeLetters(possLets,phb0);
+  let ln = allowed.length;
+  for (let i=0;i<ln;i++) {
+    let ai = allowed[i];
+    known[0] = ai;
+    this.wgen2known(k);
+    
+  }
+}
+
 item.tryFirsts =  function () {
   let {known,prohibs} = this;
   let k = '';
@@ -446,10 +470,13 @@ item.tryFirsts =  function () {
     }
   });
   debugger;
+  k = this.removeDups(k);
   console.log('k',k);
   this.mandatory = k;
   let ln = k.length;
-  if (ln ===3) {
+  if (ln ===2) {
+    this.tryFirsts2(k);
+  } else if (ln ===3) {
     this.tryFirsts3(k);
   } else if (ln === 4) {
     this.tryFirsts4(k);
