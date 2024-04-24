@@ -55,10 +55,30 @@ upload it to the prototypejungle bucket at aws
 cd c:\prototypejungle_clone
 git clone https://github.com/chrisGoad/prototypejungle.git
 
-To edit the content of kop, start by editing c:\prototypejungle_ui3\admin\images.js
+OLD Way To edit the content of kop, start by editing c:\prototypejungle_ui3\admin\images.js
+_________________
+New way: a directory listing of c:/pj/public/images is done via
+cd c:\pj 
+node admin/update
+node admin/listdir
+
+The many parameters in listdir control which of the image and animation files are listed in the outputs c:/pj/allImages and c:/pj/allAnimations  
+  
+then run
+node admin/genGalleries all 1 // for images
+and
+node admin/genGalleries allA 1 // for animations
+
+The 1 indicates forKop. if omitted,clicking on titles in http://localhost:8081/allImages.html runs the code rather than loads the image
+
+genGalleries includes a favorites global which specifies files to list first
+it also includes a titleMap global which maps file names to titles
+__________
+OLD WAY
 then run c:\pj\admin\update
 
-to deploy to kop run the following for galleries that have changes in images.js
+
+to deploy to kop run the following for galleries that have changes in images.js 
 cd c:\pj
 node admin/genGalleries top 1
 node admin/genGalleries web 1
@@ -71,15 +91,11 @@ node admin/genGalleries all 1
 node admin/genGalleries allA 1
 
 then 
-
+_________________
+both ways
 cd c:\pj
 node admin/updateKOP
 
-
-not this:
-node admin/imagesToKop
-
-drop the 1s for local use with source
 
 copy images by hand from c:/pj/public/images/std_size  to c:/kop/public/images/std_size
 copy thumbs by hand from c:/pj/public/images/thumbs  to c:/kop/public/images/thumbs
@@ -88,7 +104,9 @@ copy the jpgs by hand from public/doc from prototypejungle to kop
 
 cd c:\kop
 firebase deploy --only hosting
+DONE
 
+_____________
 
 to reinstall firebase
 install firebase tools

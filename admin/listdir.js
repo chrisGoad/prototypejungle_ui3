@@ -21,13 +21,14 @@ let omit =['drop_all_1','bounce_0','bounce_10','3d_grid_2','3d_grid_0','bounce_1
            'line_path_0_2','line_path_0_3','line_path_0_5','line_path_0_6','rectangle_gon_grid','step_ring_1','part2_0_34_f113_f113','part2_0_47'];
 let omitIm = ['drop_all_1','3d_grid','bounce','CMB','color_path_0','crosshatch_0','curves_2','drop_circles_14_5x7','drop_circles_17','drop_dandelion',
 'drop_ice','gridSpinner','curves_0','drop_circles_12','drop_circles_2','drop_leaves',,'drop_circles_2','drop_move','drop_on_top_5',
- ,'drop_on_top_7_combo_1','example1','flows','gons','grid_droplets-wide','grid_emergence','grid_example2','interpolator_0',
+ ,'drop_on_top_7_combo_1','example1','flows','gons','grid_emergence','grid_example2','interpolator_0',
  'interpolate_colors_0','interpolate_colors_1','interpolate_colors_2','interpolate_colors_7','interpolate_colors_4',
  'line_loop','line_path','logic','mathematicians','motion','moving','mutate','necker','paths','path_rwalk','philosophers','rectangle_gon_grid',
  'part2_0_30','part2_0_31','part2_0_32','part2_0_33','=part2_0_34','part2_0_35',,'part2_0_39','part2_0_38','part2_0_36',
  ,'part2_0_42','part2_0_45','part2_0_48','part2_0_49','part2_0_53','part2_0_55','part2_0_57','part2_0_58','part2_0_D',
  'path','quad','poly','rotate','spirals','spin','step_colors','step_ring','stripes','textTest','triangle_4','wiggle_grid_0','part2_0_34_f113_f113',
- 'part2_0_47','drop_circles_19','drop_circles_11','grid_droplets','grid_maze_wide','grid_fade_wide','grid_pbc_uniform_size','segDrops_0',
+ //'part2_0_47','drop_circles_19','drop_circles_11','grid_droplets','grid_maze_wide','grid_fade_wide','grid_pbc_uniform_size','	',
+ 'part2_0_47','drop_circles_19','drop_circles_11','grid_maze_wide','grid_fade_wide','grid_pbc_uniform_size','	',
  'part2_0_41b','part2_0_41c','grid_void_variant','part2_0_41','part2_0_50','part2_0_44','part2_0_11','part2_0_18','part2_0_21'];
 let frameMap = {crosshatch_1:'f083'};
 // figure out what went wrong with rectangle_gon_grid
@@ -165,13 +166,18 @@ for (let i=0;i<ln;i++ ) {
   let dis = di.split('.');
   let ext = dis[1];
   let fln = dis[0];
+  let gd = fln.indexOf('grid_drop')===0;
+  if (gd) {
+    console.log('FLN',fln);
+  }
   if (fln.indexOf('__f')>-1) {
     console.log('NOTTTTT',fln);
     continue;
   }
  // console.log('fln',fln);
   let oim = occursIn(fln,omitIm);
-  if (oim) {
+  if (oim&&gd) {
+     console.log('GD omitted');
      continue;
   }
     let anim = isAnim(fln);
@@ -183,12 +189,17 @@ for (let i=0;i<ln;i++ ) {
   if ((ext === 'jpg')&&(kind!=='web')&&(!anim)&&(!omit[fln]))  {
 	  let cmd = `[0,'${fln}','${iog}','','',{}], \n`;
     outp+=cmd;
-    if (xferImages) {
+    if (xferImages) { 
       xferFile('public/images/std_size/',di);
       xferFile('public/images/thumbs/',di);
     }
+  } else {
+    if (gd) {
+       console.log('GD Omitted');
+    }
   }
 }
+console.log('OOKK]}');
 outp+=']}';
 
 fs.writeFileSync('admin/allImages.js',outp);

@@ -659,6 +659,7 @@ let sectionString = function (things) {
       rs += `</div><br><div style="text-align:center">${txt}</div><br><div>`;
     } else {
       let [order,file,directory,useThumb,title,props] = thing;
+      console.log('FFFFILE',file);
      // console.log('PROPS',props);
       //console.log('file',file);
      // let tov = typeof variant;
