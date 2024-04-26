@@ -62,7 +62,7 @@ item.badBlend = function (str) {
   if (!bl) {
     return 0;
   }
-  let okblends = ['thr','scr','spr','shr','spl','str','tch','nch'];
+  let okblends = ['thr','scr','spr','shr','spl','str','tch','nch','ntr'];
   if (okblends.indexOf(bl) > -1) {
    // console.log('okblend',bl);
    return 0;
