@@ -69,6 +69,8 @@ node admin/genGalleries all 1 // for images
 and
 node admin/genGalleries allA 1 // for animations
 
+node admin/genGalleries alt //for development
+
 The 1 indicates forKop. if omitted,clicking on titles in http://localhost:8081/allImages.html runs the code rather than loads the image
 
 genGalleries includes a favorites global which specifies files to list first

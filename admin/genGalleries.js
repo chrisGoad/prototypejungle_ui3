@@ -546,7 +546,7 @@ const thingString = function (order,ix,dir,useThumb,ititle,props) {
    // console.log('srcUrl',srcUrl);
 	//	console.log('not for KOP');
     rs = `<div><p style="text-align:center"><a href="http://localhost:8081/draw.html?source=/${dir}/${path}.${fileExt}${theImageArg}">${title}</a><br>
-    <a href="${srcUrl}">${sourcenm}</a><br
+    <a href="${srcUrl}">${sourcenm}</a><br>
     ${propsStr}
     ${astart}<img width="200" src="${thumbsrc}"></a></p></div>
     `;
