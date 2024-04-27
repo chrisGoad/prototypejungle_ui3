@@ -14,6 +14,51 @@ addAnimationMethods(rs);
 //addRandomMethods(rs);	
 rs.setName('grid_figure_ground');
 
+rs.colorObToRgb = function (c) {
+  let {r,g,b} = c;
+  let rgb = `rgb(${r},${g},${b})`;
+  return rgb;
+}
+
+rs.initialFinalColorsAtCell = function (c,initially) {
+  let {numRows:nr,numCols:nc} = this;
+  let {x,y} = c;
+  let left = x<(nc/2);
+  let top = y<(nr/2);
+  if (!top) {
+    debugger;
+  }
+  let clr = initially?(left?{r:255,g:0,b:0}:{r:0,g:0,b:255}):(top?{r:255,g:0,b:0}:{r:0,g:0,b:255});
+  return clr;
+}
+
+rs.colorAtCell = function (c,fr) {
+  let {numRows:nr,numCols:nc} = this;
+  let {x,y} = c;
+  let iclr = this.initialFinalColorsAtCell(c,1);
+  let fclr = this.initialFinalColorsAtCell(c,0);
+  let clr = this.interpolate(iclr,fclr,fr);
+  return clr;
+}
+
+rs.paintCells = function (fr) {
+  debugger;
+  let {numRows:nr,numCols:nc} = this;
+  for (let i=0;i<nc;i++) {
+    for (let j=0;j<nr;j++) {
+      let c = {x:i,y:j}
+      let clr = this.colorAtCell(c,fr);
+      let rgb = this.colorObToRgb(clr);
+      let shp = this.shapeAt(i,j);
+      shp.fill = rgb;
+      shp.update();
+    }
+  }
+}
+
+      
+    
+
 rs.interpolateSides = function (fr) {
   let ls = this.interpolate(0,1,fr);
   let cntr = this.interpolate(1,0,fr);
@@ -125,6 +170,7 @@ rs.initialize = function () {
   crc.dimension = height+40;
   this.generateGrid();
   debugger;
+  this.paintCells(.5);
  // this.updateCells(0.95);
  //  this.set('crc',crc);
 
@@ -162,10 +208,13 @@ rs.phaseArray = [
 rs.updateState = function () {
   let {numSteps,stepsSoFar:ssf} = this;
   let ens = numSteps/8;
+  let hns = numSteps/2;
+  let cfr = ssf<hns?ssf/hns:(numSteps-ssf)/hns;
   let phaseNum = Math.floor((8*ssf)/numSteps);
   let dfofr = (ssf-ens*phaseNum)/ens;
   let phase = this.phaseArray[phaseNum];
   this.updateAtPhase(phase,dfofr,phaseNum);
+  this.paintCells(cfr);
 }
 
 
