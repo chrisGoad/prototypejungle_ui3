@@ -358,7 +358,7 @@ c:\ffmpeg\bin\ffmpeg  -framerate 15  -i animations/mutate_5_f%03d.jpg -s 500x500
 c:\ffmpeg\bin\ffmpeg  -framerate 15  -i animations/mutate_5_f%03d.jpg -s 500x500  export/mutate_5.gif
 c:\ffmpeg\bin\ffmpeg  -framerate 15  -i animations/mutate_6_f%03d.jpg -s 500x500  export/mutate_6.gif
 c:\ffmpeg\bin\ffmpeg  -framerate 15  -i animations/mutate_6_f%03d.jpg -s 500x500  export/mutate_6.mp4
-c:\ffmpeg\bin\ffmpeg  -framerate 15  -i animations/3d_grid_0_f%03d.jpg -s 500x500  export/33.gif
+c:\ffmpeg\bin\ffmpeg  -framerate 15  -i animations/grid_figure_ground_f%03d.jpg -s 800x500  export/grid_figure_ground.gif
 
 c:\ffmpeg\bin\ffmpeg -i export/bounce_12.mp4 -i export/bounce_12.wav -c:v copy -c:a aac -map 0:v -map 1:a export/blend_test.mp4
 rm animations/spatter0_7*

@@ -716,10 +716,12 @@ item.regenerateShapes = function () {
   this.shapes.remove();
   this.addShapes();
 }
+/*
 item.interpolate = function (cDomain,domainL,domainH,rangeL,rangeH) {
   let fr = (cDomain-domainL)/(domainH-domainL);
   return rangeL + fr*(rangeH-rangeL);
 }
+*/
 
 item.updateGrid = function () {
   let {numRows,numCols,pointJiggle} = this;
