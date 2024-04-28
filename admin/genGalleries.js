@@ -318,7 +318,7 @@ document.addEventListener('DOMContentLoaded', () => {
 `;
 let pageNumber = 0;
 let numPages = 0;
- const titleMap = {line_path_2_11:'line path 0',mmotion_18_4:'motion 0',mmotion_18_8:'motion 1',mmotion_18_16:'motion 2',mmotion_18_32:'motion 3',
+ const titleMapp = {line_path_2_11:'line path 0',mmotion_18_4:'motion 0',mmotion_18_8:'motion 1',mmotion_18_16:'motion 2',mmotion_18_32:'motion 3',
   mmotion_3:'motion 4',ddrop_circles3:'drop_3',bounce_16:'Square Dance',motion_24:'Colliding Orbits',drop_circles_20:'Necker',
   gons_3:'Pulsation 1',step_ring_0:'Pulsation 2',motion_18_32:'Mandala',crosshatch_1:'Crosshatch',part2_0_34:'Paths 1',part2_0_1:'Vortex',drop_circles_14:'Bloom',
   droppp_circles_3:'Dropped Circles',drop_interpolate_0:'Motion Illusion',grid_distortion_field_warped:'Distortion Field',
@@ -374,6 +374,7 @@ paths:{3:2,4:3,5:4,7:5}
 
        return mpt;
     }
+    return;
     let spl = str.split('_');
     let sp0=spl[0];
     let sp1=spl[1];
@@ -396,11 +397,15 @@ paths:{3:2,4:3,5:4,7:5}
         if (sp1num) {
           let nummap = numericMaps[sp0];
           let num = nummap?nummap[sp1n]:sp1;
+          if (num===undefined) {
+            console.log('num UNDEFINED 00');
+            return num;
+          }
           ttl = csp0+' '+num;
         } else {
           ttl = capitalize(sp1);
         }
-//        console.log(str,'=>=>=>',ttl);
+        console.log(str,'=>=>=>00',ttl);
         return ttl;
       }
     }
@@ -408,8 +413,12 @@ paths:{3:2,4:3,5:4,7:5}
       if ((sp0==='drop')&&(sp1==='circles')) {
          let nummap = numericMaps.dropCircles;
          let num = nummap[sp2];
+         if (num===undefined) {
+            console.log('num UNDEFINED 11');
+            return num;
+         }
          let ttl = 'Drop Circles '+num;
-   //    console.log(str,'==>',ttl);
+       console.log(str,'==>',ttl);
          return ttl;
       }
  
@@ -422,11 +431,14 @@ paths:{3:2,4:3,5:4,7:5}
          //let num = numm?numm:sp2;
         let ttl = 'Partition '+numm;
        //  let ttl = 'Partition '+sp2;
-         //console.log(str,'=>==>',ttl);
+         console.log(str,'=>==>',ttl);
          return ttl;
       }
       if ((sp0==='drop')&&(sp1==='circles')) {
-        return 'dropCircles '+sp2;
+        let ttl = 'dropCircles '+sp2;
+        console.log(str,'=>==>',ttl);
+        return ttl;
+
       }
        if ((sp0==='drop')&&(sp1==='all')) {
         return 'drop '+sp2;
@@ -444,9 +456,9 @@ const thingString = function (order,ix,dir,useThumb,ititle,props) {
   if (!alll&&!allA&&((kind !=='alt') && (kind !== 'book') &&(category !==  kind))) {
     return '</div>';a
   }
-    if (ix.indexOf('grid_')>-1) {
-       //console.log(ix,'!!!!!!!!!!!!!!!');
-    }
+  if (ititle==='Droplets') {
+    console.log('DropletsAAAAAAAAAA');
+  }
   //let fr = anim?props.frame:'';
   let fr = allA?props.frame:'';
   if (fr) {
@@ -463,7 +475,8 @@ const thingString = function (order,ix,dir,useThumb,ititle,props) {
  // console.log('ix',ix,'x',x);
  
 
-  let title = noTitle?pageNumber+'':titleFun(ititle)
+ // let title = noTitle?pageNumber+'':titleFun(ititle)
+  let title = ititle;
 
   
   //console.log('ititle',ititle,'title',title);

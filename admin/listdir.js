@@ -7,6 +7,22 @@ let dirc =fs.readdirSync(dir);
 //dirc = ['drop_circles3.jpg'];
 //console.log('dirc',dirc);
 let jsd = JSON.stringify(dirc);
+ const titleMap = {line_path_2_11:'line path 0',mmotion_18_4:'motion 0',mmotion_18_8:'motion 1',mmotion_18_16:'motion 2',mmotion_18_32:'motion 3',
+  mmotion_3:'motion 4',ddrop_circles3:'drop_3',bounce_16:'Square Dance',motion_24:'Colliding Orbits',drop_circles_20:'Necker',
+  gons_3:'Pulsation 1',step_ring_0:'Pulsation 2',motion_18_32:'Mandala',crosshatch_1:'Crosshatch',part2_0_34:'Paths 1',part2_0_1:'Vortex',drop_circles_14:'Bloom',
+  droppp_circles_3:'Dropped Circles',drop_interpolate_0:'Motion Illusion',grid_distortion_field_warped:'Distortion Field',
+  drop_all_0:'Thatch',drop_all_2:'Inversion',drop_circles3:'Pop',drop_space_junk:'Space Junk',drop_many_textures:'Many Textures',
+  drop_on_circles:'Borromean Knot',drop_metal_2:'Metal',drop_embedded_circles:'Embedded Circles',drop_on_line:'Cross 1',
+  drop_on_top_2:'Drop on Top 1',drop_on_top_7:'Drop on Top 2',drop_rects_1:'Field of Squares',drop_starry_night:'Starry Night',
+  drop_square:'Cross 2',grid_drop_0:'Spilled Paint',grid_cloudy_sky:'Cloudy Sky',triangle_1:'Triangle',lines_2:'Cobweb',part_0_4:'Partition 29',
+  part2_0_41a:'Partition 25',part2_0_43:'You are getting very sleepy',paths_10:'Tower',part2_0_35:'Evolving Partition 1',part2_0_46:'Evolving Partition 2',
+  part2_0_41b:'Partition 25',grid_quilt_1:'Quilt 1',grid_quilt_3:'Quilt 2',grid_two_quilts:'Two Quilts',path_rwalk_4_0:'Swarm',
+  grid_droplets_wide:'Droplets',gggrid_fade:'Fade',gggrid_ramp:'Ramp',interpolate_colors_3:'Interpolate Colors 1',interpolate_colors_6:'Interpolate Colors 2',
+ interpolate_colors_8:'Interpolate Colors 3',interpolate_colors_9:'Interpolate Colors 4',
+ ip_test_2:'Waves',triangle_0:'Form',grid_1:'Bulge',grid_3:'Grid Grid',grid_4:'Rumpled 1',grid_6:'Rumpled 2',path_avoidance_5:'Figure/Ground',
+ motion_18_16:'Motion 5',motion_18_4:'Motion 6',motion_18_8:'Motion 7',mutate_2:'Mutate 1',mutate_6:'Mutate 2',curves_7:'Beast',
+ path_avoidance_6:'Intersections',cubes_1:'Cubes',curves_10:'Stretch',line_path_2_11:'Bounce 9',drop_circles_26:'Manic',
+ drop_semi_ordered:'Semi-ordered',grid_smoke_1:'Smoke',stripes_1:'Stripes',lines_chaos_within_order:'Chaos within Order'}
 //console.log(jsd);
 /*let omit ={bounce_0:1,'3d_grid_2':1,'3d_grid_0':1,bounce_11:1,bounce_13:1,bounce_14:1,bounce_16_f073:1,bounce_2:1,bounce_6:1,bounce_7:1,bounce_8:1,
            bounce_3:1,CMB:1,color_path_0:1,crosshatch_0:1,curves_2:1,drop_circles_17:1,drop_dandelion:1,drop_dandelion_with_circles:1,drop_ice:1}*/
@@ -119,7 +135,9 @@ return 0;
 }
 
 const isAnim = function (fln) {
-    return isOne(fln,notAnims,anims,animNms,'Anim')
+    let isa = isOne(fln,notAnims,anims,animNms,'Anim');
+    //console.log('isAnim',fln,isa);
+    return isa;;
 }
 let instanceNms = ['rectangle_gon_grid','flows','gridSpinner','line_path','motion_','part_','part2_','paths_','mutate_','bounce_','curves_','path_rwalk_','spirals_0_','reflected_path_0_1'];
 let instances = ['bounce_3','gons_3','interpolate_colors','grid_distortion_field','grid_maze_wide'];
@@ -157,6 +175,8 @@ const isgif = function (fln) {
     fs.copyFileSync(ipath, opath);
    
   }
+  
+  
 let ln = dirc.length;
 let outp = 'module.exports = { sections:[ \n'
 for (let i=0;i<ln;i++ ) {
@@ -166,6 +186,13 @@ for (let i=0;i<ln;i++ ) {
   let dis = di.split('.');
   let ext = dis[1];
   let fln = dis[0];
+  if (fln === 'grid_droplets_wide') {
+    console.log(fln,'ZZZZZZZZZZZZZZZZZZZZZZZ',omit.indexOf(fln)>-1);
+  }
+  let title = titleMap[fln];
+  if (!title) {
+    continue;
+  }
   let gd = fln.indexOf('grid_drop')===0;
   if (gd) {
     console.log('FLN',fln);
@@ -186,8 +213,11 @@ for (let i=0;i<ln;i++ ) {
   //console.log('i',i,'di',di,'dis',dis,'fln',fln,'ext',ext);
   let kind = fln.split('_')[0];
  
-  if ((ext === 'jpg')&&(kind!=='web')&&(!anim)&&(!omit[fln]))  {
-	  let cmd = `[0,'${fln}','${iog}','','',{}], \n`;
+  if ((ext === 'jpg')&&(kind!=='web')&&(!anim)&&(omit.indexOf(fln)===-1))  {
+	  let cmd = `[0,'${fln}','${iog}','','${title}',{}], \n`;
+    if (fln === '3d_grid_0') {
+      console.log(fln,'AAAAAAAAAAAAAAAAAAAAAAAAA');
+    }
     outp+=cmd;
     if (xferImages) { 
       xferFile('public/images/std_size/',di);

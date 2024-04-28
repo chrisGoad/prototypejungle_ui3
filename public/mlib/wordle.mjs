@@ -383,7 +383,8 @@ item.wgen3known = function (k) {
   let ln = plets.length;
   for (let i=0;i<ln;i++) {
     let v = plets[i];
-    console.log('TOP CHECK',v);
+    console.log('TOP CHECK 3 known',v);
+    debugger;
     this.wgen4known(v+k);
   };
 }
@@ -393,7 +394,7 @@ item.wgen2known = function (k) {
   let ln = plets.length;
   for (let i=0;i<ln;i++) {
     let v = plets[i];
-    console.log('TOP CHECK',v);
+    console.log('TOP CHECK 2 known',v);
     this.wgen3known(v+k);
   };
 }
@@ -430,7 +431,8 @@ item.tryFirsts5 = function (k) {
 
   
 item.tryFirsts3 = function (k) {
-  let {possLets,known,prohibs} = this;  
+  let {possLets,known,prohibs} = this;
+  debugger;  
   let phb0 = prohibs[0];
   let allowed = this.removeLetters(possLets,phb0);
   let ln = allowed.length;
@@ -458,12 +460,15 @@ item.tryFirsts2 = function (k) {
 
 item.tryFirsts =  function () {
   let {known,prohibs} = this;
+  let k0 = known[0];
   let k = '';
-  known.forEach((kn) => {
+  let st = k0?1:0;
+  for (let i=st;i<5;i++) {
+    let kn = known[i];
     if (kn) { 
       k=k+kn;
     }
-  });
+  };
   prohibs.forEach((ph) => {
     if (ph) { 
       k=k+ph;
@@ -474,16 +479,30 @@ item.tryFirsts =  function () {
   console.log('k',k);
   this.mandatory = k;
   let ln = k.length;
-  if (ln ===2) {
-    this.tryFirsts2(k);
-  } else if (ln ===3) {
-    this.tryFirsts3(k);
-  } else if (ln === 4) {
-    this.tryFirsts4(k);
-  } else if (ln===5) {
-    this.tryFirsts5(k);
+  if (k0) {
+    if (ln ===2) {
+      this.wgen2known(k);
+    } else if (ln ===3) {
+      this.wgen3known(k);
+    } else if (ln === 4) {
+      this.wgen4known(k);
+    } else if (ln===5) {
+      this.wgenAllKnown(k);
+    } else {
+      console.log('k',k, ' is too short');
+    }
   } else {
-    console.log('k',k, ' is too short');
+    if (ln ===2) {
+      this.tryFirsts2(k);
+    } else if (ln ===3) {
+      this.tryFirsts3(k);
+    } else if (ln === 4) {
+      this.tryFirsts4(k);
+    } else if (ln===5) {
+      this.tryFirsts5(k);
+    } else {
+      console.log('k',k, ' is too short');
+    }
   }
 }
 item.wgenAllKnown = function (k) {
