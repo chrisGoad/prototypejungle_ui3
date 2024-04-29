@@ -6,7 +6,7 @@ const toBoolean = (v) => {
     return false;
   }
 }
-
+const only_favorites = 1;
 const lowerCaseAA = 'abcdefghijklmnopqrstuvwxyz';
 const upperCaseAA = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
 const toUpperCasee = function (lt) {
@@ -599,7 +599,11 @@ const stripOrnt = function (str) {
  'part2_0_27','part2_0_23','part2_0_5','part2_0_10',
  'part2_0_3','part2_0_29','part2_0_6','part2_0_26',
  'drop_light','grid_enigma','drop_circles_18','drop_circles_4',
-];
+ 'grid_comet','grid_mat','grid_drop_0','grid_maze',
+ 'drop_on_circles','drop_square','drop_triptych','lines_2',
+ 'grid_cloth','grid_ramp','grid_smoke_1','part2_0_9'
+ 
+ ];
 /* 'part2_0_1','drop_circles_14','drop_circles_3','drop_interpolate_0',
  'grid_distortion_field_warped','grid_droplets_wide','grid_fade','grid_ramp',
 'interpolate_colors_3','interpolate_colors_6',
@@ -681,6 +685,9 @@ let sectionString = function (things) {
     } else {
       let [order,file,directory,useThumb,title,props] = thing;
       console.log('FFFFILE',file);
+      if (only_favorites &&alll&(favorites.indexOf(file)===-1)) {
+        break;
+      }
      // console.log('PROPS',props);
       //console.log('file',file);
      // let tov = typeof variant;

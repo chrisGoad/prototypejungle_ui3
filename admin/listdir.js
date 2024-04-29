@@ -14,27 +14,20 @@ let jsd = JSON.stringify(dirc);
   droppp_circles_3:'Dropped Circles',drop_interpolate_0:'Motion Illusion',grid_distortion_field_warped:'Distortion Field',
   drop_all_0:'Thatch',drop_all_2:'Inversion',drop_circles3:'Pop',drop_circles_3:'Drop Circles 1',drop_space_junk:'Space Junk',drop_many_textures:'Many Textures',
   drop_on_circles:'Borromean Knot',drop_metal_2:'Metal',drop_embedded_circles:'Embedded Circles',drop_on_line:'Cross 1',
-  drop_on_top_2:'Drop on Top 1',drop_on_top_7:'Drop on Top 2',drop_rects_1:'Field of Squares',drop_starry_night:'Starry Night',
+  drop_on_top_2:'Drop on Top',drop_on_top_7:'Drop on Top 2',drop_rects_1:'Field of Squares',drop_starry_night:'Starry Night',
   drop_square:'Cross 2',grid_drop_0:'Spilled Paint',grid_cloudy_sky:'Cloudy Sky',triangle_1:'Triangle',lines_2:'Cobweb',part_0_4:'Partition 29',
   part2_0_41a:'Partition 25',part2_0_43:'You are getting very sleepy',paths_10:'Tower',part2_0_35:'Evolving Partition 1',part2_0_46:'Evolving Partition 2',
   part2_0_41b:'Partition 25',grid_quilt_1:'Quilt 1',grid_quilt_3:'Quilt 2',grid_two_quilts:'Two Quilts',path_rwalk_4_0:'Swarm',
-  grid_droplets_wide:'Droplets',gggrid_fade:'Fade',gggrid_ramp:'Ramp',interpolate_colors_3:'Interpolate Colors 1',interpolate_colors_6:'Interpolate Colors 2',
- interpolate_colors_8:'Interpolate Colors 3',interpolate_colors_9:'Interpolate Colors 4',
+  grid_droplets_wide:'Droplets',gggrid_fade:'Fade',gggrid_ramp:'Ramp',interpolate_colors_3:'Interpolate Colors',interpolate_colors_6:'Interpolate Colors 2',
+ interpolate_colors_8:'Interpolate Colors',interpolate_colors_9:'Interpolate Colors 4',
  ip_test_2:'Waves',triangle_0:'Form',grid_1:'Bulge',grid_3:'Grid Grid',grid_4:'Rumpled 1',grid_6:'Rumpled 2',path_avoidance_5:'Figure/Ground',
  motion_18_16:'Motion 5',motion_18_4:'Motion 6',motion_18_8:'Motion 7',mutate_2:'Mutate 1',mutate_6:'Mutate 2',curves_7:'Beast',
  path_avoidance_6:'Intersections',cubes_1:'Cubes',curves_10:'Stretch',line_path_2_11:'Bounce 9',drop_circles_26:'Manic',
  drop_semi_ordered:'Semi-ordered',grid_smoke_1:'Smoke',stripes_1:'Stripes',lines_chaos_within_order:'Chaos within Order'}
  
  
-let numericMaps = {dropCircles:{3:1,0:2,1:3,10:4,13:5,15:6,18:7,4:8,7:9,9:10},
-partition:{10:1,12:2,
-13:3,14:4,15:5,16:6,
-17:7,19:8,2:9,20:10,
-22:11,23:12,24:13,
-25:14,26:15,27:16,28:17,
-29:18,3:19,37:20,4:21,
-5:22,51:23,52:24,56:25,
-6:26,7:27,9:28
+let numericMaps = {dropCircles:{3:1,18:2,4:3},
+partition:{27:1,23:2,5:3,10:4,3:5,29:6,6:7,26:8,9:9
 },
     //10:1,11:2,12:3,13:4,14:5,15:6,16:7,17:8,18:9,19:10,2:11,
 //20:12,21:13,22:14,23:15,
@@ -379,6 +372,10 @@ for (let i=0;i<ln;i++ ) {
   let dis = di.split('.');
   let ext = dis[1];
   let fln = dis[0];
+  let title = titleFun(fln);
+  if (!title) {
+    continue;
+  }
   let fr = frameMap[fln];
   if (fr) {
     console.log('Frame',fr);
@@ -397,12 +394,12 @@ for (let i=0;i<ln;i++ ) {
   let mp4=isMp4(fln);
   let gif=isgif(fln);
  // let vid = mp4?'mp4':'gif';
-  let vid = gif?'gif':'mp4';
+  let vid = gif?'gif':'mp4'
   if (fln==='crosshatch_1') {
      console.log('fln',fln,'vid',vid);
   }
   if ((ext === 'jpg')&&(kind!=='web')&&(anim))  {
-	  let cmd = fr?`[0,'${fln}','${iog}','','',{video:'${vid}',frame:'${fr}'}], \n`:`[0,'${fln}','${iog}','','',{video:'${vid}'}], \n`;
+	  let cmd = fr?`[0,'${fln}','${iog}','','',{video:'${vid}',frame:'${fr}'}], \n`:`[0,'${fln}','${iog}','','${title}',{video:'${vid}'}], \n`;
     aoutp+=cmd;
     if (xferImages) {
       xferFile('public/images/std_size/',di);
