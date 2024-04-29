@@ -29,10 +29,6 @@ let jsd = JSON.stringify(dirc);
 let numericMaps = {dropCircles:{3:1,18:2,4:3},
 partition:{27:1,23:2,5:3,10:4,3:5,29:6,6:7,26:8,9:9
 },
-    //10:1,11:2,12:3,13:4,14:5,15:6,16:7,17:8,18:9,19:10,2:11,
-//20:12,21:13,22:14,23:15,
-//24:16,25:17,26:18,27:19,28:20,29:21,3:22,37:23,
-//4:24,41:25,44:26,5:27,50:28,51:29,52:30,56:31,6:32,7:33,9:34},
 bounce:{1:1,13:2,15:3,17:4,18:5,4:6,5:7,9:8},
 curves:{1:1,3:2,4:3,5:4,6:5,8:6,9:7},
 gridSpinner:{13:1,5:2,0:3,1:4,10:5,11:6,15:7,17:8,7:9},
@@ -64,9 +60,7 @@ const capitalize = function (str) {
 }
 
   const titleFun = (str)=> {
-  /*  if ((!alll)&&(!allA)) {
-      return str;
-    }*/
+  
     if (str.indexOf('curves_10')>-1) {
        console.log(str,'!!!');
     }
@@ -83,17 +77,11 @@ const capitalize = function (str) {
     let sp2=spl[2];
     let spln = spl.length;
  //   console.log('spln',spln,'sp0',sp0,'sp1',sp1,'sp2',sp2);
-    if (sp0==='grid') {
-//          console.log('grid!!!!!!!!!!');
-     }
     if (spln=== 2) {
       let ttl;
       let csp0=capitalize(sp0);
-     // if ((sp0 === 'grid')||(sp0 === 'lines')||(sp0 === 'drop')) {
-       // ttl = capitalize(sp1);
       if ((sp0==='bounce')||(sp0 === 'curves')||(sp0==='gridSpinner')||(sp0 === 'motion')||(sp0 === 'paths')||
       (sp0==='drop')||(sp0==='grid')||(sp0==='lines')){
-      
         let sp1n =1*sp1;
         let sp1num  = Number.isInteger(sp1n);
         if (sp1num) {
@@ -120,7 +108,7 @@ const capitalize = function (str) {
             return num;
          }
          let ttl = 'Drop Circles '+num;
-       console.log(str,'==>',ttl);
+       //console.log(str,'==>',ttl);
          return ttl;
       }
  
@@ -130,15 +118,13 @@ const capitalize = function (str) {
          if (!numm) {
            return;
          }
-         //let num = numm?numm:sp2;
         let ttl = 'Partition '+numm;
-       //  let ttl = 'Partition '+sp2;
-         console.log(str,'=>==>',ttl);
+         //console.log(str,'=>==>',ttl);
          return ttl;
       }
       if ((sp0==='drop')&&(sp1==='circles')) {
         let ttl = 'dropCircles '+sp2;
-        console.log(str,'=>==>',ttl);
+        //console.log(str,'=>==>',ttl);
         return ttl;
 
       }
@@ -150,40 +136,14 @@ const capitalize = function (str) {
       }
     }
     return undefined;
-  //  return str;
   }
-//console.log(jsd);
-/*let omit ={bounce_0:1,'3d_grid_2':1,'3d_grid_0':1,bounce_11:1,bounce_13:1,bounce_14:1,bounce_16_f073:1,bounce_2:1,bounce_6:1,bounce_7:1,bounce_8:1,
-           bounce_3:1,CMB:1,color_path_0:1,crosshatch_0:1,curves_2:1,drop_circles_17:1,drop_dandelion:1,drop_dandelion_with_circles:1,drop_ice:1}*/
-let omittt =['drop_all_1','bounce_0','bounce_10','3d_grid_2','3d_grid_0','bounce_11','bounce_14','bounce_16_f073','bounce_2','bounce_6','bounce_7','bounce_8',
-           'bounce_3','CMB','color_path_0','crosshatch_0','curves_2','drop_circles_17','drop_dandelion','drop_dandelion_with_circles','drop_ice',
-           'drop_move','gridSpinner_18','gridSpinner_19','gridSpinner_14','gridSpinner_2','gridSpinner_3','gridSpinner_4','gridSpinner_6','gridSpinner_8',
-           'gridSpinner_9','=gridSpinner','gridSpinner_12','gridSpinner_16','grid_emergence','example1','l2ine_path_2_11b','line_path_2_9','gons_3_f043',
-           '=motion_1','motion_14','motion_14','motion_16','motion_17','=motion_18','motion_19','=motion_2','motion_20','motion_22','motion_23',
-           'motion_25','motion_26','motion_27','motion_28','motion_29','motion_4','motion_6','motion_7','motion_8','bounce_12','reflected_path_0_1',
-           'mutate_3','mutate_4','mutate_5','paths_0','paths_0','paths_0_0','paths_0_1','paths_2','paths_6','paths_8','drop_circles_19',
-           'path_rwalk_2','path_rwalk_3','=path_rwalk_4','path_rwalk_4_1','path_avoidance_4','bounce_19','=paths_1',
-           'line_path_0_2','line_path_0_3','line_path_0_5','line_path_0_6','rectangle_gon_grid','step_ring_1','part2_0_34_f113_f113','part2_0_47'];
-let omitImmm = ['drop_all_1','3d_grid','bounce','CMB','color_path_0','crosshatch_0','curves_2','drop_circles_14_5x7','drop_circles_17','drop_dandelion',
-'drop_ice','gridSpinner','curves_0','drop_circles_12','drop_circles_2','drop_leaves',,'drop_circles_2','drop_move','drop_on_top_5',
- ,'drop_on_top_7_combo_1','example1','flows','gons','grid_emergence','grid_example2','interpolator_0',
- 'interpolate_colors_0','interpolate_colors_1','interpolate_colors_2','interpolate_colors_7','interpolate_colors_4',
- 'line_loop','line_path','logic','mathematicians','motion','moving','mutate','necker','paths','path_rwalk','philosophers','rectangle_gon_grid',
- 'part2_0_30','part2_0_31','part2_0_32','part2_0_33','=part2_0_34','part2_0_35',,'part2_0_39','part2_0_38','part2_0_36',
- ,'part2_0_42','part2_0_45','part2_0_48','part2_0_49','part2_0_53','part2_0_55','part2_0_57','part2_0_58','part2_0_D',
- 'path','quad','poly','rotate','spirals','spin','step_colors','step_ring','stripes','textTest','triangle_4','wiggle_grid_0','part2_0_34_f113_f113',
- //'part2_0_47','drop_circles_19','drop_circles_11','grid_droplets','grid_maze_wide','grid_fade_wide','grid_pbc_uniform_size','	',
- 'part2_0_47','drop_circles_19','drop_circles_11','grid_maze_wide','grid_fade_wide','grid_pbc_uniform_size','	',
- 'part2_0_41b','part2_0_41c','grid_void_variant','part2_0_41','part2_0_50','part2_0_44','part2_0_11','part2_0_18','part2_0_21'];
+
+
 let frameMap = {crosshatch_1:'f083'};
 // figure out what went wrong with rectangle_gon_grid
-/*let notAnims = {bounce_16_f077:1,crosshatch_0_f001:1,rectangle_gon_grid_9:1,curves_0:1,drop_circles_14_5x7:1,drop_circles_15:1,
-               drop_circles_25:1,drop_circles_21:1,drop_leaves:1,};*/
+
 let notAnims = ['bounce_16_f077','crosshatch_0_f001','rectangle_gon_grid_9','curves_0','drop_circles_14_5x7','drop_circles_15',
                'drop_circles_25','drop_circles_21','drop_leaves','drop_on_top','motion_24_f','motion_29_f','mutate_6_f',];
-
-/*let anims= {drop_circles_21:1,cubes_1:1,drop_circles_19:1,drop_circles_20:1,drop_circles_26:1,CMB:1,drop_circles_14_5x7:1,drop_circles_15:1,
-   drop_circles_25:1,drop_on_top_2:1,drop_on_top_7:1,drop_on_top_7_combo_1:1,drop_on_top_5:1,example1:1,emergence:1};*/
 let anims= ['drop_circles_21','cubes_1','drop_circles_19','drop_circles_20','drop_circles_26','CMB','drop_circles_14_5x7',
 'drop_circles_15','spin_1','step_ring','part2_0_43','part2_0_31','bounce_13','paths_10','part2_0_46','stripes_1',
    'drop_circles_25','drop_on_top_2','drop_on_top_7','drop_on_top_7_combo_1','drop_on_top_5','example1','emergence','reflected_path_0','gons_3'];
@@ -197,7 +157,6 @@ let mp4Nms =['bounce_','crosshatch_','emergence','gridSpinner_10','gridSpinner_1
 
 let gifs = [];
 let notgifs =[];
-//let gifNms =['part2_0_43','part2_0_46','path_rwalk_4_1','stripes_1'];
 let gifNms =['part2_0_43','part2_0_46','stripes_1'];
 
 let isOneVerbose='';
@@ -222,8 +181,6 @@ const occursIn = function (fln,names) {
 }
   
 const isOne = function (fln,nots,sos,names,kind){
-  //if (omit[fln]) {
-  //if (occursIn(fln,['crosshatch'])) {
   if (0&&framesIncluded[fln]&&(kind==='Anim')) {
     console.log('Included Frame',fln,'kind',kind,'fi',framesIncluded);
     debugger;
@@ -233,20 +190,12 @@ const isOne = function (fln,nots,sos,names,kind){
     console.log('NOTT',fln);
     return 0;
   }
-/*  if (occursIn(fln,omit)) {
-    if (isOneVerbose===fln) {
-      console.log(fln,' omitted');
-    }
-    return 0;
-  }*/
- // if (nots[fln]) {
   if (occursIn(fln,nots)) {
     if (isOneVerbose === fln) {
       console.log(fln,' is not',kind);
     }
     return 0;
   }
- // if (sos[fln]) {
   if (occursIn(fln,sos)) {
     if (isOneVerbose===fln) {
       console.log(fln,' is',kind);
@@ -298,7 +247,6 @@ const isgif = function (fln) {
  const xferFile = function(dir,ifl,iofl) {
     let ofl = iofl?iofl:ifl;
    let ipath = dir+'/'+ifl; 
-    //var vl = fs.readFileSync(ipath).toString();
     let opath = '../kop/'+dir+'/'+ofl;
    // console.log('copying ',ipath,' to ',opath);
     fs.copyFileSync(ipath, opath);
@@ -309,57 +257,36 @@ const isgif = function (fln) {
 let ln = dirc.length;
 let outp = 'module.exports = { sections:[ \n'
 for (let i=0;i<ln;i++ ) {
-//for (let i=0;i<10;i++ ) {
   let di  = dirc[i];
-//console.log(i,di);
   let dis = di.split('.');
   let ext = dis[1];
   let fln = dis[0];
- /* if (fln === 'grid_droplets_wide') {
-    console.log(fln,'ZZZZZZZZZZZZZZZZZZZZZZZ',omit.indexOf(fln)>-1);
-  }*/
-  //let title = titleMap[fln];
   let title = titleFun(fln);
   if (!title) {
     continue;
   }
-  let gd = fln.indexOf('grid_drop')===0;
+ /* let gd = fln.indexOf('grid_drop')===0;
   if (gd) {
     console.log('FLN',fln);
-  }
+  }*/
   if (fln.indexOf('__f')>-1) {
-    console.log('NOTTTTT',fln);
+  //  console.log('NOTTTTT',fln);
     continue;
   }
- // console.log('fln',fln);
-  /*let oim = occursIn(fln,omitIm);
-  if (oim&&gd) {
-     console.log('GD omitted');
-     continue;
-  }*/
     let anim = isAnim(fln);
    let inst = isInstance(fln);
   let iog = inst?'instances':'generators';
   //console.log('i',i,'di',di,'dis',dis,'fln',fln,'ext',ext);
   let kind = fln.split('_')[0];
- 
-  //if ((ext === 'jpg')&&(kind!=='web')&&(!anim)&&(omit.indexOf(fln)===-1))  {
-  if ((ext === 'jpg')&&(!anim))  {
+   if ((ext === 'jpg')&&(!anim))  {
 	  let cmd = `[0,'${fln}','${iog}','','${title}',{}], \n`;
-    console.log('cmd',cmd);
-    if (fln === '3d_grid_0') {
-      console.log(fln,'AAAAAAAAAAAAAAAAAAAAAAAAA');
-    }
+    //console.log('cmd',cmd);
     outp+=cmd;
     if (xferImages) { 
       xferFile('public/images/std_size/',di);
       xferFile('public/images/thumbs/',di);
     }
-  } else {
-    if (gd) {
-       console.log('GD Omitted');
-    }
-  }
+  } 
 }
 console.log('OOKK]}');
 outp+=']}';
@@ -368,7 +295,6 @@ fs.writeFileSync('admin/allImages.js',outp);
 console.log('ANIMANIM');
 let aoutp = 'module.exports = { sections:[ \n'
 for (let i=0;i<ln;i++ ) {
-//for (let i=0;i<10;i++ ) {
   let di  = dirc[i];
 //console.log(i,di);
   let dis = di.split('.');
@@ -383,19 +309,12 @@ for (let i=0;i<ln;i++ ) {
     console.log('Frame',fr);
   }  
   let anim = isAnim(fln);
-  if (occursIn(fln,['crosshatch'])) {//==='crosshatch_1__f083') {
-   console.log('XX',fln,'anim',anim);
-  }
-  if (fln==='motion_18_32') {
-    console.log('fln',fln,ext,'anim',anim);
-  }
    let inst = isInstance(fln);
   let iog = inst?'instances':'generators';
   //console.log('i',i,'di',di,'dis',dis,'fln',fln,'ext',ext);
   let kind = fln.split('_')[0];
   let mp4=isMp4(fln);
   let gif=isgif(fln);
- // let vid = mp4?'mp4':'gif';
   let vid = gif?'gif':'mp4'
   if (fln==='crosshatch_1') {
      console.log('fln',fln,'vid',vid);
