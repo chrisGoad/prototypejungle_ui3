@@ -24,6 +24,141 @@ let jsd = JSON.stringify(dirc);
  motion_18_16:'Motion 5',motion_18_4:'Motion 6',motion_18_8:'Motion 7',mutate_2:'Mutate 1',mutate_6:'Mutate 2',curves_7:'Beast',
  path_avoidance_6:'Intersections',cubes_1:'Cubes',curves_10:'Stretch',line_path_2_11:'Bounce 9',drop_circles_26:'Manic',
  drop_semi_ordered:'Semi-ordered',grid_smoke_1:'Smoke',stripes_1:'Stripes',lines_chaos_within_order:'Chaos within Order'}
+ 
+ 
+let numericMaps = {dropCircles:{3:1,0:2,1:3,10:4,13:5,15:6,18:7,4:8,7:9,9:10},
+partition:{10:1,12:2,
+13:3,14:4,15:5,16:6,
+17:7,19:8,2:9,20:10,
+22:11,23:12,24:13,
+25:14,26:15,27:16,28:17,
+29:18,3:19,37:20,4:21,
+5:22,51:23,52:24,56:25,
+6:26,7:27,9:28
+},
+    //10:1,11:2,12:3,13:4,14:5,15:6,16:7,17:8,18:9,19:10,2:11,
+//20:12,21:13,22:14,23:15,
+//24:16,25:17,26:18,27:19,28:20,29:21,3:22,37:23,
+//4:24,41:25,44:26,5:27,50:28,51:29,52:30,56:31,6:32,7:33,9:34},
+bounce:{1:1,13:2,15:3,17:4,18:5,4:6,5:7,9:8},
+curves:{1:1,3:2,4:3,5:4,6:5,8:6,9:7},
+gridSpinner:{13:1,5:2,0:3,1:4,10:5,11:6,15:7,17:8,7:9},
+motion:{10:1,11:2,12:3,15:4,2:5,3:9,0:6,1:7,21:8,4:9,32:10,5:11,9:12},
+paths:{3:2,4:3,5:4,7:5}
+};
+
+const lowerCaseA = 'abcdefghijklmnopqrstuvwxyz';
+const upperCaseA = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+const toUpperCase = function (lt) {
+  let idx = lowerCaseA.indexOf(lt);
+  if (idx<0) {
+    return lt;
+  }
+  let uc = upperCaseA[idx];
+  return uc;
+}
+
+const capitalize = function (str) {
+  let ln = str.length;
+  if (ln===0) {
+     return str;
+  }
+  let lt0 = str[0];
+  let clt0 = toUpperCase(lt0);
+  let rst = str.substring(1);
+  let vl = clt0+rst;
+  return vl;
+}
+
+  const titleFun = (str)=> {
+  /*  if ((!alll)&&(!allA)) {
+      return str;
+    }*/
+    if (str.indexOf('curves_10')>-1) {
+       console.log(str,'!!!');
+    }
+    let mpt = titleMap[str];
+    if (mpt) {
+       //console.log('str',str,'mpt',mpt);
+        //console.log(str,'->',mpt);
+
+       return mpt;
+    }
+    let spl = str.split('_');
+    let sp0=spl[0];
+    let sp1=spl[1];
+    let sp2=spl[2];
+    let spln = spl.length;
+ //   console.log('spln',spln,'sp0',sp0,'sp1',sp1,'sp2',sp2);
+    if (sp0==='grid') {
+//          console.log('grid!!!!!!!!!!');
+     }
+    if (spln=== 2) {
+      let ttl;
+      let csp0=capitalize(sp0);
+     // if ((sp0 === 'grid')||(sp0 === 'lines')||(sp0 === 'drop')) {
+       // ttl = capitalize(sp1);
+      if ((sp0==='bounce')||(sp0 === 'curves')||(sp0==='gridSpinner')||(sp0 === 'motion')||(sp0 === 'paths')||
+      (sp0==='drop')||(sp0==='grid')||(sp0==='lines')){
+      
+        let sp1n =1*sp1;
+        let sp1num  = Number.isInteger(sp1n);
+        if (sp1num) {
+          let nummap = numericMaps[sp0];
+          let num = nummap?nummap[sp1n]:sp1;
+          if (num===undefined) {
+            console.log('num UNDEFINED 00');
+            return num;
+          }
+          ttl = csp0+' '+num;
+        } else {
+          ttl = capitalize(sp1);
+        }
+        console.log(str,'=>=>=>00',ttl);
+        return ttl;
+      }
+    }
+    if (spln===3) {
+      if ((sp0==='drop')&&(sp1==='circles')) {
+         let nummap = numericMaps.dropCircles;
+         let num = nummap[sp2];
+         if (num===undefined) {
+            console.log('num UNDEFINED 11');
+            return num;
+         }
+         let ttl = 'Drop Circles '+num;
+       console.log(str,'==>',ttl);
+         return ttl;
+      }
+ 
+      if ((sp0==='part2')&&(sp1==='0')) {
+         let nummap = numericMaps.partition;
+         let numm = nummap[sp2];
+         if (!numm) {
+           return;
+         }
+         //let num = numm?numm:sp2;
+        let ttl = 'Partition '+numm;
+       //  let ttl = 'Partition '+sp2;
+         console.log(str,'=>==>',ttl);
+         return ttl;
+      }
+      if ((sp0==='drop')&&(sp1==='circles')) {
+        let ttl = 'dropCircles '+sp2;
+        console.log(str,'=>==>',ttl);
+        return ttl;
+
+      }
+       if ((sp0==='drop')&&(sp1==='all')) {
+        return 'drop '+sp2;
+      }
+       if (0&&(sp0==='motion')&&(sp1==='18')) {
+        return 'motion 1'+sp2;
+      }
+    }
+    return undefined;
+  //  return str;
+  }
 //console.log(jsd);
 /*let omit ={bounce_0:1,'3d_grid_2':1,'3d_grid_0':1,bounce_11:1,bounce_13:1,bounce_14:1,bounce_16_f073:1,bounce_2:1,bounce_6:1,bounce_7:1,bounce_8:1,
            bounce_3:1,CMB:1,color_path_0:1,crosshatch_0:1,curves_2:1,drop_circles_17:1,drop_dandelion:1,drop_dandelion_with_circles:1,drop_ice:1}*/
@@ -190,7 +325,8 @@ for (let i=0;i<ln;i++ ) {
   if (fln === 'grid_droplets_wide') {
     console.log(fln,'ZZZZZZZZZZZZZZZZZZZZZZZ',omit.indexOf(fln)>-1);
   }
-  let title = titleMap[fln];
+  //let title = titleMap[fln];
+  let title = titleFun(fln);
   if (!title) {
     continue;
   }

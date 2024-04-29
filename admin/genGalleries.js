@@ -7,9 +7,9 @@ const toBoolean = (v) => {
   }
 }
 
-const lowerCaseA = 'abcdefghijklmnopqrstuvwxyz';
-const upperCaseA = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-const toUpperCase = function (lt) {
+const lowerCaseAA = 'abcdefghijklmnopqrstuvwxyz';
+const upperCaseAA = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+const toUpperCasee = function (lt) {
   let idx = lowerCaseA.indexOf(lt);
   if (idx<0) {
     return lt;
@@ -18,7 +18,7 @@ const toUpperCase = function (lt) {
   return uc;
 }
 
-const capitalize = function (str) {
+const capitalizee = function (str) {
   let ln = str.length;
   if (ln===0) {
      return str;
@@ -338,7 +338,7 @@ let numPages = 0;
   
   // gridSpinner_13:'Spinner',gridSpinner_5:'Walkers',part2_0_43:'You are getting very sleepy',curves_10:'Stretch',paths_10:'Tower',};
   
-let numericMaps = {dropCircles:{3:1,0:2,1:3,10:4,13:5,15:6,18:7,4:8,7:9,9:10},
+let numericMapss = {dropCircles:{3:1,0:2,1:3,10:4,13:5,15:6,18:7,4:8,7:9,9:10},
 partition:{10:1,12:2,
 13:3,14:4,15:5,16:6,
 17:7,19:8,2:9,20:10,
@@ -360,7 +360,7 @@ paths:{3:2,4:3,5:4,7:5}
 };
 
 
-  const titleFun = (str)=> {
+  const titleFunn = (str)=> {
     if ((!alll)&&(!allA)) {
       return str;
     }
@@ -595,7 +595,10 @@ const stripOrnt = function (str) {
   'part2_0_1','drop_circles_14','drop_interpolate_0','ip_test_2',
  'triangle_0','grid_droplets_wide','drop_rects_1','drop_all_0',
  'drop_all_2','grid_distortion_field_warped','drop_circles3','drop_on_line',
- 'drop_circles_3','interpolate_colors_8','drop_on_top_2','drop_channels'
+ 'drop_circles_3','interpolate_colors_8','drop_on_top_2','drop_channels',
+ 'part2_0_27','part2_0_23','part2_0_5','part2_0_10',
+ 'part2_0_3','part2_0_29','part2_0_6','part2_0_26',
+ 'drop_light','grid_enigma','drop_circles_18','drop_circles_4',
 ];
 /* 'part2_0_1','drop_circles_14','drop_circles_3','drop_interpolate_0',
  'grid_distortion_field_warped','grid_droplets_wide','grid_fade','grid_ramp',
