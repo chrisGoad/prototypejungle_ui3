@@ -47,26 +47,27 @@ let signed = 0
 let forPJ = kind === 'forPJ';
 let book = kind === 'book';
 let top = kind === 'top';
-let drop = kind === 'drop';
-let grid = kind === 'grid';
-let lines = kind === 'lines';
-let anim = kind === 'anim';
+//let drop = kind === 'drop';
+//let grid = kind === 'grid';
+//let lines = kind === 'lines';
+//let anim = kind === 'anim';
 let stills = kind === 'stills';
-let partition = kind === 'partition';
-let web = kind === 'web';
+//let partition = kind === 'partition';
+//let web = kind === 'web';
 let alll = kind === 'all';
 let allA = kind === 'allA';
 let sortByOrder = toBoolean(sortByOrderstr);
 /*let byKind = kind === 'byKind';*/
 let alternate = kind === 'alt';
-let byLikes = kind === 'byLikes';
-let byAspect = kind === 'byAspect';
-let vertical = kind === 'vertical';
-let horizontal = kind === 'horizontal';
-let horizontalnf = kind === 'horizontalnf'; // horizontal no frame
-let square = kind === 'square';
-let imagesHere = kind === 'imagesHere';
-let images = (kind === 'images') || imagesHere;
+//let byLikes = kind === 'byLikes';
+//let byAspect = kind === 'byAspect';
+//let vertical = kind === 'vertical';
+//let horizontal = kind === 'horizontal';
+//let horizontalnf = kind === 'horizontalnf'; // horizontal no frame
+//let square = kind === 'square';
+//let imagesHere = kind === 'imagesHere';
+let images = (kind === 'images');
+//let images = (kind === 'images') || imagesHere;
 
 let local_images = alwaysLocal || (kind === 'local_images') || alternate ;
 //console.log('local_images',local_images);
@@ -90,20 +91,20 @@ let imKind;
 } else if (allA)  {
   sectionsPath = './allAnimations.js';
   imKind = 'g'
-} else if (byLikes) {
+} /*else if (byLikes) {
   sectionsPath = './images.js';
   imKind = 'g';
-} else if (alternate) {
+}*/ else if (alternate) {
  sectionsPath = './altSections.js';
   sortByOrder = 0;
   imKind = 'book';
 }  else if (top)  {
   sectionsPath = './galleries.js';
   imKind = 'g'
-} else if (images || forKOP  || forPJ || drop || grid || lines || anim || partition || web)  {
+} /*else if (images || forKOP  || forPJ || drop || grid || lines || anim || partition || web)  {
   sectionsPath = './images.js';
   imKind = 'g'
-}   else if (local_images)  {
+} */  else if (local_images)  {
   sectionsPath = './images.js';
   imKind = 'g'
 } else {
@@ -128,29 +129,29 @@ console.log('sectionsPath',sectionsPath,'imKind',imKind);
 let outPath;
 if (alternate) {
   outPath = 'public/altImages.html';
-} else if (book) {
+} /*else if (book) {
   outPath = 'public/bookImages.html';
 } else if (drop) {
    outPath = 'public/dropImages.html';
 }else if (partition) {
    outPath = 'public/partitionImages.html';
-}  else if (top) {
+} */ else if (top) {
    outPath = 'public/galleries.html';
-}  else if (grid) {
+}/*  else if (grid) {
   outPath = 'public/gridImages.html';
 } else if (lines) {
   outPath = 'public/linesImages.html';
 } else if (anim) {
   outPath = 'public/animImages.html';
-} else if (stills) {
+} */else if (stills) {
   outPath = 'public/stillsImages.html';
 }else if (alll) {
   outPath = 'public/allImages.html';
 } else if (allA) {
   outPath = 'public/allAImages.html';
-}  else if (web) {
+} /* else if (web) {
   outPath = 'public/webImages.html';
-} else {
+} */else {
   outPath = 'public/images.html';
 }
 console.log('sectionsPath', sectionsPath,'outPath',outPath);
@@ -240,7 +241,7 @@ if (imKind === 'g') {
 
       <p class="introLineSmall">To visit the galleries, click on their titles or images.</p>
     `
-   } else if (partition) {
+   } /*else if (partition) {
 
       kindTitle = 'Partition Trees';
       aboutURL = "kop_partition.html";
@@ -259,7 +260,7 @@ if (imKind === 'g') {
     } else if (anim) {
       kindTitle = 'Animation'
       aboutURL = "kop_anim.html";
-    } else if (stills) {
+    } */else if (stills) {
       kindTitle = 'Frames From Animations'
       aboutURL = "kop_stills.html";
     }  else if (alll) {
@@ -271,7 +272,8 @@ if (imKind === 'g') {
     }
     if (!top) {
     
-      aboutStart = anim?'':`<a style="color:white" href="doc/${aboutURL}">`;
+      //aboutStart = anim?'':`<a style="color:white" href="doc/${aboutURL}">`;
+      aboutStart = `<a style="color:white" href="doc/${aboutURL}">`;
       aboutLink = `${aboutStart}about ${kindTitle}</a>`;
       let aboutLine = '';//alll?`<p class="introLineSmall">${aboutLink}</p>`:'';;  
       let enlargeText = allA?'To run the animations, click on the images.':'To enlarge the images, click on them.';
@@ -362,7 +364,8 @@ const thingString = function (order,ix,dir,useThumb,ititle,props) {
 //  console.log('kind',kind);
   let kindArg = 'imKind='+kind;
   let noTitleArg = '';//noTitle?'&noTitle=1':'';
-  let localArg = 'local='+(local_images||imagesHere?1:0);
+ // let localArg = 'local='+(local_images||imagesHere?1:0);
+  let localArg = 'local='+(local_images);
 //  console.log('local_images',local_images,'imagesHere',imagesHere);
 	let theImageArg = '';
 	pageNumber++;
@@ -371,7 +374,7 @@ const thingString = function (order,ix,dir,useThumb,ititle,props) {
 	let astart = `<a style="color:white" href="page.html?image=${vx}&${pageArg}&${kindArg}&${localArg}${noTitleArg}">`;
   	let galURL,galStart,galLink;
   if (top) {
-    if (title === 'Drops') {
+   /* if (title === 'Drops') {
       galURL = "dropImages.html";
      // console.log('galURL');
     } else if (title === 'Lines') {
@@ -384,7 +387,7 @@ const thingString = function (order,ix,dir,useThumb,ititle,props) {
       galURL = "gridImages.html";
     } else if (title === 'Webs') {
       galURL = "webImages.html";
-    } else if (title === 'Stills') {
+    } else */ if (title === 'Stills') {
       galURL = "stillsImages.html";
     } else if (alll) {
       galURL = "allImages.html";
@@ -395,7 +398,8 @@ const thingString = function (order,ix,dir,useThumb,ititle,props) {
     galLink = `${galStart}${title}</a>`
   }
   //console.log('ASTART',astart);
-  let propsStr = imagesHere?`<span style="font-size:10pt">${likes?'Likes '+likes:''} ${posted?"":" NOT POSTED"} ${local_images?'Local':''} ${category}</span><br>`:'';;
+  //let propsStr = imagesHere?`<span style="font-size:10pt">${likes?'Likes '+likes:''} ${posted?"":" NOT POSTED"} ${local_images?'Local':''} ${category}</span><br>`:'';;
+  let propsStr = '';
   let sourcenm = `source${sources?'s':''}`;
  // console.log('forKOP',forKOP);
 	if (forKOP) {
