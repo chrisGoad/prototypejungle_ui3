@@ -9,9 +9,10 @@ let dirc =fs.readdirSync(dir);
 let jsd = JSON.stringify(dirc);
  const titleMap = {line_path_2_11:'line path 0',mmotion_18_4:'motion 0',mmotion_18_8:'motion 1',mmotion_18_16:'motion 2',mmotion_18_32:'motion 3',
   mmotion_3:'motion 4',ddrop_circles3:'drop_3',bounce_16:'Square Dance',motion_24:'Colliding Orbits',drop_circles_20:'Necker',
-  gons_3:'Pulsation 1',step_ring_0:'Pulsation 2',motion_18_32:'Mandala',crosshatch_1:'Crosshatch',part2_0_34:'Paths 1',part2_0_1:'Vortex',drop_circles_14:'Bloom',
+  gons_3:'Pulsation 1',step_ring_0:'Pulsation 2',motion_18_32:'Mandala',crosshatch_1:'Crosshatch',
+  part2_0_34:'Paths 1',part2_0_1:'Vortex',drop_circles_14:'Bloom',drop_channels:'Channels',
   droppp_circles_3:'Dropped Circles',drop_interpolate_0:'Motion Illusion',grid_distortion_field_warped:'Distortion Field',
-  drop_all_0:'Thatch',drop_all_2:'Inversion',drop_circles3:'Pop',drop_space_junk:'Space Junk',drop_many_textures:'Many Textures',
+  drop_all_0:'Thatch',drop_all_2:'Inversion',drop_circles3:'Pop',drop_circles_3:'Drop Circles 1',drop_space_junk:'Space Junk',drop_many_textures:'Many Textures',
   drop_on_circles:'Borromean Knot',drop_metal_2:'Metal',drop_embedded_circles:'Embedded Circles',drop_on_line:'Cross 1',
   drop_on_top_2:'Drop on Top 1',drop_on_top_7:'Drop on Top 2',drop_rects_1:'Field of Squares',drop_starry_night:'Starry Night',
   drop_square:'Cross 2',grid_drop_0:'Spilled Paint',grid_cloudy_sky:'Cloudy Sky',triangle_1:'Triangle',lines_2:'Cobweb',part_0_4:'Partition 29',

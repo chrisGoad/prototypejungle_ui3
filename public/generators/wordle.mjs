@@ -29,7 +29,7 @@ Object.assign(rs,topParams);
   this.doubles ='';
   // prohibited letters at each position
   let s0n = '';
-  let s1n = '';
+  let s1n = 'a';
   let s2n = 'r';
   let s3n = '';
   let s4n = '';
@@ -38,11 +38,11 @@ Object.assign(rs,topParams);
   // prohibited dipthongs
   this.dprohibs  = [];
   // known letters
-  let k0 = 'p';
+  let k0 = '';
   let k1 = '';
   let k2 = '';
   let k3 = '';
-  let k4 = 'e';
+  let k4 = 't';
   this.known = [k0,k1,k2,k3,k4];
   this.notPossibles = [];
   this.possibles5 = [];
@@ -51,7 +51,7 @@ Object.assign(rs,topParams);
  // let abet=this.abet = 'fjqvxyz';
 //  let cm = this.complement('might clasp brief wound');
 //  let cm = this.complement('parse might wound black');
-  let cm = this.complement('as might');// wound black');
+  let cm = this.complement('pse migh would');// black');
 
   // possible letters
   let possLets =this.possLets = this.alphabetize(cm);

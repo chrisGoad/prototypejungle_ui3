@@ -592,12 +592,17 @@ const stripOrnt = function (str) {
  const favorites =  ['crosshatch_1','bounce_16','curves_10','motion_24','drop_circles_20','gridSpinner_13','gridSpinner_5','part2_0_43','paths_10','motion_18_32',
  'gons_3',
  //now image favorites
- 'part2_0_1','drop_circles_14','drop_circles_3','drop_interpolate_0',
+  'part2_0_1','drop_circles_14','drop_interpolate_0','ip_test_2',
+ 'triangle_0','grid_droplets_wide','drop_rects_1','drop_all_0',
+ 'drop_all_2','grid_distortion_field_warped','drop_circles3','drop_on_line',
+ 'drop_circles_3','interpolate_colors_8','drop_on_top_2','drop_channels'
+];
+/* 'part2_0_1','drop_circles_14','drop_circles_3','drop_interpolate_0',
  'grid_distortion_field_warped','grid_droplets_wide','grid_fade','grid_ramp',
 'interpolate_colors_3','interpolate_colors_6',
 'ip_test_2','lines_bug_eyes',
 'quad_9_6',
-'triangle_0' ];
+'triangle_0' ];*/
 let sectionString = function (things) {
  // console.log('things',things);
 	let numThingsThisLine = 0;
