@@ -318,137 +318,9 @@ document.addEventListener('DOMContentLoaded', () => {
 `;
 let pageNumber = 0;
 let numPages = 0;
- const titleMapp = {line_path_2_11:'line path 0',mmotion_18_4:'motion 0',mmotion_18_8:'motion 1',mmotion_18_16:'motion 2',mmotion_18_32:'motion 3',
-  mmotion_3:'motion 4',ddrop_circles3:'drop_3',bounce_16:'Square Dance',motion_24:'Colliding Orbits',drop_circles_20:'Necker',
-  gons_3:'Pulsation 1',step_ring_0:'Pulsation 2',motion_18_32:'Mandala',crosshatch_1:'Crosshatch',part2_0_34:'Paths 1',part2_0_1:'Vortex',drop_circles_14:'Bloom',
-  droppp_circles_3:'Dropped Circles',drop_interpolate_0:'Motion Illusion',grid_distortion_field_warped:'Distortion Field',
-  drop_all_0:'Thatch',drop_all_2:'Inversion',drop_circles3:'Pop',drop_space_junk:'Space Junk',drop_many_textures:'Many Textures',
-  drop_on_circles:'Borromean Knot',drop_metal_2:'Metal',drop_embedded_circles:'Embedded Circles',drop_on_line:'Cross 1',
-  drop_on_top_2:'Drop on Top 1',drop_on_top_7:'Drop on Top 2',drop_rects_1:'Field of Squares',drop_starry_night:'Starry Night',
-  drop_square:'Cross 2',grid_drop_0:'Spilled Paint',grid_cloudy_sky:'Cloudy Sky',triangle_1:'Triangle',lines_2:'Cobweb',part_0_4:'Partition 29',
-  part2_0_41a:'Partition 25',part2_0_43:'You are getting very sleepy',paths_10:'Tower',part2_0_35:'Evolving Partition 1',part2_0_46:'Evolving Partition 2',
-  part2_0_41b:'Partition 25',grid_quilt_1:'Quilt 1',grid_quilt_3:'Quilt 2',grid_two_quilts:'Two Quilts',path_rwalk_4_0:'Swarm',
-  grid_droplets_wide:'Droplets',gggrid_fade:'Fade',gggrid_ramp:'Ramp',interpolate_colors_3:'Interpolate Colors 1',interpolate_colors_6:'Interpolate Colors 2',
- interpolate_colors_8:'Interpolate Colors 3',interpolate_colors_9:'Interpolate Colors 4',
- ip_test_2:'Waves',triangle_0:'Form',grid_1:'Bulge',grid_3:'Grid Grid',grid_4:'Rumpled 1',grid_6:'Rumpled 2',path_avoidance_5:'Figure/Ground',
- motion_18_16:'Motion 5',motion_18_4:'Motion 6',motion_18_8:'Motion 7',mutate_2:'Mutate 1',mutate_6:'Mutate 2',curves_7:'Beast',
- path_avoidance_6:'Intersections',cubes_1:'Cubes',curves_10:'Stretch',line_path_2_11:'Bounce 9',drop_circles_26:'Manic',
- drop_semi_ordered:'Semi-ordered',grid_smoke_1:'Smoke',stripes_1:'Stripes',lines_chaos_within_order:'Chaos within Order'}
-  
-  
-  // gridSpinner_13:'Spinner',gridSpinner_5:'Walkers',part2_0_43:'You are getting very sleepy',curves_10:'Stretch',paths_10:'Tower',};
-  
-let numericMapss = {dropCircles:{3:1,0:2,1:3,10:4,13:5,15:6,18:7,4:8,7:9,9:10},
-partition:{10:1,12:2,
-13:3,14:4,15:5,16:6,
-17:7,19:8,2:9,20:10,
-22:11,23:12,24:13,
-25:14,26:15,27:16,28:17,
-29:18,3:19,37:20,4:21,
-5:22,51:23,52:24,56:25,
-6:26,7:27,9:28
-},
-    //10:1,11:2,12:3,13:4,14:5,15:6,16:7,17:8,18:9,19:10,2:11,
-//20:12,21:13,22:14,23:15,
-//24:16,25:17,26:18,27:19,28:20,29:21,3:22,37:23,
-//4:24,41:25,44:26,5:27,50:28,51:29,52:30,56:31,6:32,7:33,9:34},
-bounce:{1:1,13:2,15:3,17:4,18:5,4:6,5:7,9:8},
-curves:{1:1,3:2,4:3,5:4,6:5,8:6,9:7},
-gridSpinner:{13:1,5:2,0:3,1:4,10:5,11:6,15:7,17:8,7:9},
-motion:{10:1,11:2,12:3,15:4,2:5,3:9,0:6,1:7,21:8,4:9,32:10,5:11,9:12},
-paths:{3:2,4:3,5:4,7:5}
-};
-
-
-  const titleFunn = (str)=> {
-    if ((!alll)&&(!allA)) {
-      return str;
-    }
-    if (str.indexOf('curves_10')>-1) {
-       console.log(str,'!!!');
-    }
-    let mpt = titleMap[str];
-    if (mpt) {
-       //console.log('str',str,'mpt',mpt);
-        //console.log(str,'->',mpt);
-
-       return mpt;
-    }
-    return;
-    let spl = str.split('_');
-    let sp0=spl[0];
-    let sp1=spl[1];
-    let sp2=spl[2];
-    let spln = spl.length;
- //   console.log('spln',spln,'sp0',sp0,'sp1',sp1,'sp2',sp2);
-    if (sp0==='grid') {
-//          console.log('grid!!!!!!!!!!');
-     }
-    if (spln=== 2) {
-      let ttl;
-      let csp0=capitalize(sp0);
-     // if ((sp0 === 'grid')||(sp0 === 'lines')||(sp0 === 'drop')) {
-       // ttl = capitalize(sp1);
-      if ((sp0==='bounce')||(sp0 === 'curves')||(sp0==='gridSpinner')||(sp0 === 'motion')||(sp0 === 'paths')||
-      (sp0==='drop')||(sp0==='grid')||(sp0==='lines')){
-      
-        let sp1n =1*sp1;
-        let sp1num  = Number.isInteger(sp1n);
-        if (sp1num) {
-          let nummap = numericMaps[sp0];
-          let num = nummap?nummap[sp1n]:sp1;
-          if (num===undefined) {
-            console.log('num UNDEFINED 00');
-            return num;
-          }
-          ttl = csp0+' '+num;
-        } else {
-          ttl = capitalize(sp1);
-        }
-        console.log(str,'=>=>=>00',ttl);
-        return ttl;
-      }
-    }
-    if (spln===3) {
-      if ((sp0==='drop')&&(sp1==='circles')) {
-         let nummap = numericMaps.dropCircles;
-         let num = nummap[sp2];
-         if (num===undefined) {
-            console.log('num UNDEFINED 11');
-            return num;
-         }
-         let ttl = 'Drop Circles '+num;
-       console.log(str,'==>',ttl);
-         return ttl;
-      }
  
-      if ((sp0==='part2')&&(sp1==='0')) {
-         let nummap = numericMaps.partition;
-         let numm = nummap[sp2];
-         if (!numm) {
-           return;
-         }
-         //let num = numm?numm:sp2;
-        let ttl = 'Partition '+numm;
-       //  let ttl = 'Partition '+sp2;
-         console.log(str,'=>==>',ttl);
-         return ttl;
-      }
-      if ((sp0==='drop')&&(sp1==='circles')) {
-        let ttl = 'dropCircles '+sp2;
-        console.log(str,'=>==>',ttl);
-        return ttl;
-
-      }
-       if ((sp0==='drop')&&(sp1==='all')) {
-        return 'drop '+sp2;
-      }
-       if (0&&(sp0==='motion')&&(sp1==='18')) {
-        return 'motion 1'+sp2;
-      }
-    }
-    return str;
-  }
+  
+  
 const thingString = function (order,ix,dir,useThumb,ititle,props) {
 	debugger;
   let {variant,likes,posted,category,sources,noTitle,video} = props;
@@ -456,10 +328,7 @@ const thingString = function (order,ix,dir,useThumb,ititle,props) {
   if (!alll&&!allA&&((kind !=='alt') && (kind !== 'book') &&(category !==  kind))) {
     return '</div>';a
   }
-  if (ititle==='Droplets') {
-    console.log('DropletsAAAAAAAAAA');
-  }
-  //let fr = anim?props.frame:'';
+
   let fr = allA?props.frame:'';
   if (fr) {
     //console.log('FR',fr,'kind',kind);
@@ -473,18 +342,11 @@ const thingString = function (order,ix,dir,useThumb,ititle,props) {
 	let ext = video?video:((spix.length === 1)?'jpg':spix[1]);
 	let x = path + '.'+ ext;
  // console.log('ix',ix,'x',x);
- 
-
- // let title = noTitle?pageNumber+'':titleFun(ititle)
   let title = ititle;
-
-  
-  //console.log('ititle',ititle,'title',title);
   theTitles.push(title);
   let vpath = (variant?path+'_v_'+variant:path);
   //console.log('variant',variant);
   //console.log('vpath',vpath);
- // let vx = fr?vpath+'__'+fr+'.'+ext:vpath+'.'+ext;
   let vx = vpath+'.'+ext;
   let vpath_fr = fr?vpath+'__'+fr:vpath;
  // console.log('vx',vx);
@@ -497,7 +359,6 @@ const thingString = function (order,ix,dir,useThumb,ititle,props) {
     console.log('thumbsrc',thumbsrc,'kind',kind);
   }
 	let pageArg = 'page='+pageNumber;
-  //let kindArg = 'imKind='+imKind;
 //  console.log('kind',kind);
   let kindArg = 'imKind='+kind;
   let noTitleArg = '';//noTitle?'&noTitle=1':'';
@@ -538,7 +399,6 @@ const thingString = function (order,ix,dir,useThumb,ititle,props) {
   let sourcenm = `source${sources?'s':''}`;
  // console.log('forKOP',forKOP);
 	if (forKOP) {
-		//let titleLink = title?`${astart}${title}</a></p>`:'';
 		let titleLink = title?`${astart}${title}</a>`:'';
 		//console.log('titleLink',titleLink);
     srcUrl = (sources)?`https://prototypejungle.net/doc/${path}_sources.html`:`https://prototypejungle.net/${dir}/${path}.${fileExt}`;
@@ -548,13 +408,10 @@ const thingString = function (order,ix,dir,useThumb,ititle,props) {
 
 	} else  {
   //  console.log('WWWWWWWWWWW');
- // if (top) {
-		//console.log('top','galLink',galLink);
     rs = `<div><p class="centered">${galLink}</p>`;
 
     rs = rs +
     `<p class="centered">${galStart}<img width="200" src="${thumbsrc}" alt="Image Missing"></a></p></div>`;
-	//} else if (!forKOP) {
     srcUrl = (sources)?`doc/${path}_sources.html`:`${dir}/${path}.${fileExt}`;
    // console.log('srcUrl',srcUrl);
 	//	console.log('not for KOP');
@@ -604,12 +461,7 @@ const stripOrnt = function (str) {
  'grid_cloth','grid_ramp','grid_smoke_1','part2_0_9'
  
  ];
-/* 'part2_0_1','drop_circles_14','drop_circles_3','drop_interpolate_0',
- 'grid_distortion_field_warped','grid_droplets_wide','grid_fade','grid_ramp',
-'interpolate_colors_3','interpolate_colors_6',
-'ip_test_2','lines_bug_eyes',
-'quad_9_6',
-'triangle_0' ];*/
+
 let sectionString = function (things) {
  // console.log('things',things);
 	let numThingsThisLine = 0;
@@ -623,7 +475,7 @@ let sectionString = function (things) {
   `;
 	let ln = things.length;
   //console.log('ln',ln);
-  const compareLikes = function (thing1,thing2) {
+/*  const compareLikes = function (thing1,thing2) {
     let likes1 = (thing1.length >= 6)?thing1[5]:0;
     let likes2 = (thing1.length >= 6)?thing2[5]:0;
     if (likes1 === likes2) {
@@ -634,9 +486,7 @@ let sectionString = function (things) {
     }
     return -1;
   }
-  if (byLikes) {
-   // things.sort(compareLikes);
-  }
+*/
   const compareByOrder = function (thing1,thing2) {
     let title1 = thing1[1];
     let title2= thing2[1];
@@ -672,7 +522,6 @@ let sectionString = function (things) {
     things.sort(compareByOrder);
   }
   // console.log('things ordered',things);
-//  ln = 2;
 	for (let i=0;i<ln;i++) {
 		let thing = things[i];
    //console.log('thing',thing,'i',i);
@@ -690,8 +539,6 @@ let sectionString = function (things) {
       }
      // console.log('PROPS',props);
       //console.log('file',file);
-     // let tov = typeof variant;
-    //  console.log('is variant',tov);
       let ord = thing[0];
       let atitle=title?title:file;
       let ts = thingString(ord,file,directory,useThumb,atitle,props);
@@ -733,7 +580,6 @@ const writeTheTitles = function () {
  //   console.log('writeTheTitles',js,titlesPath);
 
 	fs.writeFileSync(titlesPath,js);
-//	fs.writeFileSync(alternate?'public/altTitles.js':(byKind?'public/byKindTitles.js':'public/theTitles.js'),js);
 }
 const writeTheLocals = function () {
 	let js = `let ${localsVar} = ${JSON.stringify(theLocals)};`
