@@ -731,6 +731,17 @@ Line.toEquation = function () {
 	}
 	return {a,b,c};
 }
+
+Point.nearestPointOnLine = function (line) {
+  let {point,direction} = line;
+  let n = direction.normal;
+  let linen = Line.mk(p,n)
+  let ip = line.intersectLine(linen);
+  return ip;
+}
+
+
+
 // needs fixing - does not work
 Line.nearestPoint = function (p) {
 	//debugger;
@@ -2509,7 +2520,28 @@ const intersectRays = function (p0,v0,p1,v1) {
   let p = Point.mk(x,y);
   return p;
 }
+// it is assumed that p is on the segment's line.
+// let sln be the length of the segment
+// the value returned is minus the multiple  of sln needed to get from end0 to p if p is outside the segment but nearer end0
+// the value returned is  the multiple  of sln needed to get from end0 to p if p is outside the segment but nearer end1
+// the value returned is the fraction along the segment from end0 to end1 if p lies on the segment
 
+LineSegment.fractionAlong = function (p) {
+  let sln = this.length();
+  let {end0,end1} = this;
+  let lnte0 = p.distance(end0);
+  let lnte1 = p.distance(end1);
+  let fr = lnte/sln
+  if ((lnte0 <= sln) && (lnte1 <= sln)) {
+    return fr
+  }
+  if (lnte0<lnte1) {
+    return -fr
+  }
+  return fr;
+}
+  
+// works for any p
 LineSegment.onSeg = function(p) {
   let seg0 = this;
   if (isNaN(p.x)||isNaN(p.y)) {
