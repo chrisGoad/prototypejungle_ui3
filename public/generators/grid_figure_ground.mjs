@@ -123,7 +123,7 @@ rs.initProtos = function () {
 
 }  
 
-let nc = 32;
+let nc = 128;
 //nc = 8;
 let wd = 200;
 let topParams = {numRows:nc/2,numCols:nc,width:wd,height:wd/2,pointJigglee:4,framePadding:0.25*wd,frameVisible:1,
@@ -161,18 +161,23 @@ rs.initialize = function () {
   crc.fill = 'magenta';
   crc.fill = 'rgb(40,0,40)';
   crc.fill = 'rgb(0,0,0)';
-  //crc.fill = 'gray';
+  let crc2 = circleP.instantiate().show();
+
+  crc2.fill = 'rgb(50,50,0)';
   //this.set('wr',wr);
   wr . width = width/2;
   wr . height = height;
   wr.fill = 'blue';
   wr.moveto(Point.mk(width/4,0));
   crc.dimension = height+40;
+  crc.dimension = height/2;
+  crc2.dimension = height/8;
   this.generateGrid();
   debugger;
   this.paintCells(.5);
  // this.updateCells(0.95);
- //  this.set('crc',crc);
+  this.set('crc',crc);
+  this.set('crc2',crc2);
 
 }
 

@@ -5,7 +5,7 @@
 let shrinkFactor = 1;
 //let jpegPadFactor = 1.2;
 vars.jpgPadFactor = 1;
-let jpgMpixFactor = 20;
+let jpgMpixFactor = 10; // 20 for Mpix. 10 for fineartamerica
 let jpgMainFactor = 2;// 2 for animation, 6 for Mpix
 let jpgThumbFactor = 1;// 2
 let jpgSizeFactor = jpgMainFactor; // for animation

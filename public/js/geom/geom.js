@@ -650,6 +650,63 @@ Line.mk = function (point,direction) {
 	return rs;
 }
 
+
+
+Line.intersectLine = function (line)  {
+  let {point:pt,direction:dt} = this;
+  let {point:pl,direction:dl} = line;
+  let {x:ptx,y:pty} = pt;
+  let {x:dtx,y:dty} = dt;
+  let {x:plx,y:ply} = pl;
+  let {x:dlx,y:dly} = dl;
+  /* let ip be the intersection then,
+  ipx = ptx + tt*dtx;
+  ipy = pty + tt*dty;
+  ipx = plx + tl*dlx;
+  ipy = ply + tl*dly;   So
+  
+  ptx+tt*dtx = plx+tl*dlx;  
+  and
+  pty+tt*dty = ply+tl*dly;
+  
+  tt*dtx-tl*dlx = plx-ptx;  
+  tt*dty-tl*dly = ply-pty;  
+
+  
+  we want to solve for tl and tt
+  as matrices
+  
+   |dtx  -dlx|   |tt|      |plx-ptx|
+   |         | * |  |   =  |       |
+   |dty  -dly|   |tl|      |ply-pty|
+   
+   The inverse of the matrix is
+   
+   |-dly  dlx|
+   |         |
+   |-dty  dtx|
+   
+   and its determinant det is 1/(dlx*dty-dly*dtx)
+   
+   so 
+   
+   |tt|         |-dly dlx|   |plx-ptx|
+   |  | = det * |        | * |       | 
+   |tl|         |-dty dtx|   |ply-pty|
+   
+so tt = det*((-dly)*(plx-ptx)+dlx*(ply-pty)) 
+   tl = det*((-dty)*(plx-ptx)+dtx*(ply-pty)) 
+   
+   */
+  let det = 1/(dlx*dty-dly*dtx)
+  let tt = det*((-dly)*(plx-ptx)+dlx*(ply-pty))           
+  //let tl = det*((-dty)*(plx-ptx)+dtx*(ply-pty)) 
+  let ipx = ptx + tt*dtx;
+  let ipy = pty + tt*dty;        
+  return Point.mk(ipx,ipy);
+}  
+
+
 Line.toEquation = function () {
 	let {direction,point} = this;
 	let {x:dx,y:dy} = direction;

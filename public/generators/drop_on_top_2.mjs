@@ -164,7 +164,7 @@ rs.initialize = function () {
     this.generateWeb(Object.assign(webParams,{points}));
 
     debugger;
-    this.saveTheState();
+   // this.saveTheState();
   } else {
     debugger;
     this.getTheState(() => {
