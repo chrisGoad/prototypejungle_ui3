@@ -698,7 +698,9 @@ so tt = det*((-dly)*(plx-ptx)+dlx*(ply-pty))
    tl = det*((-dty)*(plx-ptx)+dtx*(ply-pty)) 
    
    */
-  let det = 1/(dlx*dty-dly*dtx)
+  let deti = dlx*dty-dly*dtx;
+  console.log('deti',deti);
+  let det = 1/deti;
   let tt = det*((-dly)*(plx-ptx)+dlx*(ply-pty))           
   //let tl = det*((-dty)*(plx-ptx)+dtx*(ply-pty)) 
   let ipx = ptx + tt*dtx;
