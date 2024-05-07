@@ -915,6 +915,60 @@ item.deepCopy = function (src) {
   }
   return copy;  
 }	
+
+item.deepSum = function (x,y,weight,zero) {
+  let kind;
+  if (typeof x === 'number') {
+    kind = 'primitive';
+  }  else if (Array.isArray(x)) {
+    kind = 'array';
+  } else {
+    kind = 'object';
+  }
+  let sum;
+  if (kind == 'array') {
+    let ln = x.length;
+    sum = [];
+    for (let i=0;i<ln;i++) {
+       let vx = x[i];
+       let vy = y[i];
+       let vs = this.deepSum(vx,vy,weight,zero);
+       sum.push(vs);
+    }
+  } else if (kind === 'primitive') {
+    sum = zero?0:(x+(weight?weight*y:y));
+  } else {
+    sum = {};
+    let props = Object.getOwnPropertyNames(x);
+    props.forEach( (p) => {
+      //debugger
+      let vx = x[p];
+      let vy = y[p];
+      let v = this.deepSum(vx,vy,weight,zero);
+      sum[p] = v;
+    });
+  }
+  return sum;  
+}	
+
+item.deepZero = function (x) {
+  //debugger;
+  let dz=this.deepSum(x,x,null,1);
+  return dz;
+}
+
+// weights should sum to 1
+item.weightedAverage = function (values, weights) {
+  let ln=values.length;
+  let v0 =values[0];
+  let sum = this.deepZero(v0);
+  for (let i=0;i<ln;i++) {
+    let v = values[i];
+    let w = weights[i];
+    sum = this.deepSum(sum,v,w);
+  }
+  return sum;
+}
 /*
 item.interpolateArrayss	 = function(a0,a1,fr) {
   let ln = a0.length; //a1 must have the same length
@@ -944,11 +998,15 @@ item.arrayOfArrayReducedPrecision = function (a,pow) {
   let ra = a.map((v) => this.arrayReducedPrecision(v,pow));
   return JSON.stringify(ra);
 }
-// vValues specifies a vector (as array) of values at each vertex
+
+
+  // vValues specifies a vector (as array) of values at each vertex
 // given a point pt, this interpolates by inverse of distance  among those vectors
+
+
 item.interpolateVectors = function (params) {
   let getVerbose = this.getVerbose;
-  let {vertices,vValues,p,dfn,verbose:poww} = params;
+  let {vertices,p,dfn,verbose:poww} = params;
   let pow;
   let {x,y}=p;
   if (0) {
@@ -1003,6 +1061,36 @@ item.interpolateVectors = function (params) {
   let sumd = suma[0]<100?[0,0,0]:[250,250,250];
   return sumi;
 }  
+
+item.interpolateInPolygon = function (iparams) {
+  let {gon,sides,values,p} = iparams;
+  let ids = [];
+  let sideValues = [];
+  let distances = [];
+  let sumid =0;
+  let ns = sides.length;
+  for (let i=0;i<ns;i++) {
+    let side = sides[i];
+    let v0 = values[i];
+    let v1 = values[(i+1)%ns];
+    let line = side.lineOf();
+    let np = p.nearestPointOnLine(line);
+    let fr = side.fractionAlong(np);
+    let sv = this.interpolate(v0,v1,fr); 
+    sideValues.push(sv);
+    let d = p.distance(np);
+    let id = 1/d;
+    sumid += id;
+    ids.push(id);
+  };
+  let weights = ids.map((v) => v/sumid);
+  let wv = this.weightedAverage(values,weights);
+  return wv;
+}
+  
+      
+
+
 item.randomColorArray = function (lb,ub,ia) {
    let a =ia?ia:3;
    let ra = this.randomArray(lb,ub,a);

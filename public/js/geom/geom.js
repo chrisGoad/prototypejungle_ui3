@@ -734,8 +734,8 @@ Line.toEquation = function () {
 
 Point.nearestPointOnLine = function (line) {
   let {point,direction} = line;
-  let n = direction.normal;
-  let linen = Line.mk(p,n)
+  let n = direction.normal();
+  let linen = Line.mk(this,n)
   let ip = line.intersectLine(linen);
   return ip;
 }
@@ -789,6 +789,14 @@ LineSegment.mk = function (end0,end1,dontCopy) {
     rs.set('end1',end1.copy());
   }
   return rs;
+}
+
+LineSegment.lineOf = function () {
+  let {end0,end1} = this;
+  let vec = end1.difference(end0);
+  let nvec = vec.normalize();
+  let line = Line.mk(end0,nvec);
+  return line;
 }
 
 
@@ -2531,7 +2539,7 @@ LineSegment.fractionAlong = function (p) {
   let {end0,end1} = this;
   let lnte0 = p.distance(end0);
   let lnte1 = p.distance(end1);
-  let fr = lnte/sln
+  let fr = lnte0/sln
   if ((lnte0 <= sln) && (lnte1 <= sln)) {
     return fr
   }
