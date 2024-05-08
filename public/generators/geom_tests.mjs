@@ -10,7 +10,8 @@ addGridMethods(rs);
 
 rs.setName('geom_tests');
 let wd = 100;
-let nc =20;
+let nc =100;
+//nc=10;
 let topParams = {numRows:nc,numCols:nc,width:wd,height:wd,framePadding:0.25*wd,frameStroke:'yellow'};
 Object.assign(rs,topParams);
 
@@ -50,7 +51,7 @@ rs.initProtos = function () {
 rs.shapeGenerator = function (rvs,cell) {
   let {rectP,numCols,width} = this;
   let cwd = width/numCols;
-  let frw =0.5;
+  let frw =1;
   let scwd = frw*cwd;
   let {x,y} = cell;
   
@@ -82,11 +83,12 @@ rs.initialize = function () {
   let  green= {r:0,g:255,b:0};
   let  blue= {r:0,g:0,b:255};
   let  black= {r:0,g:0,b:0};
-  let values = [red,green,blue,black];
+  let  cyan = {r:0,g:255,b:255};
+  let values = [red,green,blue,green];
   let p0 = Point.mk(0,0);
   let p1 = Point.mk(25,0);
   let params = {gon,sides,values,p:p0};
-  let iv=this.interpolateInPolygon(params);
+  //let iv=this.interpolateInPolygon(params);
     debugger;
 
   this.generateGrid();

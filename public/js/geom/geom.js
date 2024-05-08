@@ -699,7 +699,7 @@ so tt = det*((-dly)*(plx-ptx)+dlx*(ply-pty))
    
    */
   let deti = dlx*dty-dly*dtx;
-  console.log('deti',deti);
+ // console.log('deti',deti);
   if (Math.abs(deti)<0.1) {
     debugger;
     return undefined;

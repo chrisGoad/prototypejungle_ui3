@@ -1076,11 +1076,18 @@ item.interpolateInPolygon = function (iparams) {
     let line = side.lineOf();
     //debugger;
     let np = p.nearestPointOnLine(line);
+    if (i===1) {
+      debugger;
+    }
     let fr = side.fractionAlong(np);
     let sv = this.interpolate(v0,v1,fr); 
+    if (i===1) {
+      console.log('px',p.x,'py',p.y,'npx',np.x,'npy',np.y,'fr',fr,'v0',v0,'v1',v1,'sv',sv);
+      debugger;
+    }
     sideValues.push(sv);
     let d = p.distance(np);
-    console.log('d',d);
+    //console.log('d',d);
    if (d<0.1) {
      //debugger;
    }
@@ -1090,7 +1097,8 @@ item.interpolateInPolygon = function (iparams) {
     ids.push(id);
   };
   let weights = ids.map((v) => v/sumid);
-  let wv = this.weightedAverage(values,weights);
+  //let wv = this.weightedAverage(values,weights);
+  let wv = this.weightedAverage(sideValues,weights);
   return wv;
 }
   
