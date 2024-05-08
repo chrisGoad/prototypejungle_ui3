@@ -1074,11 +1074,17 @@ item.interpolateInPolygon = function (iparams) {
     let v0 = values[i];
     let v1 = values[(i+1)%ns];
     let line = side.lineOf();
+    //debugger;
     let np = p.nearestPointOnLine(line);
     let fr = side.fractionAlong(np);
     let sv = this.interpolate(v0,v1,fr); 
     sideValues.push(sv);
     let d = p.distance(np);
+    console.log('d',d);
+   if (d<0.1) {
+     //debugger;
+   }
+    d = Math.max(d,.001);
     let id = 1/d;
     sumid += id;
     ids.push(id);
