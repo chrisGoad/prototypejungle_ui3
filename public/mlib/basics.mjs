@@ -1063,7 +1063,8 @@ item.interpolateVectors = function (params) {
 }  
 
 item.interpolateInPolygon = function (iparams) {
-  let {gon,sides,values,p} = iparams;
+  let {gon,values,p} = iparams;
+  let {theSides:sides} = gon;
   let ids = [];
   let sideValues = [];
   let distances = [];

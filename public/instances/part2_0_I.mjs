@@ -1,12 +1,13 @@
 
 
-import {rs as generatorP} from '/generators/part_0.mjs';
+import {rs as generatorP} from '/generators/part2_0.mjs';
 
 let rs = generatorP.instantiate();
-rs.setName('part_0_D');
+rs.setName('part2_0_I');
 
 let wd = 100;
-let topParams = {width:wd,height:wd,framePadding:0.2*wd,frameStroke:undefined}
+let nr = 10;
+let topParams = {width:wd,height:wd,numRows:nr,numCols:nr,framePadding:0.2*wd,frameStroke:undefined}
 Object.assign(rs,topParams);
 rs.partParams.levels = 1;
 
@@ -20,7 +21,6 @@ rs.quadParams = {chance:1,levels:levels,polygonal:1,splitParams:{ornt:'v',fr0:cf
 rs.quadParams = {chance:1,levels:levels,polygonal:1,splitParams:{ornt:'v',fr0:.4,fr1:.4,fr2:.4,fr3:.4,fr4:.6,fr5:.4}};
 console.log('qp',rs.quadParams);
 let strokeWidths = rs.quadParams.strokeWidths = [];
-
 //rs.computeExponentials(strokeWidths,rs.quadParams.levels,0.8,.7);
 rs.computeExponentials(strokeWidths,10,.5,.7);
 */
@@ -30,8 +30,8 @@ rs.adjustProtos = function () {
 }
 
 rs.addT = function (rt,n,p) {
- // debugger;
-  let color = (rt==='P')?'black':'white';   
+  //debugger;
+  let color = (rt==='fr')?'black':'white';   
   this.addText(this.textP,rt,n,p,color);
 }
 
@@ -42,6 +42,7 @@ rs.addToArray(strokeWidths,2,100);
 
 rs.theFills = {P0:'rgb(255,0,0)',P1:'rgb(200,200,0)',P2:'rgb(0,255,0)',P3:'rgb(0,255,255)',P4:'rgb(0,0,255)',P5:'rgb(100,100,100)'};
 rs.partFill = function (prt) {
+//debugger;
   let nm = this.partName(prt);
   let fill = this.theFills[nm];
   if (fill) {
@@ -50,7 +51,7 @@ rs.partFill = function (prt) {
 }
  
 rs.showLabelsV = function () {
-// debugger;
+ //debugger;
   let {textP} = this;
   let hwd = 0.5*wd;
   let ff = 0.05*wd;

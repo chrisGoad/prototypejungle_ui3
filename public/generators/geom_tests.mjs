@@ -23,17 +23,39 @@ rs.colorObToRgb = function (c) {
 }
 
 
-rs.paintCells = function (fr) {
+rs.randomColorOb = function () {
+  const RIR = (lb,ub) => {
+    let delta= ub-lb;
+    let rv = Math.floor(lb+Math.random()*delta);
+    return rv;
+  }
+  let rc = {r:RIR(0,255),g:RIR(0,255),b:RIR(0,255)};
+  return rc;
+}
+
+rs.paintCells = function (params) {
   debugger;
   let {numRows:nr,numCols:nc} = this;
-  for (let i=0;i<nc;i++) {
-    for (let j=0;j<nr;j++) {
-      let c = {x:i,y:j}
-      let clr = this.colorAtCell(c,fr);
-      let rgb = this.colorObToRgb(clr);
-      let shp = this.shapeAt(i,j);
-      shp.fill = rgb;
-      shp.update();
+  let {gons} = params;
+  for (let x=0;x<nc;x++) {
+    for (let y=0;y<nr;y++) {
+      //let c = {x:i,y:j}
+      //let clr = this.colorAtCell(c,fr);
+      let cnt = this.centerPnt(x,y);
+      params.p = cnt;
+      let lng =gons.length;
+      for (let i=0;i<lng;i++) {
+        let gon = gons[i];
+        if (gon.contains(cnt)) {
+          params.gon = gon;
+          let iv=this.interpolateInPolygon(params);
+          let rgb = this.colorObToRgb(iv);
+          let shp = this.shapeAt(x,y);
+          shp.fill = rgb;
+          shp.update();
+          break;
+        }
+      }
     }
   }
 }
@@ -78,20 +100,24 @@ rs.initialize = function () {
   let LR =  Point.mk(dim,sdim);
   let LL =  Point.mk(-dim,sdim);
   let gon = Polygon.mk([UL,UR,LR,LL]);
-  let sides = gon.sides();
+  gon.theSides = gon.sides();
+  let gons = [gon]
   let red = {r:255,g:0,b:0};
   let  green= {r:0,g:255,b:0};
   let  blue= {r:0,g:0,b:255};
   let  black= {r:0,g:0,b:0};
   let  cyan = {r:0,g:255,b:255};
-  let values = [red,green,blue,green];
+  //let values = [red,green,blue,green];
+  let values = [this.randomColorOb(),this.randomColorOb(),this.randomColorOb(),this.randomColorOb()];
   let p0 = Point.mk(0,0);
   let p1 = Point.mk(25,0);
-  let params = {gon,sides,values,p:p0};
+  let params = {gons,values,p:p0};
   //let iv=this.interpolateInPolygon(params);
     debugger;
 
   this.generateGrid();
+  this.paintCells(params);
+  return;
   for (let x=0;x<nc;x++) {
     for (let y=0;y<nr;y++) {
       let cnt = this.centerPnt(x,y);

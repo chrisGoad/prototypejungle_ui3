@@ -2204,7 +2204,7 @@ Polygon.sides = function () {
 }
 
 Polygon.intersectsLineSegment = function (sg) {
-  let sds = this.sides();
+  let sds = (this.theSides)? this.theSides:this.sides();
   let sln = sds.length;
   for (let i=0;i<sln;i++) {
     let iscts = sg.intersectsLineSegment(sds[i]);
