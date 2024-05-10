@@ -1103,9 +1103,59 @@ item.interpolateInPolygon = function (iparams) {
   return wv;
 }
   
-      
+item.computeSides = function (ap) {
+ let ln = ap.length;
+ for (let i=0;i<ln;i++) {
+   let gon = ap[i]
+   gon.theSides = gon.sides();
+  }
+}
+
+item.colorObToRgb = function (c) {
+  let {r,g,b} = c;
+  let rgb = `rgb(${r},${g},${b})`;
+  return rgb;
+}
 
 
+item.randomColorOb = function () {
+  const RIR = (lb,ub) => {
+    let delta= ub-lb;
+    let rv = Math.floor(lb+Math.random()*delta);
+    return rv;
+  }
+  let rc = {r:RIR(0,255),g:RIR(0,255),b:RIR(0,255)};
+  return rc;
+}
+
+
+
+item.paintCells = function (params) {
+  debugger;
+  let {numRows:nr,numCols:nc} = this;
+  let {gons} = params;
+  for (let x=0;x<nc;x++) {
+    for (let y=0;y<nr;y++) {
+      //let c = {x:i,y:j}
+      //let clr = this.colorAtCell(c,fr);
+      let cnt = this.centerPnt(x,y);
+      params.p = cnt;
+      let lng =gons.length;
+      for (let i=0;i<lng;i++) {
+        let gon = gons[i];
+        if (gon.contains(cnt)) {
+          params.gon = gon;
+          let iv=this.interpolateInPolygon(params);
+          let rgb = this.colorObToRgb(iv);
+          let shp = this.shapeAt(x,y);
+          shp.fill = rgb;
+          shp.update();
+          break;
+        }
+      }
+    }
+  }
+}
 item.randomColorArray = function (lb,ub,ia) {
    let a =ia?ia:3;
    let ra = this.randomArray(lb,ub,a);
@@ -1318,7 +1368,7 @@ item.accessGrid = function (params,x,y) {
 }  
 
 
-rs.pointsAroundCell = function (params,x,y) {
+item.pointsAroundCell = function (params,x,y) {
    let UL = this.accessGrid(params,x,y);
    let UR = this.accessGrid(params,x+1,y);
    let LR = this.accessGrid(params,x+1,y+1);

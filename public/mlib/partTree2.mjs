@@ -765,7 +765,7 @@ rs.stepPartParams = function (params) {
 rs.alreadyInitialized = 0;
 rs.initialize = function () {
   debugger;
-  let {width:wd,height:ht,partParams,dropParams} = this;
+  let {width:wd,height:ht,partParams,dropParams,doNotDisplayParts:nod} = this;
   let hwd = 0.5*wd;
   let hht = 0.5*ht;
   let {emitLineSegs,rectangular} = partParams;
@@ -788,9 +788,11 @@ rs.initialize = function () {
   let prt ={polygon:pgon};
   this.topPart = prt;
   this.extendPartNLevels(prt,partParams);
-  this.displayPart(prt,emitLineSegs);
-  if (partParams.emitLineSegs) {
-    this.generateDrops(dropParams);
+  if (!nod) {
+    this.displayPart(prt,emitLineSegs);
+    if (partParams.emitLineSegs) {
+      this.generateDrops(dropParams);
+    }
   }
   let ized = this.alreadyInitialized;
   this.alreadyInitialized = 1;

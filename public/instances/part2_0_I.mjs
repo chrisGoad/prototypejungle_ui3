@@ -1,16 +1,30 @@
 
 
 import {rs as generatorP} from '/generators/part2_0.mjs';
+import {rs as addGridMethods} from '/mlib/grid.mjs';
+import {rs as linePP} from '/shape/line.mjs';
+import {rs as rectPP} from '/shape/rectangle.mjs';
 
 let rs = generatorP.instantiate();
+addGridMethods(rs);
+
 rs.setName('part2_0_I');
 
 let wd = 100;
-let nr = 10;
-let topParams = {width:wd,height:wd,numRows:nr,numCols:nr,framePadding:0.2*wd,frameStroke:undefined}
+let nr = 100;
+let topParams = {width:wd,height:wd,numRows:nr,numCols:nr,framePadding:0.2*wd,frameStroke:undefined,doNotDisplayParts:1}
 Object.assign(rs,topParams);
 rs.partParams.levels = 1;
 
+
+rs.initProtos = function () {
+  this.lineP  = linePP.instantiate();
+  this.lineP.stroke = 'white';
+  this.lineP['stroke-width'] = 1;
+  this.rectP  = rectPP.instantiate();
+  this.rectP.fill = 'white';
+  this.rectP['stroke-width'] = 0;
+}
 /*
 rs.quadParams = {chance:1,levels:levels,polygonal:1,splitParams:{ornt:'v',fr0:0.4,fr1:0.4,fr2:0.4,fr3:0.4,fr4:0.4,fr5:0.3}};
 rs.quadParams = {chance:1,levels:levels,polygonal:1,splitParams:{ornt:'v',fr0:0.1,fr1:0.2,fr2:0.3,fr3:0.4,fr4:0.6,fr5:0.7}};
@@ -24,11 +38,27 @@ let strokeWidths = rs.quadParams.strokeWidths = [];
 //rs.computeExponentials(strokeWidths,rs.quadParams.levels,0.8,.7);
 rs.computeExponentials(strokeWidths,10,.5,.7);
 */
+
+
+rs.shapeGenerator = function (rvs,cell) {
+  let {rectP,numCols,width} = this;
+  let cwd = width/numCols;
+  let frw =1;
+  let scwd = frw*cwd;
+  let {x,y} = cell;
+  
+  let shape = rectP.instantiate().show();
+  shape.width = scwd;
+  shape.height = scwd;
+  shape.fill = 'blue';
+  return shape;
+}
+/*
 rs.adjustProtos = function () {
   this.polygonP['stroke-width'] =  .4;
   this.textP["font-size"] = "6";
 }
-
+*/
 rs.addT = function (rt,n,p) {
   //debugger;
   let color = (rt==='fr')?'black':'white';   

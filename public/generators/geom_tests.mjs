@@ -15,7 +15,7 @@ let nc =100;
 let topParams = {numRows:nc,numCols:nc,width:wd,height:wd,framePadding:0.25*wd,frameStroke:'yellow'};
 Object.assign(rs,topParams);
 
-
+/*
 rs.colorObToRgb = function (c) {
   let {r,g,b} = c;
   let rgb = `rgb(${r},${g},${b})`;
@@ -59,7 +59,7 @@ rs.paintCells = function (params) {
     }
   }
 }
-
+*/
 rs.initProtos = function () {
   this.lineP  = linePP.instantiate();
   this.lineP.stroke = 'white';
