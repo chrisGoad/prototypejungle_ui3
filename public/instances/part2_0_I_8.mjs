@@ -7,7 +7,8 @@ let rs = generatorP.instantiate();
 rs.setName('part2_0_I_8');
 
 rs.partParams.rectangular = 1;
-let sp = rs.partParams.splitParams = {Case:9,direction:-0.25*Math.PI,radius:0.2,pcs:[.4,1.4,2.4,3.4]};
+let ssp = rs.partParams.splitParams = {Case:9,direction:-0.25*Math.PI,radius:0.2,pcs:[.4,1.4,2.4,3.4]};
+let sp = rs.partParams.splitParams = {Case:9,direction:Math.random()*Math.PI,radius:Math.random()*0.4,pcs:[.4,1.4,2.4,3.4]};
 
 
 rs.partSplitParamsss = function (qd) {
