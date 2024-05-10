@@ -1062,9 +1062,9 @@ item.interpolateVectors = function (params) {
   return sumi;
 }  
 
-item.interpolateInPolygon = function (iparams) {
-  let {gon,values,p} = iparams;
-  let {theSides:sides} = gon;
+item.interpolateInPolygon = function (gon,p) {
+  //let {gon,values,p} = iparams;
+  let {theSides:sides,values} = gon;
   let ids = [];
   let sideValues = [];
   let distances = [];
@@ -1130,26 +1130,32 @@ item.randomColorOb = function () {
 
 
 
-item.paintCells = function (params) {
+item.paintCells = function (gons) {
   debugger;
-  let {numRows:nr,numCols:nc} = this;
-  let {gons} = params;
+  let {numRows:nr,numCols:nc,width} = this;
+   let cwd = width/nc;
+   
   for (let x=0;x<nc;x++) {
     for (let y=0;y<nr;y++) {
       //let c = {x:i,y:j}
       //let clr = this.colorAtCell(c,fr);
       let cnt = this.centerPnt(x,y);
-      params.p = cnt;
+     // params.p = cnt;
       let lng =gons.length;
       for (let i=0;i<lng;i++) {
         let gon = gons[i];
         if (gon.contains(cnt)) {
-          params.gon = gon;
-          let iv=this.interpolateInPolygon(params);
+          let iv=this.interpolateInPolygon(gon,cnt);
           let rgb = this.colorObToRgb(iv);
+          let fr = (iv.r)/255;
+          let wd = fr*cwd;
           let shp = this.shapeAt(x,y);
           shp.fill = rgb;
+         // shp.fill = 'white';
+          shp.width = wd;
+          shp.height = wd;
           shp.update();
+
           break;
         }
       }

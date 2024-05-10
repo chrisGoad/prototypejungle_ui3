@@ -11,7 +11,7 @@ addGridMethods(rs);
 rs.setName('part2_0_I');
 
 let wd = 100;
-let nr = 100;
+let nr = 40;
 let topParams = {width:wd,height:wd,numRows:nr,numCols:nr,framePadding:0.2*wd,frameStroke:undefined,doNotDisplayParts:1}
 Object.assign(rs,topParams);
 rs.partParams.levels = 1;

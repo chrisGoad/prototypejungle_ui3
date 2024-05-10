@@ -21,6 +21,9 @@ rs.partSplitParamsss = function (qd) {
 }
 rs.afterInitialize =function ()  {
   debugger;
+  let {width:wd,height:ht} = this;
+  let hwd = wd/2;
+  let hht = ht/2;
   let tp =this.topPart;
   let gons = [tp.P0.polygon,tp.P1.polygon,tp.P2.polygon,tp.P3.polygon];
   this.computeSides(gons);
@@ -28,15 +31,46 @@ rs.afterInitialize =function ()  {
   let  green= {r:0,g:255,b:0};
   let  blue= {r:0,g:0,b:255};
   let  black= {r:0,g:0,b:0};
+  let  white= {r:255,g:255,b:255};
   let  cyan = {r:0,g:255,b:255};
   //let values = [red,green,blue,green];
-  let values = [this.randomColorOb(),this.randomColorOb(),this.randomColorOb(),this.randomColorOb()];
-   let params = {gons,values};
-  //let iv=this.interpolateInPolygon(params);
+  const mkValues = ()=>[this.randomColorOb(),this.randomColorOb(),this.randomColorOb(),this.randomColorOb()];
+  //const mkValues = ()=>[black,white,black,white];
+  let valueSrc = [this.randomColorOb()/*UR*/,this.randomColorOb()/*TOP*/,this.randomColorOb()/*UL*/,this.randomColorOb()/*RS*/,
+                 this.randomColorOb()/*LR*/,this.randomColorOb()/*BOT*/,this.randomColorOb()/*LL*/,this.randomColorOb()/*LS*/,
+                 this.randomColorOb()/*CENTER*/];
+  let  valueSrcc = [white/*UR*/,black/*TOP*/,white/*UL*/,black/*RS*/,
+                 white/*LR*/,black/*BOT*/,white/*LL*/,black/*LS*/,
+                 red/*CENTER*/];
+  const ae = (x,y) => (Math.abs(x-y) < .1)?'1':'0';
+  //const posMap={'1010':0,'1000':1,'1001':2,'0001':3,'0101':4,'0100':5,'0110':6,'0010':7,'0000':8};
+  const posMap={'1010':0,'1000':5,'1001':2,'0001':6,'0101':3,'0100':5,'0110':7,'0010':4,'0000':8};
+  const valueOfCorner = (p) => {
+    let {x,y} = p;
+    let onTop = ae(y,-hht);
+    let onBot = ae(y,hht);
+    let onLeft = ae(x,-hwd);
+    let onRight = ae(x,hwd);
+    let sig = onTop+onBot+onLeft+onRight;
+    let vli = posMap[sig];
+    let vlc = valueSrc[vli];
+    return vlc;
+  }
+  const setValuesForGon = (gon) => {
+    gon.values = mkValues();
+    return;
+    let {corners} = gon;
+    let values = corners.map((p)=>valueOfCorner(p));
+    gon.values = values;
+  }
+    
+
+  gons.forEach(setValuesForGon)  
+
     debugger;
 
   this.generateGrid();
-  this.paintCells(params);
+  this.paintCells(gons);
   return;
   this.displayTitle('Partition 8');
   this.displayPc(0);
