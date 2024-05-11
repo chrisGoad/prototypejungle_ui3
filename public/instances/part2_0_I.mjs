@@ -11,7 +11,7 @@ addGridMethods(rs);
 rs.setName('part2_0_I');
 
 let wd = 100;
-let nr = 100;
+let nr = 40;
 let topParams = {width:wd,height:wd,numRows:nr,numCols:nr,framePadding:0.2*wd,frameStroke:undefined,doNotDisplayParts:1}
 Object.assign(rs,topParams);
 rs.partParams.levels = 1;
@@ -20,7 +20,7 @@ rs.partParams.levels = 1;
 rs.initProtos = function () {
   this.lineP  = linePP.instantiate();
   this.lineP.stroke = 'white';
-  this.lineP['stroke-width'] = 1;
+  this.lineP['stroke-width'] = .5;
   this.rectP  = rectPP.instantiate();
   this.rectP.fill = 'white';
   this.rectP['stroke-width'] = 0;
@@ -41,13 +41,22 @@ rs.computeExponentials(strokeWidths,10,.5,.7);
 
 
 rs.shapeGenerator = function (rvs,cell) {
-  let {rectP,numCols,width} = this;
+  let {rectP,lineP,numCols,width} = this;
   let cwd = width/numCols;
   let frw =1;
   let scwd = frw*cwd;
   let {x,y} = cell;
   
-  let shape = rectP.instantiate().show();
+  
+  let shape = lineP.instantiate().show();
+  let hs = 0.5*scwd;
+  shape.setEnds(Point.mk(0,-hs),Point.mk(0,hs));
+  shape.stroke = 'white';
+  return shape;
+  shape.height = scwd;
+  shape.fill = 'blue';
+  return shape;
+  shape = rectP.instantiate().show();
   shape.width = scwd;
   shape.height = scwd;
   shape.fill = 'blue';

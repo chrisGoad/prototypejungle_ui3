@@ -29,17 +29,17 @@ Object.assign(rs,topParams);
   this.doubles ='';
   // prohibited letters at each position
   let s0n = '';
-  let s1n = 'a';
+  let s1n = 'al';
   let s2n = 'i';
-  let s3n = 'e';
-  let s4n = 'ed';
+  let s3n = '';
+  let s4n = 'd';
   this.prohibs = [s0n,s1n,s2n,s3n,s4n];
 
   // prohibited dipthongs
   this.dprohibs  = [];
   // known letters
   let k0 = '';
-  let k1 = '';
+  let k1 = 'i';
   let k2 = '';
   let k3 = '';
   let k4 = '';
@@ -51,7 +51,8 @@ Object.assign(rs,topParams);
   let cm = this.complement('parts chomp blind xz');
  // cm = this.complement('palms choke blind rusty xz');
  // cm = this.complement('farce pokes blind gusty xz');
- cm = this.complement('frc poks bln');// gusty xz');
+ // cm = this.complement('farce  blind gusty xz');
+  cm = this.complement('frce  bn');// gusty xz');
   //cm = this.complement('farce chomp blind gusty xz');
 console.log('cm',cm);
  // let abet=this.abet = 'fjqvxyz';

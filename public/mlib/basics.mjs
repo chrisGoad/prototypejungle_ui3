@@ -1130,32 +1130,23 @@ item.randomColorOb = function () {
 
 
 
-item.paintCells = function (gons) {
+item.setCells = function (gons,op) {
   debugger;
   let {numRows:nr,numCols:nc,width} = this;
    let cwd = width/nc;
-   
+   let p = Point.mk(0,0);
   for (let x=0;x<nc;x++) {
     for (let y=0;y<nr;y++) {
-      //let c = {x:i,y:j}
-      //let clr = this.colorAtCell(c,fr);
       let cnt = this.centerPnt(x,y);
-     // params.p = cnt;
+      p.x=x;
+      p.y=y;
       let lng =gons.length;
       for (let i=0;i<lng;i++) {
         let gon = gons[i];
         if (gon.contains(cnt)) {
           let iv=this.interpolateInPolygon(gon,cnt);
-          let rgb = this.colorObToRgb(iv);
-          let fr = (iv.r)/255;
-          let wd = fr*cwd;
           let shp = this.shapeAt(x,y);
-          shp.fill = rgb;
-         // shp.fill = 'white';
-          shp.width = wd;
-          shp.height = wd;
-          shp.update();
-
+          op(shp,iv,p);
           break;
         }
       }

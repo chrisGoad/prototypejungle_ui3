@@ -22,7 +22,7 @@ rs.partSplitParamsss = function (qd) {
 }
 rs.afterInitialize =function ()  {
   debugger;
-  let {width:wd,height:ht} = this;
+  let {width:wd,height:ht,numCols} = this;
   let hwd = wd/2;
   let hht = ht/2;
   let tp =this.topPart;
@@ -64,14 +64,34 @@ rs.afterInitialize =function ()  {
     let values = corners.map((p)=>valueOfCorner(p));
     gon.values = values;
   }
-    
+  
+  const opRect = (shp,iv) => {
+    let rgb = this.colorObToRgb(iv);
+    shp.fill = rgb;
+    shp.update();
+  }   
+
+
+  const op = (shp,iv) => {
+    let cwd = wd/numCols;
+    let frw =1;
+    let scwd = frw*cwd;
+    let hs = 0.5*scwd;
+    let rgb = this.colorObToRgb(iv);
+    shp.stroke = rgb;
+    let a = 2*(iv.r/255)*Math.PI;
+    let p0 = Point.mk(-hs*Math.cos(a),-hs*Math.sin(a));
+    let p1 = Point.mk(hs*Math.cos(a),hs*Math.sin(a));
+    shp.setEnds(p0,p1);
+    shp.update();
+  }      
 
   gons.forEach(setValuesForGon)  
 
     debugger;
 
   this.generateGrid();
-  this.paintCells(gons);
+  this.setCells(gons,op);
   return;
   this.displayTitle('Partition 8');
   this.displayPc(0);
