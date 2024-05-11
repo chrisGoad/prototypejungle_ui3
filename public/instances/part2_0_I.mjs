@@ -12,8 +12,11 @@ rs.setName('part2_0_I');
 
 let wd = 100;
 let nr = 40;
+let colorParams = {redOb:{r:255,g:0,b:0},greenOb:{r:0,g:255,b:0},blueOb:{r:0,g:0,b:255},blackOb:{r:0,g:0,b:0},whiteOb:{r:255,g:255,b:255},
+                  cyanOb:{r:0,g:255,b:255}};
 let topParams = {width:wd,height:wd,numRows:nr,numCols:nr,framePadding:0.2*wd,frameStroke:undefined,doNotDisplayParts:1}
 Object.assign(rs,topParams);
+Object.assign(rs,colorParams);
 rs.partParams.levels = 1;
 
 

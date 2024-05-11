@@ -11,15 +11,6 @@ let ssp = rs.partParams.splitParams = {Case:9,direction:-0.25*Math.PI,radius:0.2
 let sp = rs.partParams.splitParams = {Case:9,direction:Math.random()*Math.PI,radius:Math.random()*0.4,pcs:[.4,1.4,2.4,3.4]};
 
 
-rs.partSplitParamsss = function (qd) {
-  let pgon = qd.polygon;
-  let c = pgon.center();
-  let d = pgon.minDimension();
-  let rd = (c.x>0?-0.25:-0.25)*Math.PI;
-  let center = c.plus(Point.mk(Math.cos(rd),Math.sin(rd)).times(d*0.2));
-  let rs = {Case:9,direction,pc0:.4,pc1:1.4,pc2:2.4,pc3:3.4};  
-   return rs;
-}
 rs.afterInitialize =function ()  {
   debugger;
   let {width:wd,height:ht,numCols} = this;
@@ -35,8 +26,8 @@ rs.afterInitialize =function ()  {
   let  white= {r:255,g:255,b:255};
   let  cyan = {r:0,g:255,b:255};
   //let values = [red,green,blue,green];
-  const mkValues = ()=>[this.randomColorOb(),this.randomColorOb(),this.randomColorOb(),this.randomColorOb()];
-  //const mkValues = ()=>[black,white,black,white];
+  //const mkValues = ()=>[this.randomColorOb(),this.randomColorOb(),this.randomColorOb(),this.randomColorOb()];
+  const mkValues = ()=>[black,white,black,white];
   let valueSrc = [this.randomColorOb()/*UR*/,this.randomColorOb()/*TOP*/,this.randomColorOb()/*UL*/,this.randomColorOb()/*RS*/,
                  this.randomColorOb()/*LR*/,this.randomColorOb()/*BOT*/,this.randomColorOb()/*LL*/,this.randomColorOb()/*LS*/,
                  this.randomColorOb()/*CENTER*/];
