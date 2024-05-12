@@ -17,22 +17,6 @@ let nr = 40;
 let myParams = {width:wd,height:ht,numCols:nc,numRows:nr};
 Object.assign(rs,myParams);
 
-
-
-rs.shapeGenerator = function (rvs,cell) {
-  let {rectP,lineP,numCols,width} = this;
-  let cwd = width/numCols;
-  let frw =1;
-  let scwd = frw*cwd;
-  let {x,y} = cell;
-  let shape = lineP.instantiate().show();
-  let hs = 0.5*scwd;
-  shape.setEnds(Point.mk(0,-hs),Point.mk(0,hs));
-  shape.stroke = 'white';
-  return shape;
- 
-}
-
 rs.afterInitialize =function ()  {
   debugger;
   let {width:wd,height:ht,numCols,blackOb,whiteOb} = this;
@@ -66,18 +50,6 @@ rs.afterInitialize =function ()  {
   }      
 
   gons.forEach(setValuesForGon)  
-
-    debugger;
-
-  this.generateGrid();
-  this.setCells(gons,op);
-  return;
-  this.displayTitle('Partition 8');
-  this.displayPc(0);
-  this.displayPc(1);
-  this.displayPc(2);
-  this.displayPc(3);
- 
 
 }
 
