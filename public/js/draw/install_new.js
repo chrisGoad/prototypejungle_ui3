@@ -247,16 +247,22 @@ const displayError = function (msg) {
 
 core.setDisplayError(displayError);
 
-const saveTheImage = function (forMpix) {
+const saveTheImage = function (forMpix,forPixels) {
+	//saveTheThumb();
+//	return
+  
   jpgSizeFactor = forMpix?jpgMpixFactor:jpgMainFactor;
 	let wts = core.vars.whereToSave;// + '.jpg';
   if (!wts) {
 		alert('no destination given for image');
 		return;
   }
-	let dst = (forMpix?'images/hi_res/':'images/std_size/')+wts+'.jpg';
-	convertToJpeg(dst,function (ln) {
-		alert((forMpix?'saved the image in high res at ':'saved the image at ')+dst+' length '+ln);
+  //dialog('Variant',setTheVariant);
+
+	//let dst = forMpix?`images/hi_res/${wts}.jpg`:`images/std_size/${wts}.jpg`;
+	let dst = `images/${forMpix?'hi_res':(forPixels?'pixels':'std_size')}/${wts}.jpg`;
+	convertToJpeg(dst,function () {
+		alert((forMpix?'saved the image in high res at ':'saved the image at ')+dst);
 		if (!forMpix) {
 			saveTheThumb();	
 		}
@@ -271,8 +277,8 @@ const saveTheThumb = function () {
 	let wts = core.vars.whereToSave;// + '.jpg';
 	if (wts) {
 		let dst = `images/thumbs/${wts}.jpg`;
-	  convertToJpeg(dst,function (ln) {
-		  alert('saved the thumb at '+dst+' length '+ln);
+	  convertToJpeg(dst,function () {
+		  alert('saved the thumb at '+dst);
 	  });	
 	} else {
 		alert('no destination given for image');

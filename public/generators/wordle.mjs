@@ -30,9 +30,9 @@ Object.assign(rs,topParams);
   // prohibited letters at each position
   let s0n = '';
   let s1n = '';
-  let s2n = 'r';
-  let s3n = 't';
-  let s4n = 'e';
+  let s2n = 'i';
+  let s3n = 'cn';
+  let s4n = '';
   this.prohibs = [s0n,s1n,s2n,s3n,s4n];
 
   // prohibited dipthongs
@@ -51,7 +51,7 @@ Object.assign(rs,topParams);
   let cm = this.complement('parts chomp blind xz');
  // cm = this.complement('palms choke blind rusty xz');
  // cm = this.complement('farce blind gusty pokes xz');
-  cm = this.complement('fac blind gsy');// pokes xz');
+  cm = this.complement('fare bld gsty');//pokes xz');
  
 console.log('cm',cm);
  // let abet=this.abet = 'fjqvxyz';
