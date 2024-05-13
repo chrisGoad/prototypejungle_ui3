@@ -14,7 +14,7 @@ Object.assign(rs,myParams);
 
 rs.partParams.rectangular = 1;
 let ssp = rs.partParams.splitParams = {Case:9,direction:-0.25*Math.PI,radius:0.2,pcs:[.4,1.4,2.4,3.4]};
-let sp = rs.partParams.splitParams = {Case:9,direction:Math.random()*Math.PI,radius:Math.random()*0.4,pcs:[.4,1.4,2.4,3.4]};
+//let sp = rs.partParams.splitParams = {Case:9,direction:Math.random()*Math.PI,radius:Math.random()*0.4,pcs:[.4,1.4,2.4,3.4]};
 
 
 rs.shapeGenerator = function (rvs,cell) {
@@ -45,7 +45,7 @@ rs.afterInitialize =function ()  {
   let  black= {r:0,g:0,b:0};
   let  white= {r:255,g:255,b:255};
   let  cyan = {r:0,g:255,b:255};
-  //let values = [red,green,blue,green];
+ let values = [this.randomColorOb(),this.randomColorOb(),this.randomColorOb(),black];
   const mkValues = ()=>[this.randomColorOb(),this.randomColorOb(),this.randomColorOb(),this.randomColorOb()];
   //const mkValues = ()=>[black,white,black,white];
   let valueSrc = [this.randomColorOb()/*UR*/,this.randomColorOb()/*TOP*/,this.randomColorOb()/*UL*/,this.randomColorOb()/*RS*/,
@@ -69,11 +69,11 @@ rs.afterInitialize =function ()  {
     return vlc;
   }
   const setValuesForGon = (gon) => {
-    gon.values = mkValues();
-    return;
+    gon.values = values;
+  /*  return;
     let {corners} = gon;
     let values = corners.map((p)=>valueOfCorner(p));
-    gon.values = values;
+    gon.values = values;*/
   }
   
   const op = (shp,iv) => {

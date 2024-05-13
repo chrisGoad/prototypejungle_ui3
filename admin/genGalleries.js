@@ -450,7 +450,8 @@ const stripOrnt = function (str) {
   }
  
    //  first anim favorites
- const favorites =  ['crosshatch_1','bounce_16','curves_10','motion_24','drop_circles_20','gridSpinner_13','gridSpinner_5','part2_0_43','paths_10','motion_18_32',
+ const favorites =  ['crosshatch_1','bounce_16','curves_10','motion_24','drop_circles_20','gridSpinner_13','gridSpinner_5',
+ 'part2_0_43','paths_10','motion_18_32',
  'gons_3',
  //now image favorites
   'part2_0_1','drop_circles_14','drop_interpolate_0','ip_test_2',
@@ -462,7 +463,7 @@ const stripOrnt = function (str) {
  'drop_light','grid_enigma','drop_circles_18','drop_circles_4',
  'grid_comet','grid_mat','grid_drop_0','grid_maze',
  'drop_on_circles','drop_square','drop_triptych','lines_2',
- 'grid_cloth','grid_ramp','grid_smoke_1','part2_0_9'
+ 'grid_cloth','grid_ramp','grid_smoke_1','part2_0_2'
  
  ];
 
