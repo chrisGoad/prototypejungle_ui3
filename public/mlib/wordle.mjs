@@ -33,6 +33,18 @@ item.removeDups = function (str) {
   return rd;
 }
 
+item.lettersAppearing = function (str0,str1) { //letters from string 0 that appear in string1
+  let ln = str0.length;
+  let la = '';
+  for (let i=0;i<ln;i++) {
+    let let0 = str0[i];
+    if (str1.indexOf(let0) > - 1) {
+      la = la+let0;
+    }
+  }
+  return la;
+}
+
 item.blend3 = function (str) {
   let vowels = 'aeiouy';
   let ln = str.length;

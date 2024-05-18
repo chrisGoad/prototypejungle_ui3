@@ -1,1 +1,11 @@
- Generative art by Chris Goad for  your wall,t-shirt, mug,... 
+Display digital art by Chris Goad on your wall, t-shirt, mug, etc.
+ 
+ pixels.com produces dozens of products
+ displaying  images that I have created. 
+ Any pattern that you can perceive is in a sense made of mathematics. If you note a symmetry, a repetition,
+ anything systematic that knits the pattern together, then something mathematical is going on. You may not be familiar with the mathematics 
+ which can deconstruct a given pattern, but in a sense your mind possesses this mathematical capability of deconstruction "under the hood".
+ 
+I play with mathematical methods for constructing images, looking for what seems interesting or beautiful to me. 
+ 
+My website, https://kingdomofpattern.com , includes animations as well as still images.   Technical information about my image generation code is also included.

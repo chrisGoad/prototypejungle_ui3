@@ -50,7 +50,10 @@ Object.assign(rs,topParams);
   let abet=this.abet = 'abcdefghijklmnopqrstuvwxyz';
   let cm = this.complement('parts chomp blind xz');
  // cm = this.complement('palms choke blind rusty xz');
- // cm = this.complement('farce blind gusty pokes xz');
+ // cm = this.complement('farce blind gusty chomp xz');
+ let la = this.lettersAppearing('chomp','farce blind gusty');
+ console.log('la',la);
+ 
   cm = this.complement('fare bld gsty');//pokes xz');
  
 console.log('cm',cm);
@@ -257,6 +260,5 @@ rs.intersectPolygons = function (pgon0,pgon1) {
 
  
 export {rs};
-
 
 

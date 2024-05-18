@@ -464,7 +464,7 @@ const stripOrnt = function (str) {
  'grid_comet','grid_mat','grid_drop_0','grid_maze',
  'drop_on_circles','drop_square','drop_triptych','lines_2',
  'grid_cloth','grid_ramp','grid_smoke_1','part2_0_2'
- 
+
  ];
 
 let sectionString = function (things) {

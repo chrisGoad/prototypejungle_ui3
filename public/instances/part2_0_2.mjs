@@ -45,7 +45,7 @@ rs.addToArray(visibles,1,20);
 
 let strokeWidths = rs.partParams.strokeWidths = [];
 //rs.computeExponentials({dest:strokeWidths,n:20,root:0.4,factor:.7});
-rs.computeExponentials({dest:strokeWidths,n:20,root:0.05,factor:.8});
+rs.computeExponentials({dest:strokeWidths,n:20,root:0.3,factor:.8});
 
   
 //rs.addToArray(strokeWidths,.1,levels);
