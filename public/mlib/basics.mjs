@@ -1078,13 +1078,13 @@ item.interpolateInPolygon = function (gon,p) {
     //debugger;
     let np = p.nearestPointOnLine(line);
     if (i===1) {
-      debugger;
+      //debugger;
     }
     let fr = side.fractionAlong(np);
     let sv = this.interpolate(v0,v1,fr); 
     if (i===1) {
       console.log('px',p.x,'py',p.y,'npx',np.x,'npy',np.y,'fr',fr,'v0',v0,'v1',v1,'sv',sv);
-      debugger;
+      //debugger;
     }
     sideValues.push(sv);
     let d = p.distance(np);

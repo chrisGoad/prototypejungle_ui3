@@ -7,8 +7,10 @@ let rs = generatorP.instantiate();
 rs.setName('part2_0_I_16_1');
 
 let wd =100;
+let ht =100;
 let nc=40;
-let myParams = {width:wd,height:wd,numCols:nc,numRows:nc};
+let nr=40;
+let myParams = {width:wd,height:ht,numCols:nc,numRows:nr};
 Object.assign(rs,myParams);
 
 export {rs};

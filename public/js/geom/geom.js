@@ -2218,7 +2218,7 @@ Polygon.intersectsLineSegment = function (sg) {
 // only works for convex polygons.
 
 Polygon.contains = function (p) {
-  debugger;
+ // debugger;
   let ext = this.extent();
   let ra = Math.random()*2*Math.PI;
   let rvec = Point.mk(Math.cos(ra),Math.sin(ra));

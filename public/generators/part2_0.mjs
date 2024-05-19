@@ -20,6 +20,7 @@ rs.set('partParams',ObjectNode.mk());
 //rs.computeExponentials(strokeWidths,levels,0.1,0.9);
 
 rs.initProtos = function () {
+  debugger;
   this.polygonP =  polygonPP.instantiate();
   this.polygonP.stroke = 'white';
   this.polygonP.fill = 'transparent';

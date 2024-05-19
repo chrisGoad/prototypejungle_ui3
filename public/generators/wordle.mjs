@@ -31,17 +31,17 @@ Object.assign(rs,topParams);
   let s0n = '';
   let s1n = '';
   let s2n = 'i';
-  let s3n = 'cn';
+  let s3n = 't';
   let s4n = '';
   this.prohibs = [s0n,s1n,s2n,s3n,s4n];
 
   // prohibited dipthongs
   this.dprohibs  = [];
   // known letters
-  let k0 = '';
-  let k1 = 'u';
+  let k0 = 'h';
+  let k1 = '';
   let k2 = '';
-  let k3 = '';
+  let k3 = 'c';
   let k4 = '';
   this.known = [k0,k1,k2,k3,k4];
   this.notPossibles = [];
@@ -51,10 +51,11 @@ Object.assign(rs,topParams);
   let cm = this.complement('parts chomp blind xz');
  // cm = this.complement('palms choke blind rusty xz');
  // cm = this.complement('farce blind gusty chomp xz');
+ // cm = this.complement('farce blind gusty chomp xz');
+ cm = this.complement('fare blnd gusy okey');// chomp xz');
  let la = this.lettersAppearing('chomp','farce blind gusty');
  console.log('la',la);
  
-  cm = this.complement('fare bld gsty');//pokes xz');
  
 console.log('cm',cm);
  // let abet=this.abet = 'fjqvxyz';
