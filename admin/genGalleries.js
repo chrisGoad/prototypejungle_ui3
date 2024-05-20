@@ -458,15 +458,16 @@ const stripOrnt = function (str) {
  //now image faves
   'part2_0_1','drop_circles_14','drop_interpolate_0','ip_test_2',
  'triangle_0','grid_droplets_wide','drop_rects_1','drop_all_0',
- 'drop_all_2','grid_distortion_field_warped','drop_circles3','drop_on_line',
- 'drop_circles_3','interpolate_colors_8','drop_on_top_2','drop_channels',
+ 'grid_distortion_field_warped','drop_on_line',
+ 'drop_circles_3','drop_channels',
  'part2_0_27','part2_0_23','part2_0_5','part2_0_10',
  'part2_0_3','part2_0_29','part2_0_6','part2_0_26',
  'drop_light','grid_enigma','drop_circles_18','drop_circles_4',
  'grid_comet','grid_mat','grid_drop_0','grid_maze',
  'drop_on_circles','drop_square','drop_triptych','lines_2',
  'grid_cloth','grid_ramp','grid_smoke_1','part2_0_2'
-
+ 
+//'drop_all_2','drop_circles3','interpolate_colors_8','drop_on_top_2',
  ];
 
 let sectionString = function (things) {
