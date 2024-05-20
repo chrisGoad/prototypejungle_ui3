@@ -7,10 +7,10 @@ let dirc =fs.readdirSync(dir);
 //dirc = ['drop_circles3.jpg'];
 //console.log('dirc',dirc);
 let jsd = JSON.stringify(dirc);
- const titleMap = {line_path_2_11:'line path 0',mmotion_18_4:'motion 0',mmotion_18_8:'motion 1',mmotion_18_16:'motion 2',mmotion_18_32:'motion 3',
+ const titleMap = {mmotion_18_4:'motion 0',mmotion_18_8:'motion 1',mmotion_18_16:'motion 2',mmotion_18_32:'motion 3',
   mmotion_3:'motion 4',ddrop_circles3:'drop_3',bounce_16:'Square Dance',motion_24:'Colliding Orbits',drop_circles_20:'Necker',
   gons_3:'Pulsation 1',step_ring_0:'Pulsation 2',motion_18_32:'Mandala',crosshatch_1:'Crosshatch',
-  part2_0_34:'Paths 1',part2_0_1:'Vortex',drop_circles_14:'Bloom',drop_channels:'Channels',
+  part2_0_34:'Paths',part2_0_1:'Vortex',drop_circles_14:'Bloom',drop_channels:'Channels',
   droppp_circles_3:'Dropped Circles',drop_interpolate_0:'Motion Illusion',grid_distortion_field_warped:'Distortion Field',
   drop_all_0:'Thatch',drop_all_2:'Inversion',drop_circles3:'Pop',drop_circles_3:'Drop Circles 1',drop_space_junk:'Space Junk',drop_many_textures:'Many Textures',
   drop_on_circles:'Borromean Knot',drop_metal_2:'Metal',drop_embedded_circles:'Embedded Circles',drop_on_line:'Cross 1',
@@ -19,20 +19,20 @@ let jsd = JSON.stringify(dirc);
   part2_0_41a:'Partition 25',part2_0_43:'You are getting very sleepy',paths_10:'Tower',part2_0_35:'Evolving Partition 1',part2_0_46:'Evolving Partition 2',
   part2_0_41b:'Partition 25',grid_quilt_1:'Quilt 1',grid_quilt_3:'Quilt 2',grid_two_quilts:'Two Quilts',path_rwalk_4_0:'Swarm',
   grid_droplets_wide:'Droplets',gggrid_fade:'Fade',gggrid_ramp:'Ramp',interpolate_colors_3:'Interpolate Colors',interpolate_colors_6:'Interpolate Colors 2',
- interpolate_colors_8:'Interpolate Colors',interpolate_colors_9:'Interpolate Colors 4',
+ interpolate_colors_8:'Interpolate Colors',interpolate_colors_9:'Interpolate Colors 4',mutate_6:'Mutate',
  ip_test_2:'Waves',triangle_0:'Form',grid_1:'Bulge',grid_3:'Grid Grid',grid_4:'Rumpled 1',grid_6:'Rumpled 2',path_avoidance_5:'Figure/Ground',
- motion_18_16:'Motion 5',motion_18_4:'Motion 6',motion_18_8:'Motion 7',mutate_2:'Mutate 1',mutate_6:'Mutate 2',curves_7:'Beast',
- path_avoidance_6:'Intersections',cubes_1:'Cubes',curves_10:'Stretch',line_path_2_11:'Bounce 9',drop_circles_26:'Manic',
+ motion_18_16:'Motion 5',motion_18_4:'Motion 6',motion_18_8:'Motion 7',mutate_2:'Mutate 1',curves_7:'Beast',
+ path_avoidance_6:'Intersections',cubes_1:'Cubes',curves_10:'Stretch',line_path_2_11:'Bounce 4',drop_circles_26:'Manic','paths_7':'Spin',
  drop_semi_ordered:'Semi-ordered',grid_smoke_1:'Smoke',stripes_1:'Stripes',lines_chaos_within_order:'Chaos within Order',part2_0_2:'Partition 9'}
  
  
 let numericMaps = {dropCircles:{3:1,18:2,4:3},
 partition:{27:1,23:2,5:3,10:4,3:5,29:6,6:7,26:8,9:9
 },
-bounce:{1:1,13:2,15:3,17:4,18:5,4:6,5:7,9:8},
-curves:{1:1,3:2,4:3,5:4,6:5,8:6,9:7},
-gridSpinner:{13:1,5:2,0:3,1:4,10:5,11:6,15:7,17:8,7:9},
-motion:{10:1,11:2,12:3,15:4,2:5,3:9,0:6,1:7,21:8,4:9,32:10,5:11,9:12},
+bounce:{1:1,17:2,4:3},
+curves:{4:1,8:2,9:3},//,3:2,4:3,5:4,6:5,8:6,9:7},
+gridSpinner:{10:1,7:2},   ///13:1,5:2,0:3,1:4,10:5,11:6,15:7,17:8,7:9},
+motion:{21:1,32:2,5:3},    //10:1,11:2,12:3,15:4,2:5,3:9,0:6,1:7,21:8,4:9,32:10,5:11,9:12},
 paths:{3:2,4:3,5:4,7:5}
 };
 
@@ -70,9 +70,10 @@ const capitalize = function (str) {
         //console.log(str,'->',mpt);
 
        return mpt;
-    } else {
-      return str;
-    }
+    } 
+    //else {
+    //  return str;
+    //}
     let spl = str.split('_');
     let sp0=spl[0];
     let sp1=spl[1];
@@ -87,8 +88,13 @@ const capitalize = function (str) {
         let sp1n =1*sp1;
         let sp1num  = Number.isInteger(sp1n);
         if (sp1num) {
+              
           let nummap = numericMaps[sp0];
           let num = nummap?nummap[sp1n]:sp1;
+          if (str === 'bounce_17') {
+             console.log('bounce_17 num',num);
+          }
+
           if (num===undefined) {
             console.log('num UNDEFINED 00');
             return num;
@@ -216,7 +222,7 @@ return 0;
 
 const isAnim = function (fln) {
     let isa = isOne(fln,notAnims,anims,animNms,'Anim');
-    console.log('isAnim',fln,isa);
+    //console.log('isAnim',fln,isa);
     return isa;;
 }
 let instanceNms = ['rectangle_gon_grid','flows','gridSpinner','line_path','motion_','part_','part2_','paths_','mutate_','bounce_','curves_','path_rwalk_','spirals_0_','reflected_path_0_1'];

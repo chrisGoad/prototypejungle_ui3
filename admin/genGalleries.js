@@ -452,8 +452,10 @@ const stripOrnt = function (str) {
    //  first anim favorites
  const favorites =  ['crosshatch_1','bounce_16','curves_10','motion_24','drop_circles_20','gridSpinner_13','gridSpinner_5',
  'part2_0_43','paths_10','motion_18_32',
- 'gons_3',
- //now image favorites
+ 'gons_3','bounce_1','bounce_17','bounce_4','cubes_1','curves_4','curves_7','curves_8','curves_9','gridSpinner_10','gridSpinner_7',
+ 'line_path_2_11','motion_21','motion_32','motion_5','mutate_6','part2_0_34','part2_0_46','paths_7','path_avoidance_5','path_avoidance_6',
+ 'path_rwalk_4_0',
+ //now image faves
   'part2_0_1','drop_circles_14','drop_interpolate_0','ip_test_2',
  'triangle_0','grid_droplets_wide','drop_rects_1','drop_all_0',
  'drop_all_2','grid_distortion_field_warped','drop_circles3','drop_on_line',
@@ -539,7 +541,7 @@ let sectionString = function (things) {
     } else {
       let [order,file,directory,useThumb,title,props] = thing;
       console.log('FFFFILE',file);
-      if (only_favorites &&alll&(favorites.indexOf(file)===-1)) {
+      if (only_favorites && (alll||allA)&(favorites.indexOf(file)===-1)) {
         break;
       }
      // console.log('PROPS',props);
