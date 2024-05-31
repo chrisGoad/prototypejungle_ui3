@@ -36,9 +36,13 @@ rs.afterInitialize =function ()  {
   let {width:wd,height:ht,numCols} = this;
   let hwd = wd/2;
   let hht = ht/2;
-  let tp =this.topPart;
-  let gons = [tp.P0.polygon,tp.P1.polygon,tp.P2.polygon,tp.P3.polygon];
-  this.computeSides(gons);
+  
+  let left = Point.mk(-hwd,0);
+  let top= Point.mk(0,-hht);
+  let right = Point.mk(hwd,0);
+  let bot = Point.mk(0,hht);
+  let gon=  Polygon.mk([left,top,right,bot]);
+  this.computeSides([gon]);
   let red = {r:255,g:0,b:0};
   let  green= {r:0,g:255,b:0};
   let  blue= {r:0,g:0,b:255};
@@ -47,54 +51,19 @@ rs.afterInitialize =function ()  {
   let  cyan = {r:0,g:255,b:255};
  let values = [this.randomColorOb(),this.randomColorOb(),this.randomColorOb(),black];
   console.log('color 0',JSON.stringify(values[0]),'color 1',JSON.stringify(values[1]),'color 2',JSON.stringify(values[2]));
-  /*const mkValues = ()=>[this.randomColorOb(),this.randomColorOb(),this.randomColorOb(),this.randomColorOb()];
-  //const mkValues = ()=>[black,white,black,white];
-  let valueSrc = [this.randomColorOb()/+UR+/,this.randomColorOb()/+TOP+/,this.randomColorOb()/+UL+/,this.randomColorOb()/+RS+/,
-                 this.randomColorOb()/+LR+/,this.randomColorOb()/+BOT+/,this.randomColorOb()/+LL+/,this.randomColorOb()/+LS+/,
-                 this.randomColorOb()/+CENTER+/];
-  
-  const ae = (x,y) => (Math.abs(x-y) < .1)?'1':'0';
-  //const posMap={'1010':0,'1000':1,'1001':2,'0001':3,'0101':4,'0100':5,'0110':6,'0010':7,'0000':8};
-  const posMap={'1010':0,'1000':5,'1001':2,'0001':6,'0101':3,'0100':5,'0110':7,'0010':4,'0000':8};
-  const valueOfCorner = (p) => {
-    let {x,y} = p;
-    let onTop = ae(y,-hht);
-    let onBot = ae(y,hht);
-    let onLeft = ae(x,-hwd);
-    let onRight = ae(x,hwd);
-    let sig = onTop+onBot+onLeft+onRight;
-    let vli = posMap[sig];
-    let vlc = valueSrc[vli];
-    return vlc;
-  }*/
-  const setValuesForGon = (gon) => {
-    gon.values = values;
-  /*  return;
-    let {corners} = gon;
-    let values = corners.map((p)=>valueOfCorner(p));
-    gon.values = values;*/
-  }
+  gon.values = values;
+
   
   const op = (shp,iv) => {
     let rgb = this.colorObToRgb(iv);
     shp.fill = rgb;
     shp.update();
   }   
-
-
-
-  gons.forEach(setValuesForGon)  
-
     debugger;
 
   this.generateGrid();
   this.setCells(gons,op);
   return;
-  this.displayTitle('Partition 8');
-  this.displayPc(0);
-  this.displayPc(1);
-  this.displayPc(2);
-  this.displayPc(3);
  
 
 }

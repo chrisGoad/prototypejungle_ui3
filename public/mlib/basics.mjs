@@ -9,6 +9,9 @@ import {rs as polygonPP} from '/shape/polygon.mjs';
 const rs = function (item) {
 window.root = core.root;
 item.stateOpsDisabled = 1; // for exported version
+let colorParams = {redOb:{r:255,g:0,b:0},greenOb:{r:0,g:255,b:0},blueOb:{r:0,g:0,b:255},blackOb:{r:0,g:0,b:0},whiteOb:{r:255,g:255,b:255},
+                   yellowOb:{r:255,g:255,b:0},cyanOb:{r:0,g:255,b:255}};
+Object.assign(item,colorParams);
 item.setName = function (name,variant,jsonName) {
   let nameWithV = name+(variant?'_v_'+variant:'');
   let nameWithoutV= name;
@@ -1065,6 +1068,9 @@ item.interpolateVectors = function (params) {
 item.interpolateInPolygon = function (gon,p) {
   //let {gon,values,p} = iparams;
   let {theSides:sides,values} = gon;
+  if (!gon.contains(p)) {
+    debugger;
+  }
   let ids = [];
   let sideValues = [];
   let distances = [];
@@ -1083,7 +1089,7 @@ item.interpolateInPolygon = function (gon,p) {
     let fr = side.fractionAlong(np);
     let sv = this.interpolate(v0,v1,fr); 
     if (i===1) {
-      console.log('px',p.x,'py',p.y,'npx',np.x,'npy',np.y,'fr',fr,'v0',v0,'v1',v1,'sv',sv);
+    //  console.log('px',p.x,'py',p.y,'npx',np.x,'npy',np.y,'fr',fr,'v0',v0,'v1',v1,'sv',sv);
       //debugger;
     }
     sideValues.push(sv);
@@ -1143,7 +1149,7 @@ item.setCells = function (gons,op) {
       let lng =gons.length;
       for (let i=0;i<lng;i++) {
         let gon = gons[i];
-        if (gon.contains(cnt)) {
+        if (1 || gon.contains(cnt)) {
           let iv=this.interpolateInPolygon(gon,cnt);
           let shp = this.shapeAt(x,y);
           op(shp,iv,p);
