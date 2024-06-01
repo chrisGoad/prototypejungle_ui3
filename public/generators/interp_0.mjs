@@ -24,6 +24,9 @@ rs.initProtos = function () {
   this.rectP  = rectPP.instantiate();
   this.rectP.fill = 'white';
   this.rectP['stroke-width'] = 0;
+    this.lineP  = linePP.instantiate();
+  this.lineP.stroke = 'white';
+  this.lineP['stroke-width'] = .1;
 }
 
 

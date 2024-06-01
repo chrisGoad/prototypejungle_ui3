@@ -1149,7 +1149,7 @@ item.setCells = function (gons,op) {
       let lng =gons.length;
       for (let i=0;i<lng;i++) {
         let gon = gons[i];
-        if (1 || gon.contains(cnt)) {
+        if (0 || gon.contains(cnt)) {
           let iv=this.interpolateInPolygon(gon,cnt);
           let shp = this.shapeAt(x,y);
           op(shp,iv,p);

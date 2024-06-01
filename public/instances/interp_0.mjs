@@ -13,7 +13,7 @@ let myParams = {width:wd,height:wd,numCols:nc,numRows:nc};
 Object.assign(rs,myParams);
 
 
-rs.shapeGenerator = function (rvs,cell) {
+rs.shapeGenerator = function (ivs,cell) {
   let {rectP,lineP,numCols,width} = this;
   let cwd = width/numCols;
   let frw =1;
@@ -26,6 +26,24 @@ rs.shapeGenerator = function (rvs,cell) {
   shape.fill = 'blue';
   return shape;
 }
+
+rs.shapeGenerator = function (ivs,cell) {
+  let {rectP,lineP,numCols,numRows,width,height} = this;
+  debugger;
+  let cwd = width/numCols;
+  let cht = height/numRows;
+  let fr =0.25;
+  let scwd = fr*cwd;
+  let scht = fr*cht;
+  let {x,y} = cell;
+  let cshp = containerShape.mk();
+  let l0 = lineP.instantiate();
+  cshp.set('l0',l0);
+  l0.setEnds(Point.mk(-scwd,0),Point.mk(scwd,0));
+ 
+  return cshp;
+}
+
 
 rs.initialize =function ()  {
   this.initProtos();
@@ -41,19 +59,23 @@ rs.initialize =function ()  {
   let gon=  Polygon.mk([left,top,right,bot]);
   let gons = [gon];
   this.computeSides([gon]);
-  let red = {r:255,g:0,b:0};
-  let  green= {r:0,g:255,b:0};
-  let  blue= {r:0,g:0,b:255};
-  let  black= {r:0,g:0,b:0};
-  let  white= {r:255,g:255,b:255};
-  let  cyan = {r:0,g:255,b:255};
  //let values = [this.randomColorOb(),this.randomColorOb(),this.randomColorOb(),this.randomColorOb()];
-  let values = [this.redOb,this.yellowOb,this.blueOb,this.cyanOb];
+ let values = [[1,0,0,0],[0,1,0,0],[0,0,1,0],[0,0,0,1]];
+ // let values = [this.redOb,this.yellowOb,this.bDlueOb,this.cyanOb];
   console.log('color 0',JSON.stringify(values[0]),'color 1',JSON.stringify(values[1]),'color 2',JSON.stringify(values[2]));
   gon.values = values;
 
   
-  const op = (shp,iv) => {
+  const op = (shp,iv,p) => {
+    debugger;
+    let {x,y} = p;
+   let rvs=iv.map((v)=>v*Math.random());
+    let max = 0;
+    rvs.forEach((v) => {max=Math.max(max,v);})
+    let idx=rvs.indexOf(max);
+      console.log('x',x,'y',y,'idx',idx);
+
+      return;
     let rgb = this.colorObToRgb(iv);
     shp.fill = rgb;
     shp.update();
