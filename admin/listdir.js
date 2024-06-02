@@ -23,8 +23,9 @@ let jsd = JSON.stringify(dirc);
  ip_test_2:'Waves',triangle_0:'Form',grid_1:'Bulge',grid_3:'Grid Grid',grid_4:'Rumpled 1',grid_6:'Rumpled 2',path_avoidance_5:'Figure/Ground',
  motion_18_16:'Motion 5',motion_18_4:'Motion 6',motion_18_8:'Motion 7',mutate_2:'Mutate 1',curves_7:'Beast',
  path_avoidance_6:'Intersections',cubes_1:'Cubes',curves_10:'Stretch',line_path_2_11:'Bounce 4',drop_circles_26:'Manic','paths_7':'Spin',
- drop_semi_ordered:'Semi-ordered',grid_smoke_1:'Smoke',stripes_1:'Stripes',lines_chaos_within_order:'Chaos within Order',part2_0_2:'Horizon',
- part2_0_10:'Dust',part2_0_27:'Sanctum',part2_0_23:'Zia',part2_0_5:'Swirl',part2_0_3:'Window',part2_0_29:'Glass',part2_0_6:'Fields',part2_0_26:'Recursion'}
+ drop_semi_ordered:'Semi-ordered',grid_smoke_1:'Smoke',stripes_1:'Stripes',lines_chaos_within_order:'Chaos Within Order',part2_0_2:'Horizon',
+ part2_0_10:'Dust',part2_0_27:'Sanctum',part2_0_23:'Zia',part2_0_5:'Swirl',part2_0_3:'Window',part2_0_29:'Glass',part2_0_6:'Fields',part2_0_26:'Recursion',
+ lines_chaos_within_order:'Chaos Within Order'}
  
  
 let numericMaps = {dropCircles:{3:1,18:2,4:3},

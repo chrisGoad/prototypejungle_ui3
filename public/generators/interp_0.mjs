@@ -4,6 +4,7 @@ import {rs as generatorP} from '/generators/part2_0.mjs';
 import {rs as addGridMethods} from '/mlib/grid.mjs';
 import {rs as linePP} from '/shape/line.mjs';
 import {rs as rectPP} from '/shape/rectangle.mjs';
+import {rs as circlePP} from '/shape/circle.mjs';
 import {rs as basicP} from '/generators/basics.mjs';
 
 let rs = basicP.instantiate();
@@ -24,6 +25,9 @@ rs.initProtos = function () {
   this.rectP  = rectPP.instantiate();
   this.rectP.fill = 'white';
   this.rectP['stroke-width'] = 0;
+   this.circleP  = circlePP.instantiate();
+  this.circleP.fill = 'white';
+  this.circleP['stroke-width'] = 0;
     this.lineP  = linePP.instantiate();
   this.lineP.stroke = 'white';
   this.lineP['stroke-width'] = .1;
