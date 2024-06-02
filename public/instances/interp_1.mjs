@@ -13,6 +13,7 @@ let myParams = {width:wd,height:wd,numCols:nc,numRows:nc};
 Object.assign(rs,myParams);
 
 
+
 rs.shapeGenerator = function (ivs,cell) {
   let {rectP,lineP,numCols,width} = this;
   let cwd = width/numCols;
@@ -78,7 +79,7 @@ rs.shapeGenerator = function (ivs,cell) {
 
 rs.initialize =function ()  {
   this.initProtos();
-  this.addFrame();
+ // this.addFrame();
   let {width:wd,height:ht,numCols} = this;
   let hwd = wd/2;
   let hht = ht/2;
@@ -103,7 +104,7 @@ rs.initialize =function ()  {
 
   
   const op = (shp,iv,p) => {
-    debugger;
+    //debugger;
     let {x,y} = p;
   // let rvs=iv.map((v)=>v*Math.random());
    let rvs=iv.map((v)=>v+.2*Math.random());

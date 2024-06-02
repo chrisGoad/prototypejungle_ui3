@@ -1137,7 +1137,7 @@ item.randomColorOb = function () {
 
 
 item.setCells = function (gons,op) {
-  debugger;
+  //debugger;
   let {numRows:nr,numCols:nc,width} = this;
    let cwd = width/nc;
    let p = Point.mk(0,0);
