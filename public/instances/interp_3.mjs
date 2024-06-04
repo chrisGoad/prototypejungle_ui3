@@ -10,7 +10,7 @@ rs.setName('interp_3');
 
 
 let wd =100;
-let nc=100;
+let nc=200;
 let myParams = {width:wd,height:wd,numCols:nc,numRows:nc};
 Object.assign(rs,myParams);
 
@@ -39,7 +39,7 @@ rs.shapeGenerator = function (ivs,cell) {
 rs.shapeGenerator = function (ivs,cell) {
   let {rectP,lineP,circleP,numCols,numRows,width,height} = this;
   //debugger;
-  let fc = .8;
+  let fc = 1;
   let cwd = width/numCols;
   let awd = fc*cwd;
   let shp = rectP.instantiate();
@@ -63,7 +63,13 @@ rs.initialize =function ()  {
   const op = (shp,p) => {
     //debugger;
     let d = (p.distance(cnt))/ahwd;
-    let bw = .4;// boundary width
+    
+    let bw = .6;// boundary width
+    let r = .99;
+    if (d>r) {
+      shp.fill='black';//'blue';
+      return;
+    }
     let ad = d+(bw*Math.random() - .5*bw);
     console.log('x',p.x,'y',p.y,'cx',cnt.x,'cy',cnt.y,'d',d,'ad',ad);
     shp.fill = (ad>0.5)?'red':'black';

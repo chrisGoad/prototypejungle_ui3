@@ -31,18 +31,18 @@ Object.assign(rs,topParams);
 
   // prohibited letters at each position
   let s0n = '';
-  let s1n = 'a';
-  let s2n = 'rs';
-  let s3n = 't';
+  let s1n = '';
+  let s2n = 'r';
+  let s3n = 'm';
   let s4n = '';
   this.prohibs = [s0n,s1n,s2n,s3n,s4n];
 
   // prohibited dipthongs
   this.dprohibs  = [];
   // known letters
-  let k0 = '';
+  let k0 = 'g';
   let k1 = '';
-  let k2 = '';
+  let k2 = 'o';
   let k3 = '';
   let k4 = '';
   this.known = [k0,k1,k2,k3,k4];
@@ -53,7 +53,8 @@ Object.assign(rs,topParams);
   let cm = this.complement('parts chomp blind xz');
  // cm = this.complement('palms choke blind rusty xz');
  // cm = this.complement('farce blind gusty chomp xz');
-  cm = this.complement('fce blind guy');// chomp xz');
+ // cm = this.complement('force  tast bumpy xz');
+  cm = this.complement('face blind usty chp');// xz');
  
  // cm = this.complement('fare swirl guty comp');// xz');
  let la = this.lettersAppearing('chomp','farce blind gusty');

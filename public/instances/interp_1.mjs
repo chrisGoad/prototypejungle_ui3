@@ -9,7 +9,7 @@ rs.setName('interp_1');
 
 let wd =100;
 let nc=100;
-let myParams = {width:wd,height:wd,numCols:nc,numRows:nc};
+let myParams = {width:wd,height:wd,numCols:nc,numRows:nc,frameStrokee:'white'};
 Object.assign(rs,myParams);
 
 
@@ -79,7 +79,7 @@ rs.shapeGenerator = function (ivs,cell) {
 
 rs.initialize =function ()  {
   this.initProtos();
- // this.addFrame();
+ this.addFrame();
   let {width:wd,height:ht,numCols} = this;
   let hwd = wd/2;
   let hht = ht/2;
