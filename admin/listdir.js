@@ -25,7 +25,7 @@ let jsd = JSON.stringify(dirc);
  path_avoidance_6:'Intersections',cubes_1:'Cubes',curves_10:'Stretch',line_path_2_11:'Bounce 4',drop_circles_26:'Manic','paths_7':'Spin',
  drop_semi_ordered:'Semi-ordered',grid_smoke_1:'Smoke',stripes_1:'Stripes',lines_chaos_within_order:'Chaos Within Order',part2_0_2:'Horizon',
  part2_0_10:'Dust',part2_0_27:'Sanctum',part2_0_23:'Zia',part2_0_5:'Swirl',part2_0_3:'Window',part2_0_29:'Glass',part2_0_6:'Fields',part2_0_26:'Recursion',
- lines_chaos_within_order:'Chaos Within Order'}
+ lines_chaos_within_order:'Chaos Within Order',motion_29:'Oxetane'}
  
  
 let numericMaps = {dropCircles:{3:1,18:2,4:3},
@@ -152,7 +152,7 @@ const capitalize = function (str) {
 let frameMap = {crosshatch_1:'f083'};
 // figure out what went wrong with rectangle_gon_grid
 
-let notAnims = ['bounce_16_f077','crosshatch_0_f001','rectangle_gon_grid_9','curves_0','drop_circles_14_5x7','drop_circles_15',
+let notAnims = ['bounce_16_f077','crosshatch_0_f001','rectangle_gon_grid_9','curves_0','drop_circles_14_5x7','drop_circles_15','motion_29',
                'drop_circles_25','drop_circles_21','drop_leaves','drop_on_top','motion_24_f','motion_29_f','mutate_6_f',];
 let anims= ['drop_circles_21','cubes_1','drop_circles_19','drop_circles_20','drop_circles_26','CMB','drop_circles_14_5x7',
 'drop_circles_15','spin_1','step_ring','part2_0_43','part2_0_31','bounce_13','paths_10','part2_0_46','stripes_1',

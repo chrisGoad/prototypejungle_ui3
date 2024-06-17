@@ -457,7 +457,7 @@ const stripOrnt = function (str) {
  'path_rwalk_4_0',
  //now image faves
   'part2_0_1','drop_circles_14','drop_interpolate_0','ip_test_2',
- 'triangle_0','grid_droplets_wide','drop_rects_1','lines_chaos_within_order','drop_all_0',
+ 'triangle_0','grid_droplets_wide','drop_rects_1','lines_chaos_within_order','motion_29',//'drop_all_0',
  'grid_distortion_field_warped','drop_on_line',
  'drop_circles_3','drop_channels',
  'part2_0_23','part2_0_5','part2_0_10',
@@ -465,7 +465,7 @@ const stripOrnt = function (str) {
  'drop_light','grid_enigma','drop_circles_18','drop_circles_4',
  'grid_comet','grid_mat','grid_drop_0','grid_maze',
  'drop_on_circles','drop_square','drop_triptych','lines_2',
- 'grid_cloth','grid_ramp','grid_smoke_1','part2_0_2','part2_0_27'
+ 'grid_cloth','grid_ramp','grid_smoke_1','part2_0_2','part2_0_27','drop_all_0'
  
 //'drop_all_2','drop_circles3','interpolate_colors_8','drop_on_top_2',
  ];
