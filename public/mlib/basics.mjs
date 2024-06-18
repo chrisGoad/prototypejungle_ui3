@@ -1066,6 +1066,7 @@ item.interpolateVectors = function (params) {
 }  
 
 item.interpolateInPolygon = function (gon,p) {
+   debugger;
   //let {gon,values,p} = iparams;
   let {theSides:sides,values} = gon;
   if (!gon.contains(p)) {

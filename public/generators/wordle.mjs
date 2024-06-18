@@ -33,16 +33,16 @@ Object.assign(rs,topParams);
   let s0n = '';
   let s1n = '';
   let s2n = 'ro';
-  let s3n = '';
-  let s4n = 'p';
+  let s3n = 'c';
+  let s4n = 'e';
   this.prohibs = [s0n,s1n,s2n,s3n,s4n];
 
   // prohibited dipthongs
   this.dprohibs  = [];
   // known letters
-  let k0 = '';
+  let k0 = 'c';
   let k1 = '';
-  let k2 = 'i';
+  let k2 = '';
   let k3 = '';
   let k4 = '';
   this.known = [k0,k1,k2,k3,k4];
@@ -52,8 +52,9 @@ Object.assign(rs,topParams);
   let abet=this.abet = 'abcdefghijklmnopqrstuvwxyz';
   let cm = this.complement('parts chomp blind xz');
  // cm = this.complement('palms choke blind rusty xz');
-  cm = this.complement('farce blind gusty chompS');
-  cm = this.complement('face blnd gusty chm');
+  cm = this.complement('farce blind gusty chomp');
+  cm = this.complement('fa blind gusty hmp');
+ 
  
  
  // cm = this.complement('fare swirl guty comp');// xz');
