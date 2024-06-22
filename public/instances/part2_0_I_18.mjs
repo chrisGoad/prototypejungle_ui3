@@ -38,7 +38,7 @@ rs.shapeGenerator = function (rvs,cell) {
   let hs = 0.5*scwd;
   shape.setEnds(Point.mk(0,-hs),Point.mk(0,hs));
   shape.stroke = 'white';
-  shape.whichGon = (x+y)%2;
+  shape.whichGon = (y)%2;
   return shape;
  
 }
@@ -48,8 +48,14 @@ rs.afterInitialize =function ()  {
   let {width:wd,height:ht,numCols,blackOb,whiteOb} = this;
   let hwd = wd/2;
   let hht = ht/2;
+  let UL = Point.mk(-hwd,-hht);
+  let UR = Point.mk(hwd,-hht);
+  let LR = Point.mk(hwd,hht);
+  let LL = Point.mk(-hwd,hht);
+  let gon = Polygon.mk([UL,UR,LR,LL]);
   let tp =this.topPart;
-  let gons0 = [tp.P0.polygon,tp.P1.polygon,tp.P2.polygon,tp.P3.polygon];
+ // let gons0 = [tp.P0.polygon,tp.P1.polygon,tp.P2.polygon,tp.P3.polygon];
+  let gons0 = [gon];
   let gons1 = gons0.map((gon) => Polygon.mk(gon.corners));
   this.computeSides(gons0);
   this.computeSides(gons1);
@@ -73,9 +79,10 @@ rs.afterInitialize =function ()  {
     let scwd = frw*cwd;
     let hs = 0.5*scwd;
     let qs = 0.25*scwd;
-    let hlnl = qs;
-    let off = wg?Point.mk(qs,qs):Point.mk(-qs,-qs);
+    let hlnl = .4*scwd;
+    let off = wg?Point.mk(0,hs):Point.mk(0,-hs);
     let rgb = this.colorObToRgb(iv);
+    rgb = 'white';
     shp.stroke = wg?'white':'yellow';//rgb;
     shp.stroke = rgb;
     console.log('iv.r',iv.r);

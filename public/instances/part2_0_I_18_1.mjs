@@ -1,10 +1,10 @@
 
-import {rs as generatorP} from '/instances/part2_0_I_18.mjs';
+import {rs as generatorP} from '/instances/part2_0_I_18	.mjs';
 
 let rs = generatorP.instantiate();
 
 
-rs.setName('part2_0_I_16_1');
+rs.setName('part2_0_I_18_1');
 
 let wd =100;
 let ht =100;
