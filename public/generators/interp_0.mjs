@@ -1,6 +1,6 @@
 
 
-import {rs as generatorP} from '/generators/part2_0.mjs';
+//import {rs as generatorP} from '/generators/part2_0.mjs';
 import {rs as addGridMethods} from '/mlib/grid.mjs';
 import {rs as linePP} from '/shape/line.mjs';
 import {rs as rectPP} from '/shape/rectangle.mjs';
