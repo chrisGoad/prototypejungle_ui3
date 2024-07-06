@@ -4,6 +4,9 @@ module.exports = {
 sections: 
 
 [    
+      [0,'grid_kelli','generators',1,'Grid Kelli',{likes:0,posted:0,category:'web'}], 
+      [0,'wordle','generators',1,'Wordle',{likes:0,posted:0,category:'drop'}], 
+
       [0,'lines_chaos_within_order','generators',1,'Chaos within Order',{likes:0,posted:0,category:'web'}], 
       [0,'interp_3','instances',1,'interp_3',{likes:0,posted:0,category:'web'}], 
       [0,'interp_2','instances',1,'interp_2',{likes:0,posted:0,category:'web'}], 
@@ -24,7 +27,6 @@ sections:
 	    [0,'motion_21','instances',1,'Motion 21',{video:'gif',noTitle:0,likes:0,posted:0,category:'anim'}],
        [0,'grid_droplets_wide','generators','square','Grid Droplets Wide',{likes:130,posted:1,category:'grid'}],
 	    [0,'drop_circles_3','generators','square','Drop Circles 3',{likes:130,posted:1,category:'grid'}],
-      [0,'wordle','generators',1,'Wordle',{likes:0,posted:0,category:'drop'}], 
 
       [0,'mutate_5','instances',1,'mutate 5',{likes:0,posted:0,category:'drop'}], 
       [0,'mutate_4','instances',1,'mutate 4',{likes:0,posted:0,category:'drop'}], 

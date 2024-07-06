@@ -30,19 +30,19 @@ Object.assign(rs,topParams);
    this.allowBadBlends = 0;
 
   // prohibited letters at each position
-  let s0n = '';
+  let s0n = 'fc';
   let s1n = '';
-  let s2n = 'rso';
-  let s3n = '';
+  let s2n = 's';
+  let s3n = 'c';
   let s4n = '';
   this.prohibs = [s0n,s1n,s2n,s3n,s4n];
 
   // prohibited dipthongs
   this.dprohibs  = [];
-  // known letters
+  // known 
   let k0 = '';
-  let k1 = 'a';
-  let k2 = '';
+  let k1 = '';
+  let k2 = 'o';
   let k3 = '';
   let k4 = '';
   this.known = [k0,k1,k2,k3,k4];
@@ -53,7 +53,7 @@ Object.assign(rs,topParams);
   let cm = this.complement('parts chomp blind xz');
  // cm = this.complement('palms choke blind rusty xz');
   cm = this.complement('farce blind gusty chomp');
-  cm = this.complement('fce blind guty chmp');
+  cm = this.complement('are blind guty hmp');
  
  
  
