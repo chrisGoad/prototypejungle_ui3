@@ -12,11 +12,11 @@ let mul = 1;
 //let ht  = 100;
 let wd  = 100;
 //* let nr = 257;
-let nc = 257;
+let nc = 20;
 //*let nc = ((nr*mul).toString(2)).length-1;
-let nr = ((nc*mul).toString(2)).length-1;
+let nr = nc;
 //*let wd = ht/2;//Math.floor((nc/nr) * ht)-1;
-let ht = wd/2;//Math.floor((nc/nr) * ht)-1;
+let ht = wd;//Math.floor((nc/nr) * ht)-1;
 let colorParams = {redOb:{r:255,g:0,b:0},greenOb:{r:0,g:255,b:0},blueOb:{r:0,g:0,b:255},blackOb:{r:0,g:0,b:0},whiteOb:{r:255,g:255,b:255},
                   cyanOb:{r:0,g:255,b:255}};
 let topParams = {width:wd,height:ht,numRows:nr,numCols:nc,framePadding:0.2*wd,frameStroke:undefined,doNotDisplayParts:1,numSteps:30}
@@ -44,29 +44,11 @@ rs.shapeGenerator = function (rvs,cell) {
   let scwd = frw*cwd;
   let scht = frw*cht;
   let {x,y} = cell;
-  if (y === (nr-1)) {
-    debugger;
-  }
-  //*let my = mul*y;
-  let my = mul*x;
-  let ys = my.toString(2);
-  //console.log('x',x,'y',y,'ys',ys);
-  let shape = rectP.instantiate().show();
+   let shape = rectP.instantiate().show();
   shape.width = scwd;
   shape.height = scht;
-  let ysln = ys.length;
- //* let sp =nc-ysln;
-  let sp =nr-ysln;
-  //*if (x>=ysln) {
-  if (y<sp) {
-    fill = 'gray'
-  } else {
-    //* let xd = ys[x];
-    let xd = ys[y-sp];
-    console.log('x',x,'y',y,'ys',ys,'xd',xd);
-   fill = xd==='1'?'white':'black';
-    //fill = xd==='1'?this.randomRGB(100,200):'black';
-  }
+  let gv = Math.floor(255*(x/numCols));
+   fill = this.toRGB(gv,gv,gv);
   shape.fill = fill;
   return shape;
 }
