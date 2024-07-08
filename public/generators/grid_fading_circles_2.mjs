@@ -51,8 +51,8 @@ rs.addCircle = function (x,y,fill) {
 
 rs.addFadedCircle = function (x,y) {
   let {numCols,numRows,width,circleDiam,circles,circleP} = this;
- 
-  let gv = Math.floor(255*((numCols-x)/numCols));
+  let fr = this.frToLL(x,y);
+  let gv = Math.floor(255*(1-fr));
    let fill = this.toRGB(gv,gv,gv);
    this.addCircle(x,y,fill);
  }
@@ -61,7 +61,7 @@ rs.addFadingCircles = function (y) {
   let {numCircles,numCols,numRows,width} = this;
   let intx = numCols/numCircles;
   let circWd = width/numCircles;
-  this.circleDiam= 0.2*circWd;
+  this.circleDiam= 0.4*circWd;
  // let y = numRows/2;
   for  (let i=1;i<numCircles;i++) {
      let x = intx * i;
@@ -81,6 +81,16 @@ rs.addCircles = function (y,fill) {
   } 
 }
   
+rs.frToLL  = function (x,y) {
+  let {numCols,numRows} = this;
+  let LL= Point.mk(numCols-1,numRows-1);
+  let UL=Point.mk(0,0)
+  let diagLn = LL.distance(UL);
+  let cellPnt= Point.mk(x,y);
+  let cLn = cellPnt.distance(UL);
+  let fr = cLn/diagLn;
+  return fr;
+}
 
 rs.shapeGenerator = function (rvs,cell) {
   let {rectP,lineP,numCols,numRows,height,width,fill} = this;
@@ -94,7 +104,9 @@ rs.shapeGenerator = function (rvs,cell) {
    let shape = rectP.instantiate().show();
   shape.width = scwd;
   shape.height = scht;
-  let gv = Math.floor(255*(x/numCols));
+  let fr = this.frToLL(x,y);
+  let gv = Math.floor(255*fr);
+  console.log('x',x,'y',y,'fr',fr);
    fill = this.toRGB(gv,gv,gv);
   shape.fill = fill;
   return shape;
@@ -109,18 +121,10 @@ rs.initialize =function ()  {
   let hht = ht/2;
   this.generateGrid();
   this.set('circles',core.ArrayNode.mk());
-  this.circleDiam = wd/20;
-  let x = Math.floor(.6*numCols);
-  let y = Math.floor(numRows/2);
-  this.addFadingCircles(y);
-  y = Math.floor(.4*numRows); 
-  this.addCircles(y,'white')
-   y = Math.floor(.6*numRows); 
-  this.addCircles(y,'black')
-    y = Math.floor(.8*numRows); 
-  this.addCircles(y,'gray')
-    y = Math.floor(.2*numRows); 
-  this.addCircles(y,'gray')
+  for (let i=1;i<16;i++) {
+    let y = Math.floor((1/16)*i*numRows);
+    this.addFadingCircles(y);
+  }
 
 }
 

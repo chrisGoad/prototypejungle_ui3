@@ -4,6 +4,7 @@ module.exports = {
 sections: 
 
 [    
+      [0,'grid_fading_circles_2','generators',1,'Grid Fading Circles 2',{likes:0,posted:0,category:'web'}], 
       [0,'grid_fading_circles','generators',1,'Grid Fading Circles',{likes:0,posted:0,category:'web'}], 
       [0,'grid_kelli','generators',1,'Grid Kelli',{likes:0,posted:0,category:'web'}], 
       [0,'wordle','generators',1,'Wordle',{likes:0,posted:0,category:'drop'}], 
