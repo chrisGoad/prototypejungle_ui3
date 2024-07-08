@@ -83,11 +83,11 @@ rs.addCircles = function (y,fill) {
   
 rs.frToLL  = function (x,y) {
   let {numCols,numRows} = this;
-  let LL= Point.mk(numCols-1,numRows-1);
+  let LL= Point.mk(numCols,numRows);
   let UL=Point.mk(0,0)
-  let diagLn = LL.distance(UL);
+  let diagLn = LL.boxcarDistance(UL);
   let cellPnt= Point.mk(x,y);
-  let cLn = cellPnt.distance(UL);
+  let cLn = cellPnt.boxcarDistance(UL);
   let fr = cLn/diagLn;
   return fr;
 }
