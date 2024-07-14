@@ -8,7 +8,7 @@ let rs = basicP.instantiate();
 
 addGridMethods(rs);
 
-rs.setName('grid_kelli');
+rs.setName('grid_fading_circles_2');
 let mul = 1;
 //let ht  = 100;
 let wd  = 100;
@@ -20,7 +20,7 @@ let nr = nc;
 let ht = wd;//Math.floor((nc/nr) * ht)-1;
 let colorParams = {redOb:{r:255,g:0,b:0},greenOb:{r:0,g:255,b:0},blueOb:{r:0,g:0,b:255},blackOb:{r:0,g:0,b:0},whiteOb:{r:255,g:255,b:255},
                   cyanOb:{r:0,g:255,b:255}};
-let topParams = {width:wd,height:ht,numRows:nr,numCols:nc,framePadding:0.2*wd,frameStroke:undefined,doNotDisplayParts:1,numSteps:30,numCircles:16}
+let topParams = {width:wd,height:ht,numRows:nr,numCols:nc,framePadding:0.2*wd,frameStroke:undefined,doNotDisplayParts:1,numSteps:30,numCircles:32}
 Object.assign(rs,topParams);
 Object.assign(rs,colorParams);
 
