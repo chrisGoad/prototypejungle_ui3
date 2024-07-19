@@ -14,13 +14,14 @@ let mul = 1;
 let wd  = 100;
 //* let nr = 257;
 let nc = 128;
+//nc = 16;
 //*let nc = ((nr*mul).toString(2)).length-1;
 let nr = nc;
 //*let wd = ht/2;//Math.floor((nc/nr) * ht)-1;
 let ht = wd;//Math.floor((nc/nr) * ht)-1;
 let colorParams = {redOb:{r:255,g:0,b:0},greenOb:{r:0,g:255,b:0},blueOb:{r:0,g:0,b:255},blackOb:{r:0,g:0,b:0},whiteOb:{r:255,g:255,b:255},
                   cyanOb:{r:0,g:255,b:255}};
-let topParams = {width:wd,height:ht,numRows:nr,numCols:nc,framePadding:0.2*wd,frameStroke:undefined,doNotDisplayParts:1,numSteps:30,numCircles:32}
+let topParams = {width:wd,height:ht,numRows:nr,numCols:nc,framePadding:0.2*wd,frameStroke:undefined,doNotDisplayParts:1,numSteps:30,numCircles:4}
 Object.assign(rs,topParams);
 Object.assign(rs,colorParams);
 
@@ -41,6 +42,7 @@ rs.initProtos = function () {
 
 rs.addCircle = function (x,y,fill) {
   let {numCols,numRows,width,circleDiam,circles,circleP} = this;
+  
   let c = this.centerPnt(x,y);
   let circ = circleP.instantiate().show();
   circ.dimension = circleDiam;
@@ -51,6 +53,8 @@ rs.addCircle = function (x,y,fill) {
 
 rs.addFadedCircle = function (x,y) {
   let {numCols,numRows,width,circleDiam,circles,circleP} = this;
+  console.log('x',x,'y',y);
+  //debugger;
   let fr = this.frToLL(x,y);
   let gv = Math.floor(255*(1-fr));
    let fill = this.toRGB(gv,gv,gv);
@@ -63,11 +67,38 @@ rs.addFadingCircles = function (y) {
   let circWd = width/numCircles;
   this.circleDiam= 0.4*circWd;
  // let y = numRows/2;
-  for  (let i=1;i<numCircles;i++) {
+  for  (let i=0;i<numCircles;i++) {
      let x = intx * i;
      this.addFadedCircle (x,y);
   }
 }
+
+rs.placeFadingCircle  = function (cix,ciy,offset) {
+   let {numCircles,numCols,numRows,width,height,circles} = this;
+   debugger;
+   let idx =cix + ciy*numCircles;
+   let crc = circles[idx];
+   let cbcx  = numCols/numCircles; // x cells between circles 
+   let cbcy  = numRows/numCircles; // y cells between circles 
+   let gx = cbcx*cix;
+   let gy = cbcy*ciy;
+   let cwd = width/numCols;;
+   let cnt = this.centerPnt(gx,gy);
+   let aoff = offset*cbcx*cwd;
+   let cnto = cnt.plus(Point.mk(aoff,0));
+   crc.moveto(cnto);
+}
+
+rs.placeFadingCircles = function (offset) {
+  let {numCircles} = this;
+  for (let j = 0;j<numCircles;j++) {
+    for (let i = 0;i<numCircles;i++) {
+      this.placeFadingCircle(i,j,offset);
+    }
+  }
+}
+
+
  
 rs.addCircles = function (y,fill) {
  let {numCircles,numCols,numRows,width} = this;
@@ -94,7 +125,7 @@ rs.frToLL  = function (x,y) {
 
 rs.shapeGenerator = function (rvs,cell) {
   let {rectP,lineP,numCols,numRows,height,width,fill} = this;
-  debugger;
+ // debugger;
   let cwd = width/numCols;
   let cht = height/numRows;
   let frw =1;
@@ -107,7 +138,11 @@ rs.shapeGenerator = function (rvs,cell) {
   let fr = this.frToLL(x,y);
   let gv = Math.floor(255*fr);
   console.log('x',x,'y',y,'fr',fr);
-   fill = this.toRGB(gv,gv,gv);
+  if (x<1) {
+    fill = 'pink';
+  } else {
+    fill = this.toRGB(gv,gv,gv);
+  }
   shape.fill = fill;
   return shape;
 }
@@ -116,16 +151,16 @@ rs.initialize =function ()  {
   debugger;
   this.initProtos();
   this.addFrame();
-  let {width:wd,height:ht,numRows,numCols} = this;
+  let {width:wd,height:ht,numRows,numCols,numCircles} = this;
   let hwd = wd/2;
   let hht = ht/2;
   this.generateGrid();
   this.set('circles',core.ArrayNode.mk());
-  for (let i=1;i<16;i++) {
-    let y = Math.floor((1/16)*i*numRows);
+  for (let i=0;i<numCircles;i++) {
+    let y = Math.floor((1/numCircles)*i*numRows);
     this.addFadingCircles(y);
   }
-
+ this.placeFadingCircles(0.05);
 }
 
 
