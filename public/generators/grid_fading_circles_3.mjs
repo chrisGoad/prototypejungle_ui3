@@ -11,7 +11,7 @@ let rs = basicP.instantiate();
 addGridMethods(rs);
 addAnimationMethods(rs);
 
-rs.setName('grid_fading_circles_2');
+rs.setName('grid_fading_circles_3');
 let mul = 1;
 //let ht  = 100;
 let wd  = 100;
@@ -25,7 +25,7 @@ let ht = wd;//Math.floor((nc/nr) * ht)-1;
 let colorParams = {redOb:{r:255,g:0,b:0},greenOb:{r:0,g:255,b:0},blueOb:{r:0,g:0,b:255},blackOb:{r:0,g:0,b:0},whiteOb:{r:255,g:255,b:255},
                   cyanOb:{r:0,g:255,b:255}};
 let topParams = {width:wd,height:ht,numRows:nr,numCols:nc,framePadding:0.2*wd,frameStroke:undefined,doNotDisplayParts:1,numSteps:30,
-                 numCircles:16,numSteps:20,saveAnimation:1}
+                 numCircles:8,numSteps:20,saveAnimation:1}
 Object.assign(rs,topParams);
 Object.assign(rs,colorParams);
 
@@ -71,7 +71,7 @@ rs.addFadingCircles = function (y) {
   let circWd = width/numCircles;
   this.circleDiam= 0.4*circWd;
  // let y = numRows/2;
-  for  (let i=0;i<numCircles;i++) {
+  for  (let i=1;i<numCircles;i++) {
      let x = intx * i;
      this.addFadedCircle (x,y);
   }
@@ -80,8 +80,11 @@ rs.addFadingCircles = function (y) {
 rs.placeFadingCircle  = function (cix,ciy,offset) {
    let {numCircles,numCols,numRows,width,height,circles} = this;
    //debugger;
-   let idx =cix + ciy*numCircles;
+   let idx =cix + (ciy-1)*(numCircles-1)-1;
    let crc = circles[idx];
+   if (!crc) {
+     debugger;
+   }
    let cbcx  = numCols/numCircles; // x cells between circles 
    let cbcy  = numRows/numCircles; // y cells between circles 
    let gx = cbcx*cix;
@@ -95,8 +98,8 @@ rs.placeFadingCircle  = function (cix,ciy,offset) {
 
 rs.placeFadingCircles = function (offset) {
   let {numCircles} = this;
-  for (let j = 0;j<numCircles;j++) {
-    for (let i = 0;i<numCircles;i++) {
+  for (let j = 1;j<numCircles;j++) {
+    for (let i = 1;i<numCircles;i++) {
       this.placeFadingCircle(i,j,offset);
     }
   }
@@ -155,10 +158,13 @@ rs.setFills = function (fra) {
   let {numCircles,circles,numCols,numRows,gv} = this;
  // debugger;
  // let fra = numCircles*ifra;
-  for (let j = 0;j<numCircles;j++) {
-    for (let i = 0;i<numCircles;i++) {
-      let idx = i+numCircles*j;
+  for (let j = 1;j<numCircles;j++) {
+    for (let i = 1;i<numCircles;i++) {
+      let idx = i+(numCircles-1)*(j-1)-1;
       let crc = circles[idx];
+      if (!crc) {
+        debugger;
+      }
       let cbcx  = numCols/numCircles; // x cells between circles 
       let cbcy  = numRows/numCircles; // y cells between circles 
       let gx = cbcx*i;
@@ -167,18 +173,18 @@ rs.setFills = function (fra) {
       let ofr = this.frToLL(gx,gy);
      // let ogv = Math.floor(255*(1-fr))
       console.log('gx',gx,'gy',gy,'fr',fr);
-      if (1&&(gx===0)) {
+      if (1&&(gx===cbcx)) {
         let sfr = this.frToLL(gx,gy);
         let ofr2 = this.frToLL(gx+cbcx,gy);
         let efr =1-ofr2; 
         gv = 255*(sfr + fra * (efr-sfr));
-        debugger;
+        //debugger;
       } else if (1&&(gx === (numCircles-1)*cbcx)) {
         let sfr = 1-this.frToLL(gx,gy);
         let ofr2 = this.frToLL(gx+cbcx,gy);
         let efr =ofr2; 
         gv = 255*(sfr + fra * (efr-sfr));
-        debugger;
+        //debugger;
       } else {
         gv = Math.floor(255*(1-fr));
       }
@@ -199,7 +205,7 @@ rs.initialize =function ()  {
   let rectL = Rectangle.mk(Point.mk(-hwd-30,-hht),Point.mk(-hwd,hht));
   this.generateGrid();
   this.set('circles',core.ArrayNode.mk());
-  for (let i=0;i<numCircles;i++) {
+  for (let i=1;i<numCircles;i++) {
     let y = Math.floor((1/numCircles)*i*numRows);
     this.addFadingCircles(y);
   }
@@ -220,3 +226,4 @@ rs.updateState = function  () {
 export {rs};
 
       
+
