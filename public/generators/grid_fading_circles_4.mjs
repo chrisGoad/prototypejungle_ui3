@@ -11,7 +11,7 @@ let rs = basicP.instantiate();
 addGridMethods(rs);
 addAnimationMethods(rs);
 
-rs.setName('grid_fading_circles_3');
+rs.setName('grid_fading_circles_4');
 let mul = 1;
 //let ht  = 100;
 let wd  = 100;
@@ -79,7 +79,7 @@ rs.addFadingCircles = function (y) {
 
 rs.placeFadingCircle  = function (cix,ciy,offset) {
    let {numCircles,numCols,numRows,width,height,circles} = this;
-   //debugger;
+   debugger;
    let idx =cix + (ciy-1)*(numCircles-2)-1;
    let crc = circles[idx];
    if (!crc) {
@@ -91,7 +91,10 @@ rs.placeFadingCircle  = function (cix,ciy,offset) {
    let gy = cbcy*ciy;
    let cwd = width/numCols;;
    let cnt = this.centerPnt(gx,gy);
-   let aoff = offset*cbcx*cwd;
+   let mgy=numCols-gy;
+   let dir = mgy<gx?-1:(gx===mgy?0:1);
+   console.log('gx',gx,'mgy',mgy,'dir',dir);
+   let aoff = dir*offset*cbcx*cwd;
    let cnto = cnt.plus(Point.mk(aoff,0));
    crc.moveto(cnto);
 }
