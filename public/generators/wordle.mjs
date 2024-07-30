@@ -30,19 +30,19 @@ Object.assign(rs,topParams);
    this.allowBadBlends = 0;
 
   // prohibited letters at each position
-  let s0n = 'f';
+  let s0n = '';
   let s1n = 'a';
-  let s2n = 's';
-  let s3n = 't';
-  let s4n = '';
+  let s2n = '';
+  let s3n = '';
+  let s4n = 'e';
   this.prohibs = [s0n,s1n,s2n,s3n,s4n];
 
   // prohibited dipthongs
   this.dprohibs  = [];
   // known 
-  let k0 = '';
+  let k0 = 'f';
   let k1 = '';
-  let k2 = '';
+  let k2 = 'r';
   let k3 = '';
   let k4 = '';
   this.known = [k0,k1,k2,k3,k4];
@@ -52,8 +52,8 @@ Object.assign(rs,topParams);
   let abet=this.abet = 'abcdefghijklmnopqrstuvwxyz';
   let cm;
  // cm = this.complement('palms choke blind rusty xz');
-  cm = this.complement('farce blind gusty vowel');
-  cm = this.complement('rce blind guy');// vowel');
+  cm = this.complement('farce blind gutsy chomp vowel');
+  cm = this.complement('c');// blind gutsy chomp vowel');
   
  
  
@@ -87,17 +87,17 @@ console.log('cm',cm);
   return;*/
   this.doubles ='';
   let s0n = '';
-  let s1n = 'i';
+  let s1n = '';
   let s2n = '';
-  let s3n = '';
-  let s4n = '';
+  let s3n = 'c';
+  let s4n = 'de';
   this.prohibs = [s0n,s1n,s2n,s3n,s4n];
 
   // prohibited dipthongs
   this.dprohibs  = []//['jk','kj','bk','kb','jh','hj','mk','bj','jb','qq','qk','kq','kh','fz','qp','pq','jl','lj'];
   // known letters
   let k0 = '';
-  let k1 = '';
+  let k1 = 'a';
   let k2 = 'i';
   let k3 = '';
   let k4 = '';

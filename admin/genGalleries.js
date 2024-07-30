@@ -56,6 +56,7 @@ let stills = kind === 'stills';
 //let web = kind === 'web';
 let alll = kind === 'all';
 let allA = kind === 'allA';
+let art = kind === 'art';
 let sortByOrder = toBoolean(sortByOrderstr);
 /*let byKind = kind === 'byKind';*/
 let alternate = kind === 'alt';
@@ -85,7 +86,10 @@ console.log('kind','['+kind+']','sortByOrder',sortByOrder,'forKOP',forKOP,'top',
 
 let sectionsPath;
 let imKind;
- if (alll)  {
+if (art)  {
+  sectionsPath = './artImages.js';
+  imKind = 'g'
+} else if (alll)  {
   sectionsPath = './allImages.js';
   imKind = 'g'
 } else if (allA)  {
@@ -147,7 +151,9 @@ if (alternate) {
   outPath = 'public/stillsImages.html';
 }else if (alll) {
   outPath = 'public/allImages.html';
-} else if (allA) {
+}else if (art) {
+  outPath = 'public/artImages.html';
+}  else if (allA) {
   outPath = 'public/allAImages.html';
 } /* else if (web) {
   outPath = 'public/webImages.html';
