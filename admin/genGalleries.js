@@ -71,7 +71,7 @@ let alternate = kind === 'alt';
 let images = (kind === 'images');
 //let images = (kind === 'images') || imagesHere;
 
-let local_images = alwaysLocal || (kind === 'local_images') || alternate ;
+let local_images = alwaysLocal || (kind === 'local_images') || alternate || art ;
 //console.log('local_images',local_images);
 let whichPage = 1;
 let orderMin,orderMax;
@@ -88,7 +88,7 @@ console.log('kind','['+kind+']','sortByOrder',sortByOrder,'forKOP',forKOP,'top',
 let sectionsPath;
 let imKind;
 if (art)  {
-  sectionsPath = './artImages.js';
+  sectionsPath = './allArt.js';
   imKind = 'g'
 } else if (alll)  {
   sectionsPath = './allImages.js';
@@ -276,6 +276,9 @@ if (imKind === 'g') {
     }  else if (allA) {
       kindTitle = 'Animations';
       aboutURL = "kop_anim.html";
+    }  else if (art) {
+      kindTitle = 'Art';
+      aboutURL = "art_images.html";
     }
     if (!top) {
     
@@ -334,7 +337,7 @@ const thingString = function (order,ix,dir,useThumb,ititle,props) {
 	debugger;
   let {variant,likes,posted,category,sources,noTitle,video} = props;
   //console.log('POSTED',posted,'category',category,'kind',kind);
-  if (!alll&&!allA&&((kind !=='alt') && (kind !== 'book') &&(category !==  kind))) {
+  if (!alll&&!allA&&!art&&((kind !=='alt') && (kind !== 'book') &&(category !==  kind))) {
     return '</div>';a
   }
 

@@ -34,17 +34,18 @@ Object.assign(rs,topParams);
   let s1n = 'a';
   let s2n = '';
   let s3n = '';
-  let s4n = 'e';
+  let s4n = '';
   this.prohibs = [s0n,s1n,s2n,s3n,s4n];
 
+  // prohibited dipthongs
   // prohibited dipthongs
   this.dprohibs  = [];
   // known 
   let k0 = 'f';
-  let k1 = '';
-  let k2 = 'r';
+  let k1 = 'l';
+  let k2 = '';
   let k3 = '';
-  let k4 = '';
+  let k4 = 'e';
   this.known = [k0,k1,k2,k3,k4];
   this.notPossibles = [];
   this.possibles5 = [];
@@ -53,7 +54,7 @@ Object.assign(rs,topParams);
   let cm;
  // cm = this.complement('palms choke blind rusty xz');
   cm = this.complement('farce blind gutsy chomp vowel');
-  cm = this.complement('c');// blind gutsy chomp vowel');
+  cm = this.complement('rc bind');// gutsy chomp vowel');
   
  
  

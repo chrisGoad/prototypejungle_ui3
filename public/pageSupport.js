@@ -90,7 +90,7 @@ document.addEventListener('DOMContentLoaded', () => {
     thePages = vPages;
     theTitles = vTitles; 
   } else if (imKind === 'h') {
-    thePages = hPages;
+    thePages = hPages
     theTitles = hTitles;
   } else if (imKind === 'hnf') {
     thePages = hnfPages;
@@ -98,6 +98,10 @@ document.addEventListener('DOMContentLoaded', () => {
   } else if (imKind === 'sq') {
     thePages = sqPages;
     theTitles = sqTitles;
+  } else if (imKind === 'art') {
+    thePages = artPages;
+    theTitles = artTitles;
+   // theLocals = altLocals;
   } else if (imKind === 'alt') {
     thePages = altPages;
     theTitles = altTitles;
