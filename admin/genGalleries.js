@@ -125,8 +125,9 @@ console.log('sectionsPath',sectionsPath,'imKind',imKind);
   pagesVar = `${kind}Pages`;
   titlesPath = `public/${imKind}Titles.js`;
   titlesPath = `public/${kind}Titles.js`;
-  titlesVar = `${imKind}Titles`;
+ // titlesVar = `${imKind}Titles`;
   titlesVar = `${kind}Titles`;
+  longTitlesVar = `${kind}LongTitles`;
   localsPath = `public/${imKind}Locals.js`;
   localsVar = `${imKind}Locals`;
   
@@ -168,6 +169,7 @@ var fs = require('fs');
 let fileExt = alternate?'mjs':'mjs';
 let thePages = [];
 let theTitles = [];
+let theLongTitles = [];
 let theLocals = []
 let pageTop = `
 <!DOCTYPE html>
@@ -354,8 +356,9 @@ const thingString = function (order,ix,dir,useThumb,ititle,props) {
 	let ext = video?video:((spix.length === 1)?'jpg':spix[1]);
 	let x = path + '.'+ ext;
  // console.log('ix',ix,'x',x);
-  let title = ititle;
+  let title = ititle.split('-')[0];
   theTitles.push(title);
+  theLongTitles.push(ititle);
   let vpath = (variant?path+'_v_'+variant:path);
   //console.log('variant',variant);
   //console.log('vpath',vpath);
@@ -595,9 +598,10 @@ const writeThePages = function () {
 }
 const writeTheTitles = function () {
 	let js = `let ${titlesVar} = ${JSON.stringify(theTitles)};`
+	let js2 = `;let ${longTitlesVar} = ${JSON.stringify(theLongTitles)};`
  //   console.log('writeTheTitles',js,titlesPath);
 
-	fs.writeFileSync(titlesPath,js);
+	fs.writeFileSync(titlesPath,js.concat(js2));
 }
 const writeTheLocals = function () {
 	let js = `let ${localsVar} = ${JSON.stringify(theLocals)};`
