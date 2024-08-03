@@ -279,7 +279,7 @@ if (imKind === 'g') {
       kindTitle = 'Animations';
       aboutURL = "kop_anim.html";
     }  else if (art) {
-      kindTitle = 'Art';
+      kindTitle = 'A Dozen Favorite Paintings';
       aboutURL = "art_images.html";
     }
     if (!top) {
