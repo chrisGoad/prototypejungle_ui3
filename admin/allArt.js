@@ -4,7 +4,7 @@ module.exports = { sections:[
 [0,'art_odds_and_ends','generators',1,'Odds and Ends - Emily Carr',{}], 
 [0,'art_moonlight','generators',1,'Moonlight - Rockwell Kent',{}], 
 [0,'art_christ_on_the_sea_of_galilee','generators',1,'Christ on the Sea of Galilee - Eugène Delacroix',{}], 
-[0,'art_saint_francis_in_the_desert','generators',1,'Saint - Wyndham LewisFrancis in the Desert - Giovanni Bellini',{}], 
+[0,'art_saint_francis_in_the_desert','generators',1,'Saint Francis in the Desert - Giovanni Bellini',{}], 
 [0,'art_saint_jerome_in_his_study','generators',1,'Saint Jerome in His Study - Antonello da Messina',{}], 
 [0,'art_untitled','generators',1,'Untitled - Agnes Martin',{}], 
 [0,'art_a_battery_shelled','generators',1,'A Battery Shelled - Wyndham Lewis',{}], 
