@@ -50,6 +50,7 @@ xferFiles('public',['dropPages.js','dropTitles.js','dropImages.html','draw.html'
                      'allPages.js','allTitles.js','allImages.html',
                      'allAPages.js','allATitles.js','allAImages.html',
                      'artPages.js','artTitles.js','artImages.html',
+                     'artMPages.js','artMTitles.js','artMImages.html',
                      'gridPages.js','gridTitles.js','gridImages.html',
                      'partitionPages.js','partitionTitles.js','partitionImages.html',
                      'webPages.js','webTitles.js','webImages.html',

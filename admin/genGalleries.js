@@ -57,6 +57,7 @@ let stills = kind === 'stills';
 //let web = kind === 'web';
 let alll = kind === 'all';
 let allA = kind === 'allA';
+let artM = kind === 'artM';
 let art = kind === 'art';
 let sortByOrder = toBoolean(sortByOrderstr);
 /*let byKind = kind === 'byKind';*/
@@ -71,7 +72,7 @@ let alternate = kind === 'alt';
 let images = (kind === 'images');
 //let images = (kind === 'images') || imagesHere;
 
-let local_images = alwaysLocal || (kind === 'local_images') || alternate || art ;
+let local_images = alwaysLocal || (kind === 'local_images') || alternate || art || artM;
 //console.log('local_images',local_images);
 let whichPage = 1;
 let orderMin,orderMax;
@@ -90,7 +91,10 @@ let imKind;
 if (art)  {
   sectionsPath = './allArt.js';
   imKind = 'g'
-} else if (alll)  {
+} else if (artM)  {
+  sectionsPath = './allArtM.js';
+  imKind = 'g';
+} else if  (alll)  {
   sectionsPath = './allImages.js';
   imKind = 'g'
 } else if (allA)  {
@@ -155,7 +159,9 @@ if (alternate) {
   outPath = 'public/allImages.html';
 }else if (art) {
   outPath = 'public/artImages.html';
-}  else if (allA) {
+} else if (artM) {
+  outPath = 'public/artMImages.html';
+} else if (allA) {
   outPath = 'public/allAImages.html';
 } /* else if (web) {
   outPath = 'public/webImages.html';
@@ -281,6 +287,9 @@ if (imKind === 'g') {
     }  else if (art) {
       kindTitle = 'A Dozen Favorite Paintings';
       aboutURL = "art_images.html";
+    }  else if (artM) {
+      kindTitle = 'A Dozen Favorite Paintings';
+      aboutURL = "art_images.html";
     }
     if (!top) {
     
@@ -339,7 +348,7 @@ const thingString = function (order,ix,dir,useThumb,ititle,props) {
 	debugger;
   let {variant,likes,posted,category,sources,noTitle,video} = props;
   //console.log('POSTED',posted,'category',category,'kind',kind);
-  if (!alll&&!allA&&!art&&((kind !=='alt') && (kind !== 'book') &&(category !==  kind))) {
+  if (!alll&&!allA&&!art&&!artM&&((kind !=='alt') && (kind !== 'book') &&(category !==  kind))) {
     return '</div>';a
   }
 
@@ -593,7 +602,7 @@ const sectionsString = function (sections) {
 }
 const writeThePages = function () {
 	let js = `let ${pagesVar}= ${JSON.stringify(thePages)};`;
- // console.log('writeThePagess',js,pagesVar,pagesPath);
+  console.log('writeThePagess',js,pagesVar,pagesPath);
 	fs.writeFileSync(pagesPath,js);
 }
 const writeTheTitles = function () {

@@ -100,9 +100,10 @@ document.addEventListener('DOMContentLoaded', () => {
     theTitles = sqTitles;
   } else if (imKind === 'art') {
     thePages = artPages;
-  //  theTitles = artTitles;
     theTitles = artLongTitles;
-   // theLocals = altLocals;
+  } else if (imKind === 'artM') {
+    thePages = artMPages;
+    theTitles = artMLongTitles;
   } else if (imKind === 'alt') {
     thePages = altPages;
     theTitles = altTitles;
