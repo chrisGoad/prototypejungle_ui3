@@ -288,7 +288,7 @@ if (imKind === 'g') {
       kindTitle = 'A Dozen Favorite Paintings';
       aboutURL = "art_images.html";
     }  else if (artM) {
-      kindTitle = 'A Dozen Favorite Paintings';
+      kindTitle = "Some of Marianne's favorite images";
       aboutURL = "art_images.html";
     }
     if (!top) {
