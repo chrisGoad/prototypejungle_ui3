@@ -23,7 +23,7 @@ git remote add origin https://github.com/chrisGoad/prototypejungle_ui2.git
 git fetch --all
 git checkout origin/master
 
-info commands:
+info commands
 git branch --list 
 git branch -r
 This Git command will show you remote branches 
@@ -72,6 +72,7 @@ node admin/genGalleries allA 1 // for animations
 node admin/genGalleries alt //for development
 
 node admin/genGalleries art 1
+node admin/genGalleries artM 1
 
  
 The 1 indicates forKop. if omitted,clicking on titles in http://localhost:8081/allImages.html runs the code rather than loads the image

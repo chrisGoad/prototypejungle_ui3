@@ -536,6 +536,31 @@ item.allFirstTwo = function () {
   debugger;
 }
 
+item.stdWords = ['farce','gusty','blind', 'chomp'];
+item.includedLets = function () {
+  let inc = '';
+  let {prohibs,known} = this;
+  for (let i =0;i<5;i++) {
+    inc = inc+prohibs[i];
+    inc = inc+known[i];
+  }
+  return inc;
+}
+
+item.icomp= function (n) {
+  debugger;
+  let exl = '';
+  let abet = 'abcdefghijklmnopqrstuvwxyz';
+  let {stdWords} =this;
+  let inc = this.includedLets();
+  for (let i=0;i<n;i++) {
+    let csw = stdWords[i]
+    exl = exl + this.removeLetters(csw,inc);
+  }
+  return this.complement(exl);
+}
+  
+ 
 }
 export {rs};
  
