@@ -74,7 +74,7 @@ item.badBlend = function (str) {
   if (!bl) {
     return 0;
   }
-  let okblends = ['thr','scr','spr','shr','spl','str','tch','nch','ntr','ngs','gst'];
+  let okblends = ['thr','scr','spr','shr','spl','str','tch','nch','ntr','ngs','gst','lch'];
   if (okblends.indexOf(bl) > -1) {
    // console.log('okblend',bl);
    return 0;
@@ -298,7 +298,7 @@ item.wOk11 = function (str) {
     }
   }  if (str.length === 5) {
     console.log('str',str);
-    debugger;
+   // debugger;
   }
   let dln = dps.length;
   for (let i=0;i<dln;i++) {
@@ -311,6 +311,9 @@ item.wOk11 = function (str) {
 }
 
 item.wOk = function (str) {
+  if (str==='mulch') {
+     debugger;
+  }
   let ok = this.wOk1(str);
   let ln = str.length;
   if (ok) {
@@ -326,6 +329,10 @@ item.wOk = function (str) {
 }
  
 item.wgenAll = function (sofar) {
+  if (sofar === 'mulc') {
+    console.log('sofar',sofar);
+    //debugger;
+  }
   if (this.acount > 10000000) {
     return;
   }
@@ -334,7 +341,7 @@ item.wgenAll = function (sofar) {
   let drln = dr.length;
   let ln = sofar.length;
   if (sofar === 'seeps') {
-    debugger;
+   // debugger;
   }
   let ok = this.wOk(sofar);
   if (!ok) {
@@ -358,7 +365,7 @@ item.wgenAll = function (sofar) {
 item.wgenTop = function (ak,lt,k) {
   let {showPossibles4:p4,known,mandatory} = this;
   if (!mandatory) {
-    debugger;
+   // debugger;
   }
   let plets = this.plets = ak?k:this.possLets;
   let k0 = known[0];
@@ -395,8 +402,8 @@ item.wgen3known = function (k) {
   let ln = plets.length;
   for (let i=0;i<ln;i++) {
     let v = plets[i];
-    console.log('TOP CHECK 3 known',v);
-    debugger;
+   // console.log('TOP CHECK 3 known',v);
+   // debugger;
     this.wgen4known(v+k);
   };
 }
@@ -406,7 +413,7 @@ item.wgen2known = function (k) {
   let ln = plets.length;
   for (let i=0;i<ln;i++) {
     let v = plets[i];
-    console.log('TOP CHECK 2 known',v);
+   // console.log('TOP CHECK 2 known',v);
     this.wgen3known(v+k);
   };
 }
@@ -414,7 +421,7 @@ item.wgen2known = function (k) {
 item.tryFirsts4 = function (k) {
   let {possLets,known,prohibs} = this;
   let k0 = known[0];
-  debugger;
+ // debugger;
   let phb0 = prohibs[0];
   let allowed = this.removeLetters(possLets,phb0);
   if (k0) {
@@ -444,7 +451,6 @@ item.tryFirsts5 = function (k) {
   
 item.tryFirsts3 = function (k) {
   let {possLets,known,prohibs} = this;
-  debugger;  
   let phb0 = prohibs[0];
   let allowed = this.removeLetters(possLets,phb0);
   let ln = allowed.length;
@@ -486,7 +492,7 @@ item.tryFirsts =  function () {
       k=k+ph;
     }
   });
-  debugger;
+ // debugger;
   k = this.removeDups(k);
   console.log('k',k);
   this.mandatory = k;
@@ -533,7 +539,7 @@ item.allFirstTwo = function () {
       aft.push(w);
     }
   }
-  debugger;
+  //debugger;
 }
 
 item.stdWords = ['farce','gusty','blind', 'chomp'];
@@ -548,7 +554,7 @@ item.includedLets = function () {
 }
 
 item.icomp= function (n) {
-  debugger;
+  //debugger;
   let exl = '';
   let abet = 'abcdefghijklmnopqrstuvwxyz';
   let {stdWords} =this;
