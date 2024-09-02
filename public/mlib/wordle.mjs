@@ -542,7 +542,7 @@ item.allFirstTwo = function () {
   //debugger;
 }
 
-item.stdWords = ['farce','gusty','blind', 'chomp'];
+item.stdWords = ['farce','gusty','blind', 'chomp','waver'];
 item.includedLets = function () {
   let inc = '';
   let {prohibs,known} = this;

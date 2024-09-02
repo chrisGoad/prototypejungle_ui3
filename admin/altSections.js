@@ -4,6 +4,8 @@ module.exports = {
 sections: 
 
 [    
+      [0,'grid_emergence_2','generators',1,'Emergence 2',{likes:0,posted:0,category:'web'}], 
+      [0,'grid_emergence','generators',1,'Emergence',{likes:0,posted:0,category:'web'}], 
       [0,'drops_3','generators',1,'Drops 3',{likes:0,posted:0,category:'web'}], 
       [0,'drops_2','generators',1,'Drops 2',{likes:0,posted:0,category:'web'}], 
       [0,'grid_fading_circles_4','generators',1,'Grid Fading Circles 4',{likes:0,posted:0,category:'web'}], 
