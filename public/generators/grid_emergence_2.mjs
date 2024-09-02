@@ -66,54 +66,49 @@ rs.computeAnglesByCell = function () {
    
 
 rs.shapeGenerator = function (rvs,cell) {
-  //let dir = Math.random()*Math.PI;
-  //let ond0 = this.onNthDiagonal0(4,cell)
-  let ond0_top = this.onNthDiagonal0(nr/2,cell)
-  let ond0_bot = this.onNthDiagonal0(nr*(3/2),cell)
-  let ond1_top = this.onNthDiagonal1(nr/2,cell);
-  let ond1_bot = this.onNthDiagonal1(-nr/2,cell)
-  let onmd0 = this.onNthDiagonal0(nr,cell);
-  let onmd1 = this.onNthDiagonal1(0,cell);
+  
   let {lineP} = this;
   let shape = lineP.instantiate().show();
-  let dir;
   let alongDiag = 0;
-  let fr = 0;
-  if (onmd1) {
-    dir = -.25*Math.PI + fr*.5*Math.PI;
-  } else if (onmd0) {
-    dir = .25*Math.PI - fr*.5*Math.PI;
-  } else {
-    dir = this.angleByCell(cell);
-  }
+  let dir = this.angleByCell(cell);
   let hvec = Point.mk(Math.cos(dir),Math.sin(dir)).times(2);
   shape.setEnds(hvec.times(-1),hvec);
-  let {pstate} = this;
-  let {cstate} = pstate;
-  let ctime = cstate.time;
-  let gb= cstate.gb.value;
  // let stroke = `rgb(${gb},${gb},${255-gb})`;
-  let stroke = 'yellow';
-/*
-  if ((ond0_bot || ond0_top || ond1_top || ond1_bot) && (ctime <= 103)) {
-    shape.stroke = stroke;
-  }
-  */
-  if ((onmd0 || onmd1)  && (ctime > 20)) {
-   shape.stroke = stroke;
-  }
- /* if ((ond0_bot || ond0_top || ond1_top || ond1_bot ) && (ctime > 206)) {
-    shape.stroke = stroke;
-  }*/
   shape.update();
   return shape;
+}
+
+rs.updateCell = function (cell,fr) {
+  let onmd0 = this.onNthDiagonal0(nr,cell);
+  let onmd1 = this.onNthDiagonal1(0,cell);
+  let {shape} = cell;
+  let dir;
+  debugger;
+  if (onmd0 || onmd1) {
+    if (onmd1) {
+      dir = -.25*Math.PI + fr*.5*Math.PI;
+    } else if (onmd0) {
+      dir = .25*Math.PI - fr*.5*Math.PI;
+    } 
+    let hvec = Point.mk(Math.cos(dir),Math.sin(dir)).times(2);
+    shape.setEnds(hvec.times(-1),hvec);
+  }
+}
+
+rs.updateCells = function (fr) {
+  let {theCells} = this;
+  theCells.forEach( (cell) => {
+    this.updateCell(cell,fr);
+  });
 }
 
 rs.initialize = function () {
   this.addFrame();
   this.initProtos();
   this.computeAnglesByCell();
+  debugger;
   this.generateGrid();
+ this.updateCells(.9)
 }
 
 export {rs};
