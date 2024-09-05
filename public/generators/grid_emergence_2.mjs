@@ -16,7 +16,7 @@ addGridMethods(rs);
 let nr = 24;
 let wd=100;
 
-let topParams = {width:wd,height:wd,numRows:nr,numCols:nr,pointJiggle:0,framePadding:0.15*wd,numSteps:192,saveAnimation:1};
+let topParams = {width:wd,height:wd,numRows:nr,numCols:nr,pointJiggle:0,framePadding:0.15*wd,numSteps:192,saveAnimation:1,lineLength:2.5};
 Object.assign(rs,topParams);
 
 
@@ -66,12 +66,12 @@ rs.computeAnglesByCell = function () {
 
 rs.shapeGenerator = function (rvs,cell) {
   
-  let {lineP,numRows:nr} = this;
+  let {lineP,numRows:nr,lineLength:ll} = this;
   let {x,y} = cell;
   let shape = lineP.instantiate().show();
   let alongDiag = 0;
   let dir = this.angleByCell(cell);
-  let hvec = Point.mk(Math.cos(dir),Math.sin(dir)).times(2);
+  let hvec = Point.mk(Math.cos(dir),Math.sin(dir)).times(ll);
   shape.setEnds(hvec.times(-1),hvec);
   debugger;
   if ((x===(nr/2))&&(y===(nr/2))) {
@@ -84,6 +84,7 @@ rs.shapeGenerator = function (rvs,cell) {
 }
 
 rs.updateCell = function (cell,fr,wh) {
+  let {lineLength:ll} = this
   let onmd0 = this.onNthDiagonal0(nr,cell);
   let onmd1 = this.onNthDiagonal1(0,cell);
   let {shape} = cell;
@@ -101,7 +102,7 @@ rs.updateCell = function (cell,fr,wh) {
       isdir = 1;
     } 
     if (isdir) {
-      let hvec = Point.mk(Math.cos(dir),Math.sin(dir)).times(3);
+      let hvec = Point.mk(Math.cos(dir),Math.sin(dir)).times(ll);
       shape.setEnds(hvec.times(-1),hvec);
       shape.update();
     }
