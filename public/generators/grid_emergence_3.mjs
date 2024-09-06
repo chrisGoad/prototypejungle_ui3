@@ -16,8 +16,8 @@ addGridMethods(rs);
 let nr = 24;
 let wd=100;
 
-let topParams = {width:wd,height:wd,numRows:nr,numCols:nr,pointJiggle:0,framePadding:0.15*wd,numSteps:48,saveAnimation:1,lineLength:2.5,
-  hiStroke:'yellow'};
+let topParams = {width:wd,height:wd,numRows:nr,numCols:nr,pointJiggle:0,framePadding:0.15*wd,numSteps:96,saveAnimation:1,lineLength:2.5,lowStroke:[0,0,0],
+  hiStroke:[255,255,0],frv:0};
 Object.assign(rs,topParams);
 
 
@@ -28,7 +28,7 @@ Object.assign(rs,topParams);
 rs.initProtos = function () {	
   let lineP = this.lineP = linePP.instantiate();
   lineP['stroke-width'] = .4;
-  lineP.stroke='blue';
+  lineP.stroke='black';
   //lineP.stroke='white';
 }
 
@@ -67,16 +67,25 @@ rs.computeAnglesByCell = function () {
 
 rs.shapeGenerator = function (rvs,cell) {
   
-  let {lineP,numRows:nr,lineLength:ll} = this;
+  let {lineP,numRows:nr,lineLength:ll,frv} = this;
   let {x,y} = cell;
+  let onmd0 = this.onNthDiagonal0(nr,cell);
+  let onmd1 = this.onNthDiagonal1(0,cell);
   let shape = lineP.instantiate().show();
-  let alongDiag = 0;
+  let alongDiag = 0;  
   let dir = this.angleByCell(cell);
+  if (onmd0 || onmd1) {  
+    if (onmd1) {
+      dir = -.25*Math.PI + frv*Math.PI;
+    } else if (onmd0) {
+      dir = .25*Math.PI - frv*Math.PI;
+    } 
+  }
   let hvec = Point.mk(Math.cos(dir),Math.sin(dir)).times(ll);
   shape.setEnds(hvec.times(-1),hvec);
-  debugger;
+//debugger;
   if ((x===(nr/2))&&(y===(nr/2))) {
-    debugger;
+   //debugger;
     shape.stroke = 'transparent';
   }
  // let stroke = `rgb(${gb},${gb},${255-gb})`;
@@ -84,7 +93,10 @@ rs.shapeGenerator = function (rvs,cell) {
   return shape;
 }
 
-rs.updateCell = function (cell,fr,wh) {
+
+
+
+rs.updateCell = function (cell,stroke) {
   let {lineLength:ll} = this
   let onmd0 = this.onNthDiagonal0(nr,cell);
   let onmd1 = this.onNthDiagonal1(0,cell);
@@ -92,41 +104,26 @@ rs.updateCell = function (cell,fr,wh) {
   let dir;
   let isdir = 0;
   //debugger;
-  let frN = typeof fr === 'number';
   if (onmd0 || onmd1) {  
-    if (onmd1&&((wh==='1')||(wh==='both'))) {
-      //dir = -.25*Math.PI + fr*.5*Math.PI;
-      if (frN) {
-        dir = -.25*Math.PI + fr*Math.PI;
-      }
-      isdir = 1;
-    } else if (onmd0&&((wh==='0')||(wh==='both'))) {
-      if (frN) {
-        dir = .25*Math.PI - fr*Math.PI;
-      }
-      isdir = 1;
-    } 
-    if (isdir) {
-      if (frN) {
-        let hvec = Point.mk(Math.cos(dir),Math.sin(dir)).times(ll);
-        shape.setEnds(hvec.times(-1),hvec);
-        shape.stroke = 'blue'
-      } else {
-        shape.stroke = fr;
-      }
-      shape.update();
-    }
+    shape.stroke = stroke;
+    shape.update();
   }
 }
 
-rs.updateCells = function (fr,wh) {
-  let {theCells} = this;
+
+
+rs.updateCells = function (fr) {
+  let {theCells,lowStroke,hiStroke,stepsSoFar:ssf} = this;
+  let strokeA = this.interpolate(lowStroke,hiStroke,fr);
+  let stroke = this.arrayToRGB(strokeA);
+  console.log('ssf',ssf,'fr',fr,'stroke',stroke);
   theCells.forEach( (cell) => {
-    this.updateCell(cell,fr,wh);
+    this.updateCell(cell,stroke);
   });
 }
 
 rs.initialize = function () {
+  let {frv} = this;
   this.addFrame();
   this.initProtos();
   this.setBackgroundColor('gray');
@@ -194,7 +191,7 @@ rs.updateState3 = function () {
   let stage2 = (3/8)*ns;
   let stage3 = (5/8)*ns;
   let stage4 = (7/8)*ns;
-  if (ssf === stage1) {
+  if (ssf === 73) {
     debugger;
   }
   let mlength = (2/8)*ns;
@@ -212,23 +209,31 @@ rs.updateState3 = function () {
   }   
 }
 
+
 rs.updateState = function () {
-  let {stepsSoFar:ssf,numSteps:ns} = this;
+  let {stepsSoFar:ssf,numSteps:ns,frv} = this;
   //debugger;
   let stage1 = (1/8)*ns;
-  let stage2 = (3/8)*ns;
-  let stage3 = (7/8)*ns;
-  if (ssf === stage1) {
+  let mid = (1/2)*ns;
+  let stage2 = (7/8)*ns;
+  if (ssf === 48) {
     debugger;
   }
-  let mlength = (2/8)*ns;
-  if ((stage1<=ssf) && (ssf <= stage2)) {
-    this.updateCells('yellow','both'); 
+  let mlength = mid-stage1;
+  if ((ssf<stage1) || (stage2<ssf)) {
+    if (stage2<ssf) {
+      //debugger;
+    }
+    this.updateCells(0); 
+  }
+  if ((stage1<=ssf) && (ssf < mid)) {
+    let fr = (ssf-stage1)/mlength
+    this.updateCells(fr); 
   }
     
-  if (stage3<=ssf) {
-    let fr = (ssf-stage3)/mlength;
-    this.updateCells(0,'both'); 
+  if ((mid<=ssf)&&(ssf<=stage2)) {
+    let fr = (stage2-ssf)/mlength
+    this.updateCells(fr); 
   }   
 }
 export {rs};
