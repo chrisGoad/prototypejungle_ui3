@@ -9,7 +9,7 @@ import {rs as addAnimationMethods} from '/mlib/animate0.mjs';
 let rs = basicsP.instantiate();
 addAnimationMethods(rs);
 
-rs.setName('grid_emergence_3b');
+rs.setName('grid_emergence_3_d1c1');
 addGridMethods(rs);
 //addPathMethods(rs);
 //addRandomMethods(rs);
@@ -17,7 +17,7 @@ let nr = 24;
 let wd=100;
 
 let topParams = {width:wd,height:wd,numRows:nr,numCols:nr,pointJiggle:0,framePadding:0.15*wd,numSteps:48,saveAnimation:1,lineLength:2.5,lowStroke:[255,255,255],
-  hiStroke:[100,100,100],frvvvv:0,onDiagonals:0,colinear:0};
+  hiStroke:[100,100,100],frvvvv:0,onDiagonals:1,colinear:1};
 Object.assign(rs,topParams);
 
 
