@@ -109,7 +109,7 @@ rs.shapeGenerator = function (rvs,cell) {
       }
     }
   }
-  let hvec = Point.mk(Math.cos(dir),Math.sin(dir)).times(ll);
+  let hvec = Point.mk(Math.cos(dir),Math.sin(dir)).times(1.8);
   shape.setEnds(hvec.times(-1),hvec);
 //debugger;
   if ((x===(nr/2))&&(y===(nr/2))) {
@@ -243,9 +243,9 @@ rs.updateState3 = function () {
 rs.updateState = function () {
   let {stepsSoFar:ssf,numSteps:ns,frv} = this;
   //debugger;
-  let stage1 = (1/8)*ns;
+  let stage1 = (1/4)*ns;
   let mid = (1/2)*ns;
-  let stage2 = (7/8)*ns;
+  let stage2 = (3/4)*ns;
   if (ssf === 48) {
     debugger;
   }
