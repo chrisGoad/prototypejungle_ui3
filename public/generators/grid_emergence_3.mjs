@@ -9,15 +9,15 @@ import {rs as addAnimationMethods} from '/mlib/animate0.mjs';
 let rs = basicsP.instantiate();
 addAnimationMethods(rs);
 
-rs.setName('grid_emergence_2');
+rs.setName('grid_emergence_3b');
 addGridMethods(rs);
 //addPathMethods(rs);
 //addRandomMethods(rs);
 let nr = 24;
 let wd=100;
 
-let topParams = {width:wd,height:wd,numRows:nr,numCols:nr,pointJiggle:0,framePadding:0.15*wd,numSteps:96,saveAnimation:1,lineLength:2.5,lowStroke:[0,0,0],
-  hiStroke:[255,255,0],frv:0};
+let topParams = {width:wd,height:wd,numRows:nr,numCols:nr,pointJiggle:0,framePadding:0.15*wd,numSteps:48,saveAnimation:1,lineLength:2.5,lowStroke:[255,255,255],
+  hiStroke:[100,100,100],frvvvv:0,onDiagonals:0,colinear:0};
 Object.assign(rs,topParams);
 
 
@@ -29,7 +29,7 @@ rs.initProtos = function () {
   let lineP = this.lineP = linePP.instantiate();
   lineP['stroke-width'] = .4;
   lineP.stroke='black';
-  //lineP.stroke='white';
+  lineP.stroke='white';
 }
 
 rs.updateState  = function () {
@@ -49,6 +49,22 @@ rs.onNthDiagonal1 = function (n,cell) {
 }
 
 
+rs.onVertical = function (cell) {
+  let {numRows} = this;
+  let hnr = numRows/2;
+  let {x,y} = cell;
+  return x === hnr;
+}
+
+
+
+rs.onHorizontal  = function  (cell) {
+  let {numRows} = this;
+  let hnr = numRows/2;
+  let {x,y} = cell;
+  return y === hnr;
+}
+
 rs.anglesByCell = [];
 rs.angleByCell = function (cell) {
   let {x,y} = cell;
@@ -67,19 +83,31 @@ rs.computeAnglesByCell = function () {
 
 rs.shapeGenerator = function (rvs,cell) {
   
-  let {lineP,numRows:nr,lineLength:ll,frv} = this;
+  let {lineP,numRows:nr,lineLength:ll,frv,onDiagonals,colinear} = this;
   let {x,y} = cell;
   let onmd0 = this.onNthDiagonal0(nr,cell);
   let onmd1 = this.onNthDiagonal1(0,cell);
+  let onV = this.onVertical(cell);
+  let onH = this.onHorizontal(cell);
   let shape = lineP.instantiate().show();
   let alongDiag = 0;  
   let dir = this.angleByCell(cell);
-  if (onmd0 || onmd1) {  
-    if (onmd1) {
-      dir = -.25*Math.PI + frv*Math.PI;
-    } else if (onmd0) {
-      dir = .25*Math.PI - frv*Math.PI;
-    } 
+  let cond = onDiagonals?onmd0 || onmd1:onV ||onH;
+  if (cond) {
+    if (onDiagonals) {
+      let frv = colinear?0.5:0;
+      if (onmd1) {
+        dir = -.25*Math.PI + frv*Math.PI;
+      } else {
+        dir = .25*Math.PI - frv*Math.PI;
+      }
+    } else {
+      if (onV) {
+        dir =colinear?.5*Math.PI:0;
+      } else {
+        dir = colinear?0:.5*Math.PI;
+      }
+    }
   }
   let hvec = Point.mk(Math.cos(dir),Math.sin(dir)).times(ll);
   shape.setEnds(hvec.times(-1),hvec);
@@ -97,14 +125,16 @@ rs.shapeGenerator = function (rvs,cell) {
 
 
 rs.updateCell = function (cell,stroke) {
-  let {lineLength:ll} = this
+  let {lineLength:ll,onDiagonals} = this
   let onmd0 = this.onNthDiagonal0(nr,cell);
   let onmd1 = this.onNthDiagonal1(0,cell);
+  let onV = this.onVertical(cell);
+  let onH = this.onHorizontal(cell);
+  let cond = onDiagonals?!(onmd0 || onmd1):!(onV || onH);
   let {shape} = cell;
-  let dir;
-  let isdir = 0;
   //debugger;
-  if (onmd0 || onmd1) {  
+//  if (onmd0 || onmd1) {  
+  if (cond) {  
     shape.stroke = stroke;
     shape.update();
   }
@@ -123,14 +153,14 @@ rs.updateCells = function (fr) {
 }
 
 rs.initialize = function () {
-  let {frv} = this;
+  let {frv,hiStroke} = this;
   this.addFrame();
   this.initProtos();
-  this.setBackgroundColor('gray');
+  this.setBackgroundColor(this.arrayToRGB(hiStroke));
   this.computeAnglesByCell();
   debugger;
   this.generateGrid();
- this.updateCells(0,'both');
+ //this.updateCells(0,'both');
 }
 
 rs.updateStatee = function () {

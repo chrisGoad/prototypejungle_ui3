@@ -31,8 +31,8 @@ Object.assign(rs,topParams);
 
   // prohibited letters at each position
   let s0n = '';
-  let s1n = 'u';
-  let s2n = '';
+  let s1n = '';
+  let s2n = 'ro';
   let s3n = 'n';
   let s4n = 'e';
   this.prohibs = [s0n,s1n,s2n,s3n,s4n];
@@ -43,7 +43,7 @@ Object.assign(rs,topParams);
   // known 
   let k0 = '';
   let k1 = '';
-  let k2 = 'r';
+  let k2 = '';
   let k3 = '';
   let k4 = '';
   this.known = [k0,k1,k2,k3,k4];
@@ -54,7 +54,7 @@ Object.assign(rs,topParams);
   console.log('inc',inc);
   let abet=this.abet = 'abcdefghijklmnopqrstuvwxyz';
   let cm;
-  cm = this.icomp(3);
+  cm = this.icomp(4);
   console.log('cm',cm);
 
  // cm = this.complement('palms choke blind rusty xz');
