@@ -373,6 +373,9 @@ c:\ffmpeg\bin\ffmpeg  -framerate 8    -i animations/grid_emergence_3_d0c1_f%03d.
 c:\ffmpeg\bin\ffmpeg  -framerate 8    -i animations/grid_emergence_3_d1c0_f%03d.jpg -s 800x800  export/grid_emergence_3_d1c0.gif
 c:\ffmpeg\bin\ffmpeg  -framerate 8    -i animations/grid_emergence_3_d1c1_f%03d.jpg -s 800x800  export/grid_emergence_3_d1c1.gif
 
+c:\ffmpeg\bin\ffmpeg  -framerate 8    -i animations/grid_emergence_3b_f%03d.jpg -s 800x800  export/grid_emergence_3b.gif
+c:\ffmpeg\bin\ffmpeg  -framerate 8    -i animations/grid_emergence_3c_f%03c.jpg -s 800x800  export/grid_emergence_3c.gif
+
 c:\ffmpeg\bin\ffmpeg -i export/bounce_12.mp4 -i export/bounce_12.wav -c:v copy -c:a aac -map 0:v -map 1:a export/blend_test.mp4
 rm animations/spatter0_7*
 c:\ffmpeg\bin\ffmpeg  -framerate 10 -i animations/spatter0_6_f%03d.jpg -s 1000x1000  export/spatter0_6_1.mp4
