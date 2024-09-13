@@ -56,8 +56,9 @@ Object.assign(rs,topParams);
   let cm;
   cm = this.icomp(2);
   console.log('cm',cm);
-  let cm2 = this.complement('farce nymph blind ghost quick');
-  cm2 = this.complement('farce nymph blind ghost vowel');
+  let cm2 = this.complement('farce nymph quick' );
+  cm2 = this.complement('farce nymph quick ghost blend');//bleed
+ // cm2 = this.complement('farce nymph blind ghost vowel');
     console.log('cm2',cm2);
 
 
