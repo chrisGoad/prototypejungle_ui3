@@ -74,7 +74,7 @@ item.badBlend = function (str) {
   if (!bl) {
     return 0;
   }
-  let okblends = ['thr','scr','spr','shr','spl','str','tch','nch','ntr','ngs','gst','lch'];
+  let okblends = ['thr','scr','spr','shr','spl','str','tch','nch','ntr','ngs','gst','lch','rsh'];
   if (okblends.indexOf(bl) > -1) {
    // console.log('okblend',bl);
    return 0;
@@ -542,7 +542,8 @@ item.allFirstTwo = function () {
   //debugger;
 }
 
-item.stdWords = ['farce','gusty','blind', 'chomp','waver'];
+item.stdWords = ['farce','nymph','blind', 'ghost','quick'];
+//item.stdWords = ['farce','gusty','blind', 'chomp','waver'];
 //item.stdWords = ['farce','gusty','blind', 'index'];
 item.includedLets = function () {
   let inc = '';
