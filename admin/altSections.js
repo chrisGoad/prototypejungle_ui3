@@ -4,6 +4,7 @@ module.exports = {
 sections: 
 
 [    
+      [0,'spider_0','generators',1,'Spider 0',{likes:0,posted:0,category:'web'}], 
       [0,'grid_emergence_3','generators',1,'Emergence 3',{likes:0,posted:0,category:'web'}], 
       [0,'grid_emergence_2','generators',1,'Emergence 2',{likes:0,posted:0,category:'web'}], 
       [0,'grid_emergence','generators',1,'Emergence',{likes:0,posted:0,category:'web'}], 

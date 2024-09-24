@@ -224,6 +224,9 @@ item.wOk1 = function (str) {
  if (str.length ===5) {
   //debugger;
  }
+ if (str === 'exac') {
+    debugger;
+  }
  if (this.badBlend(str)) {
     return 0;
   }
@@ -542,8 +545,11 @@ item.allFirstTwo = function () {
   //debugger;
 }
 
-item.stdWords = ['farce','nymph','blind', 'ghost','quick'];
-//item.stdWords = ['farce','gusty','blind', 'chomp','waver'];
+//item.stdWords = ['farce','nymph','quick', 'ghost','blend'];//bleed
+//item.stdWords = ['farce','nymph','blind', 'ghost','quick'];
+item.stdWords = ['farce','gusty','blind', 'chomp','waver'];
+//item.stdWords = ['farce','bough','clamp', 'wicks'];
+//item.stdWords = ['farce','gusty','cruel', 'chomp','waver'];
 //item.stdWords = ['farce','gusty','blind', 'index'];
 item.includedLets = function () {
   let inc = '';

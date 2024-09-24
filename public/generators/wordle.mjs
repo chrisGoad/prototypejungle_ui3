@@ -32,9 +32,9 @@ Object.assign(rs,topParams);
   // prohibited letters at each position
   let s0n = '';
   let s1n = '';
-  let s2n = 's';
-  let s3n = '';
-  let s4n = '';
+  let s2n = '';
+  let s3n = 'n';
+  let s4n = 'd';
   this.prohibs = [s0n,s1n,s2n,s3n,s4n];
 
   // prohibited dipthongs
@@ -43,9 +43,9 @@ Object.assign(rs,topParams);
   // known 
   let k0 = '';
   let k1 = 'a';
-  let k2 = 'r';
-  let k3 = '';
-  let k4 = ''
+  let k2 = 'n';
+  let k3 = 'd';
+  let k4 = 'y'
   this.known = [k0,k1,k2,k3,k4];
   this.notPossibles = [];
   this.possibles5 = [];
@@ -54,13 +54,15 @@ Object.assign(rs,topParams);
   console.log('inc',inc);
   let abet=this.abet = 'abcdefghijklmnopqrstuvwxyz';
   let cm;
-  cm = this.icomp(2);
+  cm = this.icomp(3);
   console.log('cm',cm);
-  let cm2 = this.complement('farce nymph quick' );
-  cm2 = this.complement('farce nymph quick ghost blend');//bleed
+  let cm2 = this.complement('farce gusty blind chomp' );
+ // cm2 = this.complement('farce nymph quick ghost blend');//bleed
+  let cm3 = this.complement( 'farce bough clamp winds');//bleed
  // cm2 = this.complement('farce nymph blind ghost vowel');
     console.log('cm2',cm2);
-
+    console.log('cm3',cm3);
+//return;
 
  // cm = this.complement('palms choke blind rusty xz');
   //cm = this.complement('farce gusty blind chomp vowel');
@@ -83,25 +85,19 @@ console.log('cm',cm);
   console.log('prm',prm);
 }
 
-
+/*
   rs.initializeee = function () {
   debugger;
 //  this.tries();
   //return;
   // prohibited letters at each position
-/*  this.doubles = 'i';
-  let d0 = this.checkForDoubles('iabbi');
-  let d1 =this.checkForDoubles('iabc');
-  this.doubles = 'a'
-  let d3 =this.checkForDoubles('aabc');
-  debugger;
-  return;*/
+
   this.doubles ='';
   let s0n = '';
-  let s1n = 'u';
+  let s1n = '';
   let s2n = 's';
-  let s3n = 't';
-  let s4n = 'p';
+  let s3n = 'n';
+  let s4n = 'e';
   this.prohibs = [s0n,s1n,s2n,s3n,s4n];
 
   // prohibited dipthongs
@@ -109,7 +105,7 @@ console.log('cm',cm);
   // known letters
   let k0 = '';
   let k1 = '';
-  let k2 = 'o';
+  let k2 = '';
   let k3 = '';
   let k4 = '';
   this.known = [k0,k1,k2,k3,k4];
@@ -188,9 +184,9 @@ rs.tries = function () {
   //checkBlend('aibfd');
 }
 
-/* the data structure
-{segs0,segs1,ints, intsBySeg0,intsBySeg1 } where each int has the form has the form {point,segNum0,segNum1} where the point is the intersection
-of the two given segs, one from pgon0 the other from pgon1 */
+// the data structure
+//{segs0,segs1,ints, intsBySeg0,intsBySeg1 } where each int has the form has the form {point,segNum0,segNum1} where the point is the intersection
+//of the two given segs, one from pgon0 the other from pgon1 
 rs.lineSegsOfPgon = function (pgon) {
   let ln = pgon.length;
   let segs = [];
@@ -270,7 +266,7 @@ rs.intersectPolygons = function (pgon0,pgon1) {
   let segi0 
 }
        
-
+*/
  
 export {rs};
 
