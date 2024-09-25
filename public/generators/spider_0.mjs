@@ -98,17 +98,39 @@ rs.pointsOnCircle = function (params) {
 
 
 rs.pointsOnCircle = function (params) {
-  let {numPoints:np,adelta,centerOff,dir,radius} = params;
-  let lowA = dir-adelta;
-  let highA = dir+adelta;
+  let {numPoints:np,adelta,centerOff,dir,radius:r} = params;
+  let {lineCount} = this;
+  let lowA,highA,center,adir;
+  if (dir === 'up') {
+    adir = .5*Math.PI;
+    lowA = adir-adelta;
+    highA = adir+adelta;
+    center = Point.mk(0,-centerOff);
+  }  
+  if (dir === 'right') {
+    adir = Math.PI;
+    lowA = adir-adelta;
+    highA = adir+adelta;
+    center = Point.mk(centerOff,0);
+  }  
   let intv = (highA-lowA)/(np-1);
-  let center = Point.mk(centerOff*Math.cos(dir),centerOff*Math.sin(dir));
+
   let a = [];
   for (let i=0;i<np;i++) {
     let ca = lowA+i*intv;
-    let cp = center.plus(Point.mk(Math.cos(ca)*radius,Math.sin(ca)*radius));
+    let cp = center.plus(Point.mk(Math.cos(ca)*r,Math.sin(ca)*r));
     a.push(cp);
   }
+  let n = 0;
+  a.forEach((p) => {
+   let line = this.lineP.instantiate();
+   line.setEnds(center,p);
+   console.log('n',n,'p.x',p.x,'p.y',p.y);
+   n++;
+  this.set('line_'+lineCount,line);
+   lineCount++;
+  });
+  this.lineCount = lineCount;
   return a;
 }
      
@@ -130,7 +152,7 @@ rs.updateState  = function () {
 
 rs.arcCount =0;
 rs.lineCount =0;
-rs.drawArc = function (ymid) {
+rs.drawArc = function (ymid,dir) {
   let {fr,width,numSegs,arcCount,lineCount} = this;
   console.log('');
   console.log('ymid',ymid);
@@ -145,10 +167,10 @@ rs.drawArc = function (ymid) {
   let center = Point.mk(0, ymid- r);
   let np = numSegs+1;
   //let params = {numPoints:np,radius:r,lowA,highA,center};
-  let params = {numPoints:numSegs+1,radius:r,adelta:0.5*a,dir:1.5*Math.PI,centerOff:r-ymid};
+  let params = {numPoints:numSegs+1,radius:r,adelta:0.5*a,dir,centerOff:r-ymid};
 
   let pnts = this.pointsOnCircle(params);
-  let n=0;
+ /* let n=0;
   pnts.forEach((p) => {
    let line = this.lineP.instantiate();
    line.setEnds(center,p);
@@ -158,7 +180,7 @@ rs.drawArc = function (ymid) {
    lineCount++;
   });
   this.lineCount  = lineCount;
-  
+  */
   let pline = this.polylineP.instantiate();
   pline.wayPoints = pnts;
   this.set('pline'+arcCount,pline);
@@ -176,9 +198,10 @@ rs.initialize = function () {
   this.addFrame();
   this.initProtos();
   let ymid = 30;
-  this.drawArc(10);
-  this.drawArc(20);
-  this.drawArc(30);
+  //this.drawArc(10,');
+  //this.drawArc(20);
+  this.drawArc(30,'up');
+  this.drawArc(30,'right');
   //this.drawArc(12);
   
   //console.log('ymid',ymid,'radius',r,'angle',a * (180/Math.PI),'d',d);
