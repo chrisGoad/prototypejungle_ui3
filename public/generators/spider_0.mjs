@@ -13,8 +13,8 @@ addAnimationMethods(rs);
 rs.setName('spider_0');
 //addGridMethods(rs);
 let wd=100;
-
-let topParams = {width:wd,height:wd,fr:.8,numSegs:10,framePadding:0.15*wd,numSteps:96,saveAnimation:1,lineLength:1.8,lowStroke:[255,255,255],
+0
+let topParams = {width:wd,height:wd,fr:.8,numSegs:100,drawLines:1,framePadding:0.15*wd,numSteps:96,saveAnimation:1,lineLength:1.8,lowStroke:[255,255,255],
   hiStroke:[100,100,100],frvvvv:0,onDiagonals:1,colinear:1};
 Object.assign(rs,topParams);
 
@@ -99,7 +99,7 @@ rs.pointsOnCircle = function (params) {
 
 rs.pointsOnCircle = function (params) {
   let {numPoints:np,adelta,centerOff,dir,radius:r} = params;
-  let {lineCount} = this;
+  let {lineCount,drawLines} = this;
   let lowA,highA,center,adir;
   if (dir === 'up') {
     adir = .5*Math.PI;
@@ -121,16 +121,18 @@ rs.pointsOnCircle = function (params) {
     let cp = center.plus(Point.mk(Math.cos(ca)*r,Math.sin(ca)*r));
     a.push(cp);
   }
-  let n = 0;
-  a.forEach((p) => {
-   let line = this.lineP.instantiate();
-   line.setEnds(center,p);
-   console.log('n',n,'p.x',p.x,'p.y',p.y);
-   n++;
-  this.set('line_'+lineCount,line);
-   lineCount++;
-  });
-  this.lineCount = lineCount;
+  if (drawLines) {
+    let n = 0;
+    a.forEach((p) => {
+     let line = this.lineP.instantiate();
+     line.setEnds(center,p);
+     console.log('n',n,'p.x',p.x,'p.y',p.y);
+     n++;
+    this.set('line_'+lineCount,line);
+     lineCount++;
+    });
+    this.lineCount = lineCount;
+  }
   return a;
 }
      
@@ -140,7 +142,7 @@ rs.initProtos = function () {
   polylineP['stroke-width'] = .1;
   polylineP.stroke='white';
   let lineP = this.lineP = linePP.instantiate();
-  lineP['stroke-width'] = .1;
+  lineP['stroke-width'] = .05;
   lineP.stroke='white';
 }
 
@@ -152,12 +154,12 @@ rs.updateState  = function () {
 
 rs.arcCount =0;
 rs.lineCount =0;
-rs.drawArc = function (ymid,dir) {
+rs.drawArc = function (ymid,yside,dir) {
   let {fr,width,numSegs,arcCount,lineCount} = this;
   console.log('');
   console.log('ymid',ymid);
    let w= 0.5*fr*width;
-  let yside = 0;
+  //let yside = 0;
   let r = this.computeRadius(yside,ymid);
   let a = this.computeAngle(r,yside,ymid);
   console.log('radius',r,'angle',(180/Math.PI)*a);
@@ -200,8 +202,9 @@ rs.initialize = function () {
   let ymid = 30;
   //this.drawArc(10,');
   //this.drawArc(20);
-  this.drawArc(30,'up');
-  this.drawArc(30,'right');
+  for (let i=10;i<20;i++) {
+    this.drawArc(3*i,2*i,'up');
+  }
   //this.drawArc(12);
   
   //console.log('ymid',ymid,'radius',r,'angle',a * (180/Math.PI),'d',d);
