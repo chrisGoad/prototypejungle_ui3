@@ -30,11 +30,11 @@ Object.assign(rs,topParams);
    this.allowBadBlends = 0;
 
   // prohibited letters at each position
-  let s0n = '';
-  let s1n = '';
-  let s2n = '';
-  let s3n = 'n';
-  let s4n = 'd';
+  let s0n = 'c';
+  let s1n = 'h';
+  let s2n = 'o';
+  let s3n = 't';
+  let s4n = '';
   this.prohibs = [s0n,s1n,s2n,s3n,s4n];
 
   // prohibited dipthongs
@@ -42,10 +42,10 @@ Object.assign(rs,topParams);
   this.dprohibs  = [];
   // known 
   let k0 = '';
-  let k1 = 'a';
-  let k2 = 'n';
-  let k3 = 'd';
-  let k4 = 'y'
+  let k1 = '';
+  let k2 = 'r';
+  let k3 = 'c';
+  let k4 = ''
   this.known = [k0,k1,k2,k3,k4];
   this.notPossibles = [];
   this.possibles5 = [];

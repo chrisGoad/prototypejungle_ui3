@@ -2,6 +2,7 @@
 import {rs as circlePP} from '/shape/circle.mjs';
 import {rs as polygonPP} from '/shape/polygon.mjs';
 import {rs as polylinePP} from '/shape/polyline.mjs';
+import {rs as linePP} from '/shape/line.mjs';
 import {rs as basicsP} from '/generators/basics.mjs';
 import {rs as addGridMethods} from '/mlib/grid.mjs';
 import {rs as addAnimationMethods} from '/mlib/animate0.mjs';
@@ -13,22 +14,27 @@ rs.setName('spider_0');
 //addGridMethods(rs);
 let wd=100;
 
-let topParams = {width:wd,height:wd,fr:.8,numSegs:5,framePadding:0.15*wd,numSteps:96,saveAnimation:1,lineLength:1.8,lowStroke:[255,255,255],
+let topParams = {width:wd,height:wd,fr:.8,numSegs:10,framePadding:0.15*wd,numSteps:96,saveAnimation:1,lineLength:1.8,lowStroke:[255,255,255],
   hiStroke:[100,100,100],frvvvv:0,onDiagonals:1,colinear:1};
 Object.assign(rs,topParams);
 
 
 /*dist((0,ymid),(0,ymid-r)) = dist((wd,yside), (0,ymid-r))
 
-r*r = wd*wd+ (ymid-yside-r)**2
+r*r = wd*wd+ (yside-(ymid-r))**2 =wd*wd+ (r+yside-ymid)**2
 
-let ydelta = ymid-yside
+let ydelta = yside-ymid;
 
-r*r = wd*wd + (ydelta-r)*(ydelta-r)  = wd*wd + ydelta*ydelta -2*ydelta*r + r*r;
+r*r = wd*wd + (r+ydelta)*(r+ydelta)  = wd*wd + ydelta*ydelta + 2*ydelta*r + r*r;
+wd*wd + ydelta*ydelta +2*ydelta*r = 0;
+-2*ydelta*r = wd*wd + ydelta*ydelta;
+r = -0.5*(wd*wd+ydelta*ydelta)/ydelta = -0.5*((wd*wd)/ydelta + ydelta);
+
+
+r*r = wd*wd + (r-ydelta)*(r-ydelta)  = wd*wd + ydelta*ydelta -2*ydelta*r + r*r;
 wd*wd + ydelta*ydelta -2*ydelta*r = 0;
 2*ydelta*r = wd*wd + ydelta*ydelta;
 r = 0.5*(wd*wd+ydelta*ydelta)/ydelta = 0.5*((wd*wd)/ydelta + ydelta);
-
 
 r*r = wd*wd + (ydelta-r)*(ydelta-r)  = wd*wd + ydelta*ydelta -2*ydelta*r + r*r;
 
@@ -63,17 +69,18 @@ rs.computeYdelta =  function (r) {
 rs.computeRadius = function (yside,ymid) {
    let {fr,width} = this;
    let w= 0.5*fr*width;
-   let ydelta = ymid-yside;
+   let ydelta = yside-ymid;
   // let r = Math.sqrt(0.5*((w*w)/ydelta + ydelta));
-   let r = 0.5*((w*w)/ydelta + ydelta);
+   let r = -0.5*((w*w)/ydelta + ydelta);
    return r;
 }
 rs.computeAngle = function (r,yside,ymid) {
    let {fr,width} = this;
    let w= 0.5*fr*width;
    let ydelta = ymid-yside;
-   let halfBaseL= 0.5*Math.sqrt(w*w + ydelta*ydelta);
-   let a = 2* Math.atan2(halfBaseL,r);
+   //let halfBaseL= Math.sqrt(w*w + ydelta*ydelta);
+   let halfBaseL= Math.sqrt(w*w);
+   let a = 2* Math.atan2(halfBaseL,r-ymid);
    return a;
 }
    
@@ -90,12 +97,29 @@ rs.pointsOnCircle = function (params) {
 }
 
 
+rs.pointsOnCircle = function (params) {
+  let {numPoints:np,adelta,centerOff,dir,radius} = params;
+  let lowA = dir-adelta;
+  let highA = dir+adelta;
+  let intv = (highA-lowA)/(np-1);
+  let center = Point.mk(centerOff*Math.cos(dir),centerOff*Math.sin(dir));
+  let a = [];
+  for (let i=0;i<np;i++) {
+    let ca = lowA+i*intv;
+    let cp = center.plus(Point.mk(Math.cos(ca)*radius,Math.sin(ca)*radius));
+    a.push(cp);
+  }
+  return a;
+}
      
 
 rs.initProtos = function () {	
   let polylineP = this.polylineP = polylinePP.instantiate();
   polylineP['stroke-width'] = .1;
   polylineP.stroke='white';
+  let lineP = this.lineP = linePP.instantiate();
+  lineP['stroke-width'] = .1;
+  lineP.stroke='white';
 }
 
 rs.updateState  = function () {
@@ -105,21 +129,45 @@ rs.updateState  = function () {
 }
 
 rs.arcCount =0;
+rs.lineCount =0;
 rs.drawArc = function (ymid) {
-  let {fr,width,numSegs,arcCount} = this;
+  let {fr,width,numSegs,arcCount,lineCount} = this;
+  console.log('');
+  console.log('ymid',ymid);
+   let w= 0.5*fr*width;
   let yside = 0;
   let r = this.computeRadius(yside,ymid);
   let a = this.computeAngle(r,yside,ymid);
   console.log('radius',r,'angle',(180/Math.PI)*a);
   let lowA = .5*Math.PI - .5*a;
   let highA = .5*Math.PI +.5*a;
-  let center = Point.mk(0,ymid - r);
-  let params = {numPoints:numSegs+1,radius:r,lowA,highA,center};
+  //let center = Point.mk(0,ymid - r);
+  let center = Point.mk(0, ymid- r);
+  let np = numSegs+1;
+  //let params = {numPoints:np,radius:r,lowA,highA,center};
+  let params = {numPoints:numSegs+1,radius:r,adelta:0.5*a,dir:1.5*Math.PI,centerOff:r-ymid};
+
   let pnts = this.pointsOnCircle(params);
+  let n=0;
+  pnts.forEach((p) => {
+   let line = this.lineP.instantiate();
+   line.setEnds(center,p);
+   console.log('n',n,'p.x',p.x,'p.y',p.y);
+   n++;
+  this.set('line_'+lineCount,line);
+   lineCount++;
+  });
+  this.lineCount  = lineCount;
+  
   let pline = this.polylineP.instantiate();
   pline.wayPoints = pnts;
   this.set('pline'+arcCount,pline);
   pline.update();
+  let sp = Point.mk(w,yside);
+  let mp = Point.mk(0,ymid);
+  let spd = center.distance(sp);
+  let msd = center.distance(mp);
+  console.log('spd',spd,'msd',msd,'r',r);
   this.arcCount = arcCount+1;
 }
 rs.initialize = function () {
@@ -131,28 +179,9 @@ rs.initialize = function () {
   this.drawArc(10);
   this.drawArc(20);
   this.drawArc(30);
-  return;
-  let yside = 0;
-    debugger;
-  //let r = 150;
-  //ymid = this.computeYdelta(r);
-  let r = this.computeRadius(yside,ymid);
-  let a = this.computeAngle(r,yside,ymid);
-  let lp = Point.mk(0,ymid-r);
-  let sp = Point.mk(w,0);
-  let d = sp.distance(lp);
-  let lowA = .5*Math.PI - .5*a;
-  let highA = .5*Math.PI +.5*a;
-  let center = Point.mk(0,ymid - r);
-  let params = {numPoints:numSegs+1,radius:r,lowA,highA,center};
-  let pnts = this.pointsOnCircle(params);
-  let pline = this.polylineP.instantiate();
-  pline.wayPoints = pnts;
-  this.set('pline',pline);
-  pline.update();
+  //this.drawArc(12);
   
-  
-  console.log('ymid',ymid,'radius',r,'angle',a * (180/Math.PI),'d',d);
+  //console.log('ymid',ymid,'radius',r,'angle',a * (180/Math.PI),'d',d);
  
 }
 
