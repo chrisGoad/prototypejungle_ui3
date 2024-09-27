@@ -314,10 +314,22 @@ item.wOk11 = function (str) {
 }
 
 item.wOk = function (str) {
+  let {beenChecked} = this;
+  if (beenChecked.indexOf(str)>-1) {
+    console.log('beenChecked ',str)
+    return 0;
+  }
   if (str==='mulch') {
      debugger;
   }
   let ok = this.wOk1(str);
+  beenChecked.push(str);
+  //console.log('ok1',str,'=',ok);
+  //if (str.substring(0,3)==='faz') {
+  if (str==='fazzz') {
+    debugger;
+  }
+  
   let ln = str.length;
   if (ok) {
     if (ln === 5) {
@@ -405,7 +417,7 @@ item.wgen3known = function (k) {
   let ln = plets.length;
   for (let i=0;i<ln;i++) {
     let v = plets[i];
-   // console.log('TOP CHECK 3 known',v);
+    //console.log('TOP CHECK 3 known',v);
    // debugger;
     this.wgen4known(v+k);
   };
@@ -416,8 +428,19 @@ item.wgen2known = function (k) {
   let ln = plets.length;
   for (let i=0;i<ln;i++) {
     let v = plets[i];
-   // console.log('TOP CHECK 2 known',v);
+  //  console.log('TOP CHECK 2 known',v);
     this.wgen3known(v+k);
+  };
+}
+
+
+item.wgen1known = function (k) {
+  let {possLets:plets} = this;
+  let ln = plets.length;
+  for (let i=0;i<ln;i++) {
+    let v = plets[i];
+  // console.log('TOP CHECK 2 known',v);
+    this.wgen2known(v+k);
   };
 }
   
@@ -479,8 +502,23 @@ item.tryFirsts2 = function (k) {
   }
 }
 
+
+item.tryFirsts1 = function (k) {
+  let {possLets,known,prohibs} = this;  
+  let phb0 = prohibs[0];
+  let allowed = this.removeLetters(possLets,phb0);
+  let ln = allowed.length;
+  for (let i=0;i<ln;i++) {
+    let ai = allowed[i];
+    known[0] = ai;
+    this.wgen1known(k);
+    
+  }
+}
+
 item.tryFirsts =  function () {
   let {known,prohibs} = this;
+  debugger;
   let k0 = known[0];
   let k = '';
   let st = k0?1:0;
@@ -497,11 +535,13 @@ item.tryFirsts =  function () {
   });
  // debugger;
   k = this.removeDups(k);
-  console.log('k',k);
+  //console.log('k',k);
   this.mandatory = k;
   let ln = k.length;
   if (k0) {
-    if (ln ===2) {
+    if (ln ===1) {
+      this.wgen1known(k);
+    } else if (ln ===2) {
       this.wgen2known(k);
     } else if (ln ===3) {
       this.wgen3known(k);
@@ -513,7 +553,9 @@ item.tryFirsts =  function () {
       console.log('k',k, ' is too short');
     }
   } else {
-    if (ln ===2) {
+    if (ln ===1) {
+      this.tryFirsts1(k);
+    } else if (ln ===2) {
       this.tryFirsts2(k);
     } else if (ln ===3) {
       this.tryFirsts3(k);

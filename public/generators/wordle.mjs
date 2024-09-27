@@ -30,10 +30,10 @@ Object.assign(rs,topParams);
    this.allowBadBlends = 0;
 
   // prohibited letters at each position
-  let s0n = 'c';
-  let s1n = 'h';
-  let s2n = 'o';
-  let s3n = 't';
+  let s0n = '';
+  let s1n = '';
+  let s2n = '';
+  let s3n = '';
   let s4n = '';
   this.prohibs = [s0n,s1n,s2n,s3n,s4n];
 
@@ -41,20 +41,21 @@ Object.assign(rs,topParams);
   // prohibited dipthongs
   this.dprohibs  = [];
   // known 
-  let k0 = '';
-  let k1 = '';
-  let k2 = 'r';
-  let k3 = 'c';
+  let k0 = 'f';
+  let k1 = 'a';
+  let k2 = '';
+  let k3 = 't';
   let k4 = ''
   this.known = [k0,k1,k2,k3,k4];
   this.notPossibles = [];
   this.possibles5 = [];
   this.possibles4 = [];
+  this.beenChecked = [];
   let inc = this.includedLets();
   console.log('inc',inc);
   let abet=this.abet = 'abcdefghijklmnopqrstuvwxyz';
   let cm;
-  cm = this.icomp(3);
+  cm = this.icomp(2);
   console.log('cm',cm);
   let cm2 = this.complement('farce gusty blind chomp' );
  // cm2 = this.complement('farce nymph quick ghost blend');//bleed

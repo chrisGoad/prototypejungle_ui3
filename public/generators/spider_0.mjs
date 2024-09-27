@@ -14,7 +14,7 @@ rs.setName('spider_0');
 //addGridMethods(rs);
 let wd=100;
 0
-let topParams = {width:wd,height:wd,fr:.8,numSegs:100,drawLines:1,framePadding:0.15*wd,numSteps:96,saveAnimation:1,lineLength:1.8,lowStroke:[255,255,255],
+let topParams = {width:wd,height:wd,fr:.8,numSegs:100,drawLines:1,framePadding:0.2*wd,frameStroke:'rgb(2,2,2)',numSteps:96,saveAnimation:1,lineLength:1.8,lowStroke:[255,255,255],
   hiStroke:[100,100,100],frvvvv:0,onDiagonals:1,colinear:1};
 Object.assign(rs,topParams);
 
