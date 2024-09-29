@@ -315,7 +315,7 @@ item.wOk11 = function (str) {
 
 item.wOk = function (str) {
   let {beenChecked} = this;
-  if (beenChecked.indexOf(str)>-1) {
+  if (0 && beenChecked.indexOf(str)>-1) {
     console.log('beenChecked ',str)
     return 0;
   }
