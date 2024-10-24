@@ -587,14 +587,8 @@ item.allFirstTwo = function () {
   //debugger;
 }
 
-//item.stdWords = ['farce','nymph','quick', 'ghost','blend'];//bleed
-//item.stdWords = ['farce','nymph','blind', 'ghost','quick'];
 item.stdWords = ['farce','gusty','blind', 'chomp','waver'];
-//item.stdWords = ['farce','gusty','eager', 'pager','waver'];
-//item.stdWords = ['farce','gusty','blind', 'diver','eider'];
-//item.stdWords = ['farce','bough','clamp', 'wicks'];
-//item.stdWords = ['farce','gusty','cruel', 'chomp','waver'];
-//item.stdWords = ['farce','gusty','blind', 'index'];
+
 item.includedLets = function () {
   let inc = '';
   let {prohibs,known} = this;
