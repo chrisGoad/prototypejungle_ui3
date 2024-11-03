@@ -31,7 +31,7 @@ Object.assign(rs,topParams);
 
   // prohibited letters at each position
   let s0n = '';
-  let s1n = '';
+  let s1n = 'a';
   let s2n = '';
   let s3n = '';
   let s4n = '';
@@ -42,11 +42,14 @@ Object.assign(rs,topParams);
   this.dprohibs  = [];
   // known 
   let k0 = 'b';
-  let k1 = '';
-  let k2 = 's';
+  let k1 = 'l';
+  let k2 = '';
   let k3 = '';
-  let k4 = 'y'
+  let k4 = 'e'
   this.known = [k0,k1,k2,k3,k4];
+  this.stdWords = ['farce','gusty','blind', 'chomp','awake'];
+  this.stdWords = ['farce','gusty','blind', 'chomp','blame'];
+
   this.notPossibles = [];
   this.possibles5 = [];
   this.possibles4 = [];
@@ -54,8 +57,9 @@ Object.assign(rs,topParams);
   let inc = this.includedLets();
   console.log('inc',inc);
   let abet=this.abet = 'abcdefghijklmnopqrstuvwxyz';
+
   let cm;
-  cm = this.icomp(3);
+  cm = this.icomp(4);
   console.log('cm',cm);
   let cm2 = this.complement('farce gusty blind chomp' );
  // cm2 = this.complement('farce nymph quick ghost blend');//bleed
