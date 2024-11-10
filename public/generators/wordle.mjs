@@ -27,27 +27,25 @@ Object.assign(rs,topParams);
   rs.initialize = function () {
   debugger;
   this.doubles ='';
-   this.allowBadBlends = 1;
-
+   this.allowBadBlends = 0;  //allow bad triples
   // prohibited letters at each position
-  let s0n = 'c';
-  let s1n = '';
-  let s2n = 'o';
-  let s3n = 'ct';
+  let s0n = '';
+  let s1n = 'i';
+  let s2n = 'ri';
+  let s3n = 'n';
   let s4n = 'e';
   this.prohibs = [s0n,s1n,s2n,s3n,s4n];
-
-  // prohibited dipthongs
   // prohibited dipthongs
   this.dprohibs  = [];
   // known 
   let k0 = '';
   let k1 = '';
-  let k2 = '';
-  let k3 = '';
-  let k4 = ''
+  let k2 = 'n';
+  let k3 = 'e';
+  let k4 = 'r'
   this.known = [k0,k1,k2,k3,k4];
   this.stdWords = ['farce','gusty','blind', 'chomp','awake'];
+  this.stdWords = ['farce','gusty','blind', 'miner','awake'];
 
   this.notPossibles = [];
   this.possibles5 = [];
@@ -58,7 +56,7 @@ Object.assign(rs,topParams);
   let abet=this.abet = 'abcdefghijklmnopqrstuvwxyz';
 
   let cm;
-  cm = this.icomp(4);
+  cm = this.icomp(3);
   console.log('cm',cm);
   let cm2 = this.complement('farce gusty blind chomp' );
  // cm2 = this.complement('farce nymph quick ghost blend');//bleed

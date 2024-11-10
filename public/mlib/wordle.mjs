@@ -1,22 +1,7 @@
 
 
 const rs = function (item) {
-/*
-spent
-vicar
-would
 
-
-let s0n = '';
-let s1n = 'o';
-let s2n = '';
-let s3n = 'nal';
-let s4n = 't';
-
-let plets = 'onalt';
-
-let notOk = [s0n,s1n,s2n,s3n,s4n];
-*/
 
 
 item.vowels = 'aeiouy';
