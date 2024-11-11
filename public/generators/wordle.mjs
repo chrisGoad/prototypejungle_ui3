@@ -27,22 +27,22 @@ Object.assign(rs,topParams);
   rs.initialize = function () {
   debugger;
   this.doubles ='';
-   this.allowBadBlends = 0;  //allow bad triples
+   this.allowBadBlends = 1;  //allow bad triples
   // prohibited letters at each position
   let s0n = '';
-  let s1n = 'i';
-  let s2n = 'ri';
-  let s3n = 'n';
-  let s4n = 'e';
+  let s1n = '';
+  let s2n = 'si';
+  let s3n = 'ct';
+  let s4n = '';
   this.prohibs = [s0n,s1n,s2n,s3n,s4n];
   // prohibited dipthongs
   this.dprohibs  = [];
   // known 
   let k0 = '';
   let k1 = '';
-  let k2 = 'n';
-  let k3 = 'e';
-  let k4 = 'r'
+  let k2 = '';
+  let k3 = '';
+  let k4 = ''
   this.known = [k0,k1,k2,k3,k4];
   this.stdWords = ['farce','gusty','blind', 'chomp','awake'];
   this.stdWords = ['farce','gusty','blind', 'miner','awake'];
